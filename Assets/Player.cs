@@ -81,6 +81,7 @@ public class Player : MonoBehaviour
             Debug.Log($"Money: {GameManager.instance.moneyPlayer}");
             PlayerPrefs.SetInt("Money", GameManager.instance.moneyPlayer);
             StartCoroutine(delayLoadGame());
+            
         }
     }
 
