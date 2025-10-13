@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Bonus
   - Ship
+  - Sea
+  - Rocket
   layers:
   - Default
   - TransparentFX

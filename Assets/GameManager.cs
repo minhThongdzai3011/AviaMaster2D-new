@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,26 +13,47 @@ public class GameManager : MonoBehaviour
     public float climbAngle = 30f;  // Góc bay lên (độ)
     public float gravityScale = 1f; // Thang trọng lực chung
 
+    [Header("Sprite")]
+    public Sprite autoLoopSprites;
+    public Sprite noLoopSprites;
+
+    [Header("Image UI")]
+    public Image loopImage;
+
+    [Header("Button UI")]
+    public Button upgradeFlightAngleButton;
+    public Button upgradeFlyingPowerButton;
+    public Button upgradeTrainDistanceButton;
+
     [Header("Text UI")]
     public TextMeshProUGUI distanceText;
     public TextMeshProUGUI altitudeText;
     public TextMeshProUGUI moneyText;
+    public TextMeshProUGUI flightAngleTextLevel;
+    public TextMeshProUGUI flightAngleTextMoney;
+    public TextMeshProUGUI flyingPowerTextLevel;
+    public TextMeshProUGUI flyingPowerTextMoney;
+    public TextMeshProUGUI trainDistanceTextLevel;
+    public TextMeshProUGUI trainDistanceTextMoney;
+    public TextMeshProUGUI moneyTextPlayer;
 
+    [Header("Trạng thái chơi")]
     public Vector2 startPosition;
     public float distanceTraveled;
     private float currentAltitude;
     public int money = 0;
+    public int moneyPlayer = 0;
     public bool isLoop = false;
     public Animator anim;
     public bool isUp;
     public bool isStand;
-
-    private float elapsedTime = 0f;
-    private bool isCounting = false;
-
-private float previousY;
-    private float currentY;
-
+    [Header("Nâng cấp")]
+    public int flightAngleLevel = 1;
+    public int flyingPowerLevel = 1;
+    public int trainDistanceLevel = 1;
+    public int flightAngleMoney = 200;
+    public int flyingPowerMoney = 200;
+    public int trainDistanceMoney = 200;
 
     void Awake()
     {
@@ -39,10 +61,12 @@ private float previousY;
         else Destroy(gameObject);
 
         Time.timeScale = 1f;
+
     }
 
     void Start()
     {
+        moneyPlayer = PlayerPrefs.GetInt("Money", 0);
         if (airplaneRigidbody2D != null)
         {
             startPosition = airplaneRigidbody2D.transform.position;
@@ -54,13 +78,11 @@ private float previousY;
         moneyText.text = money.ToString("");
         // Thiết lập gravity toàn cục nếu bạn dùng Physics2D.gravity
         Physics2D.gravity = new Vector2(0f, -9.81f * gravityScale);
-        previousY = transform.position.y;
 
     }
 
     public void LaunchAirplane()
     {
-        StartCoroutine(CountTime());
 
         if (airplaneRigidbody2D == null)
         {
@@ -81,7 +103,6 @@ private float previousY;
         airplaneRigidbody2D.gravityScale = gravityScale;
 
         Physics2D.gravity = new Vector2(0f, -9.81f * gravityScale);
-        StartCoroutine(delayOneSeconds());
     }
 
     void Update()
@@ -92,52 +113,105 @@ private float previousY;
         distanceTraveled = Vector2.Distance(startPosition, currentPos);
         currentAltitude = currentPos.y - startPosition.y;
         if (currentAltitude < 0f) currentAltitude = 0f;
-
+        money = Mathf.FloorToInt(distanceTraveled * 2f);
         distanceText.text = distanceTraveled.ToString("F2") + " m";
         altitudeText.text = currentAltitude.ToString("F2") + " m";
+        moneyText.text = money.ToString("F0");
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
             LaunchAirplane();
         }
-        // currentY = transform.position.y;
-
-        // if (currentY > previousY)
-        // {
-        //     Debug.Log("Máy bay đang bay lên");
-        // }
-        // else if (currentY < previousY)
-        // {
-        //     Debug.Log("Máy bay đang hạ xuống");
-        //     isUp = false;
-        // }
-        // else
-        // {
-        //     Debug.Log("Máy bay đứng yên theo trục Y");
-        //     Debug.Log($"currentY: {currentY}, previousY: {previousY}");
-        // }
-
-        // previousY = currentY;
+        if (airplaneRigidbody2D.velocity.y > 0.1f)
+        {
+            isUp = true;
+            isStand = false;
+            anim.SetBool("isUp", true);
+            anim.SetBool("isStand", false);
+        }
+        else if (airplaneRigidbody2D.velocity.y < -0.1f)
+        {
+            isUp = false;
+            isStand = false;
+            anim.SetBool("isUp", false);
+            anim.SetBool("isStand", false);
+        }
+        else
+        {
+            isUp = false;
+            isStand = true;
+            anim.SetBool("isUp", false);
+            anim.SetBool("isStand", true);
+        }
 
     }
 
-    IEnumerator CountTime()
+    public void UpgradeFlightAngle()
     {
-        isCounting = true;
-        while (isCounting)
+        if (moneyPlayer >= flightAngleMoney)
         {
-            elapsedTime += Time.deltaTime;
-            Debug.Log("Thời gian trôi qua: " + elapsedTime.ToString("F2") + " giây");
-            yield return null;
+            moneyPlayer -= flightAngleMoney;
+            flightAngleLevel++;
+            // climbAngle += 5f; // Tăng góc bay lên
+            flightAngleMoney = Mathf.FloorToInt(flightAngleMoney * 1.5f); // Tăng giá tiền
+            moneyTextPlayer.text = moneyPlayer.ToString("");
+            PlayerPrefs.SetInt("Money", moneyPlayer);
+            flightAngleTextLevel.text = "Level " + flightAngleLevel;
+            flightAngleTextMoney.text = flightAngleMoney.ToString();
+        }
+        else
+        {
+            Debug.Log("Không đủ tiền để nâng cấp Góc bay!" + moneyPlayer + " < " + flightAngleMoney);
+        }
+    }
+    public void UpgradeFlyingPower()
+    {
+        if (moneyPlayer >= flyingPowerMoney)
+        {
+            moneyPlayer -= flyingPowerMoney;
+            flyingPowerLevel++;
+            // launchForce += 2f; // Tăng lực bay
+            flyingPowerMoney = Mathf.FloorToInt(flyingPowerMoney * 1.5f); // Tăng giá tiền
+            moneyTextPlayer.text = moneyPlayer.ToString("");
+            PlayerPrefs.SetInt("Money", moneyPlayer);
+            flyingPowerTextLevel.text = "Level " + flyingPowerLevel;
+            flyingPowerTextMoney.text = flyingPowerMoney.ToString();
+        }
+    }
+    public void UpgradeTrainDistance()
+    {
+        if (moneyPlayer >= trainDistanceMoney)
+        {
+            moneyPlayer -= trainDistanceMoney;
+            trainDistanceLevel++;
+            // gravityScale = Mathf.Max(0.1f, gravityScale - 0.5f); // Giảm trọng lực
+            if (airplaneRigidbody2D != null)
+            {
+                airplaneRigidbody2D.gravityScale = gravityScale;
+            }
+            Physics2D.gravity = new Vector2(0f, -9.81f * gravityScale);
+            trainDistanceMoney = Mathf.FloorToInt(trainDistanceMoney * 1.5f); // Tăng giá tiền
+            moneyTextPlayer.text = moneyPlayer.ToString("");
+            PlayerPrefs.SetInt("Money", moneyPlayer);
+            trainDistanceTextLevel.text = "Level " + trainDistanceLevel;
+            trainDistanceTextMoney.text = trainDistanceMoney.ToString();
         }
     }
 
-    IEnumerator delayOneSeconds()
+    public void LoopGame()
     {
-        yield return new WaitForSeconds(1f);
-        anim.SetBool("isUp",false);
-    }
+        if (isLoop)
+        {
+            isLoop = false;
+            loopImage.sprite = noLoopSprites;
+        }
+        else
+        {
+            isLoop = true;
+            loopImage.sprite = autoLoopSprites;
+        }
 
+    }
 
 
 }

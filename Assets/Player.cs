@@ -39,6 +39,17 @@ public class Player : MonoBehaviour
                 Debug.Log("Máy bay đã chạm tàu!");
                 hasLaunched = false;
             }
+            GameManager.instance.anim.SetBool("isStand", true);
+            // Haj canh tàu thì dừng lại
+            // Rigidbody2D rb = GetComponent<Rigidbody2D>();
+            // if (rb != null)
+            // {
+            //     rb.velocity = Vector2.zero;
+            //     rb.angularVelocity = 0f;
+            //     rb.gravityScale = 0f; // tắt gravity
+            // }
+            // gravityScale = 10f;
+            // GameManager.instance.airplaneRigidbody2D.velocity = GameManager.instance.airplaneRigidbody2D.velocity * 0.2f;
         }
 
         if (other.CompareTag("Bonus"))
@@ -47,6 +58,7 @@ public class Player : MonoBehaviour
             Bonus(index);
             Destroy(other.gameObject);
             isBonus = true;
+            GameManager.instance.anim.SetBool("isUp", true);
         }
 
         if (other.CompareTag("Rocket"))
@@ -55,16 +67,19 @@ public class Player : MonoBehaviour
             Rocket(index);
             Destroy(other.gameObject);
             isRocket = true;
+            GameManager.instance.anim.SetBool("isUp", false);
         }
 
         if (other.CompareTag("Sea"))
         {
             Debug.Log("Chạm Biển");
-            float ftemp = GameManager.instance.distanceTraveled;
-            int itemp = Mathf.FloorToInt(ftemp);
-            GameManager.instance.money += itemp;
-            GameManager.instance.moneyText.text = GameManager.instance.money.ToString("");
-            PlayerPrefs.SetInt("Money", GameManager.instance.money);
+            // float ftemp = GameManager.instance.distanceTraveled;
+            // int itemp = Mathf.FloorToInt(ftemp/2);
+            // GameManager.instance.money = itemp;
+            GameManager.instance.moneyPlayer += GameManager.instance.money;
+            GameManager.instance.moneyTextPlayer.text = GameManager.instance.moneyPlayer.ToString("");
+            Debug.Log($"Money: {GameManager.instance.moneyPlayer}");
+            PlayerPrefs.SetInt("Money", GameManager.instance.moneyPlayer);
             StartCoroutine(delayLoadGame());
         }
     }
