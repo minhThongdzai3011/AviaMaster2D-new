@@ -3,6 +3,8 @@ using System.Collections;
 
 public class Player : MonoBehaviour
 {
+    public static Player instance;
+    [Header("Cài đặt máy bay")]
     public float launchForce = 20f; // Lực đẩy ban đầu
     public float climbAngle = 15f;  // Góc bay lên (độ)
     public float gravityScale = 1f; // Thang trọng lực chung
@@ -10,6 +12,12 @@ public class Player : MonoBehaviour
     public int index = 2;
     public bool isBonus = false;
     public bool isRocket = false;
+
+    void Awake()
+    {
+        if (instance == null) instance = this;
+        else Destroy(gameObject);
+    }
 
     void Start()
     {
@@ -32,26 +40,6 @@ public class Player : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
         Debug.Log($"other.tag: {other.tag}, hasLaunched: {hasLaunched}, isBonus: {isBonus}, isRocket: {isRocket}");
-        if (other.CompareTag("Ship"))
-        {
-            if (hasLaunched)
-            {
-                Debug.Log("Máy bay đã chạm tàu!");
-                hasLaunched = false;
-            }
-            GameManager.instance.anim.SetBool("isStand", true);
-            // Haj canh tàu thì dừng lại
-            // Rigidbody2D rb = GetComponent<Rigidbody2D>();
-            // if (rb != null)
-            // {
-            //     rb.velocity = Vector2.zero;
-            //     rb.angularVelocity = 0f;
-            //     rb.gravityScale = 0f; // tắt gravity
-            // }
-            // gravityScale = 10f;
-            // GameManager.instance.airplaneRigidbody2D.velocity = GameManager.instance.airplaneRigidbody2D.velocity * 0.2f;
-        }
-
         if (other.CompareTag("Bonus"))
         {
             Debug.Log("Máy bay nhận được vật phẩm Bonus!");
@@ -80,8 +68,22 @@ public class Player : MonoBehaviour
             GameManager.instance.moneyTextPlayer.text = GameManager.instance.moneyPlayer.ToString("");
             Debug.Log($"Money: {GameManager.instance.moneyPlayer}");
             PlayerPrefs.SetInt("Money", GameManager.instance.moneyPlayer);
+            // gameObject.SetActive(false);
             StartCoroutine(delayLoadGame());
-            
+
+        }
+    }
+    public bool isShipStand = false;
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ship"))
+        {
+            Debug.Log("Chạm tàu");
+            GameManager.instance.anim.SetBool("isUp", false);
+            GameManager.instance.anim.SetBool("isStand", true);
+            isShipStand = true;
+            GameManager.instance.airplaneRigidbody2D.velocity = Vector2.zero;
+            GameManager.instance.airplaneRigidbody2D.angularVelocity = 0f;
         }
     }
 
@@ -141,7 +143,7 @@ public class Player : MonoBehaviour
             return;
         }
 
-        float downwardForce = 10f + (index * 3f);
+        float downwardForce = 5f + (index * 2f);
 
         rb.AddForce(Vector2.down * downwardForce, ForceMode2D.Impulse);
 
@@ -184,12 +186,13 @@ public class Player : MonoBehaviour
 
         if (BonusSpawner.instance != null) BonusSpawner.instance.DeleteSpawnedItems();
         if (RocketSpawner.instance != null) RocketSpawner.instance.DeleteSpawnedItems();
-        // if (ShipSpawner.instance != null) ShipSpawner.instance.DeleteSpawnedItems();
+        if (ShipSpawner.instance != null) ShipSpawner.instance.DeleteSpawnedItems();
     }
 
     IEnumerator delayLoadGame()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
+        // gameObject.SetActive(true);
         LoadGame();
         if (GameManager.instance.isLoop)
         {

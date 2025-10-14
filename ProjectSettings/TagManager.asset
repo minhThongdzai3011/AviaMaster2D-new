@@ -8,6 +8,7 @@ TagManager:
   - Ship
   - Sea
   - Rocket
+  - DontDestroy
   layers:
   - Default
   - TransparentFX

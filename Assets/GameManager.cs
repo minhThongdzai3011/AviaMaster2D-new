@@ -61,12 +61,26 @@ public class GameManager : MonoBehaviour
         else Destroy(gameObject);
 
         Time.timeScale = 1f;
-
+        moneyPlayer = PlayerPrefs.GetInt("Money", 0);
+        moneyTextPlayer.text = moneyPlayer.ToString("");
+        flightAngleLevel = PlayerPrefs.GetInt("FlightAngleLevel", 1);
+        flyingPowerLevel = PlayerPrefs.GetInt("FlyingPowerLevel", 1);
+        trainDistanceLevel = PlayerPrefs.GetInt("TrainDistanceLevel", 1);
+        flightAngleMoney = PlayerPrefs.GetInt("FlightAngleMoney", 200);
+        flyingPowerMoney = PlayerPrefs.GetInt("FlyingPowerMoney", 200);
+        trainDistanceMoney = PlayerPrefs.GetInt("TrainDistanceMoney", 200);
+        flightAngleTextLevel.text = "Level " + flightAngleLevel;
+        flightAngleTextMoney.text = flightAngleMoney.ToString();
+        flyingPowerTextLevel.text = "Level " + flyingPowerLevel;
+        flyingPowerTextMoney.text = flyingPowerMoney.ToString();
+        trainDistanceTextLevel.text = "Level " + trainDistanceLevel;
+        trainDistanceTextMoney.text = trainDistanceMoney.ToString();
+        Time.timeScale = 0.5f;
     }
 
     void Start()
     {
-        moneyPlayer = PlayerPrefs.GetInt("Money", 0);
+        
         if (airplaneRigidbody2D != null)
         {
             startPosition = airplaneRigidbody2D.transform.position;
@@ -122,14 +136,14 @@ public class GameManager : MonoBehaviour
         {
             LaunchAirplane();
         }
-        if (airplaneRigidbody2D.velocity.y > 0.1f)
+        if (airplaneRigidbody2D.velocity.y > 0.1f && !Player.instance.isShipStand)
         {
             isUp = true;
             isStand = false;
             anim.SetBool("isUp", true);
             anim.SetBool("isStand", false);
         }
-        else if (airplaneRigidbody2D.velocity.y < -0.1f)
+        else if (airplaneRigidbody2D.velocity.y < -0.1f && !Player.instance.isShipStand)
         {
             isUp = false;
             isStand = false;
@@ -157,7 +171,9 @@ public class GameManager : MonoBehaviour
             moneyTextPlayer.text = moneyPlayer.ToString("");
             PlayerPrefs.SetInt("Money", moneyPlayer);
             flightAngleTextLevel.text = "Level " + flightAngleLevel;
+            PlayerPrefs.SetInt("FlightAngleLevel", flightAngleLevel);
             flightAngleTextMoney.text = flightAngleMoney.ToString();
+            PlayerPrefs.SetInt("FlightAngleMoney", flightAngleMoney);
         }
         else
         {
@@ -175,7 +191,9 @@ public class GameManager : MonoBehaviour
             moneyTextPlayer.text = moneyPlayer.ToString("");
             PlayerPrefs.SetInt("Money", moneyPlayer);
             flyingPowerTextLevel.text = "Level " + flyingPowerLevel;
+            PlayerPrefs.SetInt("FlyingPowerLevel", flyingPowerLevel);
             flyingPowerTextMoney.text = flyingPowerMoney.ToString();
+            PlayerPrefs.SetInt("FlyingPowerMoney", flyingPowerMoney);
         }
     }
     public void UpgradeTrainDistance()
@@ -194,7 +212,9 @@ public class GameManager : MonoBehaviour
             moneyTextPlayer.text = moneyPlayer.ToString("");
             PlayerPrefs.SetInt("Money", moneyPlayer);
             trainDistanceTextLevel.text = "Level " + trainDistanceLevel;
+            PlayerPrefs.SetInt("TrainDistanceLevel", trainDistanceLevel);
             trainDistanceTextMoney.text = trainDistanceMoney.ToString();
+            PlayerPrefs.SetInt("TrainDistanceMoney", trainDistanceMoney);
         }
     }
 

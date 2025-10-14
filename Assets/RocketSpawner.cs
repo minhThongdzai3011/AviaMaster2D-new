@@ -12,11 +12,12 @@ public class RocketSpawner : MonoBehaviour
     [Header("Spawn Range 2D")]
     private float spawnRangeYmin = -2f;
     private float spawnRangeYmax = 2f;
-    private float spawnRangeX = 0f;
+    private float spawnRangeX = 12f;
     
     [Header("Spawn Settings")]
     private float startDelay = 0f;
     private float spawnInterval = 0.2f;
+    public int count = 0;
     
     void Start()
     {
@@ -32,11 +33,19 @@ public class RocketSpawner : MonoBehaviour
     IEnumerator SpawnRocketCoroutine()
     {
         yield return new WaitForSeconds(startDelay);
-
+        
         while (true)
         {
-            SpawnRocketItem();
-            yield return new WaitForSeconds(spawnInterval);
+            count = GameObject.FindGameObjectsWithTag("Rocket").Length;
+            if (count < 20)
+            {
+                SpawnRocketItem();
+                yield return new WaitForSeconds(spawnInterval);
+            }
+            else
+            {
+                yield return null;
+            } 
         }
     }
     
@@ -60,6 +69,6 @@ public class RocketSpawner : MonoBehaviour
         {
             Destroy(item);
         }
-        spawnRangeX = 0f; 
+        spawnRangeX = 12f; 
     }
 }
