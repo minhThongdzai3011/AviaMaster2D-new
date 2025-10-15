@@ -117,6 +117,8 @@ public class GameManager : MonoBehaviour
         airplaneRigidbody2D.gravityScale = gravityScale;
 
         Physics2D.gravity = new Vector2(0f, -9.81f * gravityScale);
+
+        Debug.Log("Máy bay đã được phóng với lực: " + launchForce + " và góc: " + climbAngle);
     }
 
     void Update()

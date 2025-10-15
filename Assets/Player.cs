@@ -117,8 +117,6 @@ public class Player : MonoBehaviour
         float angleRad = Mathf.Deg2Rad * climbAngle;
         Vector2 launchDirection = new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad)).normalized;
 
-        // Nếu máy bay hướng trái trong game, bạn có thể đảo x: launchDirection.x *= -1;
-
         rb.AddForce(launchDirection * bonusForce, ForceMode2D.Impulse);
 
         rb.gravityScale = gravityScale;
@@ -143,7 +141,8 @@ public class Player : MonoBehaviour
             return;
         }
 
-        float downwardForce = 5f + (index * 2f);
+
+        float downwardForce = 10f + (index * 2f);
 
         rb.AddForce(Vector2.down * downwardForce, ForceMode2D.Impulse);
 
