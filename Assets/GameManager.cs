@@ -138,14 +138,14 @@ public class GameManager : MonoBehaviour
         {
             LaunchAirplane();
         }
-        if (airplaneRigidbody2D.velocity.y > 0.1f && !Player.instance.isShipStand)
+        if (airplaneRigidbody2D.velocity.y > 0.1f ) //&& !Player.instance.isShipStand
         {
             isUp = true;
             isStand = false;
             anim.SetBool("isUp", true);
             anim.SetBool("isStand", false);
         }
-        else if (airplaneRigidbody2D.velocity.y < -0.1f && !Player.instance.isShipStand)
+        else if (airplaneRigidbody2D.velocity.y < -0.1f ) //&& !Player.instance.isShipStand
         {
             isUp = false;
             isStand = false;
@@ -176,6 +176,8 @@ public class GameManager : MonoBehaviour
             PlayerPrefs.SetInt("FlightAngleLevel", flightAngleLevel);
             flightAngleTextMoney.text = flightAngleMoney.ToString();
             PlayerPrefs.SetInt("FlightAngleMoney", flightAngleMoney);
+            anim.SetBool("isUp", true);
+            anim.SetBool("isStand", false);
         }
         else
         {

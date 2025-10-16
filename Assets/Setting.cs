@@ -15,7 +15,9 @@ public class Setting : MonoBehaviour
     public Image loopPanel;
     public Image imageHighQuality;
     public Image imageHoverHighQuality;
-    
+    public Image imageAudioPlay;
+    public Image imageAudioSetting;
+
 
     [Header("Text UI")]
     public TextMeshProUGUI textLoop;
@@ -36,7 +38,6 @@ public class Setting : MonoBehaviour
     public Slider sliderButtonOpacity;
 
     [Header("Settings Button Play UI")]
-
     public Image imageSettings;
     public Image arrowRight;
     public Image arrowLeft;
@@ -44,6 +45,12 @@ public class Setting : MonoBehaviour
     public Image arrowDown;
     public Image loopImageSettings;
     public TextMeshProUGUI textSpinPlace;
+
+    [Header("Change Sprite UI")]
+    public Sprite spriteAudioOffPlay;
+    public Sprite spriteAudioOnPlay;
+    public Sprite spriteAudioOffSetting;
+    public Sprite spriteAudioOnSetting;
 
     void Start()
     {
@@ -204,5 +211,41 @@ public class Setting : MonoBehaviour
         textSpinPlace.rectTransform.localScale = newSize;
         loopImageSettings.rectTransform.localScale = newSize;
 
+    }
+
+    public bool isChangeAudioPlay = true;
+    public void ChangeSpriteAudioPlay()
+    {
+        if (isChangeAudioPlay)
+        {
+            isChangeAudioPlay = false;
+            imageAudioPlay.sprite = spriteAudioOffPlay;
+            imageAudioSetting.sprite = spriteAudioOffSetting;
+            // AudioListener.volume = 0f;
+        }
+        else
+        {
+            isChangeAudioPlay = true;
+            imageAudioPlay.sprite = spriteAudioOnPlay;
+            imageAudioSetting.sprite = spriteAudioOnSetting;
+            // AudioListener.volume = 1f;
+        }
+    }
+    public void ChangeSpriteAudioSetting()
+    {
+        if (isChangeAudioPlay)
+        {
+            isChangeAudioPlay = false;
+            imageAudioPlay.sprite = spriteAudioOffPlay;
+            imageAudioSetting.sprite = spriteAudioOffSetting;
+            // AudioListener.volume = 0f;
+        }
+        else
+        {
+            isChangeAudioPlay = true;
+            imageAudioPlay.sprite = spriteAudioOnPlay;
+            imageAudioSetting.sprite = spriteAudioOnSetting;
+            // AudioListener.volume = 1f;
+        }
     }
 }

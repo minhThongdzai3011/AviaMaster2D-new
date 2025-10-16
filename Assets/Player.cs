@@ -6,7 +6,7 @@ public class Player : MonoBehaviour
     public static Player instance;
     [Header("Cài đặt máy bay")]
     public float launchForce = 20f; // Lực đẩy ban đầu
-    public float climbAngle = 15f;  // Góc bay lên (độ)
+    private float climbAngle = 15f;  // Góc bay lên (độ)
     public float gravityScale = 1f; // Thang trọng lực chung
     private bool hasLaunched = false;
     public int index = 2;
@@ -84,6 +84,7 @@ public class Player : MonoBehaviour
             isShipStand = true;
             GameManager.instance.airplaneRigidbody2D.velocity = Vector2.zero;
             GameManager.instance.airplaneRigidbody2D.angularVelocity = 0f;
+            StartCoroutine(delayLoadGame());
         }
     }
 
@@ -144,7 +145,9 @@ public class Player : MonoBehaviour
 
         float downwardForce = 10f + (index * 2f);
 
-        rb.AddForce(Vector2.down * downwardForce, ForceMode2D.Impulse);
+        float angle = 45f * Mathf.Deg2Rad; 
+        Vector2 direction = new Vector2(Mathf.Sin(angle), -Mathf.Cos(angle));
+        rb.AddForce(direction.normalized * downwardForce, ForceMode2D.Impulse);
 
         StartCoroutine(IncreaseGravityTemporarily2D(2f, 3f));
 
