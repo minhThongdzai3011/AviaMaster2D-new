@@ -15,6 +15,7 @@ public class Setting : MonoBehaviour
     public Image loopPanel;
     public Image imageHighQuality;
     public Image imageHoverHighQuality;
+    
 
     [Header("Text UI")]
     public TextMeshProUGUI textLoop;
@@ -27,6 +28,22 @@ public class Setting : MonoBehaviour
     [Header("Save Rigidbody2D")]
     public Vector2 saveVelocity;
     public float saveAngularVelocity;
+
+    [Header("Reset Settings")]
+    public Slider sliderSound;
+    public Slider sliderMusic;
+    public Slider sliderButtonSize;
+    public Slider sliderButtonOpacity;
+
+    [Header("Settings Button Play UI")]
+
+    public Image imageSettings;
+    public Image arrowRight;
+    public Image arrowLeft;
+    public Image arrowUp;
+    public Image arrowDown;
+    public Image loopImageSettings;
+    public TextMeshProUGUI textSpinPlace;
 
     void Start()
     {
@@ -41,6 +58,8 @@ public class Setting : MonoBehaviour
 
     public void AnimDoscaleCircleBigSetting()
     {
+        LoadSettings();
+
         saveVelocity = GameManager.instance.airplaneRigidbody2D.velocity;
         saveAngularVelocity = GameManager.instance.airplaneRigidbody2D.angularVelocity;
         GameManager.instance.airplaneRigidbody2D.velocity = Vector2.zero;
@@ -55,6 +74,8 @@ public class Setting : MonoBehaviour
 
     public void AnimDoscaleCircleSmallSetting()
     {
+        //SaveSetting();
+        SaveSettings();
 
         settingsPanel.gameObject.SetActive(false);
         imageCircle.rectTransform.DOScale(1f, 0.1f).SetEase(Ease.Linear).OnComplete(() =>
@@ -133,5 +154,55 @@ public class Setting : MonoBehaviour
     }
 
 
-    
+    public void ResetSetting()
+    {
+        sliderSound.value = 1f;
+        sliderMusic.value = 1f;
+        sliderButtonSize.value = 1f;
+        sliderButtonOpacity.value = 1f;
+    }
+    public void SaveSettings()
+    {
+        PlayerPrefs.SetFloat("Sound", sliderSound.value);
+        PlayerPrefs.SetFloat("Music", sliderMusic.value);
+        PlayerPrefs.SetFloat("ButtonSize", sliderButtonSize.value);
+        PlayerPrefs.SetFloat("ButtonOpacity", sliderButtonOpacity.value);
+    }
+
+    public void LoadSettings()
+    {
+        sliderSound.value = PlayerPrefs.GetFloat("Sound", 1f);
+        sliderMusic.value = PlayerPrefs.GetFloat("Music", 1f);
+        sliderButtonSize.value = PlayerPrefs.GetFloat("ButtonSize", 1f);
+        sliderButtonOpacity.value = PlayerPrefs.GetFloat("ButtonOpacity", 1f);
+    }
+
+    public void ChangeButtonSettingsOpacity()
+    {
+        Color newColor = imageSettings.color;
+        newColor.a = sliderButtonOpacity.value;
+        imageSettings.color = newColor;
+        arrowRight.color = newColor;
+        arrowLeft.color = newColor;
+        arrowUp.color = newColor;
+        arrowDown.color = newColor;
+        textSpinPlace.color = newColor;
+        loopImageSettings.color = newColor;
+
+    }
+
+    public void ChangeButtonSettingsSize()
+    {
+        Vector3 newSize = imageSettings.rectTransform.localScale;
+        newSize.x = sliderButtonSize.value;
+        newSize.y = sliderButtonSize.value;
+        imageSettings.rectTransform.localScale = newSize;
+        arrowRight.rectTransform.localScale = newSize;
+        arrowLeft.rectTransform.localScale = newSize;
+        arrowUp.rectTransform.localScale = newSize;
+        arrowDown.rectTransform.localScale = newSize;
+        textSpinPlace.rectTransform.localScale = newSize;
+        loopImageSettings.rectTransform.localScale = newSize;
+
+    }
 }
