@@ -17,8 +17,9 @@ public class Setting : MonoBehaviour
     public Image imageHoverHighQuality;
     public Image imageAudioPlay;
     public Image imageAudioSetting;
-
-
+    public Image imageInformation;
+    public Image imageInformationSetting;
+    public Image imageMenuSetting;
     [Header("Text UI")]
     public TextMeshProUGUI textLoop;
 
@@ -44,6 +45,7 @@ public class Setting : MonoBehaviour
     public Image arrowUp;
     public Image arrowDown;
     public Image loopImageSettings;
+
     public TextMeshProUGUI textSpinPlace;
 
     [Header("Change Sprite UI")]
@@ -51,6 +53,8 @@ public class Setting : MonoBehaviour
     public Sprite spriteAudioOnPlay;
     public Sprite spriteAudioOffSetting;
     public Sprite spriteAudioOnSetting;
+    // public Sprite spriteInformationOn;
+    // public Sprite spriteInformationOff;
 
     void Start()
     {
@@ -221,14 +225,14 @@ public class Setting : MonoBehaviour
             isChangeAudioPlay = false;
             imageAudioPlay.sprite = spriteAudioOffPlay;
             imageAudioSetting.sprite = spriteAudioOffSetting;
-            // AudioListener.volume = 0f;
+            AudioListener.volume = 0f;
         }
         else
         {
             isChangeAudioPlay = true;
             imageAudioPlay.sprite = spriteAudioOnPlay;
             imageAudioSetting.sprite = spriteAudioOnSetting;
-            // AudioListener.volume = 1f;
+            AudioListener.volume = 1f;
         }
     }
     public void ChangeSpriteAudioSetting()
@@ -238,14 +242,25 @@ public class Setting : MonoBehaviour
             isChangeAudioPlay = false;
             imageAudioPlay.sprite = spriteAudioOffPlay;
             imageAudioSetting.sprite = spriteAudioOffSetting;
-            // AudioListener.volume = 0f;
+            AudioListener.volume = 0f;
         }
         else
         {
             isChangeAudioPlay = true;
             imageAudioPlay.sprite = spriteAudioOnPlay;
             imageAudioSetting.sprite = spriteAudioOnSetting;
-            // AudioListener.volume = 1f;
+            AudioListener.volume = 1f;
+        }
+    }
+
+    public bool isInformationOn = true;
+    public void ChangeSpriteInformation()
+    {
+        if (isInformationOn)
+        {
+            isInformationOn = false;
+            imageInformationSetting.gameObject.SetActive(true);
+            imageMenuSetting.gameObject.SetActive(false);
         }
     }
 }

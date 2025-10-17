@@ -76,11 +76,12 @@ public class GameManager : MonoBehaviour
         trainDistanceTextLevel.text = "Level " + trainDistanceLevel;
         trainDistanceTextMoney.text = trainDistanceMoney.ToString();
         Time.timeScale = 0.5f;
+        AudioBackgroundPlay();
     }
 
     void Start()
     {
-        
+
         if (airplaneRigidbody2D != null)
         {
             startPosition = airplaneRigidbody2D.transform.position;
@@ -138,14 +139,14 @@ public class GameManager : MonoBehaviour
         {
             LaunchAirplane();
         }
-        if (airplaneRigidbody2D.velocity.y > 0.1f ) //&& !Player.instance.isShipStand
+        if (airplaneRigidbody2D.velocity.y > 0.1f) //&& !Player.instance.isShipStand
         {
             isUp = true;
             isStand = false;
             anim.SetBool("isUp", true);
             anim.SetBool("isStand", false);
         }
-        else if (airplaneRigidbody2D.velocity.y < -0.1f ) //&& !Player.instance.isShipStand
+        else if (airplaneRigidbody2D.velocity.y < -0.1f) //&& !Player.instance.isShipStand
         {
             isUp = false;
             isStand = false;
@@ -166,6 +167,7 @@ public class GameManager : MonoBehaviour
     {
         if (moneyPlayer >= flightAngleMoney)
         {
+            AudioClips();
             moneyPlayer -= flightAngleMoney;
             flightAngleLevel++;
             // climbAngle += 5f; // Tăng góc bay lên
@@ -188,6 +190,7 @@ public class GameManager : MonoBehaviour
     {
         if (moneyPlayer >= flyingPowerMoney)
         {
+            AudioClips();
             moneyPlayer -= flyingPowerMoney;
             flyingPowerLevel++;
             // launchForce += 2f; // Tăng lực bay
@@ -204,6 +207,7 @@ public class GameManager : MonoBehaviour
     {
         if (moneyPlayer >= trainDistanceMoney)
         {
+            AudioClips();
             moneyPlayer -= trainDistanceMoney;
             trainDistanceLevel++;
             // gravityScale = Mathf.Max(0.1f, gravityScale - 0.5f); // Giảm trọng lực
@@ -238,4 +242,16 @@ public class GameManager : MonoBehaviour
     }
 
 
+    public void AudioBackgroundPlay()
+    {
+        AudioManager.instance.audioMusic.clip = AudioManager.instance.backgroundMusicClip;
+        AudioManager.instance.audioMusic.loop = true;
+        AudioManager.instance.audioMusic.Play();
+    }
+
+    public void AudioClips()
+    {
+        AudioManager.instance.audioSound.Stop();
+        AudioManager.instance.audioSound.PlayOneShot(AudioManager.instance.upgradeSoundClip);
+    }
 }
