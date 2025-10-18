@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
 
     [Header("Image UI")]
     public Image loopImage;
+    public Image imageUpgradePlay;
 
     [Header("Button UI")]
     public Button upgradeFlightAngleButton;
@@ -83,12 +84,13 @@ public class GameManager : MonoBehaviour
         if (trainDistanceTextLevel != null) trainDistanceTextLevel.text = "Level " + trainDistanceLevel;
         if (trainDistanceTextMoney != null) trainDistanceTextMoney.text = trainDistanceMoney.ToString();
 
-        Time.timeScale = 0.5f;
-        AudioBackgroundPlay();
+        Time.timeScale = 1f;
+        
     }
 
     void Start()
     {
+        AudioBackgroundPlay();
         if (airplaneRigidbody2D != null)
         {
             startPosition = airplaneRigidbody2D.transform.position;
@@ -96,7 +98,6 @@ public class GameManager : MonoBehaviour
             airplaneRigidbody2D.angularVelocity = 0f;
             airplaneRigidbody2D.gravityScale = gravityScale;
 
-            // Khóa rotation vật lý để script điều khiển rotation
             airplaneRigidbody2D.freezeRotation = true;
         }
         money = PlayerPrefs.GetInt("Money", 0);
@@ -117,20 +118,17 @@ public class GameManager : MonoBehaviour
             anim.SetBool("isStand", false);
         }
 
-        // Tính hướng bay lên theo góc climbAngle (độ)
         float angleRad = Mathf.Deg2Rad * climbAngle;
         Vector2 launchDirection = new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad)).normalized;
 
-        // Áp dụng lực đẩy ban đầu
         airplaneRigidbody2D.AddForce(launchDirection * launchForce, ForceMode2D.Impulse);
 
-        // Đảm bảo gravityScale đúng
         airplaneRigidbody2D.gravityScale = gravityScale;
         Physics2D.gravity = new Vector2(0f, -9.81f * gravityScale);
 
-        // Đặt rotation khởi tạo theo hướng launchDirection chính xác (sử dụng Atan2)
         float launchAngleDeg = Mathf.Atan2(launchDirection.y, launchDirection.x) * Mathf.Rad2Deg;
         airplaneRigidbody2D.transform.rotation = Quaternion.Euler(0f, 0f, launchAngleDeg);
+        imageUpgradePlay.gameObject.SetActive(false);
 
         Debug.Log("Máy bay đã được phóng với lực: " + launchForce + " và góc: " + climbAngle + " (launchAngleDeg = " + launchAngleDeg + ")");
     }
@@ -143,12 +141,11 @@ public class GameManager : MonoBehaviour
         distanceTraveled = Vector2.Distance(startPosition, currentPos);
         currentAltitude = currentPos.y - startPosition.y;
         if (currentAltitude < 0f) currentAltitude = 0f;
-        money = Mathf.FloorToInt(distanceTraveled * 2f);
+        money = Mathf.FloorToInt(distanceTraveled / 1.34f);
         if (distanceText != null) distanceText.text = distanceTraveled.ToString("F2") + " m";
         if (altitudeText != null) altitudeText.text = currentAltitude.ToString("F2") + " m";
         if (moneyText != null) moneyText.text = money.ToString("F0");
 
-        // Tự động xoay máy bay theo hướng vận tốc khi có velocity
         UpdateRotationFromVelocity();
 
         if (Input.GetKeyDown(KeyCode.Space))
@@ -156,8 +153,6 @@ public class GameManager : MonoBehaviour
             LaunchAirplane();
         }
     }
-
-    // Thêm hai hàm helper ở cùng class
 
     float ComputeUpTargetAngle(Vector2 velocity)
     {
@@ -177,7 +172,6 @@ public class GameManager : MonoBehaviour
         return Mathf.Clamp(velAngle, maxDownAngle, 0f);
     }
 
-    // Thay thế UpdateRotationFromVelocity bằng phiên bản gọi hai hàm trên
 
     void UpdateRotationFromVelocity()
     {
@@ -186,7 +180,6 @@ public class GameManager : MonoBehaviour
         Vector2 velocity = airplaneRigidbody2D.velocity;
         float minMoveSqr = minMoveThreshold * minMoveThreshold;
 
-        // Nếu đang đứng trên tàu, về thẳng
         if (Player.instance != null && Player.instance.isShipStand)
         {
             airplaneRigidbody2D.transform.rotation = Quaternion.Lerp(
@@ -215,7 +208,6 @@ public class GameManager : MonoBehaviour
                 targetAngle = 0f;
             }
 
-            // Mượt hóa góc hiện tại -> target
             float currentZ = airplaneRigidbody2D.transform.eulerAngles.z;
             if (currentZ > 180f) currentZ -= 360f;
             float newZ = Mathf.Lerp(currentZ, targetAngle, Time.deltaTime * rotationSmooth);
@@ -224,7 +216,6 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            // Không di chuyển đáng kể, từ từ về ngang (0 độ)
             airplaneRigidbody2D.transform.rotation = Quaternion.Lerp(
                 airplaneRigidbody2D.transform.rotation,
                 Quaternion.identity,
@@ -235,6 +226,8 @@ public class GameManager : MonoBehaviour
 
     void AudioBackgroundPlay()
     {
-        // Placeholder nếu bạn có âm thanh nền
+        AudioManager.instance.audioMusic.clip = AudioManager.instance.backgroundMusicClip;
+        AudioManager.instance.audioMusic.loop = true;
+        AudioManager.instance.audioMusic.Play();
     }
 }

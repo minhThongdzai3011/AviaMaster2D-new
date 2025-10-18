@@ -11,10 +11,10 @@ public class RocketSpawner : MonoBehaviour
     public GameObject[] rocketPrefabs;
     
     [Header("Spawn Range 2D")]
-    private float spawnRangeYmin = -2f;
-    private float spawnRangeYmax = 2f;
-    private float spawnRangeX = 12f;
-    
+    public float spawnRangeYmin = -2f;
+    public float spawnRangeYmax = 2f;
+    public float spawnRangeX = -14f;
+
     [Header("Spawn Settings")]
     private float startDelay = 0f;
     private float spawnInterval = 0.2f;
@@ -60,7 +60,7 @@ public class RocketSpawner : MonoBehaviour
                                             0f); 
         
         Instantiate(rocketPrefabs[prefabIndex], spawnPosition, rocketPrefabs[prefabIndex].transform.rotation);
-        spawnRangeX += 5f; 
+        spawnRangeX += Random.Range(5f, 10f); 
     }
     
     public void DeleteSpawnedItems()
@@ -70,6 +70,6 @@ public class RocketSpawner : MonoBehaviour
         {
             Destroy(item);
         }
-        spawnRangeX = 12f; 
+        spawnRangeX = -14f; 
     }
 }

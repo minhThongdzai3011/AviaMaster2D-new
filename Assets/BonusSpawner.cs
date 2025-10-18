@@ -7,9 +7,9 @@ public class BonusSpawner : MonoBehaviour
     public static BonusSpawner instance;
     [Header("Vật phẩm Bonus")]
     public GameObject[] bonusPrefabs;
-    private float spawnRangeYmin = -2f;
-    private float spawnRangeYmax = 2f;
-    private float spawnRangeX = 8f;
+    public float spawnRangeYmin = -2f;
+    public float spawnRangeYmax = 2f;
+    public float spawnRangeX = -18f;
 
     [Header("Spawn Settings")]
     private float startDelay = 0f;
@@ -52,7 +52,7 @@ public class BonusSpawner : MonoBehaviour
                                             Random.Range(spawnRangeYmin, spawnRangeYmax),
                                             0);
         Instantiate(bonusPrefabs[prefabIndex], spawnPosition, bonusPrefabs[prefabIndex].transform.rotation);
-        spawnRangeX += 5f;
+        spawnRangeX += Random.Range(5f, 10f);
     }
 
     public void DeleteSpawnedItems()
@@ -68,7 +68,7 @@ public class BonusSpawner : MonoBehaviour
         {
             Destroy(item);
         }
-        spawnRangeX = 8f; // Reset spawnRangeX to initial value
+        spawnRangeX = -18f; // Reset spawnRangeX to initial value
     }
 
     
