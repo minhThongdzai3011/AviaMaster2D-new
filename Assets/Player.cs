@@ -13,7 +13,7 @@ public class Player : MonoBehaviour
     
     [Header("Hiệu ứng Bonus & Rocket")]
     public float bonusForceMultiplier = 1.05f; // Hệ số nhân lực khi ăn bonus
-    public float bonusAngleIncrease = 5f; // Góc tăng thêm khi ăn bonus
+    public float bonusAngleIncrease = 10f; // Góc tăng thêm khi ăn bonus
     public float rocketAngleDecrease = 15f; // Góc giảm khi ăn rocket
     public float effectDuration = 2f; // Thời gian hiệu ứng kéo dài
     
@@ -110,10 +110,49 @@ public class Player : MonoBehaviour
     public float groundFriction = 0.95f; // Hệ số ma sát (0-1, càng nhỏ càng trượt nhiều)
     public float groundDrag = 2f; // Lực cản không khí khi trên mặt đất
 
+    public bool isBonus2 = false;
+    public bool isBonus3 = false;
+    public bool isBonus4 = false;
+    public bool isBonus5 = false;
+    public bool isBonus10 = false;
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Bonus")
+        if (collision.gameObject.tag == "Bonus2")
         {
+            GameManager.instance.score *= 2;
+            isBonus2 = true;
+            Debug.Log("Ăn Bonus!");
+            ApplyBonusEffect();
+            Destroy(collision.gameObject);
+        }
+        else if (collision.gameObject.tag == "Bonus3")
+        {
+            GameManager.instance.score *= 3;
+            isBonus3 = true;
+            Debug.Log("Ăn Bonus!");
+            ApplyBonusEffect();
+            Destroy(collision.gameObject);
+        }
+        else if (collision.gameObject.tag == "Bonus4")
+        {
+            GameManager.instance.score *= 4;
+            isBonus4 = true;
+            Debug.Log("Ăn Bonus!");
+            ApplyBonusEffect();
+            Destroy(collision.gameObject);
+        }
+        else if (collision.gameObject.tag == "Bonus5")
+        {
+            GameManager.instance.score *= 5;
+            isBonus5 = true;
+            Debug.Log("Ăn Bonus!");
+            ApplyBonusEffect();
+            Destroy(collision.gameObject);
+        }
+        else if (collision.gameObject.tag == "Bonus10")
+        {
+            GameManager.instance.score *= 10;
+            isBonus10 = true;
             Debug.Log("Ăn Bonus!");
             ApplyBonusEffect();
             Destroy(collision.gameObject);

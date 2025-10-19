@@ -38,13 +38,14 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI trainDistanceTextLevel;
     public TextMeshProUGUI trainDistanceTextMoney;
     public TextMeshProUGUI moneyTextPlayer;
-
+    public TextMeshProUGUI scoreText;
     [Header("Trạng thái chơi")]
     public Vector2 startPosition;
     public float distanceTraveled;
     private float currentAltitude;
     public int money = 0;
     public int moneyPlayer = 0;
+    public int score = 0;
     public bool isLoop = false;
     public Animator anim;
     public bool isUp;
@@ -132,28 +133,90 @@ public class GameManager : MonoBehaviour
 
         Debug.Log("Máy bay đã được phóng với lực: " + launchForce + " và góc: " + climbAngle + " (launchAngleDeg = " + launchAngleDeg + ")");
     }
+    float lastDistance = 0f;
+void Update()
+{
+    if (airplaneRigidbody2D == null) return;
 
-    void Update()
+    Vector2 currentPos = airplaneRigidbody2D.transform.position;
+    distanceTraveled = Vector2.Distance(startPosition, currentPos);
+    currentAltitude = currentPos.y - startPosition.y;
+    if (currentAltitude < 0f) currentAltitude = 0f;
+    
+    // Tính money từ khoảng cách
+    money = Mathf.FloorToInt(distanceTraveled / 1.34f);
+    
+    // Tính score từ delta distance
+    if (Player.instance != null)
     {
-        if (airplaneRigidbody2D == null) return;
-
-        Vector2 currentPos = airplaneRigidbody2D.transform.position;
-        distanceTraveled = Vector2.Distance(startPosition, currentPos);
-        currentAltitude = currentPos.y - startPosition.y;
-        if (currentAltitude < 0f) currentAltitude = 0f;
-        money = Mathf.FloorToInt(distanceTraveled / 1.34f);
-        if (distanceText != null) distanceText.text = distanceTraveled.ToString("F2") + " m";
-        if (altitudeText != null) altitudeText.text = currentAltitude.ToString("F2") + " m";
-        if (moneyText != null) moneyText.text = money.ToString("F0");
-
-        UpdateRotationFromVelocity();
-
-        if (Input.GetKeyDown(KeyCode.Space))
+        int multiplier = 1; // Multiplier mặc định
+        
+        if (Player.instance.isBonus2)
         {
-            LaunchAirplane();
+            multiplier = 2;
+            Debug.Log("Bonus 2x active");
+            Player.instance.isBonus2 = false;
+        }
+        else if (Player.instance.isBonus3)
+        {
+            multiplier = 3;
+            Debug.Log("Bonus 3x active");
+            Player.instance.isBonus3 = false;
+        }
+        else if (Player.instance.isBonus4)
+        {
+            multiplier = 4;
+            Debug.Log("Bonus 4x active");
+            Player.instance.isBonus4 = false;
+        }
+        else if (Player.instance.isBonus5)
+        {
+            multiplier = 5;
+            Debug.Log("Bonus 5x active");
+            Player.instance.isBonus5 = false;
+        }
+        else if (Player.instance.isBonus10)
+        {
+            multiplier = 10;
+            Debug.Log("Bonus 10x active");
+            Player.instance.isBonus10 = false;
+        }
+        
+        float deltaDistance = distanceTraveled - lastDistance;
+        if (deltaDistance >= 1.34f)
+        {
+            int pointsToAdd = Mathf.FloorToInt(deltaDistance / 1.34f);
+            score += pointsToAdd * multiplier;
+            lastDistance += pointsToAdd * 1.34f;
+            
+            Debug.Log($"Added {pointsToAdd * multiplier} points (multiplier: {multiplier})");
+        }
+    }
+    else
+    {
+        // Fallback nếu Player.instance null
+        float deltaDistance = distanceTraveled - lastDistance;
+        if (deltaDistance >= 1.34f)
+        {
+            int pointsToAdd = Mathf.FloorToInt(deltaDistance / 1.34f);
+            score += pointsToAdd;
+            lastDistance += pointsToAdd * 1.34f;
         }
     }
 
+    // Cập nhật UI
+    if (distanceText != null) distanceText.text = distanceTraveled.ToString("F2") + " m";
+    if (altitudeText != null) altitudeText.text = currentAltitude.ToString("F2") + " m";
+    if (moneyText != null) moneyText.text = money.ToString("F0");
+    if (scoreText != null) scoreText.text = score.ToString("F0");
+
+    UpdateRotationFromVelocity();
+
+    if (Input.GetKeyDown(KeyCode.Space))
+    {
+        LaunchAirplane();
+    }
+}
     float ComputeUpTargetAngle(Vector2 velocity)
     {
         // Tính góc từ vector vận tốc, nhưng ưu tiên cảm giác "bay lên"

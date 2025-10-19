@@ -1549,7 +1549,7 @@ GameObject:
   - component: {fileID: 200452889}
   m_Layer: 0
   m_Name: 5
-  m_TagString: Bonus
+  m_TagString: Bonus5
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3825,7 +3825,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 379615459}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -28.665688, y: 2.82039, z: -10}
+  m_LocalPosition: {x: -28.283062, y: 2.82039, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4708,7 +4708,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bonusPrefabs:
-  - {fileID: 374547678}
   - {fileID: 769972044}
   - {fileID: 1858232038}
   - {fileID: 1815209240}
@@ -5121,7 +5120,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -28.665688, y: 2.82039, z: -10}
+  m_LocalPosition: {x: -28.283062, y: 2.82039, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5497,10 +5496,12 @@ MonoBehaviour:
   trainDistanceTextLevel: {fileID: 339973034}
   trainDistanceTextMoney: {fileID: 53879378}
   moneyTextPlayer: {fileID: 1825841549}
+  scoreText: {fileID: 1263012070}
   startPosition: {x: 0, y: 0}
   distanceTraveled: 0
   money: 0
   moneyPlayer: 0
+  score: 0
   isLoop: 0
   anim: {fileID: 643332589}
   isUp: 0
@@ -6462,7 +6463,7 @@ MonoBehaviour:
   isBonus: 0
   isRocket: 0
   bonusForceMultiplier: 1.05
-  bonusAngleIncrease: 5
+  bonusAngleIncrease: 10
   rocketAngleDecrease: 15
   effectDuration: 2
   rotationSpeed: 2
@@ -6470,6 +6471,11 @@ MonoBehaviour:
   isOnGround: 0
   groundFriction: 0.95
   groundDrag: 2
+  isBonus2: 0
+  isBonus3: 0
+  isBonus4: 0
+  isBonus5: 0
+  isBonus10: 0
 --- !u!95 &643332589
 Animator:
   serializedVersion: 5
@@ -7465,7 +7471,7 @@ GameObject:
   - component: {fileID: 769972046}
   m_Layer: 0
   m_Name: 2
-  m_TagString: Bonus
+  m_TagString: Bonus2
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -14448,7 +14454,7 @@ GameObject:
   - component: {fileID: 1497689002}
   m_Layer: 0
   m_Name: 10
-  m_TagString: Bonus
+  m_TagString: Bonus10
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -17974,7 +17980,7 @@ GameObject:
   - component: {fileID: 1815209242}
   m_Layer: 0
   m_Name: 4
-  m_TagString: Bonus
+  m_TagString: Bonus4
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -18374,7 +18380,7 @@ GameObject:
   - component: {fileID: 1858232040}
   m_Layer: 0
   m_Name: 3
-  m_TagString: Bonus
+  m_TagString: Bonus3
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

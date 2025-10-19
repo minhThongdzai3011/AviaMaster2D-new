@@ -9,6 +9,11 @@ TagManager:
   - Sea
   - Rocket
   - DontDestroy
+  - Bonus2
+  - Bonus3
+  - Bonus4
+  - Bonus5
+  - Bonus10
   layers:
   - Default
   - TransparentFX
