@@ -42,6 +42,7 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI moneyTextPlayer;
     public TextMeshProUGUI scoreTextPlayer;
     public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI completeText;
 
     [Header("Slider UI")]
     public Slider slider;

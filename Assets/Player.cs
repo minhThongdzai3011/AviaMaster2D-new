@@ -100,13 +100,8 @@ public class Player : MonoBehaviour
                 // Nếu máy bay gần như dừng hẳn, kết thúc game
                 if (Mathf.Abs(velocity.x) < 0.05f && velocity.y == 0f)
                 {
-                    GameManager.instance.imageWin.gameObject.SetActive(true);
-                    GameManager.instance.money = Mathf.RoundToInt(GameManager.instance.score / 3.5f);
-                    StartCoroutine(CountMoney());
-                    StartCoroutine(CountScore());
-
-
-
+                    Debug.Log("Máy bay đã dừng hoàn toàn trên mặt đất!");
+                    StartCoroutine(EndGameSequence());
                 }
             }
         }
@@ -259,7 +254,18 @@ public class Player : MonoBehaviour
                 rb.velocity = velocity;
                 rb.rotation = 0f;
                 Debug.Log("Đã chạm đất, dừng rơi và đặt góc về 0");
+                StartCoroutine(StopRunning());
             }
+        }
+    }
+
+    public IEnumerator StopRunning()
+    {
+        yield return new WaitForSeconds(1f);
+        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            rb.isKinematic = true;
         }
     }
 
@@ -293,6 +299,7 @@ public class Player : MonoBehaviour
             rb.gravityScale = 0f; // tắt gravity cho tới khi launch lại nếu cần
             rb.drag = 0f; // Reset drag về 0
             rb.mass = 1f; // Reset mass về 1
+            rb.isKinematic = false;
         }
 
         hasLaunched = false;
@@ -305,6 +312,8 @@ public class Player : MonoBehaviour
         isRotating = false;
         targetAngle = 0f;
         GameManager.instance.score = 0;
+        GameManager.instance.slider.value = 0f;
+        targetValue = 0f;
         GameManager.instance.playButton.gameObject.SetActive(true);
         GameManager gameManager = GameManager.instance;
         System.Reflection.FieldInfo lastDistanceField = typeof(GameManager).GetField("lastDistance", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
@@ -391,23 +400,69 @@ public class Player : MonoBehaviour
         GameManager.instance.scoreText.text = "$" + GameManager.instance.score.ToString();
     }
     
-    public float targetValue = 0.7f; // 70% tương đương 0.7
+    public float targetValue = 0f; 
 
+    IEnumerator EndGameSequence()
+    {
+        // Đợi một frame để đảm bảo UI được setup
+        yield return null;
+        
+        Debug.Log("Starting end game sequence...");
+        
+        // Setup UI
+        GameManager.instance.imageWin.gameObject.SetActive(true);
+        GameManager.instance.money = Mathf.RoundToInt(GameManager.instance.score / 3.5f);
+        
+        // Chạy các animation cùng lúc
+        StartCoroutine(CountMoney());
+        StartCoroutine(CountScore());
+        StartCoroutine(AnimateSlider());
+        
+        // Đợi animation hoàn thành trước khi làm gì khác
+        yield return new WaitForSeconds(duration + 0.5f);
+        
+        Debug.Log("End game sequence completed");
+    }
 
     IEnumerator AnimateSlider()
     {
+        targetValue = Mathf.Clamp01(GameManager.instance.distanceTraveled / 600f);
+
+        // Kiểm tra null safety
+        if (GameManager.instance?.slider == null || GameManager.instance?.completeText == null)
+        {
+            Debug.LogError("GameManager instance, slider hoặc completeText bị null!");
+            yield break;
+        }
+
         float elapsed = 0f;
         float startValue = GameManager.instance.slider.value;
+        Debug.Log($"Starting slider animation from {startValue} to {targetValue}");
 
         while (elapsed < duration)
         {
             elapsed += Time.deltaTime;
             float progress = Mathf.Clamp01(elapsed / duration);
-            GameManager.instance.slider.value = Mathf.Lerp(startValue, targetValue, progress);
+            float currentValue = Mathf.Lerp(startValue, targetValue, progress);
+
+            // Cập nhật slider
+            GameManager.instance.slider.value = currentValue;
+
+            // Cập nhật text theo phần trăm
+            int percent = Mathf.RoundToInt(currentValue * 100f);
+            GameManager.instance.completeText.text = percent.ToString() + "%";
+            
+            Debug.Log($"Slider progress: {percent}%"); // Debug để theo dõi
+
             yield return null;
         }
 
-        GameManager.instance.slider.value = targetValue; // Đảm bảo kết thúc đúng giá trị
+        // Đảm bảo kết thúc chính xác
+        GameManager.instance.slider.value = targetValue;
+        GameManager.instance.completeText.text = Mathf.RoundToInt(targetValue * 100f).ToString() + "% ";
+        
+        Debug.Log("Slider animation completed!");
     }
+    
 
 }
