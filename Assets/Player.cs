@@ -1,5 +1,7 @@
 using UnityEngine;
 using System.Collections;
+using System.Data.SqlTypes;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class Player : MonoBehaviour
 {
@@ -67,13 +69,13 @@ public class Player : MonoBehaviour
             Rigidbody2D rb = GetComponent<Rigidbody2D>();
             if (rb != null)
             {
-                rb.mass = 8f; // Tăng khối lượng để tăng ma sát
+                // rb.mass = 8f; // Tăng khối lượng để tăng ma sát
 
                 // Áp dụng ma sát cho velocity theo trục x (ngang)
                 Vector2 velocity = rb.velocity;
 
                 // Ma sát chỉ ảnh hưởng đến chuyển động ngang
-                // velocity.x *= groundFriction;
+                velocity.x *= groundFriction;
 
                 // Nếu tốc độ quá nhỏ thì dừng hẳn
                 if (Mathf.Abs(velocity.x) < 0.1f)
@@ -98,7 +100,13 @@ public class Player : MonoBehaviour
                 // Nếu máy bay gần như dừng hẳn, kết thúc game
                 if (Mathf.Abs(velocity.x) < 0.05f && velocity.y == 0f)
                 {
-                    StartCoroutine(delayLoadGame());
+                    GameManager.instance.imageWin.gameObject.SetActive(true);
+                    GameManager.instance.money = Mathf.RoundToInt(GameManager.instance.score / 3.5f);
+                    StartCoroutine(CountMoney());
+                    StartCoroutine(CountScore());
+
+
+
                 }
             }
         }
@@ -107,7 +115,7 @@ public class Player : MonoBehaviour
     public bool isShipStand = false;
     public bool isOnGround = false;
     [Header("Ma sát đất")]
-    public float groundFriction = 0.95f; // Hệ số ma sát (0-1, càng nhỏ càng trượt nhiều)
+    public float groundFriction = 0.85f; // Hệ số ma sát (0-1, càng nhỏ càng trượt nhiều)
     public float groundDrag = 2f; // Lực cản không khí khi trên mặt đất
 
     public bool isBonus2 = false;
@@ -121,7 +129,6 @@ public class Player : MonoBehaviour
         {
             GameManager.instance.score *= 2;
             isBonus2 = true;
-            Debug.Log("Ăn Bonus!");
             ApplyBonusEffect();
             Destroy(collision.gameObject);
         }
@@ -129,7 +136,6 @@ public class Player : MonoBehaviour
         {
             GameManager.instance.score *= 3;
             isBonus3 = true;
-            Debug.Log("Ăn Bonus!");
             ApplyBonusEffect();
             Destroy(collision.gameObject);
         }
@@ -137,7 +143,6 @@ public class Player : MonoBehaviour
         {
             GameManager.instance.score *= 4;
             isBonus4 = true;
-            Debug.Log("Ăn Bonus!");
             ApplyBonusEffect();
             Destroy(collision.gameObject);
         }
@@ -145,7 +150,6 @@ public class Player : MonoBehaviour
         {
             GameManager.instance.score *= 5;
             isBonus5 = true;
-            Debug.Log("Ăn Bonus!");
             ApplyBonusEffect();
             Destroy(collision.gameObject);
         }
@@ -153,12 +157,13 @@ public class Player : MonoBehaviour
         {
             GameManager.instance.score *= 10;
             isBonus10 = true;
-            Debug.Log("Ăn Bonus!");
             ApplyBonusEffect();
             Destroy(collision.gameObject);
         }
         else if (collision.gameObject.tag == "Rocket")
         {
+            GameManager.instance.score /= 2;
+            isRocket = true;
             Debug.Log("Ăn Rocket!");
             ApplyRocketEffect();
             Destroy(collision.gameObject);
@@ -238,18 +243,22 @@ public class Player : MonoBehaviour
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
-            Debug.Log("Máy bay chạm đất!");
             isOnGround = true;
-            GameManager.instance.anim.SetBool("isUp", false);
-            GameManager.instance.anim.SetBool("isStand", true);
 
             // Tắt gravity khi trên mặt đất để tránh rung lắc
             Rigidbody2D rb = GetComponent<Rigidbody2D>();
             if (rb != null)
             {
                 rb.gravityScale = 0f;
-                // Thêm drag để máy bay chậm dần
                 rb.drag = groundDrag;
+            }
+            if (rb.velocity.y <= 0f)
+            {
+                Vector2 velocity = rb.velocity;
+                velocity.y = 0f;
+                rb.velocity = velocity;
+                rb.rotation = 0f;
+                Debug.Log("Đã chạm đất, dừng rơi và đặt góc về 0");
             }
         }
     }
@@ -259,7 +268,6 @@ public class Player : MonoBehaviour
         // Khi rời khỏi mặt đất
         if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
-            Debug.Log("Máy bay rời khỏi mặt đất!");
             isOnGround = false;
 
             // Khôi phục gravity và drag bình thường
@@ -284,6 +292,7 @@ public class Player : MonoBehaviour
             rb.angularVelocity = 0f;
             rb.gravityScale = 0f; // tắt gravity cho tới khi launch lại nếu cần
             rb.drag = 0f; // Reset drag về 0
+            rb.mass = 1f; // Reset mass về 1
         }
 
         hasLaunched = false;
@@ -295,12 +304,18 @@ public class Player : MonoBehaviour
         // Reset rotation mượt mà
         isRotating = false;
         targetAngle = 0f;
-
+        GameManager.instance.score = 0;
+        GameManager.instance.playButton.gameObject.SetActive(true);
+        GameManager gameManager = GameManager.instance;
+        System.Reflection.FieldInfo lastDistanceField = typeof(GameManager).GetField("lastDistance", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        if (lastDistanceField != null)
+            lastDistanceField.SetValue(gameManager, 0f);
 
         GameManager.instance.moneyPlayer += GameManager.instance.money;
         Debug.Log("moneyPlayer: " + GameManager.instance.moneyPlayer);
         PlayerPrefs.SetInt("Money", GameManager.instance.moneyPlayer);
         GameManager.instance.money = 0;
+        GameManager.instance.score = 0; 
         GameManager.instance.moneyTextPlayer.text = GameManager.instance.moneyPlayer.ToString();
 
         // Dừng tất cả coroutines hiệu ứng
@@ -312,24 +327,87 @@ public class Player : MonoBehaviour
 
         if (BonusSpawner.instance != null) BonusSpawner.instance.DeleteSpawnedItems();
         if (RocketSpawner.instance != null) RocketSpawner.instance.DeleteSpawnedItems();
-        if (ShipSpawner.instance != null) ShipSpawner.instance.DeleteSpawnedItems();
+        if (MapSpawner.instance != null) MapSpawner.instance.DeleteSpawnedItems();
         GameManager.instance.imageUpgradePlay.gameObject.SetActive(true);
     }
 
-    IEnumerator delayLoadGame()
+    // IEnumerator delayLoadGame()
+    // {
+    //     yield return new WaitForSeconds(1f);
+    //     Rigidbody2D rb = GetComponent<Rigidbody2D>();
+
+    //     // gameObject.SetActive(true);
+    //     LoadGame();
+
+    //     if (GameManager.instance.isLoop)
+    //     {
+    //         yield return new WaitForSeconds(1f);
+    //         Debug.Log("Loop Game");
+    //         GameManager.instance.LaunchAirplane();
+    //     }
+    // }
+
+    public void NextPlay()
     {
-        yield return new WaitForSeconds(1f);
-        Rigidbody2D rb = GetComponent<Rigidbody2D>();
-        rb.mass = 1f;
-        // gameObject.SetActive(true);
+        GameManager.instance.imageWin.gameObject.SetActive(false);
+        
         LoadGame();
-        if (GameManager.instance.isLoop)
-        {
-            yield return new WaitForSeconds(1f);
-            Debug.Log("Loop Game");
-            GameManager.instance.LaunchAirplane();
-        }
     }
 
+    public float duration = 2f;
+
+
+    IEnumerator CountMoney()
+    {
+        float elapsed = 0f;
+        int currentMoney = 0;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float progress = Mathf.Clamp01(elapsed / duration);
+            currentMoney = Mathf.RoundToInt(progress * GameManager.instance.money);
+            GameManager.instance.moneyText.text = "$" + currentMoney.ToString();
+            yield return null;
+        }
+
+        GameManager.instance.moneyText.text = "$" + GameManager.instance.money.ToString();
+    }
+
+    IEnumerator CountScore()
+    {
+        float elapsed = 0f;
+        int currentScore = 0;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float progress = Mathf.Clamp01(elapsed / duration);
+            currentScore = Mathf.RoundToInt(progress * GameManager.instance.score);
+            GameManager.instance.scoreText.text = "$" + currentScore.ToString();
+            yield return null;
+        }
+
+        GameManager.instance.scoreText.text = "$" + GameManager.instance.score.ToString();
+    }
+    
+    public float targetValue = 0.7f; // 70% tương đương 0.7
+
+
+    IEnumerator AnimateSlider()
+    {
+        float elapsed = 0f;
+        float startValue = GameManager.instance.slider.value;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float progress = Mathf.Clamp01(elapsed / duration);
+            GameManager.instance.slider.value = Mathf.Lerp(startValue, targetValue, progress);
+            yield return null;
+        }
+
+        GameManager.instance.slider.value = targetValue; // Đảm bảo kết thúc đúng giá trị
+    }
 
 }

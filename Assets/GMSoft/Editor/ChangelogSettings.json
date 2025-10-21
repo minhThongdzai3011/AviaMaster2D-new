@@ -1,0 +1,9 @@
+{
+    "gitUrl": "http://123.24.143.6:8080/scm/git/gmsoft-sdk",
+    "branch": "gmsoft-sdk-v7",
+    "apiUrl": "http://123.24.143.6:8080/api/changelog",
+    "hasShownWelcome": true,
+    "lastViewedVersion": "",
+    "lastFetchTime": "0001-01-01T00:00:00",
+    "cacheExpiryMinutes": 30
+}

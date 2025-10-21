@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <link rel="stylesheet" href="game.css">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500&display=swap" rel="stylesheet">
+  <title>{{{ PRODUCT_NAME }}}</title>
+  <meta name="description" content="" />
+  <style type="text/css">
+    .jss1:before {
+      top: 0;
+      width: 100%;
+      filter: blur(16px);
+      height: 100%;
+      content: "";
+      display: block;
+      opacity: .5;
+      z-index: 0;
+      position: absolute;
+      background-size: cover;
+      background-image: url("loading.png")
+    }
+  </style>
+  <!--CUSTOMHEAD
+	{
+    "LOADER_FILENAME": "{{{ LOADER_FILENAME }}}",
+    "DATA_FILENAME": "{{{ DATA_FILENAME }}}",
+    "FRAMEWORK_FILENAME": "{{{ FRAMEWORK_FILENAME }}}",
+    "CODE_FILENAME": "{{{ CODE_FILENAME }}}",
+    "MEMORY_FILENAME": "{{{ MEMORY_FILENAME }}}",
+    "SYMBOLS_FILENAME": "{{{ SYMBOLS_FILENAME }}}",
+    "PRODUCT_VERSION": "{{{ PRODUCT_VERSION }}}",
+    "PRODUCT_NAME": "{{{ PRODUCT_NAME }}}"
+	}
+    ENDCUSTOMHEAD-->
+  <!----GAMECONFIG-->
+  <script>
+    var buildUrl = "Build";
+    var loaderUrl = buildUrl + "/{{{ LOADER_FILENAME }}}";
+    var config = {
+      dataUrl: buildUrl + "/{{{ DATA_FILENAME }}}",
+      frameworkUrl: buildUrl + "/{{{ FRAMEWORK_FILENAME }}}",
+      codeUrl: buildUrl + "/{{{ CODE_FILENAME }}}",
+      #if MEMORY_FILENAME
+        memoryUrl: buildUrl + "/{{{ MEMORY_FILENAME }}}",
+      #endif
+        #if SYMBOLS_FILENAME
+        symbolsUrl: buildUrl + "/{{{ SYMBOLS_FILENAME }}}",
+      #endif
+        streamingAssetsUrl: "StreamingAssets",
+      companyName: "{{{ COMPANY_NAME }}}",
+      productName: "{{{ PRODUCT_NAME }}}",
+      productVersion: "{{{ PRODUCT_VERSION }}}",
+      pubId: ""
+    };
+    config.gameId = config.productName.replace(/\s+/g, '-').toLowerCase();
+    config.enableMoreGame = "yes";
+	
+  </script>
+  <script id="gmsoft-jssdk" src="https://api.azgame.io/static/gmsdkv1.js"></script>
+  <!----ENDGAMECONFIG-->
+</head>
+
+<body>
+  <div id="unity-container" style="display: none;">
+    <canvas id="unity-canvas"></canvas>
+  </div>
+  <div id="loadingBlock" style="">
+    <div class="jss31 jss34 jss1">
+      <div
+        style="position: absolute; font-family: Arial, Helvetica, sans-serif;  bottom: 10px; right: 10px; font-size: 18px; color: #ffffff; opacity: 0.5;">
+        {{{ PRODUCT_VERSION }}}</div>
+      <div class="spinner"></div>
+      <div class="jss31 jss34 jss48" style="flex: 1 1 0%;">
+        <div class="jss32">
+          <div class="jss7 jss9 jss20 jss3">
+            <div class="jss125">
+              <div class="jss123">
+                <img src="logo.png">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="jss31 jss34" style="flex: 3 1 0%;">
+        <div class="jss32">
+          <div class="jss31 jss34 jss39 jss50 gameloader">
+            <div class="jss32">
+              <div class="gameloader-game-name">{{{ PRODUCT_NAME }}}</div>
+            </div>
+            <div class="jss32">
+              <div class="jss32 gameloader-logo">
+                <img id="game-logo" src="loading.png">
+              </div>
+            </div>
+            <div class="jss32">
+              <div>
+                <div class="gameloader-progressbar">
+                  <div class="gameloader-progressbar-progress" id="progress_fill" style="width: 0%;"></div>
+                </div>
+                <div class="gameloader-progress-info">Game Loading...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    var progressElement = document.getElementById('progress_fill');
+    var container = document.getElementById("unity-container");
+    var canvas = document.getElementById("unity-canvas");
+    var loadingBar = document.querySelector("#loadingBlock");
+    var progressBarFull = document.querySelector("#progress_fill");
+    var progress_text = document.querySelector(".gameloader-progress-info");
+    let text_percent = "";
+    #if BACKGROUND_FILENAME
+    canvas.style.background = "url('" + buildUrl + "/{{{ BACKGROUND_FILENAME.replace(/'/g, '%27') }}}') center / cover";
+    #endif
+    var script = document.createElement("script");
+    script.src = loaderUrl;
+    script.onload = () => {
+      createUnityInstance(canvas, config, (progress) => {
+        progressElement.style.width = 100 * progress + "%";
+        text_percent = "Downloading file: " + Math.round(progress * 100) + "%";
+        progress_text.innerText = text_percent;
+        if (progress >= 99) {
+          progress_text.innerText = "Game Loading ...";
+        }
+      }).then((unityInstance) => {
+        window.unityInstance = unityInstance;
+        setTimeout(function () {
+          loadingBar.style.display = "none";
+        }, 2000);
+        container.style.display = "block";
+      }).catch((message) => {
+        alert(message);
+      });
+    };
+    document.body.appendChild(script);
+  </script>
+  <!----CUSTOMSCRIPT-->
+  <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-analytics-compat.js"></script>
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import {
+      initializeApp
+    } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+    import {
+      getAnalytics
+    } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-analytics.js";
+    import {
+      getAuth
+    } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+      apiKey: "AIzaSyBiY5zIcLnzRHTXV2lBjhlPOaylnwF41IE",
+      authDomain: "gmsoft-sdk.firebaseapp.com",
+      projectId: "gmsoft-sdk",
+      storageBucket: "gmsoft-sdk.firebasestorage.app",
+      messagingSenderId: "569176921901",
+      appId: "1:569176921901:web:ec70fd1e07e97e02cfa5a4",
+      measurementId: "G-XDMS45JLNT"
+    };
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function () {
+      dataLayer.push(arguments);
+    }
+    window.gtag("config", firebaseConfig.measurementId, {
+      cookie_domain: location.hostname,
+      cookie_flags: "SameSite=None;Secure",
+    });
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+  </script>
+
+  <script id="gmsoftsdk_library">
+    <!-- config.enableDebug = "yes"; -->
+    <!-- window["GMDEBUG"] = {}; -->
+    <!-- window["GMDEBUG"]['LOAD'] = Date.now(); -->
+
+    <!-- function gmdebugtime(keytime) { -->
+      <!-- console.log("_TIME_" + keytime + ":" + (Date.now() - window["GMDEBUG"]['LOAD'])); -->
+    <!-- } -->
+
+    <!-- function gmdebug(keylog) { -->
+      <!-- console.log(keylog); -->
+    <!-- } -->
+    <!-- (function (d, s, id) { -->
+      <!-- gmdebugtime("DOCUMENT_READY"); -->
+      <!-- let _gameKey = config.gameId; -->
+      <!-- let _pubID = ""; -->
+      <!-- let _debug = config.enableDebug; -->
+      <!-- let _enableAds = false; -->
+      <!-- let domainHost = window.location.hostname; -->
+      <!-- if (!window["GMSOFT_OPTIONS"]) { -->
+        <!-- window["GMSOFT_OPTIONS"] = { -->
+          <!-- enableAds: _enableAds, -->
+          <!-- debug: _debug, -->
+          <!-- gameId: _gameKey, -->
+          <!-- pubId: _pubID, -->
+          <!-- unlockTimer: 60, -->
+          <!-- timeShowInter: 60, -->
+          <!-- hostindex: 1, -->
+          <!-- domainHost: domainHost, -->
+          <!-- enableDebug: "yes", -->
+          <!-- enableMoreGame: "yes" -->
+        <!-- }; -->
+      <!-- } -->
+      <!-- window["GMSOFT_OPTIONS"].sourceHtml = "https://api.azgames.io/lib/gmsoftsdk_v4-debug.js"; -->
+      <!-- let sourceHtml = window["GMSOFT_OPTIONS"].sourceHtml; -->
+      <!-- var js, fjs = d.getElementsByTagName(s)[0]; -->
+      <!-- if (d.getElementById(id) && d.getElementById(id).src == sourceHtml) { -->
+        <!-- return; -->
+      <!-- } -->
+      <!-- if (d.getElementById(id)) { -->
+        <!-- d.getElementById(id).remove(); -->
+      <!-- } -->
+      <!-- js = d.createElement(s); -->
+      <!-- js.id = id; -->
+      <!-- js.src = sourceHtml; -->
+      <!-- fjs.parentNode.insertBefore(js, fjs); -->
+    <!-- })(document, "script", "gmsoft-jssdk"); -->
+
+    function gmEvent(event_name, event_param) {
+      console.log("on event " + event_name + " " + event_param);
+    }
+
+    function firebaseSetUserProperties(props) {
+      firebase.analytics().setUserProperties(props);
+    }
+
+    function firebaseLogEvent(event_name) {
+      firebase.analytics().logEvent(event_name);
+    }
+
+    function firebaseLogEventParameter(event_name, event_param) {
+      firebase.analytics().logEvent(event_name, event_param);
+    }
+	
+	window["GMSOFT_SDKTYPE"] = "gm";
+	
+	function gmStartGame(callbackFunction){
+		callbackFunction();
+	}
+	
+	function gmStartAds(callbackFunction){
+		callbackFunction();
+	}
+	
+  </script>
+  <!----ENDCUSTOMSCRIPT-->
+</body>
+
+</html>

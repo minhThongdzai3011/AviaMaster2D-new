@@ -33,8 +33,8 @@ public class BonusSpawner : MonoBehaviour
 
         while (true)
         {
-            count = GameObject.FindGameObjectsWithTag("Bonus").Length;
-            if (count < 20)
+            count = GameObject.FindGameObjectsWithTag("Bonus2").Length + GameObject.FindGameObjectsWithTag("Bonus3").Length + GameObject.FindGameObjectsWithTag("Bonus4").Length + GameObject.FindGameObjectsWithTag("Bonus5").Length + GameObject.FindGameObjectsWithTag("Bonus10").Length;
+            if (count < 30)
             {
                 SpawnBonusItem();
                 yield return new WaitForSeconds(spawnInterval);
@@ -57,18 +57,41 @@ public class BonusSpawner : MonoBehaviour
 
     public void DeleteSpawnedItems()
     {
-        GameObject[] spawnedItems = GameObject.FindGameObjectsWithTag("Bonus");
-        if (spawnedItems == null || spawnedItems.Length == 0)
+        List<GameObject> allBonusItems = new List<GameObject>();
+        
+        // Danh sách các tag bonus cần xóa
+        string[] bonusTags = { "Bonus2", "Bonus3", "Bonus4", "Bonus5", "Bonus10" };
+        
+        // Tìm và thêm tất cả các object có tag bonus vào list
+        foreach (string tag in bonusTags)
         {
-            Debug.Log("No spawned items found with tag 'Bonus'.");
+            GameObject[] itemsWithTag = GameObject.FindGameObjectsWithTag(tag);
+            if (itemsWithTag != null && itemsWithTag.Length > 0)
+            {
+                allBonusItems.AddRange(itemsWithTag);
+                Debug.Log($"Tìm thấy {itemsWithTag.Length} items với tag '{tag}'");
+            }
+        }
+        
+        if (allBonusItems.Count == 0)
+        {
+            Debug.Log("Không tìm thấy bonus items nào để xóa.");
             return; // No items to delete
         }
-        Debug.Log("spawnedItems.Length: " + (spawnedItems?.Length ?? 0));
-        foreach (GameObject item in spawnedItems)
+        
+        Debug.Log($"Tổng cộng {allBonusItems.Count} bonus items sẽ bị xóa");
+        
+        // Xóa tất cả bonus items
+        foreach (GameObject item in allBonusItems)
         {
-            Destroy(item);
+            if (item != null)
+            {
+                Destroy(item);
+            }
         }
+        
         spawnRangeX = -18f; // Reset spawnRangeX to initial value
+        Debug.Log("Đã xóa tất cả bonus items và reset spawnRangeX");
     }
 
     
