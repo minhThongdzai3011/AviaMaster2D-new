@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ffdab9d3a9cff4cfd44961ca7ab8014, type: 3}
+  m_Name: PlaneBundleLibrary
+  m_EditorClassIdentifier: 
+  bundles:
+  - {fileID: 11400000, guid: 43f022432f1bdb34ebad7a206d0bddae, type: 2}
+  - {fileID: 11400000, guid: 2ec1dd35c519f074a9a2924a32cb9f38, type: 2}
+  - {fileID: 11400000, guid: f01f2da2a7e560e4b8a8c102d15d9178, type: 2}
+  - {fileID: 11400000, guid: 36235592d94ffee4e89e915e5465f90e, type: 2}
+  - {fileID: 11400000, guid: 0a433dade24140543a341016913c6c11, type: 2}
+  - {fileID: 11400000, guid: 88586a02ee8e163408eec6e30f73442d, type: 2}

@@ -16,10 +16,14 @@ public class RocketSpawner : MonoBehaviour
     public float spawnRangeX = -14f;
 
     [Header("Spawn Settings")]
-    private float startDelay = 0f;
-    private float spawnInterval = 0.2f;
+    public float startDelay = 0f;
+    public float spawnInterval = 0.2f;
     public int count = 0;
-    
+    public int maxRocketItems = 20;
+    public float rangeXmin = 5f;
+    public float rangeXmax = 10f;
+    public float startRangeX = -14f;
+
     void Start()
     {
         instance = this;
@@ -38,7 +42,7 @@ public class RocketSpawner : MonoBehaviour
         while (true)
         {
             count = GameObject.FindGameObjectsWithTag("Rocket").Length;
-            if (count < 20)
+            if (count < maxRocketItems)
             {
                 SpawnRocketItem();
                 yield return new WaitForSeconds(spawnInterval);
@@ -60,7 +64,7 @@ public class RocketSpawner : MonoBehaviour
                                             0f); 
         
         Instantiate(rocketPrefabs[prefabIndex], spawnPosition, rocketPrefabs[prefabIndex].transform.rotation);
-        spawnRangeX += Random.Range(5f, 10f); 
+        spawnRangeX += Random.Range(rangeXmin, rangeXmax);
     }
     
     public void DeleteSpawnedItems()
@@ -70,6 +74,6 @@ public class RocketSpawner : MonoBehaviour
         {
             Destroy(item);
         }
-        spawnRangeX = -14f; 
+        spawnRangeX = startRangeX; 
     }
 }

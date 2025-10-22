@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35c94b48a3b28c0158a3e1483612b183, type: 3}
+  m_Name: Cave Ruby
+  m_EditorClassIdentifier:
+  themeGroup: {fileID: 11400000, guid: 8c300365937708644b63b3def05aa9ff, type: 2}
+  isDefault: 0
+  mainColor: {r: 0.9716981, g: 0.48126557, b: 0.53699636, a: 1}
+  uiColor: {r: 0, g: 0.05751674, b: 0.084905684, a: 1}
+  caveEntranceColor: {r: 0.8160377, g: 0.98167187, b: 1, a: 1}
+  waterBombTopColor: {r: 0.96470594, g: 0.9803922, b: 1, a: 1}
+  waterBombEdgeColor: {r: 0.6862745, g: 0.7490196, b: 0.8000001, a: 1}
+  waterBombFillColor: {r: 0.4039216, g: 0.5529412, b: 0.7254902, a: 1}
+  planeWaterColor: {r: 0.27058825, g: 0.8235294, b: 1, a: 0.32156864}
+  bombButtonTopColor: {r: 0.28235295, g: 0.78039217, b: 0.9372549, a: 0.5882353}
+  bombButtonEdgeColor: {r: 0.8392157, g: 1, b: 1, a: 0.5882353}
+  bombButtonFillColor: {r: 0.27058825, g: 0.8235294, b: 1, a: 0.6666667}
+  fireSmokeColor: {r: 0.41509432, g: 0.41509432, b: 0.41509432, a: 1}
+  fireSmokeShadowColor: {r: 0.24264705, g: 0.24264705, b: 0.24264705, a: 1}
+  levelThumbBackground: {fileID: 21300000, guid: ea0633515160c9c429654550255c37da, type: 3}

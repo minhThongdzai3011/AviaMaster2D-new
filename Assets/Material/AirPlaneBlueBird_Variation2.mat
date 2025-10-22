@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: AirPlaneBlueBird_Variation2
+  m_Shader: {fileID: 4800000, guid: 965449c225b1c6948b7d887690fdb247, type: 3}
+  m_ShaderKeywords:
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _PlaneTexture:
+        m_Texture: {fileID: 2800000, guid: 2f0222057c2b57141b3a9eafe45abe98, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _PulseTexture:
+        m_Texture: {fileID: 2800000, guid: 30a0a68b73fb6f44ab7a24a5ea1904f4, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _BumpScale: 1
+    - _Cutoff: 0.5
+    - _DetailNormalMapScale: 1
+    - _DstBlend: 0
+    - _GlossMapScale: 1
+    - _Glossiness: 0
+    - _GlossyReflections: 1
+    - _HighlightAngle: 0.5579321
+    - _Metallic: 0
+    - _Mode: 0
+    - _OcclusionStrength: 1
+    - _Parallax: 0.02
+    - _PulseSpeed: 4.09
+    - _PulsingSpeed: 0.6445339
+    - _ShadowIntensity: 0.196
+    - _SmoothnessTextureChannel: 0
+    - _SpecularHighlights: 1
+    - _SrcBlend: 1
+    - _UVSec: 0
+    - _WaterLevel: 0
+    - _ZWrite: 1
+    - _node_783: 0.6445339
+    m_Colors:
+    - _2GradientColorBack: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    - _Color: {r: 0.588, g: 0.588, b: 0.588, a: 1}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 0}
+    - _GradientColor: {r: 0.24346916, g: 0.23309009, b: 0.509434, a: 1}
+    - _GradientColorBack: {r: 0.3537736, g: 0.8074388, b: 1, a: 1}
+    - _GradientColorFront: {r: 0, g: 0.30359125, b: 1, a: 1}
+    - _LightDirection: {r: 0, g: 38, b: 27.37, a: 0}
+    - _NoPulseColo: {r: 0.1132075, g: 0.05286577, b: 0.05286577, a: 1}
+    - _NoPulseColor: {r: 0.35637066, g: 0, b: 0.7735849, a: 1}
+    - _PlaneColor: {r: 0.15566039, g: 0.64885545, b: 1, a: 1}
+    - _PlaneColor_copy: {r: 0, g: 0.1828926, b: 0.5377358, a: 1}
+    - _PulseColor: {r: 0.6256571, g: 0, b: 1, a: 1}
+    - _ShadowColor: {r: 0.039215688, g: 0.11764707, b: 0.20392159, a: 1}
+    - _node_6079: {r: 0.15566039, g: 0.64236337, b: 1, a: 1}
+    - _node_7601: {r: 0.026669092, g: 0, b: 0.5943396, a: 1}

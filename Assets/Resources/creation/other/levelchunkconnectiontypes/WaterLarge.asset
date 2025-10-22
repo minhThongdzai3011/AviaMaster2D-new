@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 487bf3d8cb7bb4cd5e73e1b6349bba14, type: 3}
+  m_Name: WaterLarge
+  m_EditorClassIdentifier:
+  SurfaceConnections:
+  - RingPointOffsetsToAnchor:
+    - {x: -0.041903496, y: 0.79890156}
+    - {x: 0, y: 0}
+    - {x: 0.010476112, y: -0.19972515}
+    - {x: 0.08845234, y: -1.6863804}
+    - {x: 0.001206398, y: 13.240603}
+    - {x: -0.00060272217, y: 12.640606}
+    - {x: -0.00798893, y: 10.190617}
+    - {x: -0.0007534027, y: 12.590606}
+    - {x: 0.006934166, y: 15.1405945}
+    - {x: -0.008140564, y: 10.140617}
+  - RingPointOffsetsToAnchor:
+    - {x: -0.034125328, y: -6.800667}
+    - {x: 0, y: -7.5999393}
+    - {x: 0.00853157, y: -7.799757}
+    - {x: 0.10664272, y: -10.097664}
+  ApplyingLevelChunk: {fileID: 0}

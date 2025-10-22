@@ -1,0 +1,704 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  serializedVersion: 2
+  m_ObjectHideFlags: 0
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1669767641786763}
+  m_IsPrefabAsset: 1
+--- !u!1 &1669767641786763
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_Component:
+  - component: {fileID: 4016044571188690}
+  - component: {fileID: 114205794580199552}
+  m_Layer: 0
+  m_Name: Horten
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4016044571188690
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1669767641786763}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 78.174805, y: -25.31054, z: -6.9907317}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 4709236224728093}
+  - {fileID: 4723075161443899}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114205794580199552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1669767641786763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c729b6ff0c1732eca3b58cefc98efb7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  Title:
+    keyword: plane-horten
+  rewardRequirement:
+    type: 3
+    minSurvivalHighscore: 20000
+    survivalThemeVisit: {fileID: 0}
+    fullScorePack: {fileID: 0}
+    fullMedalPack: {fileID: 0}
+    quest: 0
+    landmark: {fileID: 0}
+    plane: {fileID: 0}
+    amount: 7500
+  isDefaultPlane: 0
+  PlaneType: {fileID: 11400000, guid: 82835b4f3f4225341ac2836bcb94f36d, type: 2}
+  id: 8
+  EngineSound: {fileID: 11400000, guid: a07f0d5c5da06554887fa33821490c7f, type: 2}
+  skins:
+  - Title:
+      keyword: plane-horten-skin-default
+    Color:
+      serializedVersion: 2
+      key0: {r: 0.33333334, g: 0.6862745, b: 0.5058824, a: 1}
+      key1: {r: 0.33333334, g: 0.6862745, b: 0.5058824, a: 1}
+      key2: {r: 0, g: 0, b: 0, a: 0}
+      key3: {r: 0, g: 0, b: 0, a: 0}
+      key4: {r: 0, g: 0, b: 0, a: 0}
+      key5: {r: 0, g: 0, b: 0, a: 0}
+      key6: {r: 0, g: 0, b: 0, a: 0}
+      key7: {r: 0, g: 0, b: 0, a: 0}
+      ctime0: 0
+      ctime1: 65535
+      ctime2: 0
+      ctime3: 0
+      ctime4: 0
+      ctime5: 0
+      ctime6: 0
+      ctime7: 0
+      atime0: 0
+      atime1: 65535
+      atime2: 0
+      atime3: 0
+      atime4: 0
+      atime5: 0
+      atime6: 0
+      atime7: 0
+      m_Mode: 0
+      m_NumColorKeys: 2
+      m_NumAlphaKeys: 2
+    rewardRequirement:
+      type: 0
+      minSurvivalHighscore: 0
+      survivalThemeVisit: {fileID: 0}
+      fullScorePack: {fileID: 0}
+      fullMedalPack: {fileID: 0}
+      quest: 0
+      landmark: {fileID: 0}
+      plane: {fileID: 0}
+      amount: 0
+    Thumbnail: {fileID: 21300000, guid: a56a7e6707cf0794a82f01d2d7cdc760, type: 3}
+    id: 0
+    skinnedVisuals:
+    - Visual: {fileID: 1669753008198539}
+      Materials:
+      - {fileID: 2100000, guid: ec7a5218ae672b346b1c2f541c05f33a, type: 2}
+      Behaviour: 0
+    - Visual: {fileID: 1826926448667773}
+      Materials:
+      - {fileID: 2100000, guid: ec7a5218ae672b346b1c2f541c05f33a, type: 2}
+      Behaviour: 0
+    - Visual: {fileID: 1268299320064687}
+      Materials:
+      - {fileID: 2100000, guid: ec7a5218ae672b346b1c2f541c05f33a, type: 2}
+      Behaviour: 0
+    - Visual: {fileID: 1142740071280643}
+      Materials:
+      - {fileID: 2100000, guid: 0bb3b36a1857ec545bcf95f29834783e, type: 2}
+      Behaviour: 0
+  - Title:
+      keyword: plane-horten-skin-variation-1
+    Color:
+      serializedVersion: 2
+      key0: {r: 0.20784315, g: 0.19607845, b: 0.2392157, a: 1}
+      key1: {r: 0.20784315, g: 0.19607845, b: 0.2392157, a: 1}
+      key2: {r: 0, g: 0, b: 0, a: 0}
+      key3: {r: 0, g: 0, b: 0, a: 0}
+      key4: {r: 0, g: 0, b: 0, a: 0}
+      key5: {r: 0, g: 0, b: 0, a: 0}
+      key6: {r: 0, g: 0, b: 0, a: 0}
+      key7: {r: 0, g: 0, b: 0, a: 0}
+      ctime0: 0
+      ctime1: 65535
+      ctime2: 0
+      ctime3: 0
+      ctime4: 0
+      ctime5: 0
+      ctime6: 0
+      ctime7: 0
+      atime0: 0
+      atime1: 65535
+      atime2: 0
+      atime3: 0
+      atime4: 0
+      atime5: 0
+      atime6: 0
+      atime7: 0
+      m_Mode: 0
+      m_NumColorKeys: 2
+      m_NumAlphaKeys: 2
+    rewardRequirement:
+      type: 3
+      minSurvivalHighscore: 0
+      survivalThemeVisit: {fileID: 0}
+      fullScorePack: {fileID: 0}
+      fullMedalPack: {fileID: 0}
+      quest: 0
+      landmark: {fileID: 0}
+      plane: {fileID: 0}
+      amount: 1900
+    Thumbnail: {fileID: 21300000, guid: 4c40a471a7ba532438025610d364661d, type: 3}
+    id: 1
+    skinnedVisuals:
+    - Visual: {fileID: 1669753008198539}
+      Materials:
+      - {fileID: 2100000, guid: 1479a841f0de8564da552567ddac8b51, type: 2}
+      Behaviour: 0
+    - Visual: {fileID: 1826926448667773}
+      Materials:
+      - {fileID: 2100000, guid: 1479a841f0de8564da552567ddac8b51, type: 2}
+      Behaviour: 0
+    - Visual: {fileID: 1268299320064687}
+      Materials:
+      - {fileID: 2100000, guid: 1479a841f0de8564da552567ddac8b51, type: 2}
+      Behaviour: 0
+    - Visual: {fileID: 1142740071280643}
+      Materials:
+      - {fileID: 2100000, guid: 0bb3b36a1857ec545bcf95f29834783e, type: 2}
+      Behaviour: 0
+  - Title:
+      keyword: plane-horten-skin-variation-2
+    Color:
+      serializedVersion: 2
+      key0: {r: 0, g: 0.18823531, b: 0.2901961, a: 1}
+      key1: {r: 0.1137255, g: 1, b: 1, a: 1}
+      key2: {r: 0, g: 0.18823531, b: 0.2901961, a: 0}
+      key3: {r: 0, g: 0, b: 0, a: 0}
+      key4: {r: 0, g: 0, b: 0, a: 0}
+      key5: {r: 0, g: 0, b: 0, a: 0}
+      key6: {r: 0, g: 0, b: 0, a: 0}
+      key7: {r: 0, g: 0, b: 0, a: 0}
+      ctime0: 0
+      ctime1: 17348
+      ctime2: 65535
+      ctime3: 0
+      ctime4: 0
+      ctime5: 0
+      ctime6: 0
+      ctime7: 0
+      atime0: 0
+      atime1: 65535
+      atime2: 0
+      atime3: 0
+      atime4: 0
+      atime5: 0
+      atime6: 0
+      atime7: 0
+      m_Mode: 0
+      m_NumColorKeys: 3
+      m_NumAlphaKeys: 2
+    rewardRequirement:
+      type: 80
+      minSurvivalHighscore: 0
+      survivalThemeVisit: {fileID: 0}
+      fullScorePack: {fileID: 0}
+      fullMedalPack: {fileID: 0}
+      quest: 0
+      landmark: {fileID: 0}
+      plane: {fileID: 114205794580199552}
+      amount: 4000
+    Thumbnail: {fileID: 21300000, guid: 3d9bb9269e4f5934fadf4941347c6552, type: 3}
+    id: 2
+    skinnedVisuals:
+    - Visual: {fileID: 1669753008198539}
+      Materials:
+      - {fileID: 2100000, guid: ee54b192a2f3ff44e831588f45e46f25, type: 2}
+      Behaviour: 0
+    - Visual: {fileID: 1826926448667773}
+      Materials:
+      - {fileID: 2100000, guid: ee54b192a2f3ff44e831588f45e46f25, type: 2}
+      Behaviour: 0
+    - Visual: {fileID: 1268299320064687}
+      Materials:
+      - {fileID: 2100000, guid: ee54b192a2f3ff44e831588f45e46f25, type: 2}
+      Behaviour: 0
+    - Visual: {fileID: 1142740071280643}
+      Materials:
+      - {fileID: 2100000, guid: 0bb3b36a1857ec545bcf95f29834783e, type: 2}
+      Behaviour: 0
+  wingTrailCount: 2
+  wingTrailPrefab: {fileID: 114957851966764099, guid: be48dd39b3544794c9d961f25c8c9aeb, type: 2}
+  EngineTrailPrefabs:
+  - EngineTrailPrefab: {fileID: 114273150203525306, guid: 7fd0c151c2dda3347b887ea6e3a6f86b, type: 2}
+    Position: {x: -3.2406921, y: -0.67464066, z: 0}
+  WaterSurfaceSplashPrefab: {fileID: 114237500569097342, guid: fb65f6d588921eb4bbc84a1330d753d2, type: 2}
+  LandingGearPrefabs:
+  - {fileID: 114149560910342618, guid: 8622bb0152b7b9048ad156de43c3683d, type: 2}
+  - {fileID: 114149560910342618, guid: 8622bb0152b7b9048ad156de43c3683d, type: 2}
+  - {fileID: 114149560910342618, guid: 8622bb0152b7b9048ad156de43c3683d, type: 2}
+  pilotPrefab: {fileID: 114076556197397882, guid: 8bd169a224ad3604a80be9ea10822ac3, type: 2}
+  pilotColor: {r: 0.17239231, g: 0.19528504, b: 0.24528301, a: 1}
+  takeOffRideAngleOffset: -20
+  WaterBombVisualPrefab: {fileID: 114300061097367275, guid: ceabb82a936eb19428477eae34e80908, type: 2}
+  crashHitEffectPrefab: {fileID: 114230685474467519, guid: 274573e0f79c9ef4a8c68b8de26e139a, type: 2}
+  crashEffectPrefab: {fileID: 0}
+  crashProgressCurve: {fileID: 11400000, guid: e5ef5b0a09a259a43831210d504dd78f, type: 2}
+  crashMaterial: {fileID: 2100000, guid: d07c6c1def13bd04280acaf95ae904be, type: 2}
+  ExplosionEffectPrefab: {fileID: 114865516176579557, guid: c6831c687c0221448992d4d5655c8412, type: 2}
+  WreckagePrefab: {fileID: 114510156930331422, guid: f1ea2e40ed770814c9687d20da642bd5, type: 2}
+  crashSound: {fileID: 82962368357692996, guid: f017c23e23710aa4e99c8592274bd37f, type: 2}
+  ExplosionSound: {fileID: 82683316754987333, guid: 0772c3b9b4d2cc04b8e56e6aeb318a13, type: 2}
+  thumbnailCameraSize: 6
+  thumbnailCameraOffset: {x: 1.06, y: 0}
+  thumbnailUIOffset: {x: 0.06, y: 0.03}
+  thumbnailUIScale: 1.26
+  bundle: {fileID: 11400000, guid: 36235592d94ffee4e89e915e5465f90e, type: 2}
+  orderInBundleIndex: 2
+  WaterTankLocation: {x: -0.1902237, y: -1.649025}
+  PilotLocation: {x: 1.1474682, y: 0.17995453, z: -0.00129411}
+  WaterFillLocations:
+  - {x: -0.5042835, y: 0.122164994, z: -0.9628906}
+  - {x: -1.369751, y: -0.1300087, z: -0.9300537}
+  - {x: 0.38099742, y: 0.14802644, z: -0.9909668}
+  - {x: 1.2972989, y: 0.20538583, z: -0.9477539}
+  - {x: 1.7184076, y: -0.48780787, z: -0.5745983}
+  - {x: 0.9323777, y: -0.65885866, z: -1.1401117}
+  - {x: 0.10302088, y: -0.7647341, z: -1.7283411}
+  - {x: -0.677343, y: -0.78525114, z: -2.1579459}
+  - {x: -1.4511305, y: -0.7606145, z: -1.7659388}
+  - {x: -2.2113287, y: -0.5583422, z: -0.5482197}
+  WingTrailLocations:
+  - {x: -1.9727478, y: -0.668396, z: 3.5217934}
+  - {x: -1.9691162, y: -0.6744995, z: -3.527853}
+  LandingGearLocations:
+  - Position: {x: -0.73285675, y: -0.90261936, z: 0.004682541}
+    LookDirection: {x: -0.047875114, y: -0.9988533, z: 0}
+  - Position: {x: -0.73329926, y: -0.90255547, z: -0.58715534}
+    LookDirection: {x: -0.045718525, y: -0.99719316, z: -0.05929308}
+  - Position: {x: 1.1734009, y: -0.916605, z: 1.3969817}
+    LookDirection: {x: 0.23136319, y: -0.97165763, z: 0.04850139}
+--- !u!1 &1669753008198539
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_Component:
+  - component: {fileID: 4709236224728093}
+  - component: {fileID: 33408314034834706}
+  - component: {fileID: 23171450792020066}
+  - component: {fileID: 95288841707541167}
+  m_Layer: 0
+  m_Name: AirplaneHorten
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4709236224728093
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1669753008198539}
+  m_LocalRotation: {x: 2.0066963E-07, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.26, y: -0.49, z: -0.01}
+  m_LocalScale: {x: 0.7724004, y: 0.7724004, z: 0.7724004}
+  m_Children:
+  - {fileID: 4041433463754508}
+  - {fileID: 4368262360406017}
+  - {fileID: 4248181296674579}
+  m_Father: {fileID: 4016044571188690}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 2.2995046E-05, y: -0, z: 0}
+--- !u!33 &33408314034834706
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1669753008198539}
+  m_Mesh: {fileID: 4300000, guid: f6d990059d845a040b34fdad15116172, type: 2}
+--- !u!23 &23171450792020066
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1669753008198539}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
+  m_Materials:
+  - {fileID: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!95 &95288841707541167
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1669753008198539}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: c41e9c95104e47a4f872c9d1512243e7, type: 2}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage:
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!1 &1142740071280643
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_Component:
+  - component: {fileID: 4041433463754508}
+  - component: {fileID: 33445657941588713}
+  - component: {fileID: 23465984405886138}
+  m_Layer: 0
+  m_Name: Cockpit
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4041433463754508
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1142740071280643}
+  m_LocalRotation: {x: 4.1723257E-07, y: 0, z: -0, w: 1}
+  m_LocalPosition: {x: 1.7666225, y: 0.9761966, z: -0.00074109435}
+  m_LocalScale: {x: 1.0387, y: 1.0387, z: 1.0387}
+  m_Children: []
+  m_Father: {fileID: 4709236224728093}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 4.7811332E-05, y: -0, z: 0}
+--- !u!33 &33445657941588713
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1142740071280643}
+  m_Mesh: {fileID: 4300000, guid: ded3a7dc47dab30478fba8b9f08f81e5, type: 2}
+--- !u!23 &23465984405886138
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1142740071280643}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
+  m_Materials:
+  - {fileID: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!1 &1826926448667773
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_Component:
+  - component: {fileID: 4368262360406017}
+  - component: {fileID: 33678034598277299}
+  - component: {fileID: 23502315331917522}
+  - component: {fileID: 114397174382545178}
+  m_Layer: 0
+  m_Name: WingFlapLeft
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4368262360406017
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1826926448667773}
+  m_LocalRotation: {x: 3.5456836E-07, y: 0.13052617, z: -4.6679798E-08, w: 0.9914449}
+  m_LocalPosition: {x: -1.0981445, y: -0.23827533, z: -3.1604867}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4709236224728093}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 4.098114E-05, y: -14.999998, z: -3.411984E-13}
+--- !u!33 &33678034598277299
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1826926448667773}
+  m_Mesh: {fileID: 4300000, guid: 91422263e64250743823eb87081067e5, type: 2}
+--- !u!23 &23502315331917522
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1826926448667773}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
+  m_Materials:
+  - {fileID: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!114 &114397174382545178
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1826926448667773}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fc717eef1c9dbaaed27f0e719eb629a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  maxRotation: 35
+  speed: 3
+  invertBehaviour: 0
+--- !u!1 &1268299320064687
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_Component:
+  - component: {fileID: 4248181296674579}
+  - component: {fileID: 33327006758319056}
+  - component: {fileID: 23906851622309122}
+  - component: {fileID: 114479300502173741}
+  m_Layer: 0
+  m_Name: WingFlapRight
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4248181296674579
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1268299320064687}
+  m_LocalRotation: {x: 3.5626698E-07, y: -0.08715579, z: 3.116934E-08, w: 0.9961947}
+  m_LocalPosition: {x: -1.0981445, y: -0.23827408, z: 3.1604867}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4709236224728093}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 4.0981136E-05, y: 10.000006, z: -1.4411779E-13}
+--- !u!33 &33327006758319056
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1268299320064687}
+  m_Mesh: {fileID: 4300000, guid: 22ab8b1c2d07aca41abd9608401b1e81, type: 2}
+--- !u!23 &23906851622309122
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1268299320064687}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
+  m_Materials:
+  - {fileID: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!114 &114479300502173741
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1268299320064687}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fc717eef1c9dbaaed27f0e719eb629a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  maxRotation: 35
+  speed: 3
+  invertBehaviour: 0
+--- !u!1 &1614420919683771
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_Component:
+  - component: {fileID: 4723075161443899}
+  - component: {fileID: 60208559762813451}
+  m_Layer: 22
+  m_Name: PlaneColllider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4723075161443899
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1614420919683771}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4016044571188690}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!60 &60208559762813451
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1614420919683771}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0.83135986, y: -1.15131}
+      - {x: 2.3000183, y: -0.7012367}
+      - {x: 1.3364909, y: 0.6153225}
+      - {x: 0.4463501, y: 0.41285324}
+      - {x: -0.52841187, y: 0.4325409}
+      - {x: -1.7015686, y: 0.14001465}
+      - {x: -2.7157898, y: -0.72094727}
+      - {x: -1.7106018, y: -1.0662842}

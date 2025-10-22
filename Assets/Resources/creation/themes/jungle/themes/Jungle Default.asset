@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35c94b48a3b28c0158a3e1483612b183, type: 3}
+  m_Name: Jungle Default
+  m_EditorClassIdentifier:
+  themeGroup: {fileID: 11400000, guid: 3c13b7050d6e39f498fe44a5337182f5, type: 2}
+  isDefault: 1
+  mainColor: {r: 0.8086207, g: 1, b: 0.625, a: 1}
+  uiColor: {r: 0.2534602, g: 0.28676468, b: 0.24037628, a: 1}
+  caveEntranceColor: {r: 0.8632076, g: 1, b: 0.87056196, a: 1}
+  waterBombTopColor: {r: 0.6933932, g: 0.99264705, b: 0.93203866, a: 1}
+  waterBombEdgeColor: {r: 0.78676474, g: 1, b: 0.9568131, a: 1}
+  waterBombFillColor: {r: 0.2977941, g: 0.7941176, b: 0.67594534, a: 1}
+  planeWaterColor: {r: 0.3114187, g: 0.9411765, b: 0.8091305, a: 0.30588236}
+  bombButtonTopColor: {r: 0.39197662, g: 0.9191176, b: 0.8477753, a: 0.5882353}
+  bombButtonEdgeColor: {r: 0.6691177, g: 1, b: 0.93154156, a: 0.81960785}
+  bombButtonFillColor: {r: 0.3114187, g: 0.9411765, b: 0.8091305, a: 0.666}
+  fireSmokeColor: {r: 0.52156866, g: 0.50767154, b: 0.40392157, a: 1}
+  fireSmokeShadowColor: {r: 0.24264705, g: 0.24264705, b: 0.24264705, a: 1}
+  levelThumbBackground: {fileID: 21300000, guid: 0ad7160700856d34c971ae6695edaa62, type: 3}

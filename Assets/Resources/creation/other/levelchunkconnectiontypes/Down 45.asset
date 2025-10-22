@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 487bf3d8cb7bb4cd5e73e1b6349bba14, type: 3}
+  m_Name: Down 45
+  m_EditorClassIdentifier:
+  SurfaceConnections:
+  - RingPointOffsetsToAnchor:
+    - {x: 0.6121249, y: 0.6924423}
+    - {x: 0, y: 0}
+    - {x: -0.18337083, y: -0.23347874}
+    - {x: -0.8910915, y: -1.1060233}
+  - RingPointOffsetsToAnchor:
+    - {x: -0.47477472, y: -16.124973}
+    - {x: -0.9032569, y: -16.800549}
+    - {x: -1.0103774, y: -16.969442}
+    - {x: -2.2422638, y: -18.911724}
+  ApplyingLevelChunk: {fileID: 0}

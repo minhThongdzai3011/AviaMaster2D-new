@@ -37,8 +37,8 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI flightAngleTextMoney;
     public TextMeshProUGUI flyingPowerTextLevel;
     public TextMeshProUGUI flyingPowerTextMoney;
-    public TextMeshProUGUI trainDistanceTextLevel;
-    public TextMeshProUGUI trainDistanceTextMoney;
+    public TextMeshProUGUI bonusPowerTextLevel;
+    public TextMeshProUGUI bonusPowerTextMoney;
     public TextMeshProUGUI moneyTextPlayer;
     public TextMeshProUGUI scoreTextPlayer;
     public TextMeshProUGUI scoreText;
@@ -62,10 +62,10 @@ public class GameManager : MonoBehaviour
     [Header("Nâng cấp")]
     public int flightAngleLevel = 1;
     public int flyingPowerLevel = 1;
-    public int trainDistanceLevel = 1;
+    public int bonusPowerLevel = 1;
     public int flightAngleMoney = 200;
     public int flyingPowerMoney = 200;
-    public int trainDistanceMoney = 200;
+    public int bonusPowerMoney = 200;
 
     [Header("Rotation settings")]
     public float maxUpAngle = 45f;    // giới hạn góc lên
@@ -82,16 +82,23 @@ public class GameManager : MonoBehaviour
         if (moneyTextPlayer != null) moneyTextPlayer.text = moneyPlayer.ToString("");
         flightAngleLevel = PlayerPrefs.GetInt("FlightAngleLevel", 1);
         flyingPowerLevel = PlayerPrefs.GetInt("FlyingPowerLevel", 1);
-        trainDistanceLevel = PlayerPrefs.GetInt("TrainDistanceLevel", 1);
+        bonusPowerLevel = PlayerPrefs.GetInt("bonusPowerLevel", 1);
         flightAngleMoney = PlayerPrefs.GetInt("FlightAngleMoney", 200);
         flyingPowerMoney = PlayerPrefs.GetInt("FlyingPowerMoney", 200);
-        trainDistanceMoney = PlayerPrefs.GetInt("TrainDistanceMoney", 200);
+        bonusPowerMoney = PlayerPrefs.GetInt("bonusPowerMoney", 200);
+        climbAngle = PlayerPrefs.GetFloat("ClimbAngle", 30f);
+        launchForce = PlayerPrefs.GetFloat("LaunchForce", 20f);
+        if (Player.instance != null)
+        {
+            Player.instance.bonusForceMultiplier = PlayerPrefs.GetFloat("BonusForceMultiplier", 1.05f);
+        }
+
         if (flightAngleTextLevel != null) flightAngleTextLevel.text = "Level " + flightAngleLevel;
         if (flightAngleTextMoney != null) flightAngleTextMoney.text = flightAngleMoney.ToString();
         if (flyingPowerTextLevel != null) flyingPowerTextLevel.text = "Level " + flyingPowerLevel;
         if (flyingPowerTextMoney != null) flyingPowerTextMoney.text = flyingPowerMoney.ToString();
-        if (trainDistanceTextLevel != null) trainDistanceTextLevel.text = "Level " + trainDistanceLevel;
-        if (trainDistanceTextMoney != null) trainDistanceTextMoney.text = trainDistanceMoney.ToString();
+        if (bonusPowerTextLevel != null) bonusPowerTextLevel.text = "Level " + bonusPowerLevel;
+        if (bonusPowerTextMoney != null) bonusPowerTextMoney.text = bonusPowerMoney.ToString();
 
         Time.timeScale = 1f;
 
@@ -302,7 +309,88 @@ public class GameManager : MonoBehaviour
         AudioManager.instance.audioMusic.Play();
     }
 
+    public bool isMaxFlightAngle = false;
+    public bool isMaxFlyingPower = false;
+    public bool isMaxBonusPower = false;
     
+    public void UpgradeFlightAngle()
+    {
+        if (moneyPlayer >= flightAngleMoney && !isMaxFlightAngle)
+        {
+            moneyPlayer -= flightAngleMoney;
+            flightAngleLevel++;
+            climbAngle += 1f; // Tăng góc bay lên
+            flightAngleMoney = Mathf.FloorToInt(flightAngleMoney * 1.5f);
+
+            PlayerPrefs.SetInt("Money", moneyPlayer);
+            PlayerPrefs.SetInt("FlightAngleLevel", flightAngleLevel);
+            PlayerPrefs.SetInt("FlightAngleMoney", flightAngleMoney);
+            PlayerPrefs.SetFloat("ClimbAngle", climbAngle);
+
+            if (moneyTextPlayer != null) moneyTextPlayer.text = moneyPlayer.ToString("");
+            if (flightAngleTextLevel != null) flightAngleTextLevel.text = "Level " + flightAngleLevel;
+            if (flightAngleTextMoney != null) flightAngleTextMoney.text = flightAngleMoney.ToString();
+            if (climbAngle >= 45f)
+            {
+                isMaxFlightAngle = true;
+                flightAngleTextLevel.text = "MAX";
+                flightAngleTextMoney.text = "-";
+            }
+        }
+    }
+
+    public void UpgradeFlyingPower()
+    {
+        if (moneyPlayer >= flyingPowerMoney && !isMaxFlyingPower)
+        {
+            moneyPlayer -= flyingPowerMoney;
+            flyingPowerLevel++;
+            launchForce += 2f; // Tăng lực bay
+            flyingPowerMoney = Mathf.FloorToInt(flyingPowerMoney * 1.5f);
+
+            PlayerPrefs.SetInt("Money", moneyPlayer);
+            PlayerPrefs.SetInt("FlyingPowerLevel", flyingPowerLevel);
+            PlayerPrefs.SetInt("FlyingPowerMoney", flyingPowerMoney);
+            PlayerPrefs.SetFloat("LaunchForce", launchForce);
+
+            if (moneyTextPlayer != null) moneyTextPlayer.text = moneyPlayer.ToString("");
+            if (flyingPowerTextLevel != null) flyingPowerTextLevel.text = "Level " + flyingPowerLevel;
+            if (flyingPowerTextMoney != null) flyingPowerTextMoney.text = flyingPowerMoney.ToString();
+            if (launchForce >= 60f)
+            {
+                
+                isMaxFlyingPower = true;
+                flyingPowerTextLevel.text = "MAX";
+                flyingPowerTextMoney.text = "-";
+            }
+        }
+    }
+
+    public void UpgradeBonusPower()
+    {
+        if (moneyPlayer >= bonusPowerMoney && !isMaxBonusPower)
+        {
+            moneyPlayer -= bonusPowerMoney;
+            bonusPowerLevel++;
+            Player.instance.bonusForceMultiplier = Mathf.Max(0.1f, Player.instance.bonusForceMultiplier + 0.01f); // Tang lực bonus
+            bonusPowerMoney = Mathf.FloorToInt(bonusPowerMoney * 1.5f);
+
+            PlayerPrefs.SetInt("Money", moneyPlayer);
+            PlayerPrefs.SetInt("bonusPowerLevel", bonusPowerLevel);
+            PlayerPrefs.SetInt("bonusPowerMoney", bonusPowerMoney);
+            PlayerPrefs.SetFloat("BonusForceMultiplier", Player.instance.bonusForceMultiplier);
+
+            if (moneyTextPlayer != null) moneyTextPlayer.text = moneyPlayer.ToString("");
+            if (bonusPowerTextLevel != null) bonusPowerTextLevel.text = "Level " + bonusPowerLevel;
+            if (bonusPowerTextMoney != null) bonusPowerTextMoney.text = bonusPowerMoney.ToString("");
+            if (Player.instance.bonusForceMultiplier >= 2f)
+            {
+                isMaxBonusPower = true;
+                bonusPowerTextLevel.text = "MAX";
+                bonusPowerTextMoney.text = "-";
+            }
+        }
+    }
     
 
 }

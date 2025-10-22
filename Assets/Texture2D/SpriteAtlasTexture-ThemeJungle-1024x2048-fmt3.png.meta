@@ -1,0 +1,801 @@
+fileFormatVersion: 2
+guid: 57e290de433753144a96c2635f514068
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 21300000
+    second: FlatLayerRocks1
+  - first:
+      213: 21300002
+    second: FlatLayerPalm1
+  - first:
+      213: 21300004
+    second: JungleSceneryTreeLineFlat2
+  - first:
+      213: 21300006
+    second: JungleSceneryTreeLineFlat1
+  - first:
+      213: 21300008
+    second: JungleSceneryTreeLineBack1
+  - first:
+      213: 21300010
+    second: EdgeLayerVine2
+  - first:
+      213: 21300012
+    second: EdgeLayerVine7
+  - first:
+      213: 21300014
+    second: FlatLayerTree4
+  - first:
+      213: 21300016
+    second: FlatLayerRocks3
+  - first:
+      213: 21300018
+    second: EdgeLayerVine3
+  - first:
+      213: 21300020
+    second: EdgeLayerVine8
+  - first:
+      213: 21300022
+    second: EdgeLayerVine
+  - first:
+      213: 21300024
+    second: EdgeLayerVine6
+  - first:
+      213: 21300026
+    second: FlatLayerTree3
+  - first:
+      213: 21300028
+    second: FlatLayerGrass2
+  - first:
+      213: 21300030
+    second: FlatLayerGrass1
+  - first:
+      213: 21300032
+    second: FlatLayerRocks2
+  - first:
+      213: 21300034
+    second: ShadowLayerRock
+  externalObjects: {}
+  serializedVersion: 12
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 3
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 1
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 29.241879
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
+  cookieLightType: 1
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: FlatLayerRocks1
+      rect:
+        serializedVersion: 2
+        x: 219
+        y: 1218
+        width: 256
+        height: 81
+      alignment: 9
+      pivot: {x: 0.49916798, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 127.786995, y: -40.5}
+        - {x: -128.21298, y: -40.5}
+        - {x: -128.21298, y: 40.5}
+        - {x: 127.786995, y: 40.5}
+      physicsShape:
+      - - {x: -128.21298, y: 40.499996}
+        - {x: -128.21298, y: -40.499996}
+        - {x: 127.786995, y: -40.499996}
+        - {x: 127.786995, y: 40.499996}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4cffdddd8124401ebdbda65322ce2f3a
+      internalID: 21300000
+      vertices:
+      - {x: 0.0000076293945, y: 81}
+      - {x: 256, y: 0}
+      - {x: 256, y: 81}
+      - {x: 0.0000076293945, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FlatLayerPalm1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1064
+        width: 217
+        height: 256
+      alignment: 9
+      pivot: {x: 0.49999997, y: 0.4990873}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 108.49999, y: -128.23364}
+        - {x: -108.50001, y: -128.23364}
+        - {x: -108.50001, y: 127.76635}
+        - {x: 108.49999, y: 127.76635}
+      physicsShape:
+      - - {x: -108.50001, y: 127.76635}
+        - {x: -108.50001, y: -128.23364}
+        - {x: 108.49999, y: -128.23364}
+        - {x: 108.49999, y: 127.76635}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6864f72b71e5451281e2ac949dd0f762
+      internalID: 21300002
+      vertices:
+      - {x: 0, y: 256}
+      - {x: 217, y: 0}
+      - {x: 217, y: 256}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: JungleSceneryTreeLineFlat2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 479
+        width: 483
+        height: 226
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 241.5, y: -113}
+        - {x: -241.5, y: -113}
+        - {x: -241.5, y: 113}
+        - {x: 241.5, y: 113}
+      physicsShape:
+      - - {x: -241.5, y: 113}
+        - {x: -241.5, y: -113}
+        - {x: 241.5, y: -113}
+        - {x: 241.5, y: 113}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5395b78afad3456c837baf2a7969a4d5
+      internalID: 21300004
+      vertices:
+      - {x: 0, y: 226}
+      - {x: 483, y: 0}
+      - {x: 483, y: 226}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: JungleSceneryTreeLineFlat1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 235
+        width: 461
+        height: 242
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 230.5, y: -121}
+        - {x: -230.5, y: -121}
+        - {x: -230.5, y: 121}
+        - {x: 230.5, y: 121}
+      physicsShape:
+      - - {x: -230.5, y: 120.99999}
+        - {x: -230.5, y: -120.99999}
+        - {x: 230.5, y: -120.99999}
+        - {x: 230.5, y: 120.99999}
+      tessellationDetail: 0
+      bones: []
+      spriteID: cae594daa4ba446fabc4d60a361ea4a4
+      internalID: 21300006
+      vertices:
+      - {x: 0, y: 242}
+      - {x: 461, y: 0}
+      - {x: 461, y: 242}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: JungleSceneryTreeLineBack1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 479
+        height: 233
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 239.5, y: -116.5}
+        - {x: -239.5, y: -116.5}
+        - {x: -239.5, y: 116.5}
+        - {x: 239.5, y: 116.5}
+      physicsShape:
+      - - {x: -239.5, y: 116.5}
+        - {x: -239.5, y: -116.5}
+        - {x: 239.5, y: -116.5}
+        - {x: 239.5, y: 116.5}
+      tessellationDetail: 0
+      bones: []
+      spriteID: d8b04165ab0c4828990a4f5677b24bed
+      internalID: 21300008
+      vertices:
+      - {x: 0, y: 233}
+      - {x: 479, y: 0}
+      - {x: 479, y: 233}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EdgeLayerVine2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 916
+        width: 512
+        height: 146
+      alignment: 9
+      pivot: {x: 0.49902347, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 255.50002, y: -73}
+        - {x: -256.5, y: -73}
+        - {x: -256.5, y: 73}
+        - {x: 255.50002, y: 73}
+      physicsShape:
+      - - {x: -256.5, y: 73}
+        - {x: -256.5, y: -73}
+        - {x: 255.50002, y: -73}
+        - {x: 255.50002, y: 73}
+      tessellationDetail: 0
+      bones: []
+      spriteID: d9201ffbcabb4fdc9e5003bddc4d1ba2
+      internalID: 21300010
+      vertices:
+      - {x: 0, y: 146}
+      - {x: 512, y: 0}
+      - {x: 512, y: 146}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EdgeLayerVine7
+      rect:
+        serializedVersion: 2
+        x: 481
+        y: 0
+        width: 512
+        height: 204
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4995241}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 256, y: -102.097084}
+        - {x: -256, y: -102.097084}
+        - {x: -256, y: 101.902916}
+        - {x: 256, y: 101.902916}
+      physicsShape:
+      - - {x: -256, y: 101.902916}
+        - {x: -256, y: -102.097084}
+        - {x: 256, y: -102.097084}
+        - {x: 256, y: 101.902916}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9fddbcd374fb4248b1a19c9d1bacf003
+      internalID: 21300012
+      vertices:
+      - {x: 0, y: 204}
+      - {x: 512, y: 0}
+      - {x: 512, y: 204}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FlatLayerTree4
+      rect:
+        serializedVersion: 2
+        x: 258
+        y: 1301
+        width: 128
+        height: 116
+      alignment: 9
+      pivot: {x: 0.5, y: 0.49787837}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 64, y: -58.24611}
+        - {x: -64, y: -58.24611}
+        - {x: -64, y: 57.75389}
+        - {x: 64, y: 57.75389}
+      physicsShape:
+      - - {x: -64, y: 57.75389}
+        - {x: -64, y: -58.24611}
+        - {x: 64, y: -58.24611}
+        - {x: 64, y: 57.75389}
+      tessellationDetail: 0
+      bones: []
+      spriteID: ce4f738a302e4c6dbc35f7b095b6b79d
+      internalID: 21300014
+      vertices:
+      - {x: 0, y: 116}
+      - {x: 128, y: 0}
+      - {x: 128, y: 116}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FlatLayerRocks3
+      rect:
+        serializedVersion: 2
+        x: 609
+        y: 486
+        width: 127.37289
+        height: 30
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -63.686443, y: -14.999999}
+        - {x: -63.686443, y: 14.999999}
+        - {x: 63.686443, y: 14.999999}
+        - {x: 63.686443, y: -14.999999}
+      physicsShape:
+      - - {x: -64, y: 14.999999}
+        - {x: -64, y: -14.999999}
+        - {x: 64, y: -14.999999}
+        - {x: 64, y: 14.999999}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0f43b78837154036a235a619b78ebbbf
+      internalID: 21300016
+      vertices:
+      - {x: 0, y: 30}
+      - {x: 127.37289, y: 30}
+      - {x: 0, y: 0.0000009536743}
+      - {x: 127.37289, y: 0.0000009536743}
+      indices: 000000000100000002000000020000000100000003000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EdgeLayerVine3
+      rect:
+        serializedVersion: 2
+        x: 463
+        y: 235
+        width: 256
+        height: 123
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4980483}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 128, y: -61.74006}
+        - {x: -128, y: -61.74006}
+        - {x: -128, y: 61.25994}
+        - {x: 128, y: 61.25994}
+      physicsShape:
+      - - {x: -128, y: 61.25994}
+        - {x: -128, y: -61.74006}
+        - {x: 128, y: -61.74006}
+        - {x: 128, y: 61.25994}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1211e279a2fe4872a66100b09b2ac6cf
+      internalID: 21300018
+      vertices:
+      - {x: 0, y: 123}
+      - {x: 256, y: 0}
+      - {x: 256, y: 123}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EdgeLayerVine8
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1573
+        width: 256
+        height: 132
+      alignment: 9
+      pivot: {x: 0.4985941, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 127.64009, y: -66}
+        - {x: -128.35991, y: -66}
+        - {x: -128.35991, y: 66}
+        - {x: 127.64009, y: 66}
+      physicsShape:
+      - - {x: -128.35991, y: 66}
+        - {x: -128.35991, y: -66}
+        - {x: 127.64009, y: -66}
+        - {x: 127.64009, y: 66}
+      tessellationDetail: 0
+      bones: []
+      spriteID: cd6abe98fb0143b7aa5c9ee269d46b53
+      internalID: 21300020
+      vertices:
+      - {x: 0, y: 132}
+      - {x: 256, y: 0}
+      - {x: 256, y: 132}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EdgeLayerVine
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 707
+        width: 512
+        height: 207
+      alignment: 9
+      pivot: {x: 0.5, y: 0.49954265}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 256, y: -103.59467}
+        - {x: -256, y: -103.59467}
+        - {x: -256, y: 103.40533}
+        - {x: 256, y: 103.40533}
+      physicsShape:
+      - - {x: -256, y: 103.40533}
+        - {x: -256, y: -103.59467}
+        - {x: 256, y: -103.59467}
+        - {x: 256, y: 103.40533}
+      tessellationDetail: 0
+      bones: []
+      spriteID: be05074be69f41f6a0de7f648e4ff69c
+      internalID: 21300022
+      vertices:
+      - {x: 0, y: 207}
+      - {x: 512, y: 0}
+      - {x: 512, y: 207}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EdgeLayerVine6
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1707
+        width: 256
+        height: 73
+      alignment: 9
+      pivot: {x: 0.4996543, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 127.9115, y: -36.5}
+        - {x: -128.0885, y: -36.5}
+        - {x: -128.0885, y: 36.5}
+        - {x: 127.9115, y: 36.5}
+      physicsShape:
+      - - {x: -128.0885, y: 36.5}
+        - {x: -128.0885, y: -36.5}
+        - {x: 127.9115, y: -36.5}
+        - {x: 127.9115, y: 36.5}
+      tessellationDetail: 0
+      bones: []
+      spriteID: b9b53c21d5c642409cda18890f71e247
+      internalID: 21300024
+      vertices:
+      - {x: 0, y: 73}
+      - {x: 256, y: 0}
+      - {x: 256, y: 73}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FlatLayerTree3
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1322
+        width: 256
+        height: 167
+      alignment: 9
+      pivot: {x: 0.5, y: 0.49853036}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 127.99999, y: -83.74543}
+        - {x: -127.99999, y: -83.74543}
+        - {x: -127.99999, y: 83.25457}
+        - {x: 127.99999, y: 83.25457}
+      physicsShape:
+      - - {x: -127.99999, y: 83.25456}
+        - {x: -127.99999, y: -83.74542}
+        - {x: 127.99999, y: -83.74542}
+        - {x: 127.99999, y: 83.25456}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 78c51626f5bc4181abf81fb877c11b21
+      internalID: 21300026
+      vertices:
+      - {x: 0.0000076293945, y: 167}
+      - {x: 256, y: 0}
+      - {x: 256, y: 167}
+      - {x: 0.0000076293945, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FlatLayerGrass2
+      rect:
+        serializedVersion: 2
+        x: 485
+        y: 360
+        width: 128
+        height: 124
+      alignment: 9
+      pivot: {x: 0.49992475, y: 0.49999997}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 63.990368, y: -62.000004}
+        - {x: -64.00963, y: -62.000004}
+        - {x: -64.00963, y: 61.999996}
+        - {x: 63.990368, y: 61.999996}
+      physicsShape:
+      - - {x: -64.00963, y: 61.999996}
+        - {x: -64.00963, y: -62.000004}
+        - {x: 63.990368, y: -62.000004}
+        - {x: 63.990368, y: 61.999996}
+      tessellationDetail: 0
+      bones: []
+      spriteID: fcd7b974133a46fda465864c0dd8e509
+      internalID: 21300028
+      vertices:
+      - {x: 0, y: 124}
+      - {x: 128, y: 0}
+      - {x: 128, y: 124}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FlatLayerGrass1
+      rect:
+        serializedVersion: 2
+        x: 485
+        y: 486
+        width: 122
+        height: 128
+      alignment: 9
+      pivot: {x: 0.49908927, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 60.88889, y: -64}
+        - {x: -61.11111, y: -64}
+        - {x: -61.11111, y: 64}
+        - {x: 60.88889, y: 64}
+      physicsShape:
+      - - {x: -61.11111, y: 64}
+        - {x: -61.11111, y: -64}
+        - {x: 60.88889, y: -64}
+        - {x: 60.88889, y: 64}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9cfd1a943fed4f858b8579dddcc6d1af
+      internalID: 21300030
+      vertices:
+      - {x: 0, y: 128}
+      - {x: 122, y: 0}
+      - {x: 122, y: 128}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FlatLayerRocks2
+      rect:
+        serializedVersion: 2
+        x: 219
+        y: 1064
+        width: 256
+        height: 152
+      alignment: 9
+      pivot: {x: 0.5, y: 0.49974117}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 128, y: -76.039345}
+        - {x: -128, y: -76.039345}
+        - {x: -128, y: 75.960655}
+        - {x: 128, y: 75.960655}
+      physicsShape:
+      - - {x: -128, y: 75.960655}
+        - {x: -128, y: -76.039345}
+        - {x: 128, y: -76.039345}
+        - {x: 128, y: 75.960655}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 72613e412da048d7be38d63a49d0be30
+      internalID: 21300032
+      vertices:
+      - {x: 0, y: 152}
+      - {x: 256, y: 0}
+      - {x: 256, y: 152}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShadowLayerRock
+      rect:
+        serializedVersion: 2
+        x: 514
+        y: 616
+        width: 128
+        height: 108
+      alignment: 9
+      pivot: {x: 0.5, y: 0.49843064}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 64, y: -54.16949}
+        - {x: -64, y: -54.16949}
+        - {x: -64, y: 53.83051}
+        - {x: 64, y: 53.83051}
+      physicsShape:
+      - - {x: -64, y: 53.83051}
+        - {x: -64, y: -54.16949}
+        - {x: 64, y: -54.16949}
+        - {x: 64, y: 53.83051}
+      tessellationDetail: 0
+      bones: []
+      spriteID: fbfa18f4351c466e854a25ba1b76ba1e
+      internalID: 21300034
+      vertices:
+      - {x: 0, y: 108}
+      - {x: 128, y: 0}
+      - {x: 128, y: 108}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      EdgeLayerVine: 21300022
+      EdgeLayerVine2: 21300010
+      EdgeLayerVine3: 21300018
+      EdgeLayerVine6: 21300024
+      EdgeLayerVine7: 21300012
+      EdgeLayerVine8: 21300020
+      FlatLayerGrass1: 21300030
+      FlatLayerGrass2: 21300028
+      FlatLayerPalm1: 21300002
+      FlatLayerRocks1: 21300000
+      FlatLayerRocks2: 21300032
+      FlatLayerRocks3: 21300016
+      FlatLayerTree3: 21300026
+      FlatLayerTree4: 21300014
+      JungleSceneryTreeLineBack1: 21300008
+      JungleSceneryTreeLineFlat1: 21300006
+      JungleSceneryTreeLineFlat2: 21300004
+      ShadowLayerRock: 21300034
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

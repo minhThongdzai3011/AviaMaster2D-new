@@ -1,0 +1,542 @@
+fileFormatVersion: 2
+guid: 7ea717cf0b5c1934696addf5f44a7a53
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 21300000
+    second: FlatLayerPalm
+  - first:
+      213: 21300002
+    second: JungleSceneryTreeLineFull2
+  - first:
+      213: 21300004
+    second: JungleSceneryTreeLineFull1
+  - first:
+      213: 21300006
+    second: FlatLayerTree1
+  - first:
+      213: 21300008
+    second: JungleSinglePalmTree
+  - first:
+      213: 21300010
+    second: JungleForegroundCutout
+  - first:
+      213: 21300012
+    second: JungleDuoPalmTree
+  - first:
+      213: 21300014
+    second: EdgeLayerVine4
+  - first:
+      213: 21300016
+    second: FlatLayerTree2
+  - first:
+      213: 21300018
+    second: FlatLayerBush
+  - first:
+      213: 21300020
+    second: JungleAssetCutout
+  externalObjects: {}
+  serializedVersion: 12
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 3
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 1
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 80.884674
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
+  cookieLightType: 1
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: FlatLayerPalm
+      rect:
+        serializedVersion: 2
+        x: 1434
+        y: 0
+        width: 441
+        height: 512
+      alignment: 9
+      pivot: {x: 0.4997976, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 220.41075, y: -256}
+        - {x: -220.58925, y: -256}
+        - {x: -220.58925, y: 256}
+        - {x: 220.41075, y: 256}
+      physicsShape:
+      - - {x: -220.58926, y: 256}
+        - {x: -220.58926, y: -256}
+        - {x: 220.41077, y: -256}
+        - {x: 220.41077, y: 256}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2f69bbbd64884653a354002ecc34f128
+      internalID: 21300000
+      vertices:
+      - {x: 0, y: 512}
+      - {x: 441, y: 0}
+      - {x: 441, y: 512}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: JungleSceneryTreeLineFull2
+      rect:
+        serializedVersion: 2
+        x: 1045
+        y: 1688
+        width: 469
+        height: 312
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 234.5, y: -156}
+        - {x: -234.5, y: -156}
+        - {x: -234.5, y: 156}
+        - {x: 234.5, y: 156}
+      physicsShape:
+      - - {x: -234.5, y: 156}
+        - {x: -234.5, y: -156}
+        - {x: 234.5, y: -156}
+        - {x: 234.5, y: 156}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1106d4d4b0e443e9b718103e3efcc507
+      internalID: 21300002
+      vertices:
+      - {x: 0, y: 312}
+      - {x: 469, y: 0}
+      - {x: 469, y: 312}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: JungleSceneryTreeLineFull1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1525
+        width: 529
+        height: 372
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 264.5, y: -186}
+        - {x: -264.5, y: -186}
+        - {x: -264.5, y: 186}
+        - {x: 264.5, y: 186}
+      physicsShape:
+      - - {x: -264.5, y: 186}
+        - {x: -264.5, y: -186}
+        - {x: 264.5, y: -186}
+        - {x: 264.5, y: 186}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8f356d9d273042e9bee5cdd0ea8925fd
+      internalID: 21300004
+      vertices:
+      - {x: 0, y: 372}
+      - {x: 529, y: 0}
+      - {x: 529, y: 372}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FlatLayerTree1
+      rect:
+        serializedVersion: 2
+        x: 1513
+        y: 514
+        width: 381
+        height: 512
+      alignment: 9
+      pivot: {x: 0.4999653, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 190.48679, y: -256}
+        - {x: -190.51321, y: -256}
+        - {x: -190.51321, y: 256}
+        - {x: 190.48679, y: 256}
+      physicsShape:
+      - - {x: -190.51323, y: 256}
+        - {x: -190.51323, y: -256}
+        - {x: 190.4868, y: -256}
+        - {x: 190.4868, y: 256}
+      tessellationDetail: 0
+      bones: []
+      spriteID: f6175e6d0a964de8821f6e15fec6279f
+      internalID: 21300006
+      vertices:
+      - {x: 0, y: 512}
+      - {x: 381, y: 0}
+      - {x: 381, y: 512}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: JungleSinglePalmTree
+      rect:
+        serializedVersion: 2
+        x: 1540
+        y: 1028
+        width: 368
+        height: 512
+      alignment: 9
+      pivot: {x: 0.50000006, y: 0.49968877}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 184.00002, y: -256.15936}
+        - {x: -183.99998, y: -256.15936}
+        - {x: -183.99998, y: 255.84065}
+        - {x: 184.00002, y: 255.84065}
+      physicsShape:
+      - - {x: -183.99998, y: 255.84065}
+        - {x: -183.99998, y: -256.15936}
+        - {x: 184.00002, y: -256.15936}
+        - {x: 184.00002, y: 255.84065}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 69ad6ef2e47045a783599e31afa30028
+      internalID: 21300008
+      vertices:
+      - {x: 0, y: 512}
+      - {x: 368, y: 0}
+      - {x: 368, y: 512}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: JungleForegroundCutout
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 837
+        width: 1024
+        height: 686
+      alignment: 9
+      pivot: {x: 0.49970394, y: 0.49999997}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 511.6968, y: -343.00003}
+        - {x: -512.3031, y: -343.00003}
+        - {x: -512.3031, y: 342.99997}
+        - {x: 511.6968, y: 342.99997}
+      physicsShape:
+      - - {x: -512.3031, y: 342.99997}
+        - {x: -512.3031, y: -343.00003}
+        - {x: 511.6968, y: -343.00003}
+        - {x: 511.6968, y: 342.99997}
+      tessellationDetail: 0
+      bones: []
+      spriteID: d03e78d205704a29807c503d2f589e16
+      internalID: 21300010
+      vertices:
+      - {x: 0.000030517578, y: 686}
+      - {x: 1024, y: 0}
+      - {x: 1024, y: 686}
+      - {x: 0.000030517578, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: JungleDuoPalmTree
+      rect:
+        serializedVersion: 2
+        x: 1026
+        y: 710
+        width: 485
+        height: 512
+      alignment: 9
+      pivot: {x: 0.49982333, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 242.4143, y: -256}
+        - {x: -242.58566, y: -256}
+        - {x: -242.58566, y: 256}
+        - {x: 242.4143, y: 256}
+      physicsShape:
+      - - {x: -242.5857, y: 256}
+        - {x: -242.5857, y: -256}
+        - {x: 242.41434, y: -256}
+        - {x: 242.41434, y: 256}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 13c35e8204cf49ec95e5b99d09c8fb33
+      internalID: 21300012
+      vertices:
+      - {x: 0.000015258789, y: 512}
+      - {x: 485, y: 0}
+      - {x: 485, y: 512}
+      - {x: 0.000015258789, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EdgeLayerVine4
+      rect:
+        serializedVersion: 2
+        x: 1516
+        y: 1688
+        width: 512
+        height: 233
+      alignment: 9
+      pivot: {x: 0.5, y: 0.49956077}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 256, y: -116.60233}
+        - {x: -256, y: -116.60233}
+        - {x: -256, y: 116.39765}
+        - {x: 256, y: 116.39765}
+      physicsShape:
+      - - {x: -256, y: 116.39767}
+        - {x: -256, y: -116.60235}
+        - {x: 256, y: -116.60235}
+        - {x: 256, y: 116.39767}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 54b39677fd2148fb9b6362574e0a26da
+      internalID: 21300014
+      vertices:
+      - {x: 0, y: 233}
+      - {x: 512, y: 0.0000076293945}
+      - {x: 512, y: 233}
+      - {x: 0, y: 0.0000076293945}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FlatLayerTree2
+      rect:
+        serializedVersion: 2
+        x: 908
+        y: 0
+        width: 524
+        height: 708
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 262, y: -354}
+        - {x: -262, y: -354}
+        - {x: -262, y: 354}
+        - {x: 262, y: 354}
+      physicsShape:
+      - - {x: -262, y: 354}
+        - {x: -262, y: -354}
+        - {x: 262, y: -354}
+        - {x: 262, y: 354}
+      tessellationDetail: 0
+      bones: []
+      spriteID: f0d478b93ebe4eae992ea3b15464a374
+      internalID: 21300016
+      vertices:
+      - {x: 0, y: 708}
+      - {x: 524, y: 0}
+      - {x: 524, y: 708}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FlatLayerBush
+      rect:
+        serializedVersion: 2
+        x: 531
+        y: 1688
+        width: 512
+        height: 297
+      alignment: 9
+      pivot: {x: 0.5, y: 0.49940163}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 256, y: -148.67772}
+        - {x: -256, y: -148.67772}
+        - {x: -256, y: 148.32228}
+        - {x: 256, y: 148.32228}
+      physicsShape:
+      - - {x: -256, y: 148.32228}
+        - {x: -256, y: -148.67772}
+        - {x: 256, y: -148.67772}
+        - {x: 256, y: 148.32228}
+      tessellationDetail: 0
+      bones: []
+      spriteID: afbe47a308ee4a70b03e5f4acaca6eb2
+      internalID: 21300018
+      vertices:
+      - {x: 0, y: 297}
+      - {x: 512, y: 0}
+      - {x: 512, y: 297}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: JungleAssetCutout
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 906
+        height: 835
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 453.00003, y: -417.50003}
+        - {x: -453.00003, y: -417.50003}
+        - {x: -453.00003, y: 417.50003}
+        - {x: 453.00003, y: 417.50003}
+      physicsShape:
+      - - {x: -452.99997, y: 417.49997}
+        - {x: -452.99997, y: -417.49997}
+        - {x: 452.99997, y: -417.49997}
+        - {x: 452.99997, y: 417.49997}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5575c00187e14fa2b9c66d7bb81c773c
+      internalID: 21300020
+      vertices:
+      - {x: -0.000030517578, y: 835}
+      - {x: 906, y: -0.000030517578}
+      - {x: 906, y: 835}
+      - {x: -0.000030517578, y: -0.000030517578}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      EdgeLayerVine4: 21300014
+      FlatLayerBush: 21300018
+      FlatLayerPalm: 21300000
+      FlatLayerTree1: 21300006
+      FlatLayerTree2: 21300016
+      JungleAssetCutout: 21300020
+      JungleDuoPalmTree: 21300012
+      JungleForegroundCutout: 21300010
+      JungleSceneryTreeLineFull1: 21300004
+      JungleSceneryTreeLineFull2: 21300002
+      JungleSinglePalmTree: 21300008
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 339c411759833076fdfa9fa7d5a4dde7, type: 3}
+  m_Name: Tier3
+  m_EditorClassIdentifier:
+  title:
+    keyword: plane-bundle-tier-3
+  rewardRequirement:
+    type: 4
+    minSurvivalHighscore: 0
+    survivalThemeVisit: {fileID: 0}
+    fullScorePack: {fileID: 0}
+    fullMedalPack: {fileID: 0}
+    quest: 0
+    landmark: {fileID: 0}
+    plane: {fileID: 0}
+    amount: 15
+  planes:
+  - {fileID: 114506388997372761, guid: 4c8831e7a011e034fa863173b3312606, type: 2}
+  - {fileID: 114952166091510043, guid: 66d23964f5b0b7f488233ddb61c04264, type: 2}
+  - {fileID: 114205794580199552, guid: ecaa90699935f6841a85148b830ab602, type: 2}
+  orderInLibraryIndex: 3

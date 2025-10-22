@@ -1,0 +1,801 @@
+fileFormatVersion: 2
+guid: e776f91daca08f8469de02ea5a36cd75
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 21300000
+    second: CaveRockSmall3
+  - first:
+      213: 21300002
+    second: CaveRockSmall2
+  - first:
+      213: 21300004
+    second: CaveRockBig
+  - first:
+      213: 21300006
+    second: CaveCrystalSmall
+  - first:
+      213: 21300008
+    second: CaveStalactites
+  - first:
+      213: 21300010
+    second: CavePillarSmall
+  - first:
+      213: 21300012
+    second: CavePillarBig
+  - first:
+      213: 21300014
+    second: CavePillarMedium
+  - first:
+      213: 21300016
+    second: CaveCrystalMedium
+  - first:
+      213: 21300018
+    second: CaveRocks1
+  - first:
+      213: 21300020
+    second: CaveRocks2
+  - first:
+      213: 21300022
+    second: CaveStalactitesDown
+  - first:
+      213: 21300024
+    second: CaveStalactitesUp
+  - first:
+      213: 21300026
+    second: CaveRockCluster
+  - first:
+      213: 21300028
+    second: CaveRockSmall
+  - first:
+      213: 21300030
+    second: EdgeLayerRock6
+  - first:
+      213: 21300032
+    second: CaveCrystalBig
+  - first:
+      213: 21300034
+    second: EdgeLayerRock7
+  externalObjects: {}
+  serializedVersion: 12
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 3
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 1
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 47.92746
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
+  cookieLightType: 1
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: CaveRockSmall3
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1286
+        width: 256
+        height: 185
+      alignment: 9
+      pivot: {x: 0.49986842, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 127.96631, y: -92.5}
+        - {x: -128.03368, y: -92.5}
+        - {x: -128.03368, y: 92.5}
+        - {x: 127.96631, y: 92.5}
+      physicsShape:
+      - - {x: -128.03368, y: 92.49999}
+        - {x: -128.03368, y: -92.49999}
+        - {x: 127.96631, y: -92.49999}
+        - {x: 127.96631, y: 92.49999}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8e8ae734ec1940efb84c0c1302b6426f
+      internalID: 21300000
+      vertices:
+      - {x: 0.0000076293945, y: 185}
+      - {x: 256, y: 0}
+      - {x: 256, y: 185}
+      - {x: 0.0000076293945, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CaveRockSmall2
+      rect:
+        serializedVersion: 2
+        x: 673
+        y: 440
+        width: 242
+        height: 256
+      alignment: 9
+      pivot: {x: 0.4999128, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 120.9789, y: -128}
+        - {x: -121.0211, y: -128}
+        - {x: -121.0211, y: 128}
+        - {x: 120.9789, y: 128}
+      physicsShape:
+      - - {x: -121.021095, y: 128}
+        - {x: -121.021095, y: -128}
+        - {x: 120.97889, y: -128}
+        - {x: 120.97889, y: 128}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 047f54d551c74e52a3f3676b9a958416
+      internalID: 21300002
+      vertices:
+      - {x: 0, y: 256}
+      - {x: 242, y: 0}
+      - {x: 242, y: 256}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CaveRockBig
+      rect:
+        serializedVersion: 2
+        x: 258
+        y: 1115
+        width: 256
+        height: 136
+      alignment: 9
+      pivot: {x: 0.499375, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 127.84, y: -68}
+        - {x: -128.16, y: -68}
+        - {x: -128.16, y: 68}
+        - {x: 127.84, y: 68}
+      physicsShape:
+      - - {x: -128.16, y: 68}
+        - {x: -128.16, y: -68}
+        - {x: 127.84, y: -68}
+        - {x: 127.84, y: 68}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3c901557a2e04117a79840cf798f6886
+      internalID: 21300004
+      vertices:
+      - {x: 0, y: 136}
+      - {x: 256, y: 0}
+      - {x: 256, y: 136}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CaveCrystalSmall
+      rect:
+        serializedVersion: 2
+        x: 708
+        y: 933
+        width: 114
+        height: 256
+      alignment: 9
+      pivot: {x: 0.49921727, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 56.910774, y: -127.99999}
+        - {x: -57.089233, y: -127.99999}
+        - {x: -57.089233, y: 127.99999}
+        - {x: 56.910774, y: 127.99999}
+      physicsShape:
+      - - {x: -57.089226, y: 127.99999}
+        - {x: -57.089226, y: -127.99999}
+        - {x: 56.910767, y: -127.99999}
+        - {x: 56.910767, y: 127.99999}
+      tessellationDetail: 0
+      bones: []
+      spriteID: d662efeceae14205b1f84a3ff68a8d8f
+      internalID: 21300006
+      vertices:
+      - {x: -0.0000038146973, y: 256}
+      - {x: 114, y: 0.0000076293945}
+      - {x: 114, y: 256}
+      - {x: -0.0000038146973, y: 0.0000076293945}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CaveStalactites
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 857
+        width: 256
+        height: 230
+      alignment: 9
+      pivot: {x: 0.5, y: 0.49948975}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 128, y: -115.117355}
+        - {x: -128, y: -115.117355}
+        - {x: -128, y: 114.882645}
+        - {x: 128, y: 114.882645}
+      physicsShape:
+      - - {x: -128, y: 114.882645}
+        - {x: -128, y: -115.117355}
+        - {x: 128, y: -115.117355}
+        - {x: 128, y: 114.882645}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 91a1dee03567450ba3b278ffa71be178
+      internalID: 21300008
+      vertices:
+      - {x: 0, y: 230}
+      - {x: 256, y: 0}
+      - {x: 256, y: 230}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CavePillarSmall
+      rect:
+        serializedVersion: 2
+        x: 514
+        y: 440
+        width: 157
+        height: 512
+      alignment: 9
+      pivot: {x: 0.5, y: 0.49995756}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 78.5, y: -256.02173}
+        - {x: -78.5, y: -256.02173}
+        - {x: -78.5, y: 255.97827}
+        - {x: 78.5, y: 255.97827}
+      physicsShape:
+      - - {x: -78.5, y: 255.97827}
+        - {x: -78.5, y: -256.02173}
+        - {x: 78.5, y: -256.02173}
+        - {x: 78.5, y: 255.97827}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5d0cfffe5ce84c78a24df09c2fc06f18
+      internalID: 21300010
+      vertices:
+      - {x: 0, y: 512}
+      - {x: 157, y: 0}
+      - {x: 157, y: 512}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CavePillarBig
+      rect:
+        serializedVersion: 2
+        x: 514
+        y: 0
+        width: 350
+        height: 438
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 175, y: -219}
+        - {x: -175, y: -219}
+        - {x: -175, y: 219}
+        - {x: 175, y: 219}
+      physicsShape:
+      - - {x: -175, y: 219}
+        - {x: -175, y: -219}
+        - {x: 175, y: -219}
+        - {x: 175, y: 219}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0f94b232e3ae436a95d2f3ffef63e0db
+      internalID: 21300012
+      vertices:
+      - {x: 0, y: 438}
+      - {x: 350, y: 0}
+      - {x: 350, y: 438}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CavePillarMedium
+      rect:
+        serializedVersion: 2
+        x: 516
+        y: 1113
+        width: 79
+        height: 255
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4993975}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 39.5, y: -127.65364}
+        - {x: -39.5, y: -127.65364}
+        - {x: -39.5, y: 127.34636}
+        - {x: 39.5, y: 127.34636}
+      physicsShape:
+      - - {x: -39.5, y: 127.34636}
+        - {x: -39.5, y: -127.65364}
+        - {x: 39.5, y: -127.65364}
+        - {x: 39.5, y: 127.34636}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6938ce1be26a4108aa333438d9a38a89
+      internalID: 21300014
+      vertices:
+      - {x: 0, y: 255}
+      - {x: 79, y: 0}
+      - {x: 79, y: 255}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CaveCrystalMedium
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1473
+        width: 78
+        height: 256
+      alignment: 9
+      pivot: {x: 0.4978111, y: 0.49999997}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 38.829266, y: -128}
+        - {x: -39.170734, y: -128}
+        - {x: -39.170734, y: 127.99999}
+        - {x: 38.829266, y: 127.99999}
+      physicsShape:
+      - - {x: -39.170734, y: 127.99999}
+        - {x: -39.170734, y: -128}
+        - {x: 38.829266, y: -128}
+        - {x: 38.829266, y: 127.99999}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 764e0253f79d48dc893f732a880a243e
+      internalID: 21300016
+      vertices:
+      - {x: 0, y: 256}
+      - {x: 78, y: 0}
+      - {x: 78, y: 256}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CaveRocks1
+      rect:
+        serializedVersion: 2
+        x: 450
+        y: 954
+        width: 256
+        height: 157
+      alignment: 9
+      pivot: {x: 0.49980405, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 127.94984, y: -78.5}
+        - {x: -128.05017, y: -78.5}
+        - {x: -128.05017, y: 78.5}
+        - {x: 127.94984, y: 78.5}
+      physicsShape:
+      - - {x: -128.05017, y: 78.5}
+        - {x: -128.05017, y: -78.5}
+        - {x: 127.94984, y: -78.5}
+        - {x: 127.94984, y: 78.5}
+      tessellationDetail: 0
+      bones: []
+      spriteID: f15d8c8f72b04873850a52c5610f8312
+      internalID: 21300018
+      vertices:
+      - {x: 0, y: 157}
+      - {x: 256, y: 0}
+      - {x: 256, y: 157}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CaveRocks2
+      rect:
+        serializedVersion: 2
+        x: 258
+        y: 1253
+        width: 256
+        height: 83
+      alignment: 9
+      pivot: {x: 0.5, y: 0.49760643}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 128, y: -41.698666}
+        - {x: -128, y: -41.698666}
+        - {x: -128, y: 41.301334}
+        - {x: 128, y: 41.301334}
+      physicsShape:
+      - - {x: -128, y: 41.301334}
+        - {x: -128, y: -41.698666}
+        - {x: 128, y: -41.698666}
+        - {x: 128, y: 41.301334}
+      tessellationDetail: 0
+      bones: []
+      spriteID: ca0581473c424aa2acc7faffdc3f872e
+      internalID: 21300020
+      vertices:
+      - {x: 0, y: 83}
+      - {x: 256, y: 0}
+      - {x: 256, y: 83}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CaveStalactitesDown
+      rect:
+        serializedVersion: 2
+        x: 673
+        y: 698
+        width: 256
+        height: 233
+      alignment: 9
+      pivot: {x: 0.49999997, y: 0.49909744}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 127.99999, y: -116.7103}
+        - {x: -128, y: -116.7103}
+        - {x: -128, y: 116.2897}
+        - {x: 127.99999, y: 116.2897}
+      physicsShape:
+      - - {x: -128, y: 116.2897}
+        - {x: -128, y: -116.7103}
+        - {x: 127.99999, y: -116.7103}
+        - {x: 127.99999, y: 116.2897}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6a532aa0aa6745858cd8635c37e33d81
+      internalID: 21300022
+      vertices:
+      - {x: 0, y: 233}
+      - {x: 256, y: 0}
+      - {x: 256, y: 233}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CaveStalactitesUp
+      rect:
+        serializedVersion: 2
+        x: 824
+        y: 933
+        width: 128
+        height: 109
+      alignment: 9
+      pivot: {x: 0.49844635, y: 0.50000006}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 63.801132, y: -54.499992}
+        - {x: -64.19887, y: -54.499992}
+        - {x: -64.19887, y: 54.500008}
+        - {x: 63.801132, y: 54.500008}
+      physicsShape:
+      - - {x: -64.19887, y: 54.500008}
+        - {x: -64.19887, y: -54.499992}
+        - {x: 63.801132, y: -54.499992}
+        - {x: 63.801132, y: 54.500008}
+      tessellationDetail: 0
+      bones: []
+      spriteID: b555bd6eb583469a808f63b57d71e7d4
+      internalID: 21300024
+      vertices:
+      - {x: 0, y: 109}
+      - {x: 128, y: 0}
+      - {x: 128, y: 109}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CaveRockCluster
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 512
+        height: 317
+      alignment: 9
+      pivot: {x: 0.49934524, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 255.66476, y: -158.5}
+        - {x: -256.33524, y: -158.5}
+        - {x: -256.33524, y: 158.5}
+        - {x: 255.66476, y: 158.5}
+      physicsShape:
+      - - {x: -256.33524, y: 158.5}
+        - {x: -256.33524, y: -158.5}
+        - {x: 255.66476, y: -158.5}
+        - {x: 255.66476, y: 158.5}
+      tessellationDetail: 0
+      bones: []
+      spriteID: a40817daa9d1432f9ed149a8837ed866
+      internalID: 21300026
+      vertices:
+      - {x: 0, y: 317}
+      - {x: 512, y: 0}
+      - {x: 512, y: 317}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CaveRockSmall
+      rect:
+        serializedVersion: 2
+        x: 258
+        y: 857
+        width: 190
+        height: 256
+      alignment: 9
+      pivot: {x: 0.50000006, y: 0.4988293}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 95.00001, y: -128.2997}
+        - {x: -94.99999, y: -128.2997}
+        - {x: -94.99999, y: 127.7003}
+        - {x: 95.00001, y: 127.7003}
+      physicsShape:
+      - - {x: -94.99999, y: 127.7003}
+        - {x: -94.99999, y: -128.2997}
+        - {x: 95.00001, y: -128.2997}
+        - {x: 95.00001, y: 127.7003}
+      tessellationDetail: 0
+      bones: []
+      spriteID: a088d2dd274d4a2fa2b76f693513cd3b
+      internalID: 21300028
+      vertices:
+      - {x: 0, y: 256}
+      - {x: 190, y: 0}
+      - {x: 190, y: 256}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EdgeLayerRock6
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 593
+        width: 512
+        height: 262
+      alignment: 9
+      pivot: {x: 0.49927574, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 255.62918, y: -131}
+        - {x: -256.37082, y: -131}
+        - {x: -256.37082, y: 131}
+        - {x: 255.62918, y: 131}
+      physicsShape:
+      - - {x: -256.37082, y: 131}
+        - {x: -256.37082, y: -131}
+        - {x: 255.62918, y: -131}
+        - {x: 255.62918, y: 131}
+      tessellationDetail: 0
+      bones: []
+      spriteID: b45d86e118974b378b92eba39023c72b
+      internalID: 21300030
+      vertices:
+      - {x: 0, y: 262}
+      - {x: 512, y: 0}
+      - {x: 512, y: 262}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CaveCrystalBig
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1089
+        width: 256
+        height: 195
+      alignment: 9
+      pivot: {x: 0.4989869, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 127.74065, y: -97.5}
+        - {x: -128.25935, y: -97.5}
+        - {x: -128.25935, y: 97.5}
+        - {x: 127.74065, y: 97.5}
+      physicsShape:
+      - - {x: -128.25935, y: 97.5}
+        - {x: -128.25935, y: -97.5}
+        - {x: 127.74065, y: -97.5}
+        - {x: 127.74065, y: 97.5}
+      tessellationDetail: 0
+      bones: []
+      spriteID: fddc68a9fc614fb6bb1252207bead482
+      internalID: 21300032
+      vertices:
+      - {x: 0, y: 195}
+      - {x: 256, y: 0}
+      - {x: 256, y: 195}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EdgeLayerRock7
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 319
+        width: 512
+        height: 272
+      alignment: 9
+      pivot: {x: 0.49913412, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 255.55667, y: -136}
+        - {x: -256.44333, y: -136}
+        - {x: -256.44333, y: 136}
+        - {x: 255.55667, y: 136}
+      physicsShape:
+      - - {x: -256.44333, y: 136}
+        - {x: -256.44333, y: -136}
+        - {x: 255.55667, y: -136}
+        - {x: 255.55667, y: 136}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3b29802c0b3342d29bac41d1347ff46a
+      internalID: 21300034
+      vertices:
+      - {x: 0, y: 272}
+      - {x: 512, y: 0}
+      - {x: 512, y: 272}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      CaveCrystalBig: 21300032
+      CaveCrystalMedium: 21300016
+      CaveCrystalSmall: 21300006
+      CavePillarBig: 21300012
+      CavePillarMedium: 21300014
+      CavePillarSmall: 21300010
+      CaveRockBig: 21300004
+      CaveRockCluster: 21300026
+      CaveRockSmall: 21300028
+      CaveRockSmall2: 21300002
+      CaveRockSmall3: 21300000
+      CaveRocks1: 21300018
+      CaveRocks2: 21300020
+      CaveStalactites: 21300008
+      CaveStalactitesDown: 21300022
+      CaveStalactitesUp: 21300024
+      EdgeLayerRock6: 21300030
+      EdgeLayerRock7: 21300034
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e53f7577335ecc17232c3e068e7433fe, type: 3}
+  m_Name: Forest CaveDarkOverlay
+  m_EditorClassIdentifier:
+  themeGroup: {fileID: 11400000, guid: 146db5a3d5694a04fbc27cf1f2a5245b, type: 2}
+  shader: {fileID: 10755, guid: 0000000000000000f000000000000000, type: 0}
+  unsortedMaterialVariants:
+  - Theme: {fileID: 11400000, guid: fcc2a83e6c14f8142b02ac5305a581b3, type: 2}
+    FloatSettings: []
+    ColorSettings:
+    - PropertyName: _Color
+      Value: {r: 0.08627451, g: 0.04705883, b: 0.07058824, a: 0}
+    VectorSettings: []
+    TextureSettings: []
+  - Theme: {fileID: 11400000, guid: 24da48b48478baf43b3e4ffdb24b66bd, type: 2}
+    FloatSettings: []
+    ColorSettings:
+    - PropertyName: _Color
+      Value: {r: 0.3529412, g: 0.20392159, b: 0.3254902, a: 1}
+    VectorSettings: []
+    TextureSettings: []
+  renderTarget: 1

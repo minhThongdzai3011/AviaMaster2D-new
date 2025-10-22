@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 477aaaf894d1d1836595eb17d60c1919, type: 3}
+  m_Name: Jungle
+  m_EditorClassIdentifier:
+  title:
+    keyword: theme-jungle
+  isCave: 0
+  order: 200
+  surfaceMaterial: {fileID: 11400000, guid: faa35c9c3964dab4397f6ca298e38ab3, type: 2}
+  waterVertMaterial: {fileID: 11400000, guid: 42e0ef130793f9747905cc4e99b9b148, type: 2}
+  waterWavesMaterial: {fileID: 11400000, guid: 8fd4d3afe02e64f42af269067647a8f2, type: 2}
+  waterFlatMaterial: {fileID: 11400000, guid: df702149639ef7f439ac0eb04892933a, type: 2}
+  defaultFirePrefab: {fileID: 114808573540442689, guid: a7416d3f6229308479b6f4997c785971, type: 2}
+  noSmokeFirePrefab: {fileID: 114065697814046141, guid: 426ab863c347c6347bcde66b0dbc12ec, type: 2}
+  sceneryPrefab: {fileID: 114877986207427762, guid: d174df41800e29f43941d1436cb77adb, type: 2}
+  sceneryUIPrefab: {fileID: 0}
+  sceneryMusic: jungle_music
+  themes:
+  - {fileID: 11400000, guid: cdce344f8c3f435409546fc0b97f65d0, type: 2}
+  - {fileID: 11400000, guid: 3492a5f26780b214797ad07fdc5e4db9, type: 2}
+  dynamicMaterials:
+  - {fileID: 11400000, guid: 317c98a5d1d47d54dbb45829a136e181, type: 2}
+  - {fileID: 11400000, guid: 2d5057317d870224b883aeebbd062cd3, type: 2}
+  - {fileID: 11400000, guid: b2a0d4bfcb764214f98c765f3855e6c7, type: 2}
+  - {fileID: 11400000, guid: 2169e73475ac4054aa548cea31295f3a, type: 2}
+  - {fileID: 11400000, guid: 815c23e07952cdb499720fdcdad35e66, type: 2}
+  - {fileID: 11400000, guid: 65688663b0004614f8d5712dad46863a, type: 2}
+  - {fileID: 11400000, guid: 78e276c49762b554882244e54f862d7c, type: 2}
+  - {fileID: 11400000, guid: c7008d1a3dec90743bd618c3b208bf8c, type: 2}
+  - {fileID: 11400000, guid: 6e18c9867a58c9d4c91cd96e77698ea7, type: 2}
+  - {fileID: 11400000, guid: 4a30f76d40587ac40bdf86244c3e9a51, type: 2}
+  - {fileID: 11400000, guid: 9bdd786fcd9203044a3bb6e178e44f9b, type: 2}
+  - {fileID: 11400000, guid: b44691fb7e8d8514b89de3f25ca5d828, type: 2}
+  - {fileID: 11400000, guid: 056c8baa80a3f954cb2d9e5fc10a7e4b, type: 2}
+  - {fileID: 11400000, guid: 94e0927ba57e07e428032ab32f8ce6e2, type: 2}
+  - {fileID: 11400000, guid: 68b7ff0f60435a4479020bc4cbb0f184, type: 2}
+  - {fileID: 11400000, guid: 72a28401baf9f7b459ae95e199e1b465, type: 2}
+  - {fileID: 11400000, guid: 9854788f839e4f346832a18e4fb42012, type: 2}
+  - {fileID: 11400000, guid: 5142af53c1e2e2647853e521a2ee9c71, type: 2}
+  - {fileID: 11400000, guid: c8f40646028c25140943b40a60e131f3, type: 2}
+  - {fileID: 11400000, guid: 8414a2dae96ab50408ac4c67809c7f98, type: 2}
+  - {fileID: 11400000, guid: f6060742269aebe49bd835d622494759, type: 2}
+  - {fileID: 11400000, guid: 1e74a790afadcec40ba5494967cf4c9d, type: 2}
+  - {fileID: 11400000, guid: b26625f0a05a7ba459db7b3d3edaf694, type: 2}
+  - {fileID: 11400000, guid: 30fb05d3cbf6c2d4894417410bc655e7, type: 2}
+  - {fileID: 11400000, guid: fa8f89cc0b3be57479dbcdd14438eff1, type: 2}
+  - {fileID: 11400000, guid: aea2c93155f6da8468779c93dc249fd5, type: 2}
+  - {fileID: 11400000, guid: 380dcb76672bc9f499cdc42260dd1af0, type: 2}
+  - {fileID: 11400000, guid: 3a86ef364ef55024c8bcf1e835e56780, type: 2}
+  - {fileID: 11400000, guid: 871f8db5d6a853a4ca430b85dba95152, type: 2}
+  - {fileID: 11400000, guid: a97ca0e462cda45439f721ca10d3f137, type: 2}
+  - {fileID: 11400000, guid: faa35c9c3964dab4397f6ca298e38ab3, type: 2}
+  - {fileID: 11400000, guid: df702149639ef7f439ac0eb04892933a, type: 2}
+  - {fileID: 11400000, guid: 42e0ef130793f9747905cc4e99b9b148, type: 2}
+  - {fileID: 11400000, guid: 8fd4d3afe02e64f42af269067647a8f2, type: 2}

@@ -324,8 +324,11 @@ public class Player : MonoBehaviour
         Debug.Log("moneyPlayer: " + GameManager.instance.moneyPlayer);
         PlayerPrefs.SetInt("Money", GameManager.instance.moneyPlayer);
         GameManager.instance.money = 0;
-        GameManager.instance.score = 0; 
+        GameManager.instance.score = 0;
         GameManager.instance.moneyTextPlayer.text = GameManager.instance.moneyPlayer.ToString();
+        
+        BonusSpawner.instance.spawnRangeX = BonusSpawner.instance.startRangeX;
+        RocketSpawner.instance.spawnRangeX = RocketSpawner.instance.startRangeX;
 
         // Dừng tất cả coroutines hiệu ứng
         StopAllCoroutines();
@@ -427,17 +430,8 @@ public class Player : MonoBehaviour
     IEnumerator AnimateSlider()
     {
         targetValue = Mathf.Clamp01(GameManager.instance.distanceTraveled / 600f);
-
-        // Kiểm tra null safety
-        if (GameManager.instance?.slider == null || GameManager.instance?.completeText == null)
-        {
-            Debug.LogError("GameManager instance, slider hoặc completeText bị null!");
-            yield break;
-        }
-
         float elapsed = 0f;
         float startValue = GameManager.instance.slider.value;
-        Debug.Log($"Starting slider animation from {startValue} to {targetValue}");
 
         while (elapsed < duration)
         {
@@ -452,16 +446,13 @@ public class Player : MonoBehaviour
             int percent = Mathf.RoundToInt(currentValue * 100f);
             GameManager.instance.completeText.text = percent.ToString() + "%";
             
-            Debug.Log($"Slider progress: {percent}%"); // Debug để theo dõi
 
             yield return null;
         }
 
-        // Đảm bảo kết thúc chính xác
         GameManager.instance.slider.value = targetValue;
         GameManager.instance.completeText.text = Mathf.RoundToInt(targetValue * 100f).ToString() + "% ";
         
-        Debug.Log("Slider animation completed!");
     }
     
 

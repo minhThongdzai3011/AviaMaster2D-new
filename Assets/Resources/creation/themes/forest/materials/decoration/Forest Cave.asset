@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e53f7577335ecc17232c3e068e7433fe, type: 3}
+  m_Name: Forest Cave
+  m_EditorClassIdentifier:
+  themeGroup: {fileID: 11400000, guid: 146db5a3d5694a04fbc27cf1f2a5245b, type: 2}
+  shader: {fileID: 4800000, guid: fb8104d9b2a0aa14090fab3a9a5c87ea, type: 3}
+  unsortedMaterialVariants:
+  - Theme: {fileID: 11400000, guid: fcc2a83e6c14f8142b02ac5305a581b3, type: 2}
+    FloatSettings:
+    - PropertyName: _ShineSpeed
+      Value: 0.7
+    - PropertyName: _LightIntensity
+      Value: 0.2
+    - PropertyName: _LightOpacity
+      Value: 0.2
+    - PropertyName: _LightAmbient
+      Value: 0.95
+    ColorSettings:
+    - PropertyName: _LightColor
+      Value: {r: 0, g: 0.5461459, b: 1, a: 1}
+    VectorSettings: []
+    TextureSettings:
+    - PropertyName: _MainTex
+      Value: {fileID: 2800000, guid: 97600cf6ffa87b141b7850a6fde8309b, type: 3}
+    - PropertyName: _TextureMask
+      Value: {fileID: 2800000, guid: 90f28e00f9d2c9648b50a79d38a3712c, type: 3}
+  - Theme: {fileID: 11400000, guid: 24da48b48478baf43b3e4ffdb24b66bd, type: 2}
+    FloatSettings:
+    - PropertyName: _ShineSpeed
+      Value: 0.7
+    - PropertyName: _LightIntensity
+      Value: 0.2
+    - PropertyName: _LightOpacity
+      Value: 0.2
+    - PropertyName: _LightAmbient
+      Value: 0.95
+    ColorSettings:
+    - PropertyName: _LightColor
+      Value: {r: 0, g: 0.5461459, b: 1, a: 1}
+    VectorSettings: []
+    TextureSettings:
+    - PropertyName: _MainTex
+      Value: {fileID: 2800000, guid: ebbbb1b443642474fa5408eb210e1f1a, type: 3}
+    - PropertyName: _TextureMask
+      Value: {fileID: 2800000, guid: 90f28e00f9d2c9648b50a79d38a3712c, type: 3}
+  renderTarget: 1

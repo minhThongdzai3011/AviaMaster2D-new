@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 339c411759833076fdfa9fa7d5a4dde7, type: 3}
+  m_Name: Starter
+  m_EditorClassIdentifier:
+  title:
+    keyword: plane-bundle-start
+  rewardRequirement:
+    type: 0
+    minSurvivalHighscore: 0
+    survivalThemeVisit: {fileID: 0}
+    fullScorePack: {fileID: 0}
+    fullMedalPack: {fileID: 0}
+    quest: 0
+    landmark: {fileID: 0}
+    plane: {fileID: 0}
+    amount: 0
+  planes:
+  - {fileID: 114580881112699545, guid: b1e8281f880b54546873b52bd9b7681c, type: 2}
+  - {fileID: 114852107067693577, guid: b7ee7d1cb01ebe54797b5995aa406314, type: 2}
+  - {fileID: 114619554241917054, guid: c5cf72fe4ca945d4b8ecef97c8a53670, type: 2}
+  orderInLibraryIndex: 0

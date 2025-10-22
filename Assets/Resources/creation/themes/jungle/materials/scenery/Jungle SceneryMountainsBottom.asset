@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e53f7577335ecc17232c3e068e7433fe, type: 3}
+  m_Name: Jungle SceneryMountainsBottom
+  m_EditorClassIdentifier:
+  themeGroup: {fileID: 11400000, guid: 3c13b7050d6e39f498fe44a5337182f5, type: 2}
+  shader: {fileID: 4800000, guid: c80d844e0a26dd247bfc202401d8b86c, type: 3}
+  unsortedMaterialVariants:
+  - Theme: {fileID: 11400000, guid: cdce344f8c3f435409546fc0b97f65d0, type: 2}
+    FloatSettings:
+    - PropertyName: _BottomDeltaWidth
+      Value: 0.49
+    ColorSettings:
+    - PropertyName: _Color
+      Value: {r: 0.82745105, g: 0.86666673, b: 0.5764706, a: 1}
+    VectorSettings: []
+    TextureSettings: []
+  - Theme: {fileID: 11400000, guid: 3492a5f26780b214797ad07fdc5e4db9, type: 2}
+    FloatSettings:
+    - PropertyName: _BottomDeltaWidth
+      Value: 0.49
+    ColorSettings:
+    - PropertyName: _Color
+      Value: {r: 0.1137255, g: 0.50980395, b: 0.5686275, a: 1}
+    VectorSettings: []
+    TextureSettings: []
+  renderTarget: 0

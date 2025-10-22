@@ -6,10 +6,15 @@ using UnityEngine;
 public class MapSpawner : MonoBehaviour
 {
     public static MapSpawner instance;
-    
+
     [Header("Vật phẩm Map")]
     public GameObject[] mapPrefabs;
+
+    [Header("MapCity")]
+    public GameObject[] mapCityPrefabs;
+
     
+
     [Header("Spawn Range 2D")]
     public float spawnRangeYmin = -1.5f;
     public float spawnRangeX = 12f;

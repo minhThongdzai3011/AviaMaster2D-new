@@ -1,0 +1,912 @@
+fileFormatVersion: 2
+guid: ab1f851699e90e947a29238703c43889
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 21300000
+    second: EdgeLayerRock3
+  - first:
+      213: 21300002
+    second: FlatLayerRock3
+  - first:
+      213: 21300004
+    second: EdgeLayerRock4
+  - first:
+      213: 21300006
+    second: EdgeLayerRock2
+  - first:
+      213: 21300008
+    second: ForestSceneryTreeLineHighAngle2
+  - first:
+      213: 21300010
+    second: ForestSceneryTreeLineHighAngle
+  - first:
+      213: 21300012
+    second: ForestSceneryTreeLineBack
+  - first:
+      213: 21300014
+    second: ShadowLayerRock4
+  - first:
+      213: 21300016
+    second: FlatLayerTreeSingle1
+  - first:
+      213: 21300018
+    second: EdgeLayerRock5
+  - first:
+      213: 21300020
+    second: FlatLayerBush1
+  - first:
+      213: 21300022
+    second: FlatLayerTreeSingle2
+  - first:
+      213: 21300024
+    second: FlatLayerRock2
+  - first:
+      213: 21300026
+    second: FlatLayerTreePatch1
+  - first:
+      213: 21300028
+    second: FlatLayerRock1
+  - first:
+      213: 21300030
+    second: ShadowLayerRock1
+  - first:
+      213: 21300032
+    second: FlatLayerRock4
+  - first:
+      213: 21300034
+    second: ShadowLayerRock3
+  - first:
+      213: 21300036
+    second: FlatLayerRock
+  - first:
+      213: 21300038
+    second: EdgeLayerRock1
+  - first:
+      213: 21300040
+    second: ShadowLayerRock2
+  externalObjects: {}
+  serializedVersion: 12
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 3
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 1
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
+  cookieLightType: 1
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: EdgeLayerRock3
+      rect:
+        serializedVersion: 2
+        x: 258
+        y: 850
+        width: 439
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 219.5, y: -56}
+        - {x: -219.5, y: -56}
+        - {x: -219.5, y: 56}
+        - {x: 219.5, y: 56}
+      physicsShape:
+      - - {x: -219.5, y: 56}
+        - {x: -219.5, y: -56}
+        - {x: 219.5, y: -56}
+        - {x: 219.5, y: 56}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 40654d17108b41569bf02a3bbd73b316
+      internalID: 21300000
+      vertices:
+      - {x: 0, y: 112}
+      - {x: 439, y: 0}
+      - {x: 439, y: 112}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FlatLayerRock3
+      rect:
+        serializedVersion: 2
+        x: 765
+        y: 747
+        width: 256
+        height: 178
+      alignment: 9
+      pivot: {x: 0.4986652, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 127.658295, y: -89}
+        - {x: -128.3417, y: -89}
+        - {x: -128.3417, y: 89}
+        - {x: 127.658295, y: 89}
+      physicsShape:
+      - - {x: -128.3417, y: 89.00001}
+        - {x: -128.3417, y: -89.00001}
+        - {x: 127.658295, y: -89.00001}
+        - {x: 127.658295, y: 89.00001}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8f3d0141546845d7bd6a9071828efe1f
+      internalID: 21300002
+      vertices:
+      - {x: 0, y: 178}
+      - {x: 256, y: 0}
+      - {x: 256, y: 178}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EdgeLayerRock4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 514
+        width: 518
+        height: 219
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 259, y: -109.5}
+        - {x: -259, y: -109.5}
+        - {x: -259, y: 109.5}
+        - {x: 259, y: 109.5}
+      physicsShape:
+      - - {x: -259, y: 109.5}
+        - {x: -259, y: -109.5}
+        - {x: 259, y: -109.5}
+        - {x: 259, y: 109.5}
+      tessellationDetail: 0
+      bones: []
+      spriteID: e377783f322b4a81a592b3ee297486f0
+      internalID: 21300004
+      vertices:
+      - {x: 0, y: 219}
+      - {x: 518, y: 0}
+      - {x: 518, y: 219}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EdgeLayerRock2
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 1256
+        width: 255
+        height: 77
+      alignment: 9
+      pivot: {x: 0.4998295, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 127.45652, y: -38.5}
+        - {x: -127.54348, y: -38.5}
+        - {x: -127.54348, y: 38.5}
+        - {x: 127.45652, y: 38.5}
+      physicsShape:
+      - - {x: -127.54347, y: 38.5}
+        - {x: -127.54347, y: -38.5}
+        - {x: 127.45651, y: -38.5}
+        - {x: 127.45651, y: 38.5}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0ea9a5208da24e3aa3ebefae97f0ac4c
+      internalID: 21300006
+      vertices:
+      - {x: 0, y: 77}
+      - {x: 255, y: 0}
+      - {x: 255, y: 77}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ForestSceneryTreeLineHighAngle2
+      rect:
+        serializedVersion: 2
+        x: 520
+        y: 514
+        width: 243
+        height: 334
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 121.5, y: -167}
+        - {x: -121.5, y: -167}
+        - {x: -121.5, y: 167}
+        - {x: 121.5, y: 167}
+      physicsShape:
+      - - {x: -121.49999, y: 167}
+        - {x: -121.49999, y: -167}
+        - {x: 121.49999, y: -167}
+        - {x: 121.49999, y: 167}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 31cb77fb380c45f194a8df6bc1efbee1
+      internalID: 21300008
+      vertices:
+      - {x: 0, y: 334}
+      - {x: 243, y: 0}
+      - {x: 243, y: 334}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ForestSceneryTreeLineHighAngle
+      rect:
+        serializedVersion: 2
+        x: 765
+        y: 514
+        width: 256
+        height: 231
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 128, y: -115.5}
+        - {x: -128, y: -115.5}
+        - {x: -128, y: 115.5}
+        - {x: 128, y: 115.5}
+      physicsShape:
+      - - {x: -128, y: 115.5}
+        - {x: -128, y: -115.5}
+        - {x: 128, y: -115.5}
+        - {x: 128, y: 115.5}
+      tessellationDetail: 0
+      bones: []
+      spriteID: b4ea75e476474d338d7dc834798aa553
+      internalID: 21300010
+      vertices:
+      - {x: 0, y: 231}
+      - {x: 256, y: 0}
+      - {x: 256, y: 231}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ForestSceneryTreeLineBack
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1145
+        width: 207
+        height: 179
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 103.5, y: -89.5}
+        - {x: -103.5, y: -89.5}
+        - {x: -103.5, y: 89.5}
+        - {x: 103.5, y: 89.5}
+      physicsShape:
+      - - {x: -103.5, y: 89.5}
+        - {x: -103.5, y: -89.5}
+        - {x: 103.5, y: -89.5}
+        - {x: 103.5, y: 89.5}
+      tessellationDetail: 0
+      bones: []
+      spriteID: db2d7b19e9d1416084c2fd8b31a643b4
+      internalID: 21300012
+      vertices:
+      - {x: 0, y: 179}
+      - {x: 207, y: 0}
+      - {x: 207, y: 179}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShadowLayerRock4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1463
+        width: 128
+        height: 104
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4994426}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 64, y: -52.057972}
+        - {x: -64, y: -52.057972}
+        - {x: -64, y: 51.942036}
+        - {x: 64, y: 51.942036}
+      physicsShape:
+      - - {x: -64, y: 51.942036}
+        - {x: -64, y: -52.057972}
+        - {x: 64, y: -52.057972}
+        - {x: 64, y: 51.942036}
+      tessellationDetail: 0
+      bones: []
+      spriteID: d61ee0d5b53e4c84afa39fca17cfe584
+      internalID: 21300014
+      vertices:
+      - {x: 0, y: 104}
+      - {x: 128, y: -0.0000038146973}
+      - {x: 128, y: 104}
+      - {x: 0, y: -0.0000038146973}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FlatLayerTreeSingle1
+      rect:
+        serializedVersion: 2
+        x: 789
+        y: 0
+        width: 213
+        height: 512
+      alignment: 9
+      pivot: {x: 0.5, y: 0.49958208}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 106.5, y: -256.214}
+        - {x: -106.5, y: -256.214}
+        - {x: -106.5, y: 255.78603}
+        - {x: 106.5, y: 255.78603}
+      physicsShape:
+      - - {x: -106.5, y: 255.78603}
+        - {x: -106.5, y: -256.214}
+        - {x: 106.5, y: -256.214}
+        - {x: 106.5, y: 255.78603}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0727bc8533e7473ea7cb0834d0b5f7dc
+      internalID: 21300016
+      vertices:
+      - {x: 0, y: 512}
+      - {x: 213, y: 0}
+      - {x: 213, y: 512}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EdgeLayerRock5
+      rect:
+        serializedVersion: 2
+        x: 258
+        y: 964
+        width: 256
+        height: 149
+      alignment: 9
+      pivot: {x: 0.5, y: 0.49964556}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 128, y: -74.55281}
+        - {x: -128, y: -74.55281}
+        - {x: -128, y: 74.44719}
+        - {x: 128, y: 74.44719}
+      physicsShape:
+      - - {x: -128, y: 74.44719}
+        - {x: -128, y: -74.55281}
+        - {x: 128, y: -74.55281}
+        - {x: 128, y: 74.44719}
+      tessellationDetail: 0
+      bones: []
+      spriteID: b47386191b7d47fda875087022e77b66
+      internalID: 21300018
+      vertices:
+      - {x: 0, y: 149}
+      - {x: 256, y: 0}
+      - {x: 256, y: 149}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FlatLayerBush1
+      rect:
+        serializedVersion: 2
+        x: 258
+        y: 735
+        width: 128
+        height: 97
+      alignment: 9
+      pivot: {x: 0.5, y: 0.49821165}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 64, y: -48.67347}
+        - {x: -64, y: -48.67347}
+        - {x: -64, y: 48.32653}
+        - {x: 64, y: 48.32653}
+      physicsShape:
+      - - {x: -64, y: 48.326534}
+        - {x: -64, y: -48.673473}
+        - {x: 64, y: -48.673473}
+        - {x: 64, y: 48.326534}
+      tessellationDetail: 0
+      bones: []
+      spriteID: ef8523dc3fd24298a5c489959cfd23ef
+      internalID: 21300020
+      vertices:
+      - {x: 0, y: 97}
+      - {x: 128, y: 0}
+      - {x: 128, y: 97}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FlatLayerTreeSingle2
+      rect:
+        serializedVersion: 2
+        x: 514
+        y: 0
+        width: 273
+        height: 512
+      alignment: 9
+      pivot: {x: 0.5, y: 0.49998173}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 136.5, y: -256.00934}
+        - {x: -136.5, y: -256.00934}
+        - {x: -136.5, y: 255.99065}
+        - {x: 136.5, y: 255.99065}
+      physicsShape:
+      - - {x: -136.5, y: 255.99065}
+        - {x: -136.5, y: -256.00934}
+        - {x: 136.5, y: -256.00934}
+        - {x: 136.5, y: 255.99065}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6c34cda282fc432399858520c058d4f7
+      internalID: 21300022
+      vertices:
+      - {x: 0, y: 512}
+      - {x: 273, y: 0}
+      - {x: 273, y: 512}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FlatLayerRock2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1569
+        width: 128
+        height: 68
+      alignment: 9
+      pivot: {x: 0.49848568, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 63.806168, y: -34}
+        - {x: -64.19383, y: -34}
+        - {x: -64.19383, y: 34}
+        - {x: 63.806168, y: 34}
+      physicsShape:
+      - - {x: -64.19383, y: 34}
+        - {x: -64.19383, y: -34}
+        - {x: 63.806168, y: -34}
+        - {x: 63.806168, y: 34}
+      tessellationDetail: 0
+      bones: []
+      spriteID: efa4bf6bbfe246ce8a127c6890501551
+      internalID: 21300024
+      vertices:
+      - {x: 0, y: 68}
+      - {x: 128, y: 0}
+      - {x: 128, y: 68}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FlatLayerTreePatch1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 512
+        height: 512
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 256, y: -256}
+        - {x: -256, y: -256}
+        - {x: -256, y: 256}
+        - {x: 256, y: 256}
+      physicsShape:
+      - - {x: -256, y: 256}
+        - {x: -256, y: -256}
+        - {x: 256, y: -256}
+        - {x: 256, y: 256}
+      tessellationDetail: 0
+      bones: []
+      spriteID: b142b98890da4cffbd23c63a9428696e
+      internalID: 21300026
+      vertices:
+      - {x: 0, y: 512}
+      - {x: 512, y: 0}
+      - {x: 512, y: 512}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FlatLayerRock1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1384
+        width: 255
+        height: 77
+      alignment: 9
+      pivot: {x: 0.49889174, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 127.21739, y: -38.5}
+        - {x: -127.78261, y: -38.5}
+        - {x: -127.78261, y: 38.5}
+        - {x: 127.21739, y: 38.5}
+      physicsShape:
+      - - {x: -127.782616, y: 38.500004}
+        - {x: -127.782616, y: -38.500004}
+        - {x: 127.2174, y: -38.500004}
+        - {x: 127.2174, y: 38.500004}
+      tessellationDetail: 0
+      bones: []
+      spriteID: c6766b3cab5f45c588b9e556fb7a9cb5
+      internalID: 21300028
+      vertices:
+      - {x: 0, y: 77}
+      - {x: 255, y: 0}
+      - {x: 255, y: 77}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShadowLayerRock1
+      rect:
+        serializedVersion: 2
+        x: 130
+        y: 1463
+        width: 128
+        height: 92
+      alignment: 9
+      pivot: {x: 0.5, y: 0.49923274}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 64, y: -46.070587}
+        - {x: -64, y: -46.070587}
+        - {x: -64, y: 45.929413}
+        - {x: 64, y: 45.929413}
+      physicsShape:
+      - - {x: -64, y: 45.929413}
+        - {x: -64, y: -46.070587}
+        - {x: 64, y: -46.070587}
+        - {x: 64, y: 45.929413}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1e1381eaafbb44f98bab2616b4cb698c
+      internalID: 21300030
+      vertices:
+      - {x: 0, y: 92}
+      - {x: 128, y: 0}
+      - {x: 128, y: 92}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FlatLayerRock4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 735
+        width: 256
+        height: 236
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4992828}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 127.99999, y: -118.16926}
+        - {x: -127.99999, y: -118.16926}
+        - {x: -127.99999, y: 117.83074}
+        - {x: 127.99999, y: 117.83074}
+      physicsShape:
+      - - {x: -127.99999, y: 117.830734}
+        - {x: -127.99999, y: -118.16925}
+        - {x: 127.99999, y: -118.16925}
+        - {x: 127.99999, y: 117.830734}
+      tessellationDetail: 0
+      bones: []
+      spriteID: be01b35165364a84911634da5c733fac
+      internalID: 21300032
+      vertices:
+      - {x: 0.0000076293945, y: 236}
+      - {x: 256, y: 0}
+      - {x: 256, y: 236}
+      - {x: 0.0000076293945, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShadowLayerRock3
+      rect:
+        serializedVersion: 2
+        x: 209
+        y: 1256
+        width: 173
+        height: 126
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 86.5, y: -63}
+        - {x: -86.5, y: -63}
+        - {x: -86.5, y: 63}
+        - {x: 86.5, y: 63}
+      physicsShape:
+      - - {x: -86.5, y: 63}
+        - {x: -86.5, y: -63}
+        - {x: 86.5, y: -63}
+        - {x: 86.5, y: 63}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9b3c758e4fe8471eacde76ea814cac59
+      internalID: 21300034
+      vertices:
+      - {x: 0, y: 126}
+      - {x: 173, y: 0}
+      - {x: 173, y: 126}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FlatLayerRock
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 973
+        width: 256
+        height: 170
+      alignment: 9
+      pivot: {x: 0.5, y: 0.49866927}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 128, y: -85.22623}
+        - {x: -128, y: -85.22623}
+        - {x: -128, y: 84.77377}
+        - {x: 128, y: 84.77377}
+      physicsShape:
+      - - {x: -128, y: 84.77377}
+        - {x: -128, y: -85.22623}
+        - {x: 128, y: -85.22623}
+        - {x: 128, y: 84.77377}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3fac6d33b80544febc42ae24bb10c446
+      internalID: 21300036
+      vertices:
+      - {x: 0, y: 170}
+      - {x: 256, y: 0}
+      - {x: 256, y: 170}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EdgeLayerRock1
+      rect:
+        serializedVersion: 2
+        x: 209
+        y: 1145
+        width: 246
+        height: 109
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 123, y: -54.5}
+        - {x: -123, y: -54.5}
+        - {x: -123, y: 54.5}
+        - {x: 123, y: 54.5}
+      physicsShape:
+      - - {x: -123, y: 54.5}
+        - {x: -123, y: -54.5}
+        - {x: 123, y: -54.5}
+        - {x: 123, y: 54.5}
+      tessellationDetail: 0
+      bones: []
+      spriteID: e6519bf3db6c49309a4dcf97433417ea
+      internalID: 21300038
+      vertices:
+      - {x: 0, y: 109}
+      - {x: 246, y: 0}
+      - {x: 246, y: 109}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShadowLayerRock2
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 1335
+        width: 128
+        height: 117
+      alignment: 9
+      pivot: {x: 0.49999997, y: 0.4999299}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 63.999996, y: -58.5082}
+        - {x: -64, y: -58.5082}
+        - {x: -64, y: 58.4918}
+        - {x: 63.999996, y: 58.4918}
+      physicsShape:
+      - - {x: -64, y: 58.4918}
+        - {x: -64, y: -58.5082}
+        - {x: 63.999996, y: -58.5082}
+        - {x: 63.999996, y: 58.4918}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6172d0acc7c149819bb35e1b277ea65b
+      internalID: 21300040
+      vertices:
+      - {x: 0, y: 117}
+      - {x: 128, y: 0}
+      - {x: 128, y: 117}
+      - {x: 0, y: 0}
+      indices: 030000000000000001000000020000000100000000000000
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      EdgeLayerRock1: 21300038
+      EdgeLayerRock2: 21300006
+      EdgeLayerRock3: 21300000
+      EdgeLayerRock4: 21300004
+      EdgeLayerRock5: 21300018
+      FlatLayerBush1: 21300020
+      FlatLayerRock: 21300036
+      FlatLayerRock1: 21300028
+      FlatLayerRock2: 21300024
+      FlatLayerRock3: 21300002
+      FlatLayerRock4: 21300032
+      FlatLayerTreePatch1: 21300026
+      FlatLayerTreeSingle1: 21300016
+      FlatLayerTreeSingle2: 21300022
+      ForestSceneryTreeLineBack: 21300012
+      ForestSceneryTreeLineHighAngle: 21300010
+      ForestSceneryTreeLineHighAngle2: 21300008
+      ShadowLayerRock1: 21300030
+      ShadowLayerRock2: 21300040
+      ShadowLayerRock3: 21300034
+      ShadowLayerRock4: 21300014
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

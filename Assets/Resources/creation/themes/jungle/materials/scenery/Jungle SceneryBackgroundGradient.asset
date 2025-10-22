@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e53f7577335ecc17232c3e068e7433fe, type: 3}
+  m_Name: Jungle SceneryBackgroundGradient
+  m_EditorClassIdentifier:
+  themeGroup: {fileID: 11400000, guid: 3c13b7050d6e39f498fe44a5337182f5, type: 2}
+  shader: {fileID: 4800000, guid: 6a917218187463849bec61e8af66a637, type: 3}
+  unsortedMaterialVariants:
+  - Theme: {fileID: 11400000, guid: cdce344f8c3f435409546fc0b97f65d0, type: 2}
+    FloatSettings:
+    - PropertyName: _GradientHigh
+      Value: 0
+    - PropertyName: _GradientLow
+      Value: -30.6
+    - PropertyName: _AltitudeOffset
+      Value: -1.09
+    ColorSettings:
+    - PropertyName: _ColorHigh
+      Value: {r: 0.5882353, g: 0.69803923, b: 0.43137258, a: 1}
+    - PropertyName: _ColorLow
+      Value: {r: 0.7258705, g: 0.8490566, b: 0.5166429, a: 1}
+    VectorSettings: []
+    TextureSettings: []
+  - Theme: {fileID: 11400000, guid: 3492a5f26780b214797ad07fdc5e4db9, type: 2}
+    FloatSettings:
+    - PropertyName: _GradientHigh
+      Value: 0
+    - PropertyName: _GradientLow
+      Value: -30.6
+    - PropertyName: _AltitudeOffset
+      Value: -1.09
+    ColorSettings:
+    - PropertyName: _ColorHigh
+      Value: {r: 0.13333334, g: 0.38431376, b: 0.38823533, a: 1}
+    - PropertyName: _ColorLow
+      Value: {r: 0.16447133, g: 0.44839388, b: 0.4528302, a: 1}
+    VectorSettings: []
+    TextureSettings: []
+  renderTarget: 0

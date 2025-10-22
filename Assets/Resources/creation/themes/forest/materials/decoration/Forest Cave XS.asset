@@ -1,0 +1,107 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e53f7577335ecc17232c3e068e7433fe, type: 3}
+  m_Name: Forest Cave XS
+  m_EditorClassIdentifier:
+  themeGroup: {fileID: 11400000, guid: 146db5a3d5694a04fbc27cf1f2a5245b, type: 2}
+  shader: {fileID: 10752, guid: 0000000000000000f000000000000000, type: 0}
+  unsortedMaterialVariants:
+  - Theme: {fileID: 11400000, guid: fcc2a83e6c14f8142b02ac5305a581b3, type: 2}
+    FloatSettings:
+    - PropertyName: _ShineSpeed
+      Value: 0.7
+    - PropertyName: _LightIntensity
+      Value: 0.2
+    - PropertyName: _LightOpacity
+      Value: 0.2
+    - PropertyName: _LightAmbient
+      Value: 0.95
+    ColorSettings:
+    - PropertyName: _LightColor
+      Value: {r: 0, g: 0.5461459, b: 1, a: 1}
+    VectorSettings: []
+    TextureSettings:
+    - PropertyName: _MainTex
+      Value: {fileID: 2800000, guid: 0742ca4ce505bc84d85cd83e59c67321, type: 3}
+    - PropertyName: _TextureMask
+      Value: {fileID: 2800000, guid: 90f28e00f9d2c9648b50a79d38a3712c, type: 3}
+  - Theme: {fileID: 11400000, guid: 24da48b48478baf43b3e4ffdb24b66bd, type: 2}
+    FloatSettings:
+    - PropertyName: _ShineSpeed
+      Value: 0.7
+    - PropertyName: _LightIntensity
+      Value: 0.2
+    - PropertyName: _LightOpacity
+      Value: 0.2
+    - PropertyName: _LightAmbient
+      Value: 0.95
+    - PropertyName: _ShadowIntensity
+      Value: 0
+    - PropertyName: _Falloff
+      Value: 0
+    - PropertyName: _ScrollSpeed
+      Value: 0
+    - PropertyName: PixelSnap
+      Value: 0
+    - PropertyName: _EnableExternalAlpha
+      Value: 0
+    - PropertyName: _ZWrite
+      Value: 0
+    - PropertyName: _Cutoff
+      Value: 0
+    - PropertyName: _ShadowAlphaCutoff
+      Value: 0
+    - PropertyName: _CustomRenderQueue
+      Value: 0
+    - PropertyName: _Hue
+      Value: 0
+    - PropertyName: _Saturation
+      Value: 0
+    - PropertyName: _Brightness
+      Value: 0
+    - PropertyName: _BlendAmount
+      Value: 0
+    - PropertyName: _SrcBlend
+      Value: 0
+    - PropertyName: _DstBlend
+      Value: 0
+    - PropertyName: _RenderQueue
+      Value: 0
+    - PropertyName: _Cull
+      Value: 0
+    ColorSettings:
+    - PropertyName: _LightColor
+      Value: {r: 0, g: 0.9433379, b: 1, a: 1}
+    - PropertyName: _Color
+      Value: {r: 0, g: 0, b: 0, a: 0}
+    - PropertyName: _ShadowColor
+      Value: {r: 0, g: 0, b: 0, a: 0}
+    - PropertyName: _HighlightColor
+      Value: {r: 0, g: 0, b: 0, a: 0}
+    - PropertyName: _TintColor
+      Value: {r: 1, g: 1, b: 1, a: 0}
+    - PropertyName: _OverlayColor
+      Value: {r: 0, g: 0, b: 0, a: 0}
+    VectorSettings:
+    - PropertyName: _LightDirection
+      Value: {x: 0, y: 0, z: 0, w: 0}
+    - PropertyName: _StartDistance
+      Value: {x: 0, y: 0, z: 0, w: 0}
+    TextureSettings:
+    - PropertyName: _MainTex
+      Value: {fileID: 2800000, guid: 3edff802175df4e4d9702d62e3f9ca76, type: 3}
+    - PropertyName: _TextureMask
+      Value: {fileID: 2800000, guid: 90f28e00f9d2c9648b50a79d38a3712c, type: 3}
+    - PropertyName: _AlphaTex
+      Value: {fileID: 0}
+    - PropertyName: _BlendTex
+      Value: {fileID: 0}
+  renderTarget: 1

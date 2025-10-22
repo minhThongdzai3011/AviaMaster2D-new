@@ -1,0 +1,101 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e53f7577335ecc17232c3e068e7433fe, type: 3}
+  m_Name: Cave UISceneryBackgroundTop
+  m_EditorClassIdentifier:
+  themeGroup: {fileID: 11400000, guid: 8c300365937708644b63b3def05aa9ff, type: 2}
+  shader: {fileID: 4800000, guid: 4013c48d203b68542bb40ebe09d7a209, type: 3}
+  unsortedMaterialVariants:
+  - Theme: {fileID: 11400000, guid: 196ed20e7e609ff4f8ec3b01a21c47ab, type: 2}
+    FloatSettings:
+    - PropertyName: _AltitudeOffset
+      Value: 11.93
+    - PropertyName: _HillWidth
+      Value: 199
+    - PropertyName: _HillAmplitude
+      Value: 10.5
+    - PropertyName: _HillSmooth
+      Value: 1
+    - PropertyName: _HillOffset
+      Value: 28.9
+    - PropertyName: _FlipY
+      Value: 1
+    - PropertyName: _Cutoff
+      Value: 0.5
+    ColorSettings:
+    - PropertyName: _Color
+      Value: {r: 0.19607845, g: 0.5137255, b: 0.53333336, a: 1}
+    VectorSettings: []
+    TextureSettings: []
+  - Theme: {fileID: 11400000, guid: b59c9a2064b5ab24ab1878c4785d2472, type: 2}
+    FloatSettings:
+    - PropertyName: _AltitudeOffset
+      Value: 11.93
+    - PropertyName: _HillWidth
+      Value: 199
+    - PropertyName: _HillAmplitude
+      Value: 10.5
+    - PropertyName: _HillSmooth
+      Value: 1
+    - PropertyName: _HillOffset
+      Value: 28.9
+    - PropertyName: _FlipY
+      Value: 1
+    - PropertyName: _Cutoff
+      Value: 0.5
+    ColorSettings:
+    - PropertyName: _Color
+      Value: {r: 0.14901961, g: 0.22352943, b: 0.454902, a: 1}
+    VectorSettings: []
+    TextureSettings: []
+  - Theme: {fileID: 11400000, guid: 46bfdd4de213a314381d8482ba31631b, type: 2}
+    FloatSettings:
+    - PropertyName: _AltitudeOffset
+      Value: 11.93
+    - PropertyName: _HillWidth
+      Value: 199
+    - PropertyName: _HillAmplitude
+      Value: 10.5
+    - PropertyName: _HillSmooth
+      Value: 1
+    - PropertyName: _HillOffset
+      Value: 28.9
+    - PropertyName: _FlipY
+      Value: 1
+    - PropertyName: _Cutoff
+      Value: 0.5
+    ColorSettings:
+    - PropertyName: _Color
+      Value: {r: 0.25882354, g: 0.15294118, b: 0.30980393, a: 1}
+    VectorSettings: []
+    TextureSettings: []
+  - Theme: {fileID: 11400000, guid: 1d11187666f17304192c1a2c4381bf2c, type: 2}
+    FloatSettings:
+    - PropertyName: _AltitudeOffset
+      Value: 11.93
+    - PropertyName: _HillWidth
+      Value: 199
+    - PropertyName: _HillAmplitude
+      Value: 10.5
+    - PropertyName: _HillSmooth
+      Value: 1
+    - PropertyName: _HillOffset
+      Value: 28.9
+    - PropertyName: _FlipY
+      Value: 1
+    - PropertyName: _Cutoff
+      Value: 0.5
+    ColorSettings:
+    - PropertyName: _Color
+      Value: {r: 0.45098042, g: 0.22352943, b: 0.21960786, a: 1}
+    VectorSettings: []
+    TextureSettings: []
+  renderTarget: 0

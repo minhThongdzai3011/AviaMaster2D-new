@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e53f7577335ecc17232c3e068e7433fe, type: 3}
+  m_Name: Forest SceneryMidgroundEdge
+  m_EditorClassIdentifier:
+  themeGroup: {fileID: 11400000, guid: 146db5a3d5694a04fbc27cf1f2a5245b, type: 2}
+  shader: {fileID: 4800000, guid: 197c86b52f57a9443adcb706281d4277, type: 3}
+  unsortedMaterialVariants:
+  - Theme: {fileID: 11400000, guid: 24da48b48478baf43b3e4ffdb24b66bd, type: 2}
+    FloatSettings:
+    - PropertyName: _GradientHigh
+      Value: 0
+    - PropertyName: _GradientLow
+      Value: -17.87
+    - PropertyName: _AltitudeOffset
+      Value: -0.11
+    - PropertyName: _HillWidth
+      Value: 100.64
+    - PropertyName: _HillAmplitude
+      Value: 5.28
+    - PropertyName: _HillSmooth
+      Value: 0.297
+    - PropertyName: _HillOffset
+      Value: 54.81
+    - PropertyName: _Cutoff
+      Value: 0.5
+    ColorSettings:
+    - PropertyName: _ColorHigh
+      Value: {r: 0.68235296, g: 0.4784314, b: 0.5019608, a: 1}
+    - PropertyName: _ColorLow
+      Value: {r: 0.73333335, g: 0.49803925, b: 0.5058824, a: 1}
+    VectorSettings: []
+    TextureSettings: []
+  - Theme: {fileID: 11400000, guid: fcc2a83e6c14f8142b02ac5305a581b3, type: 2}
+    FloatSettings:
+    - PropertyName: _GradientHigh
+      Value: 0
+    - PropertyName: _GradientLow
+      Value: -17.87
+    - PropertyName: _AltitudeOffset
+      Value: -0.11
+    - PropertyName: _HillWidth
+      Value: 100.64
+    - PropertyName: _HillAmplitude
+      Value: 5.28
+    - PropertyName: _HillSmooth
+      Value: 0.297
+    - PropertyName: _HillOffset
+      Value: 54.81
+    - PropertyName: _Cutoff
+      Value: 0.5
+    ColorSettings:
+    - PropertyName: _ColorHigh
+      Value: {r: 0.2784314, g: 0.19607845, b: 0.31764707, a: 1}
+    - PropertyName: _ColorLow
+      Value: {r: 0.38443708, g: 0.26352793, b: 0.3962264, a: 1}
+    VectorSettings: []
+    TextureSettings: []
+  renderTarget: 0

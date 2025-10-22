@@ -1,0 +1,1010 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  serializedVersion: 2
+  m_ObjectHideFlags: 0
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1773689191567319}
+  m_IsPrefabAsset: 1
+--- !u!1 &1773689191567319
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_Component:
+  - component: {fileID: 4037040361201919}
+  - component: {fileID: 114952166091510043}
+  m_Layer: 0
+  m_Name: BeeGee
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4037040361201919
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1773689191567319}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.5062323, y: -0.269, z: -12.667969}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 4069563952053202}
+  - {fileID: 4183967725929199}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114952166091510043
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1773689191567319}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c729b6ff0c1732eca3b58cefc98efb7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  Title:
+    keyword: plane-beegee
+  rewardRequirement:
+    type: 3
+    minSurvivalHighscore: 20000
+    survivalThemeVisit: {fileID: 0}
+    fullScorePack: {fileID: 0}
+    fullMedalPack: {fileID: 0}
+    quest: 0
+    landmark: {fileID: 0}
+    plane: {fileID: 0}
+    amount: 7500
+  isDefaultPlane: 0
+  PlaneType: {fileID: 11400000, guid: da264786eabe2624cae86f26021a8253, type: 2}
+  id: 4
+  EngineSound: {fileID: 11400000, guid: 7bdd3ac09dad67045b58bb4c3992aca2, type: 2}
+  skins:
+  - Title:
+      keyword: plane-beegee-skin-default
+    Color:
+      serializedVersion: 2
+      key0: {r: 0.6784314, g: 0.078431375, b: 0.11764707, a: 1}
+      key1: {r: 0.6784314, g: 0.078431375, b: 0.11764707, a: 1}
+      key2: {r: 0, g: 0, b: 0, a: 0}
+      key3: {r: 0, g: 0, b: 0, a: 0}
+      key4: {r: 0, g: 0, b: 0, a: 0}
+      key5: {r: 0, g: 0, b: 0, a: 0}
+      key6: {r: 0, g: 0, b: 0, a: 0}
+      key7: {r: 0, g: 0, b: 0, a: 0}
+      ctime0: 0
+      ctime1: 65535
+      ctime2: 0
+      ctime3: 0
+      ctime4: 0
+      ctime5: 0
+      ctime6: 0
+      ctime7: 0
+      atime0: 0
+      atime1: 65535
+      atime2: 0
+      atime3: 0
+      atime4: 0
+      atime5: 0
+      atime6: 0
+      atime7: 0
+      m_Mode: 0
+      m_NumColorKeys: 2
+      m_NumAlphaKeys: 2
+    rewardRequirement:
+      type: 0
+      minSurvivalHighscore: 0
+      survivalThemeVisit: {fileID: 0}
+      fullScorePack: {fileID: 0}
+      fullMedalPack: {fileID: 0}
+      quest: 0
+      landmark: {fileID: 0}
+      plane: {fileID: 0}
+      amount: 0
+    Thumbnail: {fileID: 21300000, guid: c750783e7a36e4d459158b5087cc96de, type: 3}
+    id: 0
+    skinnedVisuals:
+    - Visual: {fileID: 1902258634844611}
+      Materials:
+      - {fileID: 2100000, guid: d4cfbe790e1907b4cbe3935c525a83d9, type: 2}
+      Behaviour: 0
+    - Visual: {fileID: 1745877806416635}
+      Materials:
+      - {fileID: 2100000, guid: d4cfbe790e1907b4cbe3935c525a83d9, type: 2}
+      Behaviour: 0
+    - Visual: {fileID: 1079044282615081}
+      Materials:
+      - {fileID: 2100000, guid: d4cfbe790e1907b4cbe3935c525a83d9, type: 2}
+      Behaviour: 0
+    - Visual: {fileID: 1576685064742213}
+      Materials:
+      - {fileID: 2100000, guid: d4cfbe790e1907b4cbe3935c525a83d9, type: 2}
+      Behaviour: 0
+    - Visual: {fileID: 1172424304088110}
+      Materials:
+      - {fileID: 2100000, guid: d4cfbe790e1907b4cbe3935c525a83d9, type: 2}
+      Behaviour: 0
+    - Visual: {fileID: 1376531551030577}
+      Materials:
+      - {fileID: 2100000, guid: d4cfbe790e1907b4cbe3935c525a83d9, type: 2}
+      Behaviour: 0
+    - Visual: {fileID: 1839887534999746}
+      Materials:
+      - {fileID: 2100000, guid: 0bb3b36a1857ec545bcf95f29834783e, type: 2}
+      Behaviour: 0
+  - Title:
+      keyword: plane-beegee-skin-variation-1
+    Color:
+      serializedVersion: 2
+      key0: {r: 0.43921572, g: 0.9568628, b: 0.5372549, a: 1}
+      key1: {r: 0.43921572, g: 0.9568628, b: 0.5372549, a: 1}
+      key2: {r: 0, g: 0, b: 0, a: 0}
+      key3: {r: 0, g: 0, b: 0, a: 0}
+      key4: {r: 0, g: 0, b: 0, a: 0}
+      key5: {r: 0, g: 0, b: 0, a: 0}
+      key6: {r: 0, g: 0, b: 0, a: 0}
+      key7: {r: 0, g: 0, b: 0, a: 0}
+      ctime0: 0
+      ctime1: 65535
+      ctime2: 0
+      ctime3: 0
+      ctime4: 0
+      ctime5: 0
+      ctime6: 0
+      ctime7: 0
+      atime0: 0
+      atime1: 65535
+      atime2: 0
+      atime3: 0
+      atime4: 0
+      atime5: 0
+      atime6: 0
+      atime7: 0
+      m_Mode: 0
+      m_NumColorKeys: 2
+      m_NumAlphaKeys: 2
+    rewardRequirement:
+      type: 3
+      minSurvivalHighscore: 0
+      survivalThemeVisit: {fileID: 0}
+      fullScorePack: {fileID: 0}
+      fullMedalPack: {fileID: 0}
+      quest: 0
+      landmark: {fileID: 0}
+      plane: {fileID: 0}
+      amount: 1900
+    Thumbnail: {fileID: 21300000, guid: 919f3427707296a4ebbd5129e43accaf, type: 3}
+    id: 1
+    skinnedVisuals:
+    - Visual: {fileID: 1902258634844611}
+      Materials:
+      - {fileID: 2100000, guid: 20af3b338a4818248a552a2e9e663035, type: 2}
+      Behaviour: 0
+    - Visual: {fileID: 1745877806416635}
+      Materials:
+      - {fileID: 2100000, guid: 20af3b338a4818248a552a2e9e663035, type: 2}
+      Behaviour: 0
+    - Visual: {fileID: 1079044282615081}
+      Materials:
+      - {fileID: 2100000, guid: 20af3b338a4818248a552a2e9e663035, type: 2}
+      Behaviour: 0
+    - Visual: {fileID: 1576685064742213}
+      Materials:
+      - {fileID: 2100000, guid: 20af3b338a4818248a552a2e9e663035, type: 2}
+      Behaviour: 0
+    - Visual: {fileID: 1172424304088110}
+      Materials:
+      - {fileID: 2100000, guid: 20af3b338a4818248a552a2e9e663035, type: 2}
+      Behaviour: 0
+    - Visual: {fileID: 1376531551030577}
+      Materials:
+      - {fileID: 2100000, guid: 20af3b338a4818248a552a2e9e663035, type: 2}
+      Behaviour: 0
+    - Visual: {fileID: 1839887534999746}
+      Materials:
+      - {fileID: 2100000, guid: 0bb3b36a1857ec545bcf95f29834783e, type: 2}
+      Behaviour: 0
+  - Title:
+      keyword: plane-beegee-skin-variation-2
+    Color:
+      serializedVersion: 2
+      key0: {r: 1, g: 1, b: 0.49411768, a: 1}
+      key1: {r: 0.49411762, g: 1, b: 0.5703475, a: 1}
+      key2: {r: 0.5529412, g: 0.8053824, b: 1, a: 0}
+      key3: {r: 0.8584906, g: 0.44139376, b: 0.5047169, a: 0}
+      key4: {r: 1, g: 1, b: 0.49411768, a: 0}
+      key5: {r: 1, g: 1, b: 0.49411768, a: 0}
+      key6: {r: 1, g: 1, b: 0.49411768, a: 0}
+      key7: {r: 0, g: 0, b: 0, a: 0}
+      ctime0: 0
+      ctime1: 8096
+      ctime2: 19853
+      ctime3: 40478
+      ctime4: 65535
+      ctime5: 65535
+      ctime6: 65535
+      ctime7: 0
+      atime0: 0
+      atime1: 65535
+      atime2: 0
+      atime3: 0
+      atime4: 0
+      atime5: 0
+      atime6: 0
+      atime7: 0
+      m_Mode: 0
+      m_NumColorKeys: 5
+      m_NumAlphaKeys: 2
+    rewardRequirement:
+      type: 100
+      minSurvivalHighscore: 0
+      survivalThemeVisit: {fileID: 0}
+      fullScorePack: {fileID: 0}
+      fullMedalPack: {fileID: 0}
+      quest: 0
+      landmark: {fileID: 0}
+      plane: {fileID: 114952166091510043}
+      amount: 1000
+    Thumbnail: {fileID: 21300000, guid: 12ba19a7d13a60b43bf891ce640280b0, type: 3}
+    id: 2
+    skinnedVisuals:
+    - Visual: {fileID: 1902258634844611}
+      Materials:
+      - {fileID: 2100000, guid: 2d4222392b908b14780a4a4f54dabc5c, type: 2}
+      Behaviour: 0
+    - Visual: {fileID: 1745877806416635}
+      Materials:
+      - {fileID: 2100000, guid: 2d4222392b908b14780a4a4f54dabc5c, type: 2}
+      Behaviour: 0
+    - Visual: {fileID: 1079044282615081}
+      Materials:
+      - {fileID: 2100000, guid: 2d4222392b908b14780a4a4f54dabc5c, type: 2}
+      Behaviour: 0
+    - Visual: {fileID: 1576685064742213}
+      Materials:
+      - {fileID: 2100000, guid: 2d4222392b908b14780a4a4f54dabc5c, type: 2}
+      Behaviour: 0
+    - Visual: {fileID: 1172424304088110}
+      Materials:
+      - {fileID: 2100000, guid: 2d4222392b908b14780a4a4f54dabc5c, type: 2}
+      Behaviour: 0
+    - Visual: {fileID: 1376531551030577}
+      Materials:
+      - {fileID: 2100000, guid: 2d4222392b908b14780a4a4f54dabc5c, type: 2}
+      Behaviour: 0
+    - Visual: {fileID: 1839887534999746}
+      Materials:
+      - {fileID: 2100000, guid: 0bb3b36a1857ec545bcf95f29834783e, type: 2}
+      Behaviour: 0
+  wingTrailCount: 2
+  wingTrailPrefab: {fileID: 114957851966764099, guid: be48dd39b3544794c9d961f25c8c9aeb, type: 2}
+  EngineTrailPrefabs:
+  - EngineTrailPrefab: {fileID: 114273150203525306, guid: 7fd0c151c2dda3347b887ea6e3a6f86b, type: 2}
+    Position: {x: -2.6625063, y: -0.46567088, z: 0}
+  WaterSurfaceSplashPrefab: {fileID: 114237500569097342, guid: fb65f6d588921eb4bbc84a1330d753d2, type: 2}
+  LandingGearPrefabs: []
+  pilotPrefab: {fileID: 114076556197397882, guid: 8bd169a224ad3604a80be9ea10822ac3, type: 2}
+  pilotColor: {r: 0.17239231, g: 0.19528504, b: 0.24528301, a: 1}
+  takeOffRideAngleOffset: 5
+  WaterBombVisualPrefab: {fileID: 114300061097367275, guid: ceabb82a936eb19428477eae34e80908, type: 2}
+  crashHitEffectPrefab: {fileID: 114230685474467519, guid: 274573e0f79c9ef4a8c68b8de26e139a, type: 2}
+  crashEffectPrefab: {fileID: 0}
+  crashProgressCurve: {fileID: 11400000, guid: e5ef5b0a09a259a43831210d504dd78f, type: 2}
+  crashMaterial: {fileID: 2100000, guid: d07c6c1def13bd04280acaf95ae904be, type: 2}
+  ExplosionEffectPrefab: {fileID: 114865516176579557, guid: c6831c687c0221448992d4d5655c8412, type: 2}
+  WreckagePrefab: {fileID: 114510156930331422, guid: f1ea2e40ed770814c9687d20da642bd5, type: 2}
+  crashSound: {fileID: 82962368357692996, guid: f017c23e23710aa4e99c8592274bd37f, type: 2}
+  ExplosionSound: {fileID: 82683316754987333, guid: 0772c3b9b4d2cc04b8e56e6aeb318a13, type: 2}
+  thumbnailCameraSize: 5.27
+  thumbnailCameraOffset: {x: 0.52, y: -0.51}
+  thumbnailUIOffset: {x: 0.01, y: -0.01}
+  thumbnailUIScale: 1.17
+  bundle: {fileID: 11400000, guid: 36235592d94ffee4e89e915e5465f90e, type: 2}
+  orderInBundleIndex: 1
+  WaterTankLocation: {x: -1.2526939, y: -1.9813218}
+  PilotLocation: {x: -1.4288177, y: -0.1566704, z: -0.001294136}
+  WaterFillLocations:
+  - {x: -1.3700906, y: -0.18134806, z: -0.460083}
+  - {x: -2.0282083, y: -0.43940756, z: -0.9923105}
+  - {x: -0.39590025, y: -0.16662243, z: -0.95600605}
+  - {x: 0.5808625, y: -0.18155286, z: -0.877347}
+  - {x: 1.3587909, y: -0.41199657, z: -0.9862585}
+  - {x: 0.95924973, y: -1.1312969, z: -0.7705612}
+  - {x: -0.030936122, y: -1.1545345, z: -1.0639343}
+  - {x: -1.0087729, y: -1.0014001, z: -1.9906721}
+  - {x: -1.9453409, y: -0.87903273, z: -0.41992188}
+  - {x: -1.8585691, y: 0.34476352, z: -0.27627373}
+  WingTrailLocations:
+  - {x: -0.8426693, y: -0.90022886, z: 2.928441}
+  - {x: -1.1102389, y: -0.9132649, z: -2.96766}
+  LandingGearLocations: []
+--- !u!1 &1578090524556879
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_Component:
+  - component: {fileID: 4069563952053202}
+  m_Layer: 0
+  m_Name: BeeGeePlane
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4069563952053202
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1578090524556879}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.19, y: -0.8, z: -0.3355584}
+  m_LocalScale: {x: 0.48234296, y: 0.48234296, z: 0.48234296}
+  m_Children:
+  - {fileID: 4748728877773313}
+  - {fileID: 4426461621797272}
+  - {fileID: 4155646943900804}
+  - {fileID: 4118462316780598}
+  - {fileID: 4551509793804027}
+  - {fileID: 4792327673647034}
+  - {fileID: 4881457718541584}
+  m_Father: {fileID: 4037040361201919}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1902258634844611
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_Component:
+  - component: {fileID: 4748728877773313}
+  - component: {fileID: 33670469557977069}
+  - component: {fileID: 23681454654249939}
+  m_Layer: 0
+  m_Name: BeeGeePlane
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4748728877773313
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1902258634844611}
+  m_LocalRotation: {x: 9.9748014E-08, y: 0.7071067, z: -9.9748E-08, w: 0.7071068}
+  m_LocalPosition: {x: -0.68912387, y: 0, z: 0.68912387}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4069563952053202}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 1.6164857E-05, y: -89.999985, z: 0}
+--- !u!33 &33670469557977069
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1902258634844611}
+  m_Mesh: {fileID: 4300000, guid: 1850553a53045c1479522f6aa4838942, type: 2}
+--- !u!23 &23681454654249939
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1902258634844611}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
+  m_Materials:
+  - {fileID: 2100000, guid: d4cfbe790e1907b4cbe3935c525a83d9, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!1 &1745877806416635
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_Component:
+  - component: {fileID: 4426461621797272}
+  - component: {fileID: 33598470897687150}
+  - component: {fileID: 23512553555180186}
+  - component: {fileID: 114828606258305170}
+  m_Layer: 0
+  m_Name: BeeGeeRotary
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4426461621797272
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1745877806416635}
+  m_LocalRotation: {x: 9.9748014E-08, y: 0.7071067, z: -9.9748E-08, w: 0.7071068}
+  m_LocalPosition: {x: 4.4967003, y: 0.33197027, z: 0.68912363}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4069563952053202}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 1.6164857E-05, y: -89.999985, z: 0}
+--- !u!33 &33598470897687150
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1745877806416635}
+  m_Mesh: {fileID: 4300000, guid: e7d78a4afc2484540a2ab3972b5a37ba, type: 2}
+--- !u!23 &23512553555180186
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1745877806416635}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
+  m_Materials:
+  - {fileID: 2100000, guid: d4cfbe790e1907b4cbe3935c525a83d9, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!114 &114828606258305170
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1745877806416635}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dd55161d646809cdfad93e730c5e956, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  Speed: 1
+  axis: 2
+--- !u!1 &1839887534999746
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_Component:
+  - component: {fileID: 4155646943900804}
+  - component: {fileID: 33070614966270174}
+  - component: {fileID: 23099463880055863}
+  m_Layer: 0
+  m_Name: Capsule
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4155646943900804
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1839887534999746}
+  m_LocalRotation: {x: 9.9748014E-08, y: 0.7071067, z: -9.9748E-08, w: 0.7071068}
+  m_LocalPosition: {x: -2.4017265, y: 1.8923284, z: 0.68912387}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4069563952053202}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 1.6164857E-05, y: -89.999985, z: 0}
+--- !u!33 &33070614966270174
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1839887534999746}
+  m_Mesh: {fileID: 4300000, guid: 778a5029f0f1e59499467604f2494794, type: 2}
+--- !u!23 &23099463880055863
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1839887534999746}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
+  m_Materials:
+  - {fileID: 2100000, guid: 0bb3b36a1857ec545bcf95f29834783e, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!1 &1079044282615081
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_Component:
+  - component: {fileID: 4118462316780598}
+  - component: {fileID: 33595263366507929}
+  - component: {fileID: 23519492206917125}
+  - component: {fileID: 114282650178749610}
+  m_Layer: 0
+  m_Name: SmallWingFlapLeft
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4118462316780598
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1079044282615081}
+  m_LocalRotation: {x: 9.9748014E-08, y: 0.7071067, z: -9.9748E-08, w: 0.7071068}
+  m_LocalPosition: {x: -4.1291084, y: 0.70707947, z: 1.9906588}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4069563952053202}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 1.6164857E-05, y: -89.999985, z: 0}
+--- !u!33 &33595263366507929
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1079044282615081}
+  m_Mesh: {fileID: 4300000, guid: d19bf87e280990b4aa8e1e6750a49af7, type: 2}
+--- !u!23 &23519492206917125
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1079044282615081}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
+  m_Materials:
+  - {fileID: 2100000, guid: d4cfbe790e1907b4cbe3935c525a83d9, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!114 &114282650178749610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1079044282615081}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fc717eef1c9dbaaed27f0e719eb629a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  maxRotation: 35
+  speed: 3
+  invertBehaviour: 0
+--- !u!1 &1576685064742213
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_Component:
+  - component: {fileID: 4551509793804027}
+  - component: {fileID: 33567225153354655}
+  - component: {fileID: 23184689738080644}
+  - component: {fileID: 114416340316514483}
+  m_Layer: 0
+  m_Name: SmallWingFlapRight
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4551509793804027
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1576685064742213}
+  m_LocalRotation: {x: -4.216082E-09, y: 0.7071067, z: 4.2160817E-09, w: 0.7071068}
+  m_LocalPosition: {x: -4.1291084, y: 0.70707947, z: -0.61241055}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4069563952053202}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: -6.8324533E-07, y: -89.999985, z: 0}
+--- !u!33 &33567225153354655
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1576685064742213}
+  m_Mesh: {fileID: 4300000, guid: 397853edea0c935458fb2405e47854b8, type: 2}
+--- !u!23 &23184689738080644
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1576685064742213}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
+  m_Materials:
+  - {fileID: 2100000, guid: d4cfbe790e1907b4cbe3935c525a83d9, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!114 &114416340316514483
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1576685064742213}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fc717eef1c9dbaaed27f0e719eb629a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  maxRotation: 35
+  speed: 3
+  invertBehaviour: 0
+--- !u!1 &1172424304088110
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_Component:
+  - component: {fileID: 4792327673647034}
+  - component: {fileID: 33467061733123805}
+  - component: {fileID: 23415772020920282}
+  - component: {fileID: 114125835633515103}
+  m_Layer: 0
+  m_Name: WingFlapLeft
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4792327673647034
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1172424304088110}
+  m_LocalRotation: {x: 4.8293426E-08, y: 0.7660445, z: 1.199241E-08, w: 0.6427876}
+  m_LocalPosition: {x: -0.67200375, y: -0.42953724, z: -3.2424948}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4069563952053202}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 179.99997, y: -79.99999, z: -179.99997}
+--- !u!33 &33467061733123805
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1172424304088110}
+  m_Mesh: {fileID: 4300000, guid: 864ab45530ca453498d24c07999206dc, type: 2}
+--- !u!23 &23415772020920282
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1172424304088110}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
+  m_Materials:
+  - {fileID: 2100000, guid: d4cfbe790e1907b4cbe3935c525a83d9, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!114 &114125835633515103
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1172424304088110}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fc717eef1c9dbaaed27f0e719eb629a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  maxRotation: 35
+  speed: 3
+  invertBehaviour: 0
+--- !u!1 &1376531551030577
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_Component:
+  - component: {fileID: 4881457718541584}
+  - component: {fileID: 33187112369574551}
+  - component: {fileID: 23423734462011251}
+  - component: {fileID: 114966295121597689}
+  m_Layer: 0
+  m_Name: WingFlapRight
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4881457718541584
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1376531551030577}
+  m_LocalRotation: {x: 1.6742431E-08, y: 0.6427877, z: -1.4048571E-08, w: 0.7660444}
+  m_LocalPosition: {x: -0.6720035, y: -0.42953724, z: 4.6207423}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4069563952053202}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 2.504478E-06, y: -80.000015, z: 4.8400767E-14}
+--- !u!33 &33187112369574551
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1376531551030577}
+  m_Mesh: {fileID: 4300000, guid: 9e2d1564956f64244949fff05455c0d0, type: 2}
+--- !u!23 &23423734462011251
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1376531551030577}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
+  m_Materials:
+  - {fileID: 2100000, guid: d4cfbe790e1907b4cbe3935c525a83d9, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!114 &114966295121597689
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1376531551030577}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fc717eef1c9dbaaed27f0e719eb629a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  maxRotation: 35
+  speed: 3
+  invertBehaviour: 0
+--- !u!1 &1722164698105610
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_Component:
+  - component: {fileID: 4183967725929199}
+  - component: {fileID: 60555890790946784}
+  m_Layer: 22
+  m_Name: PlaneColllider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4183967725929199
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1722164698105610}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4037040361201919}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!60 &60555890790946784
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1722164698105610}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: -0.62525773, y: -1.4651228}
+      - {x: 0.8672607, y: -1.5643333}
+      - {x: 1.7159903, y: -1.2784954}
+      - {x: 1.7791908, y: -0.60179913}
+      - {x: 1.7841744, y: -0.098107815}
+      - {x: 0.9194417, y: 0.26820284}
+      - {x: -0.49886703, y: 0.15749806}
+      - {x: -1.0299003, y: 0.1020143}
+      - {x: -1.4478307, y: 0.3159839}
+      - {x: -1.9017706, y: 0.29188514}
+      - {x: -2.12919, y: 0.59665954}
+      - {x: -2.4509888, y: 0.36478066}
+      - {x: -2.4117339, y: -1.0222435}
+      - {x: -2.181468, y: -1.203371}

@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 339c411759833076fdfa9fa7d5a4dde7, type: 3}
+  m_Name: Shop
+  m_EditorClassIdentifier:
+  title:
+    keyword: plane-bundle-shop
+  rewardRequirement:
+    type: 0
+    minSurvivalHighscore: 0
+    survivalThemeVisit: {fileID: 0}
+    fullScorePack: {fileID: 0}
+    fullMedalPack: {fileID: 0}
+    quest: 0
+    landmark: {fileID: 0}
+    plane: {fileID: 0}
+    amount: 0
+  planes:
+  - {fileID: 114089871113901861, guid: edd20a79c7d9afb47b2875278b3393dd, type: 2}
+  orderInLibraryIndex: 6

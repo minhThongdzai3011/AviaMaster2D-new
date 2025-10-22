@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 762d440f04517577dd59b9247b51a1e1, type: 3}
+  m_Name: PackOutside1
+  m_EditorClassIdentifier:
+  title:
+    keyword: pack-outside-1
+  rewardRequirement:
+    type: 5
+    minSurvivalHighscore: 0
+    survivalThemeVisit: {fileID: 11400000, guid: 146db5a3d5694a04fbc27cf1f2a5245b, type: 2}
+    fullScorePack: {fileID: 0}
+    fullMedalPack: {fileID: 0}
+    quest: 0
+    landmark: {fileID: 114950212944886414, guid: a23600cf522832443b0a6feaa8996c63, type: 2}
+    plane: {fileID: 0}
+    amount: 0
+  timeTrialsRewardUnlockMinutes: 0
+  price: 10
+  coinRewardsFactor: 1
+  levels:
+  - {fileID: 114459501178486902, guid: 495be8d6f1555ab49b4dd61d4b7858f5, type: 2}
+  - {fileID: 114779365985763606, guid: 0aad556c2cfa90942b9dcd9279496f61, type: 2}
+  - {fileID: 114915451412652493, guid: c14913bcf6d7a7944908e4b3adde0f01, type: 2}
+  - {fileID: 114967866487208650, guid: d78b079407af2be4eb41b2bcc028bf01, type: 2}
+  fallbackThumbnail: {fileID: 0}
+  packOrderIndex: 0
+  isStartOfPage: 0

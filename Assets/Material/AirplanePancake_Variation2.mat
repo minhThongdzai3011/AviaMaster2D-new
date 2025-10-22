@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: AirplanePancake_Variation2
+  m_Shader: {fileID: 4800000, guid: 965449c225b1c6948b7d887690fdb247, type: 3}
+  m_ShaderKeywords:
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _PlaneTexture:
+        m_Texture: {fileID: 2800000, guid: 2515a984517736746b4c5002ff08c659, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _PulseTexture:
+        m_Texture: {fileID: 2800000, guid: 30a0a68b73fb6f44ab7a24a5ea1904f4, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _BumpScale: 1
+    - _Cutoff: 0.5
+    - _DetailNormalMapScale: 1
+    - _DstBlend: 0
+    - _GhostFactor: 0
+    - _GhostFactorMax: 0.7
+    - _GhostFactorMin: 0.3
+    - _GlossMapScale: 1
+    - _Glossiness: 0
+    - _GlossyReflections: 1
+    - _Metallic: 0
+    - _Mode: 0
+    - _OcclusionStrength: 1
+    - _Parallax: 0.02
+    - _PulseSpeed: 1.78
+    - _PulsingSpeed: 0.6445339
+    - _ShadowIntensity: 0.298
+    - _SmoothnessTextureChannel: 0
+    - _SpecularHighlights: 1
+    - _SrcBlend: 1
+    - _UVSec: 0
+    - _WaterLevel: 0
+    - _ZWrite: 1
+    m_Colors:
+    - _Color: {r: 0.588, g: 0.588, b: 0.588, a: 1}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 0}
+    - _GradientColorBack: {r: 0.5097454, g: 0.57868326, b: 0.745283, a: 1}
+    - _GradientColorFront: {r: 0.33090067, g: 0.3781616, b: 0.49056602, a: 1}
+    - _LightDirection: {r: 0, g: 0.69, b: -0.59, a: 0}
+    - _NoPulseColor: {r: 0, g: 0.2830189, b: 0.21460015, a: 1}
+    - _PlaneColor: {r: 0.31520426, g: 0.29957277, b: 0.33962262, a: 1}
+    - _PlaneGhostColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    - _PulseColor: {r: 0, g: 1, b: 0.48015118, a: 1}
+    - _ShadowColor: {r: 0.06768425, g: 0.072381005, b: 0.084905684, a: 1}

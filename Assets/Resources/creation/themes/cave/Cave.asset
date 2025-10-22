@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 477aaaf894d1d1836595eb17d60c1919, type: 3}
+  m_Name: Cave
+  m_EditorClassIdentifier:
+  title:
+    keyword: theme-cave
+  isCave: 1
+  order: 100
+  surfaceMaterial: {fileID: 11400000, guid: bc1878c4810d02c40a5b074252db76ed, type: 2}
+  waterVertMaterial: {fileID: 11400000, guid: d8d630e25d38eb447a3e189d8bf1e683, type: 2}
+  waterWavesMaterial: {fileID: 11400000, guid: e88a199e4052b1d44962350fe29f01af, type: 2}
+  waterFlatMaterial: {fileID: 11400000, guid: 9639f3255e5e34c4ca119fd7c938c421, type: 2}
+  defaultFirePrefab: {fileID: 114808573540442689, guid: a7416d3f6229308479b6f4997c785971, type: 2}
+  noSmokeFirePrefab: {fileID: 114065697814046141, guid: 426ab863c347c6347bcde66b0dbc12ec, type: 2}
+  sceneryPrefab: {fileID: 114391796055746589, guid: 3baf42677455b29499069bb2e146af30, type: 2}
+  sceneryUIPrefab: {fileID: 114058985233193370, guid: 1b86e8c1ed3e8de469c1f9d57ccc3be2, type: 2}
+  sceneryMusic: cave_music
+  themes:
+  - {fileID: 11400000, guid: 1d11187666f17304192c1a2c4381bf2c, type: 2}
+  - {fileID: 11400000, guid: 46bfdd4de213a314381d8482ba31631b, type: 2}
+  - {fileID: 11400000, guid: b59c9a2064b5ab24ab1878c4785d2472, type: 2}
+  - {fileID: 11400000, guid: 196ed20e7e609ff4f8ec3b01a21c47ab, type: 2}
+  dynamicMaterials:
+  - {fileID: 11400000, guid: 77dab0e82ebcd8e41ac8e5b02e4faf16, type: 2}
+  - {fileID: 11400000, guid: 834d5bc0931e5034495207f6dbfef51d, type: 2}
+  - {fileID: 11400000, guid: 8c67aa157be7b984ca73d5d9362d3292, type: 2}
+  - {fileID: 11400000, guid: 03f866b3d1eb6b34b9f3e320345781d3, type: 2}
+  - {fileID: 11400000, guid: ba0640b43c8812e43acd47595b103812, type: 2}
+  - {fileID: 11400000, guid: ec581ff494aed794a82b1c1eb8559ccd, type: 2}
+  - {fileID: 11400000, guid: 5fcf61d06cd827b4d86fb15a77fc845e, type: 2}
+  - {fileID: 11400000, guid: 9cc2ba54dfe3e7e40bddc7fcdd556970, type: 2}
+  - {fileID: 11400000, guid: e7250df10a71ee048a1d5cf1b663f16f, type: 2}
+  - {fileID: 11400000, guid: 4e36c63cfca2d2148943d24eb7a98afc, type: 2}
+  - {fileID: 11400000, guid: d185b7697d1ab8d4b84d3e83644bfb0a, type: 2}
+  - {fileID: 11400000, guid: 291f8c46153c2b94eaab193c166485ba, type: 2}
+  - {fileID: 11400000, guid: aaab85dcee5a432499848c579d0046dd, type: 2}
+  - {fileID: 11400000, guid: 876a70d727c5a334b90d10ad2943294e, type: 2}
+  - {fileID: 11400000, guid: e14589b989c9be04294b896db81c7bf0, type: 2}
+  - {fileID: 11400000, guid: 2ba0351e8cda9484c8acd379b52831f5, type: 2}
+  - {fileID: 11400000, guid: e586da6f0ac490c438cc7a09382ba033, type: 2}
+  - {fileID: 11400000, guid: 76a6e7c80448522469d987141a94f03d, type: 2}
+  - {fileID: 11400000, guid: 412ae27bed07ac5408b2c58a38fe6cb0, type: 2}
+  - {fileID: 11400000, guid: d170ddd0261d5ab498190902b5aab275, type: 2}
+  - {fileID: 11400000, guid: c5c7c1bea24ebbe4ba6c8ef86437ffbf, type: 2}
+  - {fileID: 11400000, guid: 94bb9dee73ed9f947a05e4cb442ca261, type: 2}
+  - {fileID: 11400000, guid: 65a428518470e1d4286b29d003bd313a, type: 2}
+  - {fileID: 11400000, guid: d53c9ece62b6db54bb7baf1fd953e88c, type: 2}
+  - {fileID: 11400000, guid: 863f6a4e35e15374c9dd8e440f451e15, type: 2}
+  - {fileID: 11400000, guid: b3a5e17fbbb82204c83179b53904878b, type: 2}
+  - {fileID: 11400000, guid: 2eeb19d3f4b27c74699b600234085e09, type: 2}
+  - {fileID: 11400000, guid: 77e29dbea6c2d8c479b49cf2ef24ebcd, type: 2}
+  - {fileID: 11400000, guid: bc1878c4810d02c40a5b074252db76ed, type: 2}
+  - {fileID: 11400000, guid: 9639f3255e5e34c4ca119fd7c938c421, type: 2}
+  - {fileID: 11400000, guid: d8d630e25d38eb447a3e189d8bf1e683, type: 2}
+  - {fileID: 11400000, guid: e88a199e4052b1d44962350fe29f01af, type: 2}

@@ -1,0 +1,111 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e53f7577335ecc17232c3e068e7433fe, type: 3}
+  m_Name: Jungle WaterWavesMaterial
+  m_EditorClassIdentifier:
+  themeGroup: {fileID: 11400000, guid: 3c13b7050d6e39f498fe44a5337182f5, type: 2}
+  shader: {fileID: 4800000, guid: 63855a967a38b5c4096bbf68200117f3, type: 3}
+  unsortedMaterialVariants:
+  - Theme: {fileID: 11400000, guid: cdce344f8c3f435409546fc0b97f65d0, type: 2}
+    FloatSettings:
+    - PropertyName: _WaveSpeed
+      Value: 3
+    - PropertyName: _WaveCount
+      Value: 0.39
+    - PropertyName: _WaveSize
+      Value: 0.06
+    - PropertyName: _EdgeSize
+      Value: 0.06
+    - PropertyName: _EdgeSizeMax
+      Value: 0.1
+    - PropertyName: _SecondaryWaveSpeed
+      Value: -2
+    - PropertyName: _SecondaryWaveCount
+      Value: 0.17
+    - PropertyName: _SecondaryWaveSize
+      Value: 0.04
+    - PropertyName: _DiveSize
+      Value: 0.38
+    - PropertyName: _DiveDistanceStart
+      Value: 7.2
+    - PropertyName: _DiveDistanceEnd
+      Value: 16
+    - PropertyName: _DiveCountStart
+      Value: 5.55
+    - PropertyName: _DiveCountEnd
+      Value: 10
+    - PropertyName: _DiveSpeed
+      Value: 16
+    - PropertyName: _GlideSize
+      Value: 0.4
+    - PropertyName: _GlideLengthMin
+      Value: 5
+    - PropertyName: _GlideLengthMax
+      Value: 9
+    - PropertyName: _Cutoff
+      Value: 0.5
+    ColorSettings:
+    - PropertyName: _FlatColor
+      Value: {r: 0.4575472, g: 0.9459555, b: 1, a: 0.784}
+    - PropertyName: _EdgeColor
+      Value: {r: 0.8915094, g: 0.98962265, b: 1, a: 0.941}
+    - PropertyName: _VerticalColor
+      Value: {r: 0.1462264, g: 0.77974564, b: 1, a: 0.666}
+    VectorSettings: []
+    TextureSettings: []
+  - Theme: {fileID: 11400000, guid: 3492a5f26780b214797ad07fdc5e4db9, type: 2}
+    FloatSettings:
+    - PropertyName: _WaveSpeed
+      Value: 3
+    - PropertyName: _WaveCount
+      Value: 0.39
+    - PropertyName: _WaveSize
+      Value: 0.06
+    - PropertyName: _EdgeSize
+      Value: 0.06
+    - PropertyName: _EdgeSizeMax
+      Value: 0.1
+    - PropertyName: _SecondaryWaveSpeed
+      Value: -2
+    - PropertyName: _SecondaryWaveCount
+      Value: 0.17
+    - PropertyName: _SecondaryWaveSize
+      Value: 0.04
+    - PropertyName: _DiveSize
+      Value: 0.38
+    - PropertyName: _DiveDistanceStart
+      Value: 7.2
+    - PropertyName: _DiveDistanceEnd
+      Value: 16
+    - PropertyName: _DiveCountStart
+      Value: 5.55
+    - PropertyName: _DiveCountEnd
+      Value: 10
+    - PropertyName: _DiveSpeed
+      Value: 16
+    - PropertyName: _GlideSize
+      Value: 0.4
+    - PropertyName: _GlideLengthMin
+      Value: 5
+    - PropertyName: _GlideLengthMax
+      Value: 9
+    - PropertyName: _Cutoff
+      Value: 0.5
+    ColorSettings:
+    - PropertyName: _FlatColor
+      Value: {r: 0.08116765, g: 0.70830834, b: 0.9056604, a: 0.784}
+    - PropertyName: _EdgeColor
+      Value: {r: 0.6156863, g: 0.86274517, b: 0.98823535, a: 0.941}
+    - PropertyName: _VerticalColor
+      Value: {r: 0, g: 0.3308902, b: 0.5471698, a: 0.666}
+    VectorSettings: []
+    TextureSettings: []
+  renderTarget: 1

@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 487bf3d8cb7bb4cd5e73e1b6349bba14, type: 3}
+  m_Name: CaveMedium WaterLarge
+  m_EditorClassIdentifier:
+  SurfaceConnections:
+  - RingPointOffsetsToAnchor:
+    - {x: 0.14378738, y: 1.0498667}
+    - {x: 0, y: 0}
+    - {x: -0.028844833, y: -0.21061134}
+    - {x: -0.22592163, y: -1.6495762}
+    - {x: 0.0030622482, y: 15.8965645}
+    - {x: -0.0006122589, y: 15.296576}
+    - {x: -0.015615463, y: 12.8466215}
+    - {x: -0.00091838837, y: 15.246576}
+    - {x: 0.014697075, y: 17.79653}
+    - {x: -0.015921593, y: 12.796623}
+  - RingPointOffsetsToAnchor:
+    - {x: -0.021658897, y: 27.72099}
+    - {x: 3.8146973E-06, y: 28.428936}
+    - {x: 0.009181023, y: 28.728851}
+    - {x: 0.08230686, y: 31.118656}
+  ApplyingLevelChunk: {fileID: 0}

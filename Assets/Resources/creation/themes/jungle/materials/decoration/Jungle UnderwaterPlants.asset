@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e53f7577335ecc17232c3e068e7433fe, type: 3}
+  m_Name: Jungle UnderwaterPlants
+  m_EditorClassIdentifier:
+  themeGroup: {fileID: 11400000, guid: 3c13b7050d6e39f498fe44a5337182f5, type: 2}
+  shader: {fileID: 4800000, guid: dc09b862c9451624ca715cf5e4d0f09d, type: 3}
+  unsortedMaterialVariants:
+  - Theme: {fileID: 11400000, guid: cdce344f8c3f435409546fc0b97f65d0, type: 2}
+    FloatSettings:
+    - PropertyName: _Waves
+      Value: 4
+    - PropertyName: _Amplitude
+      Value: 0.3
+    - PropertyName: _Speed
+      Value: 7.51
+    - PropertyName: _Cutoff
+      Value: 0.5
+    ColorSettings:
+    - PropertyName: _Color
+      Value: {r: 0.08410465, g: 0.086151645, b: 0.09433961, a: 1}
+    VectorSettings:
+    - PropertyName: _WaveDirection
+      Value: {x: 1, y: 1, z: 0, w: 0}
+    TextureSettings:
+    - PropertyName: _MainTex
+      Value: {fileID: 2800000, guid: 655c6f3116bffee4da174549c51dc520, type: 3}
+  - Theme: {fileID: 11400000, guid: 3492a5f26780b214797ad07fdc5e4db9, type: 2}
+    FloatSettings:
+    - PropertyName: _Waves
+      Value: 4
+    - PropertyName: _Amplitude
+      Value: 0.3
+    - PropertyName: _Speed
+      Value: 7.51
+    - PropertyName: _Cutoff
+      Value: 0.5
+    ColorSettings:
+    - PropertyName: _Color
+      Value: {r: 0.08410465, g: 0.086151645, b: 0.09433961, a: 1}
+    VectorSettings:
+    - PropertyName: _WaveDirection
+      Value: {x: 1, y: 1, z: 0, w: 0}
+    TextureSettings:
+    - PropertyName: _MainTex
+      Value: {fileID: 2800000, guid: 655c6f3116bffee4da174549c51dc520, type: 3}
+  renderTarget: 1

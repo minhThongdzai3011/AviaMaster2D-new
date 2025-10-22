@@ -12,9 +12,14 @@ public class BonusSpawner : MonoBehaviour
     public float spawnRangeX = -18f;
 
     [Header("Spawn Settings")]
-    private float startDelay = 0f;
-    private float spawnInterval = 0.2f;
+    public float startDelay = 0f;
+    public float spawnInterval = 0.2f;
     public int count = 0;
+    public int maxSpawnedItems = 30;
+    public float rangeXmin = 5f;
+    public float rangeXmax = 10f;
+    public float startRangeX = -18f;
+
     void Start()
     {
         instance = this;
@@ -34,7 +39,7 @@ public class BonusSpawner : MonoBehaviour
         while (true)
         {
             count = GameObject.FindGameObjectsWithTag("Bonus2").Length + GameObject.FindGameObjectsWithTag("Bonus3").Length + GameObject.FindGameObjectsWithTag("Bonus4").Length + GameObject.FindGameObjectsWithTag("Bonus5").Length + GameObject.FindGameObjectsWithTag("Bonus10").Length;
-            if (count < 30)
+            if (count < maxSpawnedItems)
             {
                 SpawnBonusItem();
                 yield return new WaitForSeconds(spawnInterval);
@@ -52,7 +57,8 @@ public class BonusSpawner : MonoBehaviour
                                             Random.Range(spawnRangeYmin, spawnRangeYmax),
                                             0);
         Instantiate(bonusPrefabs[prefabIndex], spawnPosition, bonusPrefabs[prefabIndex].transform.rotation);
-        spawnRangeX += Random.Range(5f, 10f);
+        // Debug.Log("Spawned Bonus Item at X: " + spawnRangeX + " Y: " + spawnPosition.y + " | Prefab Index: " + prefabIndex);
+        spawnRangeX += Random.Range(rangeXmin, rangeXmax);
     }
 
     public void DeleteSpawnedItems()
@@ -76,7 +82,7 @@ public class BonusSpawner : MonoBehaviour
         if (allBonusItems.Count == 0)
         {
             Debug.Log("Không tìm thấy bonus items nào để xóa.");
-            return; // No items to delete
+            // return; // No items to delete
         }
         
         Debug.Log($"Tổng cộng {allBonusItems.Count} bonus items sẽ bị xóa");
@@ -89,8 +95,10 @@ public class BonusSpawner : MonoBehaviour
                 Destroy(item);
             }
         }
-        
-        spawnRangeX = -18f; // Reset spawnRangeX to initial value
+
+        spawnRangeX = startRangeX; // Reset spawnRangeX to initial value
+        Debug.Log("GameObj" + gameObject.name);
+
         Debug.Log("Đã xóa tất cả bonus items và reset spawnRangeX");
     }
 

@@ -1,0 +1,81 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: AirplaneHorten_Variation2
+  m_Shader: {fileID: 4800000, guid: 965449c225b1c6948b7d887690fdb247, type: 3}
+  m_ShaderKeywords:
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _PlaneTexture:
+        m_Texture: {fileID: 2800000, guid: f281204582d3cef439049bdb90e91db8, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _PulseTexture:
+        m_Texture: {fileID: 2800000, guid: 30a0a68b73fb6f44ab7a24a5ea1904f4, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _BumpScale: 1
+    - _Cutoff: 0.5
+    - _DetailNormalMapScale: 1
+    - _DstBlend: 0
+    - _GlossMapScale: 1
+    - _Glossiness: 0.5
+    - _GlossyReflections: 1
+    - _Metallic: 0
+    - _Mode: 0
+    - _OcclusionStrength: 1
+    - _Parallax: 0.02
+    - _PulseSpeed: 1
+    - _PulsingSpeed: 1.22
+    - _ShadowIntensity: 0.216
+    - _ShineAngle: 0.8
+    - _ShineIntensity: 1
+    - _ShineSize: 0.112
+    - _SmoothnessTextureChannel: 0
+    - _SpecularHighlights: 1
+    - _Speed: 3
+    - _SrcBlend: 1
+    - _Steps: 6.72
+    - _StripeCount: 10.6
+    - _UVSec: 0
+    - _WaterLevel: 0
+    - _ZWrite: 1
+    - _node_5555: -3.13
+    - _node_6649: 3.55
+    - _node_9950: 1.71
+    - _shineintensity: 1.45
+    - _steps: 5
+    m_Colors:
+    - _Color: {r: 1, g: 0.6823299, b: 0.05098039, a: 1}
+    - _Colorer: {r: 1, g: 0.8604652, b: 0, a: 1}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _FresnelColor: {r: 1, g: 1, b: 1, a: 1}
+    - _GradientColorBack: {r: 0.21048418, g: 0.49008158, b: 0.8113208, a: 1}
+    - _GradientColorFront: {r: 0.078097194, g: 0.26241302, b: 0.6132076, a: 1}
+    - _HighlightColor: {r: 1, g: 0.8757036, b: 0.6179246, a: 1}
+    - _LightDirection: {r: 2, g: 1.37, b: -0.56, a: 0}
+    - _NoPulseColor: {r: 0, g: 0.4339623, b: 0.6603774, a: 1}
+    - _PlaneColor: {r: 0, g: 0.34014657, b: 0.5188679, a: 1}
+    - _PulseColor: {r: 0.10849059, g: 0.696405, b: 1, a: 1}
+    - _ShadowColor: {r: 0.03137255, g: 0.09019608, b: 0.18431373, a: 1}
+    - _StripeColor: {r: 0.664731, g: 1, b: 0.015686274, a: 1}
+    - _color: {r: 0.9815709, g: 1, b: 0.504717, a: 1}
+    - _node_2700: {r: 0.6039216, g: 0.6039216, b: 0.6039216, a: 1}
+    - _node_3087: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    - _node_4872: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    - _node_5136: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    - _node_8058: {r: 1, g: 0.11792451, b: 0.11792451, a: 1}
+    - _node_8675: {r: 1, g: 0.9789998, b: 0.6367924, a: 1}

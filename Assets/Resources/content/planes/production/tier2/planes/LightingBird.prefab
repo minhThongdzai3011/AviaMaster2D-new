@@ -1,0 +1,1054 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  serializedVersion: 2
+  m_ObjectHideFlags: 0
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1909705814757916}
+  m_IsPrefabAsset: 1
+--- !u!1 &1909705814757916
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_Component:
+  - component: {fileID: 4692414148352435}
+  - component: {fileID: 114867208263430138}
+  m_Layer: 0
+  m_Name: LightingBird
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4692414148352435
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1909705814757916}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 4374948775136869}
+  - {fileID: 4692986912651203}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114867208263430138
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1909705814757916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c729b6ff0c1732eca3b58cefc98efb7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  Title:
+    keyword: plane-thunderbird
+  rewardRequirement:
+    type: 3
+    minSurvivalHighscore: 20
+    survivalThemeVisit: {fileID: 0}
+    fullScorePack: {fileID: 0}
+    fullMedalPack: {fileID: 0}
+    quest: 0
+    landmark: {fileID: 0}
+    plane: {fileID: 0}
+    amount: 5000
+  isDefaultPlane: 0
+  PlaneType: {fileID: 11400000, guid: a01b9f3b76456b0488c7bb522b776a46, type: 2}
+  id: 10
+  EngineSound: {fileID: 11400000, guid: a07f0d5c5da06554887fa33821490c7f, type: 2}
+  skins:
+  - Title:
+      keyword: plane-thunderbird-skin-default
+    Color:
+      serializedVersion: 2
+      key0: {r: 0.9568628, g: 0.7137255, b: 0.2784314, a: 1}
+      key1: {r: 0.9568628, g: 0.7137255, b: 0.2784314, a: 1}
+      key2: {r: 0, g: 0, b: 0, a: 0}
+      key3: {r: 0, g: 0, b: 0, a: 0}
+      key4: {r: 0, g: 0, b: 0, a: 0}
+      key5: {r: 0, g: 0, b: 0, a: 0}
+      key6: {r: 0, g: 0, b: 0, a: 0}
+      key7: {r: 0, g: 0, b: 0, a: 0}
+      ctime0: 0
+      ctime1: 65535
+      ctime2: 0
+      ctime3: 0
+      ctime4: 0
+      ctime5: 0
+      ctime6: 0
+      ctime7: 0
+      atime0: 0
+      atime1: 65535
+      atime2: 0
+      atime3: 0
+      atime4: 0
+      atime5: 0
+      atime6: 0
+      atime7: 0
+      m_Mode: 0
+      m_NumColorKeys: 2
+      m_NumAlphaKeys: 2
+    rewardRequirement:
+      type: 0
+      minSurvivalHighscore: 0
+      survivalThemeVisit: {fileID: 0}
+      fullScorePack: {fileID: 0}
+      fullMedalPack: {fileID: 0}
+      quest: 0
+      landmark: {fileID: 0}
+      plane: {fileID: 0}
+      amount: 0
+    Thumbnail: {fileID: 21300000, guid: af2d87b58b5f6aa448fd4ead90e3cc17, type: 3}
+    id: 0
+    skinnedVisuals:
+    - Visual: {fileID: 1417724695660418}
+      Materials:
+      - {fileID: 2100000, guid: fede02e4632cd374f933b41350ecd679, type: 2}
+      Behaviour: 0
+    - Visual: {fileID: 1367760092940238}
+      Materials:
+      - {fileID: 2100000, guid: fede02e4632cd374f933b41350ecd679, type: 2}
+      Behaviour: 0
+    - Visual: {fileID: 1448208030240737}
+      Materials:
+      - {fileID: 2100000, guid: fede02e4632cd374f933b41350ecd679, type: 2}
+      Behaviour: 0
+    - Visual: {fileID: 1417724695660418}
+      Materials:
+      - {fileID: 2100000, guid: fede02e4632cd374f933b41350ecd679, type: 2}
+      Behaviour: 0
+    - Visual: {fileID: 1733547295977642}
+      Materials:
+      - {fileID: 2100000, guid: fede02e4632cd374f933b41350ecd679, type: 2}
+      Behaviour: 0
+    - Visual: {fileID: 1192063789397709}
+      Materials:
+      - {fileID: 2100000, guid: fede02e4632cd374f933b41350ecd679, type: 2}
+      Behaviour: 0
+    - Visual: {fileID: 1251511192081107}
+      Materials:
+      - {fileID: 2100000, guid: fede02e4632cd374f933b41350ecd679, type: 2}
+      Behaviour: 0
+    - Visual: {fileID: 1454108217205667}
+      Materials:
+      - {fileID: 2100000, guid: fede02e4632cd374f933b41350ecd679, type: 2}
+      Behaviour: 0
+    - Visual: {fileID: 1161117751745475}
+      Materials:
+      - {fileID: 2100000, guid: 0f46e2512508eac41a61bb517e3df117, type: 2}
+      Behaviour: 0
+  - Title:
+      keyword: plane-thunderbird-skin-variation-1
+    Color:
+      serializedVersion: 2
+      key0: {r: 0.10588236, g: 0.50980395, b: 0.654902, a: 1}
+      key1: {r: 0.10588236, g: 0.50980395, b: 0.654902, a: 1}
+      key2: {r: 0, g: 0, b: 0, a: 0}
+      key3: {r: 0, g: 0, b: 0, a: 0}
+      key4: {r: 0, g: 0, b: 0, a: 0}
+      key5: {r: 0, g: 0, b: 0, a: 0}
+      key6: {r: 0, g: 0, b: 0, a: 0}
+      key7: {r: 0, g: 0, b: 0, a: 0}
+      ctime0: 0
+      ctime1: 65535
+      ctime2: 0
+      ctime3: 0
+      ctime4: 0
+      ctime5: 0
+      ctime6: 0
+      ctime7: 0
+      atime0: 0
+      atime1: 65535
+      atime2: 0
+      atime3: 0
+      atime4: 0
+      atime5: 0
+      atime6: 0
+      atime7: 0
+      m_Mode: 0
+      m_NumColorKeys: 2
+      m_NumAlphaKeys: 2
+    rewardRequirement:
+      type: 3
+      minSurvivalHighscore: 0
+      survivalThemeVisit: {fileID: 0}
+      fullScorePack: {fileID: 0}
+      fullMedalPack: {fileID: 0}
+      quest: 0
+      landmark: {fileID: 0}
+      plane: {fileID: 0}
+      amount: 1300
+    Thumbnail: {fileID: 21300000, guid: 644fade6cb00f7540952597ce69aa574, type: 3}
+    id: 1
+    skinnedVisuals:
+    - Visual: {fileID: 1417724695660418}
+      Materials:
+      - {fileID: 2100000, guid: 9c0d9af2e8c22734b991b109f1b99357, type: 2}
+      Behaviour: 0
+    - Visual: {fileID: 1367760092940238}
+      Materials:
+      - {fileID: 2100000, guid: 9c0d9af2e8c22734b991b109f1b99357, type: 2}
+      Behaviour: 0
+    - Visual: {fileID: 1448208030240737}
+      Materials:
+      - {fileID: 2100000, guid: 9c0d9af2e8c22734b991b109f1b99357, type: 2}
+      Behaviour: 0
+    - Visual: {fileID: 1417724695660418}
+      Materials:
+      - {fileID: 2100000, guid: 9c0d9af2e8c22734b991b109f1b99357, type: 2}
+      Behaviour: 0
+    - Visual: {fileID: 1733547295977642}
+      Materials:
+      - {fileID: 2100000, guid: 9c0d9af2e8c22734b991b109f1b99357, type: 2}
+      Behaviour: 0
+    - Visual: {fileID: 1192063789397709}
+      Materials:
+      - {fileID: 2100000, guid: 9c0d9af2e8c22734b991b109f1b99357, type: 2}
+      Behaviour: 0
+    - Visual: {fileID: 1251511192081107}
+      Materials:
+      - {fileID: 2100000, guid: 9c0d9af2e8c22734b991b109f1b99357, type: 2}
+      Behaviour: 0
+    - Visual: {fileID: 1454108217205667}
+      Materials:
+      - {fileID: 2100000, guid: 9c0d9af2e8c22734b991b109f1b99357, type: 2}
+      Behaviour: 0
+    - Visual: {fileID: 1161117751745475}
+      Materials:
+      - {fileID: 2100000, guid: 0bb3b36a1857ec545bcf95f29834783e, type: 2}
+      Behaviour: 0
+  - Title:
+      keyword: plane-thunderbird-skin-variation-2
+    Color:
+      serializedVersion: 2
+      key0: {r: 0, g: 0.14117648, b: 0.38823533, a: 1}
+      key1: {r: 0, g: 0.7725491, b: 1, a: 1}
+      key2: {r: 0, g: 0.14117648, b: 0.38823533, a: 0}
+      key3: {r: 0, g: 0, b: 0, a: 0}
+      key4: {r: 0, g: 0, b: 0, a: 0}
+      key5: {r: 0, g: 0, b: 0, a: 0}
+      key6: {r: 0, g: 0, b: 0, a: 0}
+      key7: {r: 0, g: 0, b: 0, a: 0}
+      ctime0: 0
+      ctime1: 17540
+      ctime2: 65535
+      ctime3: 0
+      ctime4: 0
+      ctime5: 0
+      ctime6: 0
+      ctime7: 0
+      atime0: 0
+      atime1: 65535
+      atime2: 0
+      atime3: 0
+      atime4: 0
+      atime5: 0
+      atime6: 0
+      atime7: 0
+      m_Mode: 0
+      m_NumColorKeys: 3
+      m_NumAlphaKeys: 2
+    rewardRequirement:
+      type: 90
+      minSurvivalHighscore: 0
+      survivalThemeVisit: {fileID: 0}
+      fullScorePack: {fileID: 0}
+      fullMedalPack: {fileID: 0}
+      quest: 0
+      landmark: {fileID: 0}
+      plane: {fileID: 114867208263430138}
+      amount: 6000
+    Thumbnail: {fileID: 21300000, guid: 52f31f88ab5d4d44c9c36e6d6d60d72b, type: 3}
+    id: 2
+    skinnedVisuals:
+    - Visual: {fileID: 1417724695660418}
+      Materials:
+      - {fileID: 2100000, guid: 769cef3da17dd0343b364610c80f5ce2, type: 2}
+      Behaviour: 0
+    - Visual: {fileID: 1367760092940238}
+      Materials:
+      - {fileID: 2100000, guid: 769cef3da17dd0343b364610c80f5ce2, type: 2}
+      Behaviour: 0
+    - Visual: {fileID: 1448208030240737}
+      Materials:
+      - {fileID: 2100000, guid: 769cef3da17dd0343b364610c80f5ce2, type: 2}
+      Behaviour: 0
+    - Visual: {fileID: 1417724695660418}
+      Materials:
+      - {fileID: 2100000, guid: 769cef3da17dd0343b364610c80f5ce2, type: 2}
+      Behaviour: 0
+    - Visual: {fileID: 1733547295977642}
+      Materials:
+      - {fileID: 2100000, guid: 769cef3da17dd0343b364610c80f5ce2, type: 2}
+      Behaviour: 0
+    - Visual: {fileID: 1192063789397709}
+      Materials:
+      - {fileID: 2100000, guid: 769cef3da17dd0343b364610c80f5ce2, type: 2}
+      Behaviour: 0
+    - Visual: {fileID: 1251511192081107}
+      Materials:
+      - {fileID: 2100000, guid: 769cef3da17dd0343b364610c80f5ce2, type: 2}
+      Behaviour: 0
+    - Visual: {fileID: 1454108217205667}
+      Materials:
+      - {fileID: 2100000, guid: 769cef3da17dd0343b364610c80f5ce2, type: 2}
+      Behaviour: 0
+    - Visual: {fileID: 1161117751745475}
+      Materials:
+      - {fileID: 2100000, guid: 0bb3b36a1857ec545bcf95f29834783e, type: 2}
+      Behaviour: 0
+  wingTrailCount: 2
+  wingTrailPrefab: {fileID: 114957851966764099, guid: be48dd39b3544794c9d961f25c8c9aeb, type: 2}
+  EngineTrailPrefabs:
+  - EngineTrailPrefab: {fileID: 114157013038460022, guid: f35e16ca14b7a224e9e6ab00743aedc1, type: 2}
+    Position: {x: -2.489488, y: -0.5512243, z: -0.58062935}
+  - EngineTrailPrefab: {fileID: 114157013038460022, guid: f35e16ca14b7a224e9e6ab00743aedc1, type: 2}
+    Position: {x: -2.4901137, y: -0.55024755, z: 0.67097664}
+  - EngineTrailPrefab: {fileID: 114273150203525306, guid: 7fd0c151c2dda3347b887ea6e3a6f86b, type: 2}
+    Position: {x: -3.0043442, y: -0.55020463, z: 0.67097664}
+  - EngineTrailPrefab: {fileID: 114273150203525306, guid: 7fd0c151c2dda3347b887ea6e3a6f86b, type: 2}
+    Position: {x: -3.004775, y: -0.54929477, z: 0.67097664}
+  WaterSurfaceSplashPrefab: {fileID: 114237500569097342, guid: fb65f6d588921eb4bbc84a1330d753d2, type: 2}
+  LandingGearPrefabs:
+  - {fileID: 114149560910342618, guid: 8622bb0152b7b9048ad156de43c3683d, type: 2}
+  - {fileID: 114149560910342618, guid: 8622bb0152b7b9048ad156de43c3683d, type: 2}
+  - {fileID: 114149560910342618, guid: 8622bb0152b7b9048ad156de43c3683d, type: 2}
+  pilotPrefab: {fileID: 114076556197397882, guid: 8bd169a224ad3604a80be9ea10822ac3, type: 2}
+  pilotColor: {r: 0.17239231, g: 0.19528504, b: 0.24528301, a: 1}
+  takeOffRideAngleOffset: -20
+  WaterBombVisualPrefab: {fileID: 114300061097367275, guid: ceabb82a936eb19428477eae34e80908, type: 2}
+  crashHitEffectPrefab: {fileID: 114230685474467519, guid: 274573e0f79c9ef4a8c68b8de26e139a, type: 2}
+  crashEffectPrefab: {fileID: 0}
+  crashProgressCurve: {fileID: 11400000, guid: e5ef5b0a09a259a43831210d504dd78f, type: 2}
+  crashMaterial: {fileID: 2100000, guid: d07c6c1def13bd04280acaf95ae904be, type: 2}
+  ExplosionEffectPrefab: {fileID: 114865516176579557, guid: c6831c687c0221448992d4d5655c8412, type: 2}
+  WreckagePrefab: {fileID: 114510156930331422, guid: f1ea2e40ed770814c9687d20da642bd5, type: 2}
+  crashSound: {fileID: 82962368357692996, guid: f017c23e23710aa4e99c8592274bd37f, type: 2}
+  ExplosionSound: {fileID: 82683316754987333, guid: 0772c3b9b4d2cc04b8e56e6aeb318a13, type: 2}
+  thumbnailCameraSize: 4.78
+  thumbnailCameraOffset: {x: 0.3, y: 0}
+  thumbnailUIOffset: {x: -0, y: 0.05}
+  thumbnailUIScale: 1.2
+  bundle: {fileID: 11400000, guid: f01f2da2a7e560e4b8a8c102d15d9178, type: 2}
+  orderInBundleIndex: 1
+  WaterTankLocation: {x: 0.32022095, y: -1.6730461}
+  PilotLocation: {x: 1.463609, y: -0.2748535, z: 0.0016021729}
+  WaterFillLocations:
+  - {x: -1.5132543, y: -0.55360204, z: -0.88533145}
+  - {x: -0.6800554, y: -0.80749196, z: -2.1328437}
+  - {x: 0.15985382, y: -0.8199203, z: -1.4286028}
+  - {x: 1.0294809, y: -0.739392, z: -0.90545225}
+  - {x: 1.8451402, y: -0.56986225, z: -0.6670238}
+  - {x: -1.1466981, y: -0.3430977, z: -0.99935114}
+  - {x: -2.2125068, y: -0.128845, z: -0.6036353}
+  - {x: -0.3639819, y: -0.04834091, z: -1.1708797}
+  - {x: 1.2993602, y: -0.20400372, z: -0.7088678}
+  - {x: 0.50408053, y: 0.020748474, z: -1.0798362}
+  WingTrailLocations:
+  - {x: -0.9746605, y: -0.6589759, z: 2.6951904}
+  - {x: -0.9728203, y: -0.66015625, z: -2.623993}
+  LandingGearLocations:
+  - Position: {x: -0.50629425, y: -0.9699993, z: 0.64093196}
+    LookDirection: {x: -0.051386274, y: -0.98661894, z: 0.15473364}
+  - Position: {x: -0.50421906, y: -0.97254753, z: -0.5684688}
+    LookDirection: {x: -0.0538791, y: -0.9840537, z: -0.16951527}
+  - Position: {x: 1.3437653, y: -0.97810936, z: 0.039939985}
+    LookDirection: {x: 0.28531322, y: -0.95843166, z: -0.002248516}
+--- !u!1 &1682372803870332
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_Component:
+  - component: {fileID: 4374948775136869}
+  m_Layer: 0
+  m_Name: AirplaneThunderdog
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4374948775136869
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1682372803870332}
+  m_LocalRotation: {x: -0, y: 0.70710677, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: -0.69693, y: -0.59059, z: -0.54584}
+  m_LocalScale: {x: 0.45340863, y: 0.45340863, z: 0.45340863}
+  m_Children:
+  - {fileID: 4070881373746852}
+  - {fileID: 4937366511901666}
+  - {fileID: 4963541815344427}
+  - {fileID: 4279525451411446}
+  - {fileID: 4633451644210682}
+  - {fileID: 4028929591130289}
+  - {fileID: 4366361531763407}
+  - {fileID: 4017611501321185}
+  m_Father: {fileID: 4692414148352435}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: -0, y: -90, z: 0}
+--- !u!1 &1161117751745475
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_Component:
+  - component: {fileID: 4070881373746852}
+  - component: {fileID: 33089227574247434}
+  - component: {fileID: 23632397309289688}
+  m_Layer: 0
+  m_Name: Capsule
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4070881373746852
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1161117751745475}
+  m_LocalRotation: {x: 2.1855694E-08, y: 0, z: -0, w: 1}
+  m_LocalPosition: {x: -1.3014772, y: -0.09407902, z: 1.6603463}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4374948775136869}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 2.504478E-06, y: -0, z: 0}
+--- !u!33 &33089227574247434
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1161117751745475}
+  m_Mesh: {fileID: 4300000, guid: 20fa23ff8e34fbb469c6f4fd44f6e01b, type: 2}
+--- !u!23 &23632397309289688
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1161117751745475}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
+  m_Materials:
+  - {fileID: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!1 &1367760092940238
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_Component:
+  - component: {fileID: 4937366511901666}
+  - component: {fileID: 33233638043512105}
+  - component: {fileID: 23269047073148915}
+  m_Layer: 0
+  m_Name: ThunderdogJetLeft
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4937366511901666
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1367760092940238}
+  m_LocalRotation: {x: 2.1855694E-08, y: 0, z: -0, w: 1}
+  m_LocalPosition: {x: -1.3014772, y: -0.09407902, z: 0.101459205}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4374948775136869}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 2.504478E-06, y: -0, z: 0}
+--- !u!33 &33233638043512105
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1367760092940238}
+  m_Mesh: {fileID: 4300000, guid: 9985ea301659be447a47321bcef2331f, type: 2}
+--- !u!23 &23269047073148915
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1367760092940238}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
+  m_Materials:
+  - {fileID: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!1 &1448208030240737
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_Component:
+  - component: {fileID: 4963541815344427}
+  - component: {fileID: 33411849091982902}
+  - component: {fileID: 23979134437661044}
+  m_Layer: 0
+  m_Name: ThunderdogJetRight
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4963541815344427
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1448208030240737}
+  m_LocalRotation: {x: 2.1855694E-08, y: 0, z: -0, w: 1}
+  m_LocalPosition: {x: -1.3014772, y: -0.09407902, z: 0.101459205}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4374948775136869}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 2.504478E-06, y: -0, z: 0}
+--- !u!33 &33411849091982902
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1448208030240737}
+  m_Mesh: {fileID: 4300000, guid: 951fe81beb218794184b9ccb76b4d184, type: 2}
+--- !u!23 &23979134437661044
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1448208030240737}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
+  m_Materials:
+  - {fileID: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!1 &1417724695660418
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_Component:
+  - component: {fileID: 4279525451411446}
+  - component: {fileID: 33498168417906394}
+  - component: {fileID: 23201697577455600}
+  m_Layer: 0
+  m_Name: ThunderdogPlane
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4279525451411446
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1417724695660418}
+  m_LocalRotation: {x: 2.1855694E-08, y: 0, z: -0, w: 1}
+  m_LocalPosition: {x: -1.3014772, y: -0.09407902, z: 1.6603463}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4374948775136869}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 2.504478E-06, y: -0, z: 0}
+--- !u!33 &33498168417906394
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1417724695660418}
+  m_Mesh: {fileID: 4300000, guid: b1736ad4068ab57439f55848e1d8157d, type: 2}
+--- !u!23 &23201697577455600
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1417724695660418}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
+  m_Materials:
+  - {fileID: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!1 &1733547295977642
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_Component:
+  - component: {fileID: 4633451644210682}
+  - component: {fileID: 33565798931115777}
+  - component: {fileID: 23564340258478362}
+  m_Layer: 0
+  m_Name: ThunderdogRed
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4633451644210682
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1733547295977642}
+  m_LocalRotation: {x: 8.146034E-08, y: 0, z: -0, w: 1}
+  m_LocalPosition: {x: -1.3014772, y: -0.09407902, z: 1.6603463}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4374948775136869}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 9.334668E-06, y: -0, z: 0}
+--- !u!33 &33565798931115777
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1733547295977642}
+  m_Mesh: {fileID: 4300000, guid: c9b9b7b72fea79743840d0fc6c053a5a, type: 2}
+--- !u!23 &23564340258478362
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1733547295977642}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
+  m_Materials:
+  - {fileID: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!1 &1192063789397709
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_Component:
+  - component: {fileID: 4028929591130289}
+  - component: {fileID: 33233083694717744}
+  - component: {fileID: 23735712841136452}
+  m_Layer: 0
+  m_Name: WingFlapBack
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4028929591130289
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1192063789397709}
+  m_LocalRotation: {x: 2.1855694E-08, y: 0, z: -0, w: 1}
+  m_LocalPosition: {x: -1.3014774, y: 2.198195, z: -3.686611}
+  m_LocalScale: {x: 1, y: 0.638156, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4374948775136869}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 2.504478E-06, y: -0, z: 0}
+--- !u!33 &33233083694717744
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1192063789397709}
+  m_Mesh: {fileID: 4300000, guid: 875d7b6b0011a4641b37ee019f9cc0fb, type: 2}
+--- !u!23 &23735712841136452
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1192063789397709}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
+  m_Materials:
+  - {fileID: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!1 &1251511192081107
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_Component:
+  - component: {fileID: 4366361531763407}
+  - component: {fileID: 33315721097598489}
+  - component: {fileID: 23994621354597827}
+  m_Layer: 0
+  m_Name: WingFlapLeft
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4366361531763407
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1251511192081107}
+  m_LocalRotation: {x: 2.151039E-08, y: 0.17706479, z: -3.86987E-09, w: 0.98419917}
+  m_LocalPosition: {x: -5.74, y: -0.03, z: -0.21}
+  m_LocalScale: {x: 1, y: 0.702111, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4374948775136869}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 2.5044822E-06, y: -20.397678, z: -1.1828136E-12}
+--- !u!33 &33315721097598489
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1251511192081107}
+  m_Mesh: {fileID: 4300000, guid: 3e86fabaf482fff45ba61dcca86bd0f8, type: 2}
+--- !u!23 &23994621354597827
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1251511192081107}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
+  m_Materials:
+  - {fileID: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!1 &1454108217205667
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_Component:
+  - component: {fileID: 4017611501321185}
+  - component: {fileID: 33764455561617800}
+  - component: {fileID: 23142980672399175}
+  m_Layer: 0
+  m_Name: WingFlapRight
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4017611501321185
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1454108217205667}
+  m_LocalRotation: {x: 0.008853858, y: -0.2125244, z: 0.00097228936, w: 0.97711515}
+  m_LocalPosition: {x: 3.143, y: -0.07263908, z: -0.217}
+  m_LocalScale: {x: 1, y: 0.702111, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4374948775136869}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 1.0638357, y: 24.540659, z: 0.1173574}
+--- !u!33 &33764455561617800
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1454108217205667}
+  m_Mesh: {fileID: 4300000, guid: 0e8857c75b5645b4587021ea06aeeb20, type: 2}
+--- !u!23 &23142980672399175
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1454108217205667}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
+  m_Materials:
+  - {fileID: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!1 &1269944420821790
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_Component:
+  - component: {fileID: 4692986912651203}
+  - component: {fileID: 60304025958212351}
+  m_Layer: 22
+  m_Name: PlaneColllider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4692986912651203
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1269944420821790}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4692414148352435}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!60 &60304025958212351
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1269944420821790}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: -1.1641495, y: 0.1179159}
+      - {x: -1.7019951, y: -0.238122}
+      - {x: -2.0476537, y: 0.4856986}
+      - {x: -2.6663933, y: 0.37600595}
+      - {x: -2.171165, y: -0.3897512}
+      - {x: -2.6684227, y: -0.3575896}
+      - {x: -2.6752794, y: -0.75872326}
+      - {x: -2.204044, y: -0.76244324}
+      - {x: -1.6742917, y: -0.8545735}
+      - {x: -1.0694436, y: -1.2157589}
+      - {x: 0.9435959, y: -1.2159247}
+      - {x: 1.1039907, y: -1.0476872}
+      - {x: 1.825963, y: -1.0359201}
+      - {x: 2.2374995, y: -0.823727}
+      - {x: 2.3235435, y: -0.5222603}
+      - {x: 2.1753893, y: -0.30539784}
+      - {x: 2.0183172, y: -0.17937455}
+      - {x: 1.7827522, y: 0.010444045}
+      - {x: 1.5109046, y: 0.20291209}
+      - {x: 0.60567546, y: 0.442914}
