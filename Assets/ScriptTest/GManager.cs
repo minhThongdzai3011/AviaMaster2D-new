@@ -75,19 +75,53 @@ public class GManager : MonoBehaviour
             return;
         }
 
+        StartCoroutine(LaunchSequence());
+    }
+
+    IEnumerator LaunchSequence()
+    {
+        // Bước 1: Di chuyển ngang một đoạn r
+        float r = 5f; // khoảng cách ngang trước khi bay lên
+        float horizontalSpeed = 10f;
+        float targetX = airplaneRigidbody2D.position.x + r;
+
+        airplaneRigidbody2D.gravityScale = 0f; // tạm tắt trọng lực
+        airplaneRigidbody2D.velocity = new Vector2(horizontalSpeed, 0f);
+
+        // Chờ đến khi máy bay đi hết đoạn r
+        while (airplaneRigidbody2D.position.x < targetX)
+        {
+            yield return null;
+        }
+
+        // Bước 2: Bay lên
+        float climbForce = launchForce;
         float angleRad = Mathf.Deg2Rad * climbAngle;
         Vector2 launchDirection = new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad)).normalized;
 
-        airplaneRigidbody2D.AddForce(launchDirection * launchForce, ForceMode2D.Impulse);
+        airplaneRigidbody2D.velocity = Vector2.zero;
+        airplaneRigidbody2D.AddForce(launchDirection * climbForce, ForceMode2D.Impulse);
 
+        // Bước 3: Chờ đến khi đạt độ cao thích hợp
+        float targetAltitude = startPosition.y + 10f;
+        while (airplaneRigidbody2D.position.y < targetAltitude)
+        {
+            yield return null;
+        }
+
+        // Bước 4: Giữ độ cao trong 2 giây
+        airplaneRigidbody2D.gravityScale = 0f;
+        airplaneRigidbody2D.velocity = new Vector2(airplaneRigidbody2D.velocity.x, 0f);
+        yield return new WaitForSeconds(2f);
+
+        // Bước 5: Bắt đầu rơi xuống từ từ
         airplaneRigidbody2D.gravityScale = gravityScale;
         Physics2D.gravity = new Vector2(0f, -9.81f * gravityScale);
 
-        float launchAngleDeg = Mathf.Atan2(launchDirection.y, launchDirection.x) * Mathf.Rad2Deg;
-        airplaneRigidbody2D.transform.rotation = Quaternion.Euler(0f, 0f, launchAngleDeg);
-
-        Debug.Log("Máy bay đã được phóng với lực: " + launchForce + " và góc: " + climbAngle + " (launchAngleDeg = " + launchAngleDeg + ")");
+        Debug.Log("Máy bay đã hoàn thành chuỗi bay: ngang → bay lên → giữ → rơi");
     }
+
+
     float lastDistance = 0f;
     void Update()
     {
