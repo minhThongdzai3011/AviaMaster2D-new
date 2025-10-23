@@ -46,6 +46,9 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        
+
+
         // Xử lý rotation mượt mà
         if (isRotating && !isOnGround)
         {
@@ -327,8 +330,8 @@ public class Player : MonoBehaviour
         GameManager.instance.score = 0;
         GameManager.instance.moneyTextPlayer.text = GameManager.instance.moneyPlayer.ToString();
         
-        BonusSpawner.instance.spawnRangeX = BonusSpawner.instance.startRangeX;
-        RocketSpawner.instance.spawnRangeX = RocketSpawner.instance.startRangeX;
+        // BonusSpawner.instance.spawnRangeX = BonusSpawner.instance.startRangeX;
+        // RocketSpawner.instance.spawnRangeX = RocketSpawner.instance.startRangeX;
 
         // Dừng tất cả coroutines hiệu ứng
         StopAllCoroutines();
