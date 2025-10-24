@@ -2,6 +2,7 @@ using TMPro;
 using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System;
 
 public class GManager : MonoBehaviour
 {
@@ -17,44 +18,57 @@ public class GManager : MonoBehaviour
     [Header("Button UI")]
     public Button playButton;
 
-
     [Header("Slider UI")]
-    public Slider slider;
+    public Slider sliderFuel;
+    public Slider sliderBooster;
 
     [Header("Trạng thái chơi")]
     public Vector2 startPosition;
     public float distanceTraveled;
     private float currentAltitude;
+    private float rotationZ;
+    public bool isBoosterActive = false;
+    public float boostDecreaseRate = 100f; 
+    private bool isBoostDecreasing = false;
+    private Coroutine boostCoroutine;
     public int money = 0;
-    public int moneyPlayer = 0;
-    public int score = 0;
-    public bool isLoop = false;
-    public Animator anim;
-    public bool isUp;
-    public bool isStand;
 
     [Header("Nâng cấp")]
-    public int flightAngleLevel = 1;
-    public int flyingPowerLevel = 1;
-    public int bonusPowerLevel = 1;
-    public int flightAngleMoney = 200;
-    public int flyingPowerMoney = 200;
-    public int bonusPowerMoney = 200;
+    public int durationFuel = 2;
+    public float totalBoost = 100;
+    public int levelPower;
+    public int levelFuel;
+    public int levelBoost;
 
-    [Header("Rotation settings")]
+    [Header("RotationZ settings")]
     public float maxUpAngle = 45f;    // giới hạn góc lên
     public float maxDownAngle = -45f; // giới hạn góc xuống
     public float rotationSmooth = 8f; // độ mượt khi quay
     public float minMoveThreshold = 0.5f; // ngưỡng vận tốc để bắt đầu quay theo velocity
 
+    [Header("RotationX settings")]
+    public float amplitude = 15.0f; // Góc nghiêng tối đa
+    public float frequency = 1.0f;  // Tốc độ lắc lư
+    private Quaternion originalRotation;
+
+    [Header("UI Texts")]
+    public TextMeshProUGUI distanceText;
+    public TextMeshProUGUI altitudeText;
+    public TextMeshProUGUI rotationZText;
+    public TextMeshProUGUI levelPowerText;
+    public TextMeshProUGUI levelFuelText;
+    public TextMeshProUGUI levelBoostText;
+    public TextMeshProUGUI moneyText;
+
     void Awake()
     {
-        
+
 
     }
 
     void Start()
     {
+        instance = this;
         if (airplaneRigidbody2D != null)
         {
             startPosition = airplaneRigidbody2D.transform.position;
@@ -112,7 +126,8 @@ public class GManager : MonoBehaviour
         // Bước 4: Giữ độ cao trong 2 giây
         airplaneRigidbody2D.gravityScale = 0f;
         airplaneRigidbody2D.velocity = new Vector2(airplaneRigidbody2D.velocity.x, 0f);
-        yield return new WaitForSeconds(2f);
+        StartCoroutine(DecreaseSliderFuel(durationFuel));
+        yield return new WaitForSeconds(durationFuel);
 
         // Bước 5: Bắt đầu rơi xuống từ từ
         airplaneRigidbody2D.gravityScale = gravityScale;
@@ -121,8 +136,6 @@ public class GManager : MonoBehaviour
         Debug.Log("Máy bay đã hoàn thành chuỗi bay: ngang → bay lên → giữ → rơi");
     }
 
-
-    float lastDistance = 0f;
     void Update()
     {
         if (airplaneRigidbody2D == null) return;
@@ -131,23 +144,30 @@ public class GManager : MonoBehaviour
         distanceTraveled = Vector2.Distance(startPosition, currentPos);
         currentAltitude = currentPos.y - startPosition.y;
         if (currentAltitude < 0f) currentAltitude = 0f;
+        rotationZ = airplaneRigidbody2D.transform.eulerAngles.z;
 
-        // Tính money từ khoảng cách
-    
 
         UpdateRotationFromVelocity();
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            LaunchAirplane();
+            StartBoostDecrease();
         }
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyUp(KeyCode.Space))
         {
-            airplaneRigidbody2D.velocity = new Vector2(airplaneRigidbody2D.velocity.x, airplaneRigidbody2D.velocity.y + 5f);
+            StopBoostDecrease();
         }
-        if (Input.GetKeyDown(KeyCode.D))
+        if (Input.GetKey(KeyCode.Space))
         {
-            airplaneRigidbody2D.velocity = new Vector2(airplaneRigidbody2D.velocity.x, airplaneRigidbody2D.velocity.y - 5f);
+            BoosterUp();
+        }
+        if (Input.GetKey(KeyCode.E))
+        {
+            PlainUp();
+        }
+        if (Input.GetKey(KeyCode.D))
+        {
+            PlainDown();
         }
         if (Input.GetKeyDown(KeyCode.P))
         {
@@ -156,6 +176,20 @@ public class GManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.X))
         {
             AgainGame();
+        }
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            LaunchAirplane();
+        }
+
+        if (distanceText != null) distanceText.text = distanceTraveled.ToString("F2") + " m";
+        if (altitudeText != null) altitudeText.text = currentAltitude.ToString("F2") + " m";
+        if (rotationZText != null) rotationZText.text = rotationZ.ToString("F2") + " °";
+
+        if (GManager.instance.airplaneRigidbody2D.velocity.x == 0)
+        {
+            money = Mathf.FloorToInt(distanceTraveled / 1.67f);
+            moneyText.text = money.ToString() + " $";
         }
     }
     float ComputeUpTargetAngle(Vector2 velocity)
@@ -175,7 +209,7 @@ public class GManager : MonoBehaviour
         float velAngle = Mathf.Atan2(velocity.y * downBias, velocity.x) * Mathf.Rad2Deg;
         return Mathf.Clamp(velAngle, maxDownAngle, 0f);
     }
-    
+
 
 
     void UpdateRotationFromVelocity()
@@ -231,9 +265,18 @@ public class GManager : MonoBehaviour
 
     public void BoosterUp()
     {
-        if (airplaneRigidbody2D != null)
+        if (airplaneRigidbody2D != null && totalBoost > 0)
         {
-            airplaneRigidbody2D.velocity = new Vector2(airplaneRigidbody2D.velocity.x, airplaneRigidbody2D.velocity.y + 10f);
+            isBoosterActive = true;
+            if (isBoosterActive)
+            {
+                airplaneRigidbody2D.AddForce(new Vector2(0f, 10f), ForceMode2D.Force);
+            }
+        }
+        else
+        {
+            // Nếu hết boost thì tắt booster
+            isBoosterActive = false;
         }
     }
     public bool isGamePaused = false;
@@ -256,34 +299,117 @@ public class GManager : MonoBehaviour
         UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
+    public void PlainUp()
     {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        rotationZ = airplaneRigidbody2D.transform.eulerAngles.z + 45f;
+    }
+
+    public void PlainDown()
+    {
+        rotationZ = airplaneRigidbody2D.transform.eulerAngles.z - 45f;
+    }
+
+// Giảm fuel theo thời gian
+    private IEnumerator DecreaseSliderFuel(int durationFuel)
+    {
+        float timer = 0f;
+        float startValue = sliderFuel.value;
+        float endValue = 0f;
+
+        while (timer < durationFuel)
         {
-            // Xử lý khi va chạm với mặt đất
-            Debug.Log("Máy bay đã va chạm với mặt đất!");
-            // Có thể thêm logic kết thúc trò chơi hoặc giảm máu ở đây
-            StartCoroutine(UpMass());
+            timer += Time.deltaTime;
+
+            // Tính toán giá trị mới cho slider một cách mượt mà
+            sliderFuel.value = Mathf.Lerp(startValue, endValue, timer / durationFuel);
+
+            // Đợi đến khung hình tiếp theo
+            yield return null;
         }
 
+        sliderFuel.value = endValue;
     }
-    IEnumerator UpMass()
+
+
+// Giảm boost theo thời gian
+    private IEnumerator DecreaseSliderBoost()
     {
-        airplaneRigidbody2D.mass = 1.1f;
-        yield return new WaitForSeconds(0.1f);
-        airplaneRigidbody2D.mass = 1.3f;
-        yield return new WaitForSeconds(0.1f);
-        airplaneRigidbody2D.mass = 1.5f;
-        yield return new WaitForSeconds(0.1f);
-        airplaneRigidbody2D.mass = 1.7f;
-        yield return new WaitForSeconds(0.1f);
-        airplaneRigidbody2D.mass = 1.9f;
-        yield return new WaitForSeconds(0.1f);
-        airplaneRigidbody2D.mass = 2.1f;
-        yield return new WaitForSeconds(0.1f);
-        airplaneRigidbody2D.mass = 2.3f;
-        Debug.Log("New mass: " + airplaneRigidbody2D.mass);
+        while (isBoostDecreasing && totalBoost > 0)
+        {
+            // Giảm boost theo thời gian thực
+            float decreaseAmount = boostDecreaseRate * Time.deltaTime;
+            totalBoost -= decreaseAmount;
 
+            // Đảm bảo không giảm xuống dưới 0
+            if (totalBoost < 0)
+            {
+                totalBoost = 0;
+            }
+
+            // Cập nhật slider (giả sử slider có maxValue = 100)
+            sliderBooster.value = totalBoost / 100f;
+
+            // Cập nhật UI text nếu có
+            if (levelBoostText != null)
+            {
+                levelBoostText.text = "Lv" + levelBoost + " | " + totalBoost.ToString("F0");
+            }
+
+            // Nếu boost = 0 thì dừng
+            if (totalBoost <= 0)
+            {
+                isBoostDecreasing = false;
+                isBoosterActive = false;
+                break;
+            }
+
+            yield return null;
+        }
+        boostCoroutine = null;
+    }   
+
+    public void StartBoostDecrease()
+    {
+        if (!isBoostDecreasing && totalBoost > 0)
+        {
+            isBoostDecreasing = true;
+            if (boostCoroutine != null)
+            {
+                StopCoroutine(boostCoroutine);
+            }
+            boostCoroutine = StartCoroutine(DecreaseSliderBoost());
+        }
+    }
+    
+    public void StopBoostDecrease()
+    {
+        isBoostDecreasing = false;
+        if (boostCoroutine != null)
+        {
+            StopCoroutine(boostCoroutine);
+            boostCoroutine = null;
+        }
     }
 
+// Nâng cấp các chỉ số
+    public void UpgradeFuel()
+    {
+        levelFuel += 1;
+        durationFuel += 1;
+        levelFuelText.text = "Lv" + levelFuel + " | " + durationFuel + "s";
+    }
+
+    public void UpgradeBoost()
+    {
+        levelBoost += 1;
+        totalBoost += 20;
+        levelBoostText.text = "Lv" + levelBoost + " | " + totalBoost;
+    }
+    
+    public void UpgradePower()
+    {
+        levelPower += 1;
+        launchForce += 5;
+        levelPowerText.text = "Lv" + levelPower + " | " + launchForce;
+    }
 }
