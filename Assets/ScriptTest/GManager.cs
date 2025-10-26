@@ -60,6 +60,11 @@ public class GManager : MonoBehaviour
     public TextMeshProUGUI levelBoostText;
     public TextMeshProUGUI moneyText;
 
+    [Header("Trạng thái chơi")]
+    public bool isControllable = false;
+    public float controlForce = 8f; // Lực điều khiển A/D
+    public float maxVerticalSpeed = 15f; // Giới hạn tốc độ dọc
+
     void Awake()
     {
 
@@ -95,14 +100,16 @@ public class GManager : MonoBehaviour
     IEnumerator LaunchSequence()
     {
         // Bước 1: Di chuyển ngang một đoạn r
-        float r = 5f; // khoảng cách ngang trước khi bay lên
+        float r = 5f;
         float horizontalSpeed = 10f;
         float targetX = airplaneRigidbody2D.position.x + r;
 
-        airplaneRigidbody2D.gravityScale = 0f; // tạm tắt trọng lực
+        airplaneRigidbody2D.gravityScale = 0f;
         airplaneRigidbody2D.velocity = new Vector2(horizontalSpeed, 0f);
+        
+        // Giữ góc 0 khi bay ngang
+        airplaneRigidbody2D.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
 
-        // Chờ đến khi máy bay đi hết đoạn r
         while (airplaneRigidbody2D.position.x < targetX)
         {
             yield return null;
@@ -115,26 +122,85 @@ public class GManager : MonoBehaviour
 
         airplaneRigidbody2D.velocity = Vector2.zero;
         airplaneRigidbody2D.AddForce(launchDirection * climbForce, ForceMode2D.Impulse);
+        
+        // Xoay máy bay lên ngay khi bắt đầu bay lên
+        airplaneRigidbody2D.transform.rotation = Quaternion.Euler(0f, 0f, climbAngle);
 
         // Bước 3: Chờ đến khi đạt độ cao thích hợp
         float targetAltitude = startPosition.y + 10f;
         while (airplaneRigidbody2D.position.y < targetAltitude)
         {
+            // Cập nhật rotation theo velocity khi bay lên
+            Vector2 vel = airplaneRigidbody2D.velocity;
+            if (vel.magnitude > 1f)
+            {
+                float angle = Mathf.Atan2(vel.y, vel.x) * Mathf.Rad2Deg;
+                angle = Mathf.Clamp(angle, -45f, 45f);
+                airplaneRigidbody2D.transform.rotation = Quaternion.Euler(0f, 0f, angle);
+            }
             yield return null;
         }
 
-        // Bước 4: Giữ độ cao trong 2 giây
-        airplaneRigidbody2D.gravityScale = 0f;
+        // Bước 4: Giữ độ cao và cho phép điều khiển
+        airplaneRigidbody2D.gravityScale = 0.2f;
         airplaneRigidbody2D.velocity = new Vector2(airplaneRigidbody2D.velocity.x, 0f);
+        
+        isControllable = true;
+        
         StartCoroutine(DecreaseSliderFuel(durationFuel));
-        yield return new WaitForSeconds(durationFuel);
+        
+        // Trong giai đoạn này, rotation được điều khiển bởi HandleAircraftControl()
+        float timer = 0f;
+        while (timer < durationFuel)
+        {
+            timer += Time.deltaTime;
+            
+            // Nếu không điều khiển thủ công, tự động xoay theo velocity
+            if (!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
+            {
+                Vector2 vel = airplaneRigidbody2D.velocity;
+                if (vel.magnitude > 1f)
+                {
+                    float angle = Mathf.Atan2(vel.y, vel.x) * Mathf.Rad2Deg;
+                    angle = Mathf.Clamp(angle, -45f, 45f);
+                    
+                    float currentZ = airplaneRigidbody2D.transform.eulerAngles.z;
+                    if (currentZ > 180f) currentZ -= 360f;
+                    
+                    float targetAngle = Mathf.LerpAngle(currentZ, angle, Time.deltaTime * 2f);
+                    airplaneRigidbody2D.transform.rotation = Quaternion.Euler(0f, 0f, targetAngle);
+                }
+            }
+            
+            yield return null;
+        }
 
-        // Bước 5: Bắt đầu rơi xuống từ từ
+        // Bước 5: Kết thúc điều khiển và rơi
+        isControllable = false;
         airplaneRigidbody2D.gravityScale = gravityScale;
         Physics2D.gravity = new Vector2(0f, -9.81f * gravityScale);
 
-        Debug.Log("Máy bay đã hoàn thành chuỗi bay: ngang → bay lên → giữ → rơi");
+        // Trong giai đoạn rơi, tự động xoay theo velocity
+        while (airplaneRigidbody2D.velocity.x > 0.1f)
+        {
+            Vector2 vel = airplaneRigidbody2D.velocity;
+            if (vel.magnitude > 1f)
+            {
+                float angle = Mathf.Atan2(vel.y, vel.x) * Mathf.Rad2Deg;
+                angle = Mathf.Clamp(angle, -45f, 45f);
+                
+                float currentZ = airplaneRigidbody2D.transform.eulerAngles.z;
+                if (currentZ > 180f) currentZ -= 360f;
+                
+                float targetAngle = Mathf.LerpAngle(currentZ, angle, Time.deltaTime * 2f);
+                airplaneRigidbody2D.transform.rotation = Quaternion.Euler(0f, 0f, targetAngle);
+            }
+            yield return null;
+        }
+
+        Debug.Log("Máy bay đã hoàn thành chuỗi bay: ngang → bay lên → giữ (có điều khiển) → rơi");
     }
+
 
     void Update()
     {
@@ -145,9 +211,15 @@ public class GManager : MonoBehaviour
         currentAltitude = currentPos.y - startPosition.y;
         if (currentAltitude < 0f) currentAltitude = 0f;
         rotationZ = airplaneRigidbody2D.transform.eulerAngles.z;
+        if (rotationZ > 180f) rotationZ -= 360f;
 
 
         UpdateRotationFromVelocity();
+        if (isControllable)
+        {
+            HandleAircraftControl();
+        }
+
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -165,7 +237,7 @@ public class GManager : MonoBehaviour
         {
             PlainUp();
         }
-        if (Input.GetKey(KeyCode.D))
+            if (Input.GetKey(KeyCode.D) && !isControllable && !isBoosterActive)
         {
             PlainDown();
         }
@@ -192,6 +264,74 @@ public class GManager : MonoBehaviour
             moneyText.text = money.ToString() + " $";
         }
     }
+
+    void HandleAircraftControl()
+    {
+        if (airplaneRigidbody2D == null) return;
+        
+        // Lấy góc hiện tại và chuyển về dạng -180 đến +180
+        float currentZ = airplaneRigidbody2D.transform.eulerAngles.z;
+        if (currentZ > 180f) currentZ -= 360f;
+        
+        // Điều khiển lên (A key)
+        if (Input.GetKey(KeyCode.A))
+        {
+            // Xoay máy bay lên nhưng giới hạn tối đa 45 độ
+            float targetRotation = Mathf.Min(currentZ + Time.deltaTime * 60f, 45f);
+            airplaneRigidbody2D.transform.rotation = Quaternion.Euler(0f, 0f, targetRotation);
+            
+            // Nếu đang boost thì thêm lực theo hướng mới
+            if (isBoosterActive)
+            {
+                float angleRad = targetRotation * Mathf.Deg2Rad;
+                Vector2 forceDirection = new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad));
+                airplaneRigidbody2D.AddForce(forceDirection * controlForce * 0.3f, ForceMode2D.Force);
+            }
+            
+            Debug.Log("Máy bay nghiêng lên - Angle: " + targetRotation.ToString("F1") + "°");
+        }
+        
+        // Điều khiển xuống (D key)
+        if (Input.GetKey(KeyCode.D))
+        {
+            // Xoay máy bay xuống nhưng giới hạn tối đa -45 độ
+            float targetRotation = Mathf.Max(currentZ - Time.deltaTime * 60f, -45f);
+            airplaneRigidbody2D.transform.rotation = Quaternion.Euler(0f, 0f, targetRotation);
+            
+            // Nếu đang boost thì thêm lực theo hướng mới
+            if (isBoosterActive)
+            {
+                float angleRad = targetRotation * Mathf.Deg2Rad;
+                Vector2 forceDirection = new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad));
+                airplaneRigidbody2D.AddForce(forceDirection * controlForce * 0.3f, ForceMode2D.Force);
+            }
+            
+            Debug.Log("Máy bay nghiêng xuống - Angle: " + targetRotation.ToString("F1") + "°");
+        }
+        
+        // Khi không nhấn A hoặc D, từ từ trở về góc 0
+        if (!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
+        {
+            float targetRotation;
+            
+            // Tính toán để về 0 một cách mượt mà
+            if (currentZ > 0)
+            {
+                targetRotation = Mathf.Max(currentZ - Time.deltaTime * 90f, 0f);
+            }
+            else if (currentZ < 0)
+            {
+                targetRotation = Mathf.Min(currentZ + Time.deltaTime * 90f, 0f);
+            }
+            else
+            {
+                targetRotation = 0f;
+            }
+            
+            airplaneRigidbody2D.transform.rotation = Quaternion.Euler(0f, 0f, targetRotation);
+        }
+    }
+
     float ComputeUpTargetAngle(Vector2 velocity)
     {
         // Tính góc từ vector vận tốc, nhưng ưu tiên cảm giác "bay lên"
@@ -270,7 +410,19 @@ public class GManager : MonoBehaviour
             isBoosterActive = true;
             if (isBoosterActive)
             {
-                airplaneRigidbody2D.AddForce(new Vector2(0f, 10f), ForceMode2D.Force);
+                // Lấy góc hiện tại của máy bay (chuyển về radian)
+                float currentAngleZ = airplaneRigidbody2D.transform.eulerAngles.z;
+                if (currentAngleZ > 180f) currentAngleZ -= 360f; // Chuyển về -180 đến +180
+                float angleRad = currentAngleZ * Mathf.Deg2Rad;
+                
+                // Tính vector lực theo góc máy bay
+                Vector2 boostDirection = new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad));
+                
+                // Áp dụng lực theo hướng máy bay đang hướng
+                float boostForce = 15f; // Có thể tùy chỉnh
+                airplaneRigidbody2D.AddForce(boostDirection * boostForce, ForceMode2D.Force);
+                
+                Debug.Log($"Boost theo góc {currentAngleZ:F1}° - Direction: {boostDirection}");
             }
         }
         else
