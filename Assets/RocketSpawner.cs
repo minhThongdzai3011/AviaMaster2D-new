@@ -41,7 +41,7 @@ public class RocketSpawner : MonoBehaviour
         
         while (true)
         {
-            count = GameObject.FindGameObjectsWithTag("Rocket").Length;
+            count = GameObject.FindGameObjectsWithTag("Coin").Length;
             if (count < maxRocketItems)
             {
                 SpawnRocketItem();
@@ -69,7 +69,7 @@ public class RocketSpawner : MonoBehaviour
     
     public void DeleteSpawnedItems()
     {
-        GameObject[] spawnedItems = GameObject.FindGameObjectsWithTag("Rocket");
+        GameObject[] spawnedItems = GameObject.FindGameObjectsWithTag("Coin");
         foreach (GameObject item in spawnedItems)
         {
             Destroy(item);

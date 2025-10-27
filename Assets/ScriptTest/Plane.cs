@@ -22,6 +22,11 @@ public class Plane : MonoBehaviour
         {
             StartCoroutine(UpMass());
         }
+        if (collision.gameObject.tag == "Coin")
+        {
+            Destroy(collision.gameObject);
+            GManager.instance.money += 1;
+        }
 
     }
 
@@ -35,56 +40,55 @@ public class Plane : MonoBehaviour
         float limit = 100.0f;
         float frictionForce = 0.95f; // Hệ số ma sát (0.9-0.99)
         float groundDrag = 5f; // Drag khi chạm đất
-        
+
         WaitForSeconds wait = new WaitForSeconds(0.1f);
 
         // Lưu drag ban đầu để khôi phục sau
         float originalDrag = rb.drag;
-        
+
         // Áp dụng drag cao ngay khi chạm đất
         rb.drag = groundDrag;
-        
-        Debug.Log($"Máy bay chạm đất! Velocity trước ma sát: {rb.velocity}");
+
 
         while (rb.mass < limit)
         {
             // Tăng mass
             rb.mass = Mathf.Round((rb.mass + step) * 10f) / 10f;
             if (rb.mass > limit) rb.mass = limit;
-            
+
             // Áp dụng ma sát cho velocity ngang
             Vector2 velocity = rb.velocity;
-            
+
             // Ma sát chỉ ảnh hưởng đến chuyển động ngang (x)
             velocity.x *= frictionForce;
-            
+
             // Nếu tốc độ ngang quá nhỏ thì dừng hẳn
             if (Mathf.Abs(velocity.x) < 0.5f)
             {
                 velocity.x = 0f;
             }
-            
+
             // Giữ máy bay trên mặt đất (không rơi xuống nữa)
             if (velocity.y < 0) velocity.y = 0f;
-            
+
             // Cập nhật velocity
             rb.velocity = velocity;
-            
-            
+
+
             // Nếu máy bay đã gần như dừng hẳn
             if (velocity.magnitude < 0.1f)
             {
                 rb.velocity = Vector2.zero;
-                Debug.Log("Máy bay đã dừng hoàn toàn!");
                 break;
             }
-            
+
             yield return wait;
         }
-        
+
         // Khôi phục drag ban đầu (tùy chọn)
         // rb.drag = originalDrag;
-        
-        Debug.Log($"UpMass hoàn thành - Final Mass: {rb.mass}, Final Velocity: {rb.velocity}");
+
     }
+
+
 }

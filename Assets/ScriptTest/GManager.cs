@@ -258,11 +258,9 @@ public class GManager : MonoBehaviour
         if (altitudeText != null) altitudeText.text = currentAltitude.ToString("F2") + " m";
         if (rotationZText != null) rotationZText.text = rotationZ.ToString("F2") + " °";
 
-        if (GManager.instance.airplaneRigidbody2D.velocity.x == 0)
-        {
-            money = Mathf.FloorToInt(distanceTraveled / 1.67f);
-            moneyText.text = money.ToString() + " $";
-        }
+
+        moneyText.text = money.ToString() + " $";
+
     }
 
     void HandleAircraftControl()
@@ -288,7 +286,6 @@ public class GManager : MonoBehaviour
                 airplaneRigidbody2D.AddForce(forceDirection * controlForce * 0.3f, ForceMode2D.Force);
             }
             
-            Debug.Log("Máy bay nghiêng lên - Angle: " + targetRotation.ToString("F1") + "°");
         }
         
         // Điều khiển xuống (D key)
@@ -422,7 +419,6 @@ public class GManager : MonoBehaviour
                 float boostForce = 15f; // Có thể tùy chỉnh
                 airplaneRigidbody2D.AddForce(boostDirection * boostForce, ForceMode2D.Force);
                 
-                Debug.Log($"Boost theo góc {currentAngleZ:F1}° - Direction: {boostDirection}");
             }
         }
         else
@@ -459,6 +455,11 @@ public class GManager : MonoBehaviour
     public void PlainDown()
     {
         rotationZ = airplaneRigidbody2D.transform.eulerAngles.z - 45f;
+    }
+
+    public void ResetGame()
+    {
+        Debug.Log("Reset Game");
     }
 
 // Giảm fuel theo thời gian

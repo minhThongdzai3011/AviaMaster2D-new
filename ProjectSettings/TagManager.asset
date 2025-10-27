@@ -15,6 +15,7 @@ TagManager:
   - Bonus5
   - Bonus10
   - Map
+  - Coin
   layers:
   - Default
   - TransparentFX
