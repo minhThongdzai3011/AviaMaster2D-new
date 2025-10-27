@@ -25,7 +25,7 @@ public class GManager : MonoBehaviour
     [Header("Trạng thái chơi")]
     public Vector2 startPosition;
     public float distanceTraveled;
-    private float currentAltitude;
+    public float currentAltitude;
     private float rotationZ;
     public bool isBoosterActive = false;
     public float boostDecreaseRate = 100f; 

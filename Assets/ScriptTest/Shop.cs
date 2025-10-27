@@ -11,22 +11,41 @@ public class Shop : MonoBehaviour
     public Image imagePlane2;
     public Image imagePlane3;
     public Sprite[] spritePlanes;
-    // Start is called before the first frame update
+    
+    private int currentIndex = 1; // Bắt đầu từ index 1
+    
     void Start()
     {
         instance = this;
+        
+        // Khởi tạo ban đầu với spritePlanes[1,2,3]
+        InitializePlanes();
     }
 
-    // Update is called once per frame
     void Update()
     {
 
+    }
+    
+    void InitializePlanes()
+    {
+        if (spritePlanes != null && spritePlanes.Length >= 4)
+        {
+            imagePlane1.sprite = spritePlanes[1];
+            imagePlane2.sprite = spritePlanes[2];
+            imagePlane3.sprite = spritePlanes[3];
+            currentIndex = 1;
+            Debug.Log("Khởi tạo máy bay: Plane1=1, Plane2=2, Plane3=3");
+        }
     }
 
     public void OpenShop()
     {
         Debug.Log("Mở cửa hàng!");
         imageShop.gameObject.SetActive(true);
+        
+        // Đảm bảo hiển thị đúng khi mở shop
+        InitializePlanes();
     }
 
     public void CloseShop()
@@ -37,29 +56,41 @@ public class Shop : MonoBehaviour
 
     public void buttonRight()
     {
-        for (int i = 0; i < spritePlanes.Length - 1; i++)
+        if (spritePlanes == null || spritePlanes.Length == 0) return;
+        
+        // Tăng index lên 1
+        currentIndex++;
+        
+        // Nếu vượt quá độ dài mảng, quay về 0
+        if (currentIndex >= spritePlanes.Length - 2) // -2 vì cần 3 sprite liên tiếp
         {
-            if (imagePlane1.sprite == spritePlanes[i])
-            {
-                imagePlane1.sprite = spritePlanes[i + 1];
-                imagePlane2.sprite = spritePlanes[(i + 2) % spritePlanes.Length];
-                imagePlane3.sprite = spritePlanes[(i + 3) % spritePlanes.Length];
-                break;
-            }
+            currentIndex = 0;
         }
+        
+        // Cập nhật 3 sprite liên tiếp
+        imagePlane1.sprite = spritePlanes[currentIndex];
+        imagePlane2.sprite = spritePlanes[currentIndex + 1];
+        imagePlane3.sprite = spritePlanes[currentIndex + 2];
+        
     }
     
     public void buttonLeft()
     {
-        for (int i = 1; i < spritePlanes.Length; i++)
+        if (spritePlanes == null || spritePlanes.Length == 0) return;
+        
+        // Giảm index xuống 1
+        currentIndex--;
+        
+        // Nếu nhỏ hơn 0, quay về cuối mảng
+        if (currentIndex < 0)
         {
-            if (imagePlane1.sprite == spritePlanes[i])
-            {
-                imagePlane1.sprite = spritePlanes[i - 1];
-                imagePlane2.sprite = spritePlanes[(i) % spritePlanes.Length];
-                imagePlane3.sprite = spritePlanes[(i + 1) % spritePlanes.Length];
-                break;
-            }
+            currentIndex = spritePlanes.Length - 3; // -3 vì cần 3 sprite liên tiếp
         }
+        
+        // Cập nhật 3 sprite liên tiếp
+        imagePlane1.sprite = spritePlanes[currentIndex];
+        imagePlane2.sprite = spritePlanes[currentIndex + 1];
+        imagePlane3.sprite = spritePlanes[currentIndex + 2];
+        
     }
 }
