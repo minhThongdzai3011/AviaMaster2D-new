@@ -107,6 +107,7 @@ public class GManager : MonoBehaviour
         StartCoroutine(LaunchSequence());
     }
 
+
     IEnumerator LaunchSequence()
     {
         // Bước 1: Di chuyển ngang một đoạn r
@@ -125,7 +126,7 @@ public class GManager : MonoBehaviour
             yield return null;
         }
 
-        // Bước 2: Bay lên
+        // Bước 2: Bay lên với rotation dần dần
         float climbForce = launchForce;
         float angleRad = Mathf.Deg2Rad * climbAngle;
         Vector2 launchDirection = new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad)).normalized;
@@ -133,24 +134,42 @@ public class GManager : MonoBehaviour
         airplaneRigidbody2D.velocity = Vector2.zero;
         airplaneRigidbody2D.AddForce(launchDirection * climbForce, ForceMode2D.Impulse);
         
-        // Xoay máy bay lên ngay khi bắt đầu bay lên
-        airplaneRigidbody2D.transform.rotation = Quaternion.Euler(0f, 0f, climbAngle);
+        // KHÔNG xoay ngay lập tức - sẽ xoay dần dần trong bước 3
+        // airplaneRigidbody2D.transform.rotation = Quaternion.Euler(0f, 0f, climbAngle);
 
         boostedAltitude = launchForce / 2.5f;
-        // Bước 3: Chờ đến khi đạt độ cao thích hợp
+        
+        // Bước 3: Chờ đến khi đạt độ cao và xoay dần dần
         float targetAltitude = startPosition.y + boostedAltitude;
+        float startAltitude = airplaneRigidbody2D.position.y;
+        float startRotation = 0f; // Bắt đầu từ góc 0
+        float targetRotation = climbAngle; // Mục tiêu là climbAngle
+        
+        Debug.Log($"Bắt đầu bay lên - Start: {startAltitude:F1}, Target: {targetAltitude:F1}, Rotation: {startRotation}° → {targetRotation}°");
+        
         while (airplaneRigidbody2D.position.y < targetAltitude)
         {
-            // Cập nhật rotation theo velocity khi bay lên
-            Vector2 vel = airplaneRigidbody2D.velocity;
-            if (vel.magnitude > 1f)
+            // Tính toán tiến độ bay lên (0.0 đến 1.0)
+            float currentAltitude = airplaneRigidbody2D.position.y;
+            float altitudeProgress = (currentAltitude - startAltitude) / (targetAltitude - startAltitude);
+            altitudeProgress = Mathf.Clamp01(altitudeProgress);
+            
+            // Xoay dần dần theo tiến độ bay lên
+            float currentRotation = Mathf.Lerp(startRotation, targetRotation, altitudeProgress);
+            airplaneRigidbody2D.transform.rotation = Quaternion.Euler(0f, 0f, currentRotation);
+            
+            // Debug để theo dõi
+            if (Time.frameCount % 30 == 0) // Mỗi 30 frame log một lần
             {
-                float angle = Mathf.Atan2(vel.y, vel.x) * Mathf.Rad2Deg;
-                angle = Mathf.Clamp(angle, -45f, 45f);
-                airplaneRigidbody2D.transform.rotation = Quaternion.Euler(0f, 0f, angle);
+                Debug.Log($"Bay lên - Altitude: {currentAltitude:F1}/{targetAltitude:F1} ({altitudeProgress*100:F0}%) - Rotation: {currentRotation:F1}°");
             }
+            
             yield return null;
         }
+        
+        // Đảm bảo rotation đạt đúng climbAngle cuối cùng
+        airplaneRigidbody2D.transform.rotation = Quaternion.Euler(0f, 0f, climbAngle);
+        Debug.Log($"Hoàn thành bay lên - Final rotation: {climbAngle}°");
 
         // Bước 4: Giữ độ cao và cho phép điều khiển
         airplaneRigidbody2D.gravityScale = 0.2f;
@@ -209,7 +228,7 @@ public class GManager : MonoBehaviour
             yield return null;
         }
 
-        Debug.Log("Máy bay đã hoàn thành chuỗi bay: ngang → bay lên → giữ (có điều khiển) → rơi");
+        Debug.Log("Máy bay đã hoàn thành chuỗi bay: ngang → bay lên (xoay dần) → giữ (có điều khiển) → rơi");
     }
 
     public bool isVelocity = true;
