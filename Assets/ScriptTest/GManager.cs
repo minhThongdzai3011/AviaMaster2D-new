@@ -14,6 +14,8 @@ public class GManager : MonoBehaviour
     [Tooltip("Góc bay lên ban đầu khi nhấn Launch (độ). Có thể thay đổi trong Inspector.")]
     public float climbAngle = 30f;  // Góc bay lên (độ) - có thể chỉnh trong Inspector
     public float gravityScale = 1f; // Thang trọng lực chung
+    public float boostedAltitude;
+
 
     [Header("Button UI")]
     public Button playButton;
@@ -32,9 +34,10 @@ public class GManager : MonoBehaviour
     private bool isBoostDecreasing = false;
     private Coroutine boostCoroutine;
     public int money = 0;
+    public int totalMoney = 0;
 
     [Header("Nâng cấp")]
-    public int durationFuel = 2;
+    public float durationFuel = 2;
     public float totalBoost = 100;
     public int levelPower;
     public int levelFuel;
@@ -59,8 +62,9 @@ public class GManager : MonoBehaviour
     public TextMeshProUGUI levelFuelText;
     public TextMeshProUGUI levelBoostText;
     public TextMeshProUGUI moneyText;
+    public TextMeshProUGUI totalMoneyText;
 
-    [Header("Trạng thái chơi")]
+    [Header("Người chơi")]
     public bool isControllable = false;
     public float controlForce = 8f; // Lực điều khiển A/D
     public float maxVerticalSpeed = 15f; // Giới hạn tốc độ dọc
@@ -74,6 +78,12 @@ public class GManager : MonoBehaviour
     void Start()
     {
         instance = this;
+        totalMoney = PlayerPrefs.GetInt("TotalMoney", 0);
+
+        // Cập nhật UI
+        if (totalMoneyText != null)
+            totalMoneyText.text = "" + totalMoney;
+        
         if (airplaneRigidbody2D != null)
         {
             startPosition = airplaneRigidbody2D.transform.position;
@@ -126,8 +136,9 @@ public class GManager : MonoBehaviour
         // Xoay máy bay lên ngay khi bắt đầu bay lên
         airplaneRigidbody2D.transform.rotation = Quaternion.Euler(0f, 0f, climbAngle);
 
+        boostedAltitude = launchForce / 2.5f;
         // Bước 3: Chờ đến khi đạt độ cao thích hợp
-        float targetAltitude = startPosition.y + 10f;
+        float targetAltitude = startPosition.y + boostedAltitude;
         while (airplaneRigidbody2D.position.y < targetAltitude)
         {
             // Cập nhật rotation theo velocity khi bay lên
@@ -146,7 +157,7 @@ public class GManager : MonoBehaviour
         airplaneRigidbody2D.velocity = new Vector2(airplaneRigidbody2D.velocity.x, 0f);
         
         isControllable = true;
-        
+        Debug.Log("Máy bay đã vào trạng thái có thể điều khiển." + durationFuel);
         StartCoroutine(DecreaseSliderFuel(durationFuel));
         
         // Trong giai đoạn này, rotation được điều khiển bởi HandleAircraftControl()
@@ -201,7 +212,7 @@ public class GManager : MonoBehaviour
         Debug.Log("Máy bay đã hoàn thành chuỗi bay: ngang → bay lên → giữ (có điều khiển) → rơi");
     }
 
-
+    public bool isVelocity = true;
     void Update()
     {
         if (airplaneRigidbody2D == null) return;
@@ -213,11 +224,20 @@ public class GManager : MonoBehaviour
         rotationZ = airplaneRigidbody2D.transform.eulerAngles.z;
         if (rotationZ > 180f) rotationZ -= 360f;
 
+        
+        if (isVelocity)
+        {
+            airplaneRigidbody2D.velocity = 0.5f * airplaneRigidbody2D.velocity;
+            isVelocity = false;
+        }
 
-        UpdateRotationFromVelocity();
         if (isControllable)
         {
             HandleAircraftControl();
+        }
+        else
+        {
+            UpdateRotationFromVelocity();
         }
 
 
@@ -233,11 +253,11 @@ public class GManager : MonoBehaviour
         {
             BoosterUp();
         }
-        if (Input.GetKey(KeyCode.E))
+        if (Input.GetKey(KeyCode.A))
         {
             PlainUp();
         }
-            if (Input.GetKey(KeyCode.D) && !isControllable && !isBoosterActive)
+        if (Input.GetKey(KeyCode.D) && !isControllable && !isBoosterActive)
         {
             PlainDown();
         }
@@ -275,7 +295,7 @@ public class GManager : MonoBehaviour
         if (Input.GetKey(KeyCode.A))
         {
             // Xoay máy bay lên nhưng giới hạn tối đa 45 độ
-            float targetRotation = Mathf.Min(currentZ + Time.deltaTime * 60f, 45f);
+            float targetRotation = Mathf.Min(currentZ + Time.deltaTime * 60f, maxUpAngle);
             airplaneRigidbody2D.transform.rotation = Quaternion.Euler(0f, 0f, targetRotation);
             
             // Nếu đang boost thì thêm lực theo hướng mới
@@ -292,7 +312,7 @@ public class GManager : MonoBehaviour
         if (Input.GetKey(KeyCode.D))
         {
             // Xoay máy bay xuống nhưng giới hạn tối đa -45 độ
-            float targetRotation = Mathf.Max(currentZ - Time.deltaTime * 60f, -45f);
+            float targetRotation = Mathf.Max(currentZ - Time.deltaTime * 60f, maxDownAngle);
             airplaneRigidbody2D.transform.rotation = Quaternion.Euler(0f, 0f, targetRotation);
             
             // Nếu đang boost thì thêm lực theo hướng mới
@@ -352,7 +372,7 @@ public class GManager : MonoBehaviour
     void UpdateRotationFromVelocity()
     {
         if (airplaneRigidbody2D == null) return;
-
+        if (isControllable) return; 
         Vector2 velocity = airplaneRigidbody2D.velocity;
         float minMoveSqr = minMoveThreshold * minMoveThreshold;
 
@@ -444,17 +464,19 @@ public class GManager : MonoBehaviour
 
     public void AgainGame()
     {
+        money = 0;
+        isVelocity = true;
         UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
     }
 
     public void PlainUp()
     {
-        rotationZ = airplaneRigidbody2D.transform.eulerAngles.z + 45f;
+        rotationZ = airplaneRigidbody2D.transform.eulerAngles.z + 0f;
     }
 
     public void PlainDown()
     {
-        rotationZ = airplaneRigidbody2D.transform.eulerAngles.z - 45f;
+        rotationZ = airplaneRigidbody2D.transform.eulerAngles.z - 0f;
     }
 
     public void ResetGame()
@@ -463,7 +485,7 @@ public class GManager : MonoBehaviour
     }
 
 // Giảm fuel theo thời gian
-    private IEnumerator DecreaseSliderFuel(int durationFuel)
+    private IEnumerator DecreaseSliderFuel(float durationFuel)
     {
         float timer = 0f;
         float startValue = sliderFuel.value;
@@ -548,21 +570,22 @@ public class GManager : MonoBehaviour
     public void UpgradeFuel()
     {
         levelFuel += 1;
-        durationFuel += 1;
+        durationFuel += 0.1f;
+        durationFuel = (float)Math.Round(durationFuel, 1);
         levelFuelText.text = "Lv" + levelFuel + " | " + durationFuel + "s";
     }
 
     public void UpgradeBoost()
     {
         levelBoost += 1;
-        totalBoost += 20;
+        totalBoost += 5;
         levelBoostText.text = "Lv" + levelBoost + " | " + totalBoost;
     }
     
     public void UpgradePower()
     {
         levelPower += 1;
-        launchForce += 5;
+        launchForce += 2;
         levelPowerText.text = "Lv" + levelPower + " | " + launchForce;
     }
 }

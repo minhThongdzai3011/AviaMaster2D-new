@@ -22,12 +22,16 @@ public class Plane : MonoBehaviour
         {
             StartCoroutine(UpMass());
         }
-        if (collision.gameObject.tag == "Coin")
+
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Coin"))
         {
-            Destroy(collision.gameObject);
+            Destroy(other.gameObject);
             GManager.instance.money += 1;
         }
-
     }
 
     IEnumerator UpMass()
@@ -66,6 +70,16 @@ public class Plane : MonoBehaviour
             if (Mathf.Abs(velocity.x) < 0.5f)
             {
                 velocity.x = 0f;
+                 GManager.instance.totalMoney += GManager.instance.money;
+                GManager.instance.money = 0;
+                
+                // Cập nhật UI
+                GManager.instance.totalMoneyText.text = "" + GManager.instance.totalMoney;
+                GManager.instance.moneyText.text = "" + GManager.instance.money;
+                
+                // Lưu TotalMoney và đảm bảo lưu ngay
+                PlayerPrefs.SetInt("TotalMoney", GManager.instance.totalMoney);
+                PlayerPrefs.Save(); 
             }
 
             // Giữ máy bay trên mặt đất (không rơi xuống nữa)

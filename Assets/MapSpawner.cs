@@ -54,7 +54,7 @@ public class MapSpawner : MonoBehaviour
 
     [Header("Spawn Settings")]
     private float startDelay = 0f;
-    private float spawnInterval = 0.1f;
+    private float spawnInterval = 0.05f;
     public int count = 0;
     
     void Start()
