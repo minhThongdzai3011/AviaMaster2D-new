@@ -51,6 +51,8 @@ public class GManager : MonoBehaviour
     public float rotationSmooth = 8f; // độ mượt khi quay
     public float minMoveThreshold = 0.5f; // ngưỡng vận tốc để bắt đầu quay theo velocity
 
+    public GameObject arrowAngleZ;
+
     [Header("RotationX settings")]
     public float amplitude = 15.0f; // Góc nghiêng tối đa
     public float frequency = 1.0f;  // Tốc độ lắc lư
@@ -93,6 +95,7 @@ public class GManager : MonoBehaviour
     {
         sliderAchievement.value = 0f;
         totalMoney = PlayerPrefs.GetInt("TotalMoney", 0);
+        startZ = airplaneRigidbody2D.transform.rotation.eulerAngles.z;
 
         // Cập nhật UI
         if (totalMoneyText != null)
@@ -252,6 +255,7 @@ public class GManager : MonoBehaviour
         rotationZ = airplaneRigidbody2D.transform.eulerAngles.z;
         if (rotationZ > 180f) rotationZ -= 360f;
 
+        rotationAngleZ();
         UpdateSliderAchievement();
 
 
@@ -655,6 +659,27 @@ public class GManager : MonoBehaviour
     {
         leaderBoardImage.gameObject.SetActive(false);
     }
+
+    public float angleRange = 20f;      // Góc tối đa (±20 độ)
+    public float speed = 1f;            // Tốc độ dao động
+
+    private float startZ;
+
+    public void rotationAngleZ()
+{
+    // Kiểm tra xem arrowAngleZ có được gán không
+    if (arrowAngleZ == null) return;
+    
+    // Tạo dao động từ -20 đến +20 độ
+    // Mathf.Sin dao động từ -1 đến +1, nhân với angleRange để có ±20°
+    float angle = Mathf.Sin(Time.time * speed) * angleRange;
+    
+    // Áp dụng rotation cho arrowAngleZ
+    arrowAngleZ.transform.rotation = Quaternion.Euler(0f, 0f, angle);
+    
+    // Debug để theo dõi (có thể xóa sau)
+    // Debug.Log($"Arrow angle: {angle:F1}°");
+}
 
 
 }
