@@ -52,6 +52,7 @@ public class GManager : MonoBehaviour
     public float minMoveThreshold = 0.5f; // ngưỡng vận tốc để bắt đầu quay theo velocity
 
     public GameObject arrowAngleZ;
+    public GameObject rotationXObject;
 
     [Header("RotationX settings")]
     public float amplitude = 15.0f; // Góc nghiêng tối đa
@@ -122,6 +123,9 @@ public class GManager : MonoBehaviour
         }
         homeImage.gameObject.SetActive(false);
         playImage.gameObject.SetActive(true);
+
+        arrowAngleZ.SetActive(true);
+        rotationXObject.SetActive(true);
 
         StartCoroutine(LaunchSequence());
     }
@@ -659,27 +663,38 @@ public class GManager : MonoBehaviour
     {
         leaderBoardImage.gameObject.SetActive(false);
     }
+    [Header("RotationZ Oscillation")]
 
-    public float angleRange = 20f;      // Góc tối đa (±20 độ)
+    public float angleRangeMax = 22f;     
+    public float angleRangeMin = -30f;        // Phạm vi góc dao động ±20 độ
     public float speed = 1f;            // Tốc độ dao động
 
     private float startZ;
 
     public void rotationAngleZ()
-{
-    // Kiểm tra xem arrowAngleZ có được gán không
-    if (arrowAngleZ == null) return;
-    
-    // Tạo dao động từ -20 đến +20 độ
-    // Mathf.Sin dao động từ -1 đến +1, nhân với angleRange để có ±20°
-    float angle = Mathf.Sin(Time.time * speed) * angleRange;
-    
-    // Áp dụng rotation cho arrowAngleZ
-    arrowAngleZ.transform.rotation = Quaternion.Euler(0f, 0f, angle);
-    
-    // Debug để theo dõi (có thể xóa sau)
-    // Debug.Log($"Arrow angle: {angle:F1}°");
-}
+    {
+        if (arrowAngleZ == null) return;
+        float angleAverange = (angleRangeMax + angleRangeMin) / 2;
+        // Debug.Log("angleAverange: " + angleAverange);
+
+
+        float angle = Mathf.Sin(Time.time * speed) * (angleRangeMax - angleRangeMin) / 2 + angleAverange;
+
+        // if (angle < -3f && angle > -8f)
+        // {
+        //     speed = 1.5f;
+        // }
+        // else if (angle <= -8f && angle >= -25f || angle >= -3f && angle <= 12f)
+        // {
+        //     speed = 1.2f;
+        // }
+        // else
+        // {
+        //     speed = 1f;
+        // }
+        arrowAngleZ.transform.rotation = Quaternion.Euler(0f, 0f, angle);
+        
+    }
 
 
 }
