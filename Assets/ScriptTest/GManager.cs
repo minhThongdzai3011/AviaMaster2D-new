@@ -37,6 +37,7 @@ public class GManager : MonoBehaviour
     public int totalMoney = 0;
     public float targetValue = 0f;
     public float duration = 1f;
+    public bool isPlaying = true;
 
     [Header("Nâng cấp")]
     public float durationFuel = 2;
@@ -116,23 +117,32 @@ public class GManager : MonoBehaviour
 
     public void LaunchAirplane()
     {
-        if (airplaneRigidbody2D == null)
+        if (isPlaying)
         {
-            Debug.LogError("Rigidbody2D chưa được gán!");
-            return;
+            if (airplaneRigidbody2D == null)
+            {
+                Debug.LogError("Rigidbody2D chưa được gán!");
+                return;
+            }
+            homeImage.gameObject.SetActive(false);
+            playImage.gameObject.SetActive(true);
+
+
+
+            StartCoroutine(LaunchSequence());
+            isPlaying = false;
+            
+            isRotationOscillating = false;
         }
-        homeImage.gameObject.SetActive(false);
-        playImage.gameObject.SetActive(true);
-
-        arrowAngleZ.SetActive(true);
-        rotationXObject.SetActive(true);
-
-        StartCoroutine(LaunchSequence());
     }
 
 
     IEnumerator LaunchSequence()
     {
+        yield return new WaitForSeconds(0.5f);
+        arrowAngleZ.SetActive(false);
+        rotationXObject.SetActive(false);
+        yield return new WaitForSeconds(1.5f);
         // Bước 1: Di chuyển ngang một đoạn r
         float r = 5f;
         float horizontalSpeed = 10f;
@@ -267,6 +277,11 @@ public class GManager : MonoBehaviour
         {
             airplaneRigidbody2D.velocity = 0.5f * airplaneRigidbody2D.velocity;
             isVelocity = false;
+
+        }
+        if (airplaneRigidbody2D.velocity.x > 100.0f)
+        {
+            airplaneRigidbody2D.velocity = new Vector2(100.0f, airplaneRigidbody2D.velocity.y);
         }
 
         if (isControllable)
@@ -611,33 +626,120 @@ public class GManager : MonoBehaviour
     public float moneyPower = 50f;
     public float moneyFuel = 50f;
     public float moneyBoost = 50f;
+    public bool isFuelMax = false;
+    public bool isPowerMax = false;
+    public bool isBoostMax = false;
+    
     public void UpgradeFuel()
     {
-        levelFuel += 1;
-        rateFuel += 5;
-        moneyFuel = moneyFuel * 1.34f;
-        moneyFuel = (int)Math.Round(moneyFuel, 1);
-        fuelMoneyText.text = "" + moneyFuel;
-        durationFuel = durationFuel * (1 + (rateFuel / 100f));
-        durationFuel = (float)Math.Round(durationFuel, 1);
-        levelFuelText.text = "Character is " + rateFuel + " % fuel";
+        if (!isFuelMax)
+        {
+            levelFuel += 1;
+            rateFuel += 5;
+            if (levelFuel >= 60)
+            {
+                fuelMoneyText.text = "MAX";
+                fuelMoneyText.color = Color.yellow;
+                isFuelMax = true;
+            }
+            moneyFuel = moneyFuel * 1.34f;
+            moneyFuel = (int)Math.Round(moneyFuel, 1);
+            if (moneyFuel > 999)
+            {
+                if (moneyFuel >= 1000 && moneyFuel < 1000000)
+                {
+                    fuelMoneyText.text = (moneyFuel / 1000f).ToString("F1") + "K";
+                }
+                else if (moneyFuel >= 1000000 && moneyFuel < 1000000000)
+                {
+                    fuelMoneyText.fontSize = 28;
+                    fuelMoneyText.text = (moneyFuel / 1000000f).ToString("F1") + "M";
+                }
+            }
+            else
+            {
+                fuelMoneyText.text = "" + moneyFuel;
+            }
+            durationFuel = durationFuel * (1 + (rateFuel / 100f));
+            durationFuel = (float)Math.Round(durationFuel, 1);
+            levelFuelText.text = "Character is " + rateFuel + " % fuel";
+        }
     }
 
     public void UpgradeBoost()
     {
-        levelBoost += 1;
-        rateBoost += 5;
-        totalBoost = totalBoost * (1 + (rateBoost / 100f));
-        levelBoostText.text = "Character is " + rateBoost + " % boost";
+        if (!isBoostMax)
+        {
+            levelBoost += 1;
+            rateBoost += 5;
+            if (levelBoost >= 60)
+            {
+                boostMoneyText.text = "MAX";
+                boostMoneyText.color = Color.yellow;
+                isBoostMax = true;
+            }
+            moneyBoost = moneyBoost * 1.34f;
+            moneyBoost = (int)Math.Round(moneyBoost, 1);
+            if (moneyBoost > 999)
+            {
+                
+                if (moneyBoost >= 1000 && moneyBoost < 1000000)
+                {
+                    boostMoneyText.text = (moneyBoost / 1000f).ToString("F1") + "K";
+                }
+                else if (moneyBoost >= 1000000 && moneyBoost < 1000000000)
+                {
+                    boostMoneyText.fontSize = 28;
+                    boostMoneyText.text = (moneyBoost / 1000000f).ToString("F1") + "M";
+                }
+            }
+            else
+            {
+                boostMoneyText.text = "" + moneyBoost;
+            }
+            totalBoost = totalBoost * (1 + (rateBoost / 100f));
+            totalBoost = (float)Math.Round(totalBoost, 1);
+            levelBoostText.text = "Character is " + rateBoost + " % boost";
+        }
+
     }
 
 
     public void UpgradePower()
     {
-        levelPower += 1;
-        ratePower += 5;
-        launchForce = launchForce * (1 + (ratePower / 100f));
-        levelPowerText.text = "Character is " + ratePower + " % power";
+        if (!isPowerMax)
+        {
+            levelPower += 1;
+            ratePower += 5;
+            if (levelPower >= 60)
+            {
+                powerMoneyText.text = "MAX";
+                powerMoneyText.color = Color.yellow;
+                isPowerMax = true;
+            }
+            moneyPower = moneyPower * 1.34f;
+            moneyPower = (int)Math.Round(moneyPower, 1);
+            if (moneyPower > 999)
+            {
+
+                if (moneyPower >= 1000 && moneyPower < 1000000)
+                {
+                    powerMoneyText.text = (moneyPower / 1000f).ToString("F1") + "K";
+                }
+                else if (moneyPower >= 1000000 && moneyPower < 1000000000)
+                {
+                    powerMoneyText.fontSize = 28;
+                    powerMoneyText.text = (moneyPower / 1000000f).ToString("F1") + "M";
+                }
+            }
+            else
+            {
+                powerMoneyText.text = "" + moneyPower;
+            }
+            launchForce = launchForce * (1 + (ratePower / 100f));
+            launchForce = (float)Math.Round(launchForce, 1);
+            levelPowerText.text = "Character is " + ratePower + " % power";
+        }
     }
 
     void UpdateSliderAchievement()
@@ -668,31 +770,33 @@ public class GManager : MonoBehaviour
     public float angleRangeMax = 22f;     
     public float angleRangeMin = -30f;        // Phạm vi góc dao động ±20 độ
     public float speed = 1f;            // Tốc độ dao động
-
+    public bool isRotationOscillating = true;
     private float startZ;
-
     public void rotationAngleZ()
     {
-        if (arrowAngleZ == null) return;
-        float angleAverange = (angleRangeMax + angleRangeMin) / 2;
-        // Debug.Log("angleAverange: " + angleAverange);
+        if (isRotationOscillating)
+        {
+            if (arrowAngleZ == null) return;
+            float angleAverange = (angleRangeMax + angleRangeMin) / 2;
+            // Debug.Log("angleAverange: " + angleAverange);
 
 
-        float angle = Mathf.Sin(Time.time * speed) * (angleRangeMax - angleRangeMin) / 2 + angleAverange;
+            float angle = Mathf.Sin(Time.time * speed) * (angleRangeMax - angleRangeMin) / 2 + angleAverange;
 
-        // if (angle < -3f && angle > -8f)
-        // {
-        //     speed = 1.5f;
-        // }
-        // else if (angle <= -8f && angle >= -25f || angle >= -3f && angle <= 12f)
-        // {
-        //     speed = 1.2f;
-        // }
-        // else
-        // {
-        //     speed = 1f;
-        // }
-        arrowAngleZ.transform.rotation = Quaternion.Euler(0f, 0f, angle);
+            // if (angle < -3f && angle > -8f)
+            // {
+            //     speed = 1.5f;
+            // }
+            // else if (angle <= -8f && angle >= -25f || angle >= -3f && angle <= 12f)
+            // {
+            //     speed = 1.2f;
+            // }
+            // else
+            // {
+            //     speed = 1f;
+            // }
+            arrowAngleZ.transform.rotation = Quaternion.Euler(0f, 0f, angle);
+        }
         
     }
 
