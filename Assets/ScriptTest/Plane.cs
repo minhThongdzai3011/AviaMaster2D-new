@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class Plane : MonoBehaviour
 {
+
+    private int moneyDistance = 0;
+    private int moneyTotal = 0;
     // Start is called before the first frame update
     void Start()
     {
@@ -70,16 +73,7 @@ public class Plane : MonoBehaviour
             if (Mathf.Abs(velocity.x) < 0.5f)
             {
                 velocity.x = 0f;
-                 GManager.instance.totalMoney += GManager.instance.money;
-                GManager.instance.money = 0;
                 
-                // Cập nhật UI
-                GManager.instance.totalMoneyText.text = "" + GManager.instance.totalMoney;
-                GManager.instance.moneyText.text = "" + GManager.instance.money;
-                
-                // Lưu TotalMoney và đảm bảo lưu ngay
-                PlayerPrefs.SetInt("TotalMoney", GManager.instance.totalMoney);
-                PlayerPrefs.Save(); 
             }
 
             // Giữ máy bay trên mặt đất (không rơi xuống nữa)
@@ -97,11 +91,38 @@ public class Plane : MonoBehaviour
             }
 
             yield return wait;
+            StartCoroutine(OpenImageWIn());
         }
 
         // Khôi phục drag ban đầu (tùy chọn)
         // rb.drag = originalDrag;
 
+    }
+    private bool isAddMoneyDone = false;
+    IEnumerator OpenImageWIn()
+    {
+        yield return new WaitForSeconds(2f);
+        if (!isAddMoneyDone)
+        {
+            isAddMoneyDone = true;
+            moneyDistance = (int)(GManager.instance.distanceTraveled / 1.34f);
+            moneyTotal = moneyDistance + GManager.instance.money;
+            Debug.Log("Money from Distance: " + moneyDistance + " | Current Money: " + GManager.instance.money + " | Total Money: " + moneyTotal);
+            GManager.instance.totalMoney += moneyTotal;
+            Debug.Log("Updated Total Money: " + GManager.instance.totalMoney);
+            GManager.instance.money = 0;
+            Settings.instance.totalMoneyPlayText.text = "" + moneyTotal;
+
+            // Cập nhật UI
+            GManager.instance.totalMoneyText.text = "" + GManager.instance.totalMoney;
+            GManager.instance.moneyText.text = "" + GManager.instance.money;
+
+
+            // Lưu TotalMoney và đảm bảo lưu ngay
+            PlayerPrefs.SetInt("TotalMoney", GManager.instance.totalMoney);
+            PlayerPrefs.Save();
+            Settings.instance.winImage.gameObject.SetActive(true);
+        }
     }
 
 

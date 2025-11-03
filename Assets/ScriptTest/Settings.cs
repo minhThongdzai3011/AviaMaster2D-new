@@ -12,6 +12,7 @@ public class Settings : MonoBehaviour
     [Header("Text Settings")]
     public TextMeshProUGUI musicText;
     public TextMeshProUGUI soundText;
+    public TextMeshProUGUI totalMoneyPlayText;
 
     [Header("Image Settings")]
     public Image musicImageOn;
@@ -19,6 +20,7 @@ public class Settings : MonoBehaviour
     public Image soundImageOn;
     public Image soundImageOff;
     public Image settingsImage;
+    public Image winImage;
 
     [Header("Bool Settings")]
     public bool isMusicOn = true;
@@ -121,25 +123,32 @@ public class Settings : MonoBehaviour
     public void CloseSettings()
     {
         if (isAnimating) return;
-        
+        if (Settings.instance == null)
+        {
+            Debug.LogError("Settings.instance is null!");
+            return;
+        }
+
         Debug.Log("Đóng Settings!");
-        
+
         // Dừng tất cả animation đang chạy
         DOTween.Kill(settingsImage.transform);
         isAnimating = true;
-        
+
         // Lưu settings trước khi đóng
         SaveSettings();
-        
+
         // Animation đóng settings (giống ShopImage)
         settingsImage.transform.DOScale(Vector3.zero, closeDuration)
             .SetEase(closeEase)
-            .OnComplete(() => {
+            .OnComplete(() =>
+            {
                 settingsImage.gameObject.SetActive(false);
                 isAnimating = false;
                 Debug.Log("Settings animation đóng hoàn thành!");
             });
     }
+
 
     public void ToggleMusic()
     {
@@ -215,10 +224,12 @@ public class Settings : MonoBehaviour
         if (settingsImage.gameObject.activeInHierarchy)
         {
             CloseSettings();
+            Debug.Log("Settings button clicked - closing settings.");
         }
         else
         {
             OpenSettings();
+            Debug.Log("Settings button clicked - opening settings.");
         }
     }
     
@@ -235,7 +246,7 @@ public class Settings : MonoBehaviour
             SaveSettings();
         }
     }
-    
+
     void OnApplicationFocus(bool hasFocus)
     {
         if (!hasFocus)
@@ -243,4 +254,58 @@ public class Settings : MonoBehaviour
             SaveSettings();
         }
     }
+
+    public void OpenWinImage()
+    {
+        if (isAnimating) return;
+
+        Debug.Log("Mở Win Image!");
+
+        // Dừng tất cả animation đang chạy
+        DOTween.Kill(winImage.transform);
+        isAnimating = true;
+
+        // Hiển thị win image
+        winImage.gameObject.SetActive(true);
+
+        // Cập nhật UI trước khi hiển thị
+        UpdateUI();
+
+        // Animation mở win image
+        winImage.transform.localScale = Vector3.zero;
+        winImage.transform.DOScale(Vector3.one, openDuration)
+            .SetEase(openEase)
+            .OnComplete(() => {
+                isAnimating = false;
+                Debug.Log("Win Image animation mở hoàn thành!");
+            });
+    }
+
+    public void CloseWinImage()
+    {
+        if (isAnimating) return;
+        if (Settings.instance == null)
+        {
+            Debug.LogError("Settings.instance is null!");
+            return;
+        }
+
+        Debug.Log("Đóng Win Image!");
+
+        // Dừng tất cả animation đang chạy
+        DOTween.Kill(winImage.transform);
+        isAnimating = true;
+
+        // Animation đóng win image
+        winImage.transform.DOScale(Vector3.zero, closeDuration)
+            .SetEase(closeEase)
+            .OnComplete(() =>
+            {
+                winImage.gameObject.SetActive(false);
+                GManager.instance.AgainGame();
+                isAnimating = false;
+                Debug.Log("Win Image animation đóng hoàn thành!");
+            });
+    }
+        
 }

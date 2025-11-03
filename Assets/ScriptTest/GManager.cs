@@ -15,10 +15,18 @@ public class GManager : MonoBehaviour
     public float climbAngle = 30f;  // Góc bay lên (độ) - có thể chỉnh trong Inspector
     public float gravityScale = 1f; // Thang trọng lực chung
     public float boostedAltitude;
+    
+    [Header("Giới hạn độ cao")]
+    public float maxAltitude = 1200f; // Độ cao tối đa
+    public float maxPowerPercent = 300f; // Power tối đa (300% = 3x lực ban đầu)
+    public float altitudeDragMultiplier = 2f; // Hệ số lực kéo xuống theo độ cao
+    public float altitudeDragStart = 600f; // Độ cao bắt đầu có lực kéo mạnh
+    public float velocityDampingFactor = 0.98f; // Hệ số giảm vận tốc theo độ cao
 
 
     [Header("Button UI")]
     public Button playButton;
+    public bool isPlay = false;
 
     [Header("Slider UI")]
     public Slider sliderFuel;
@@ -96,12 +104,10 @@ public class GManager : MonoBehaviour
     void Start()
     {
         sliderAchievement.value = 0f;
-        totalMoney = PlayerPrefs.GetInt("TotalMoney", 0);
         startZ = airplaneRigidbody2D.transform.rotation.eulerAngles.z;
 
         // Cập nhật UI
-        if (totalMoneyText != null)
-            totalMoneyText.text = "" + totalMoney;
+        SaveTotalMoney();
 
         if (airplaneRigidbody2D != null)
         {
@@ -127,10 +133,9 @@ public class GManager : MonoBehaviour
             homeImage.gameObject.SetActive(false);
             playImage.gameObject.SetActive(true);
 
-
-
             StartCoroutine(LaunchSequence());
             isPlaying = false;
+            isPlay = true;
             
             isRotationOscillating = false;
         }
@@ -271,6 +276,9 @@ public class GManager : MonoBehaviour
 
         rotationAngleZ();
         UpdateSliderAchievement();
+        
+        // Áp dụng lực kéo xuống theo độ cao
+        ApplyAltitudeDrag();
 
 
         if (isVelocity)
@@ -293,19 +301,22 @@ public class GManager : MonoBehaviour
             UpdateRotationFromVelocity();
         }
 
-
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (isPlay)
         {
-            StartBoostDecrease();
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                StartBoostDecrease();
+            }
+            if (Input.GetKeyUp(KeyCode.Space))
+            {
+                StopBoostDecrease();
+            }
+            if (Input.GetKey(KeyCode.Space))
+            {
+                BoosterUp();
+            }
         }
-        if (Input.GetKeyUp(KeyCode.Space))
-        {
-            StopBoostDecrease();
-        }
-        if (Input.GetKey(KeyCode.Space))
-        {
-            BoosterUp();
-        }
+        
         if (Input.GetKey(KeyCode.A))
         {
             PlainUp();
@@ -323,8 +334,25 @@ public class GManager : MonoBehaviour
             AgainGame();
         }
 
-        if (distanceText != null) distanceText.text = distanceTraveled.ToString("F2") + " m";
-        if (altitudeText != null) altitudeText.text = currentAltitude.ToString("F2") + " m";
+        if (distanceText != null) distanceText.text = distanceTraveled.ToString("F0") + " ft";
+        if (altitudeText != null) 
+        {
+            altitudeText.text = currentAltitude.ToString("F2") + " m";
+            
+            // Thêm warning khi gần giới hạn độ cao
+            if (currentAltitude > maxAltitude * 0.8f)
+            {
+                altitudeText.color = Color.red; // Màu đỏ cảnh báo
+            }
+            else if (currentAltitude > maxAltitude * 0.6f)
+            {
+                altitudeText.color = Color.yellow; // Màu vàng cảnh báo
+            }
+            else
+            {
+                altitudeText.color = Color.white; // Màu bình thường
+            }
+        }
         if (rotationZText != null) rotationZText.text = rotationZ.ToString("F2") + " °";
 
 
@@ -483,10 +511,18 @@ public class GManager : MonoBehaviour
                 // Tính vector lực theo góc máy bay
                 Vector2 boostDirection = new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad));
 
-                // Áp dụng lực theo hướng máy bay đang hướng
-                float boostForce = 15f; // Có thể tùy chỉnh
+                // Tính lực boost với giới hạn power và độ cao
+                float basePowerMultiplier = 1f + (ratePower / 100f); // 1.0 + (power% / 100)
+                float maxPowerMultiplier = maxPowerPercent / 100f; // 3.0 cho 300%
+                float actualPowerMultiplier = Mathf.Min(basePowerMultiplier, maxPowerMultiplier);
+                
+                // Giảm hiệu quả boost theo độ cao
+                float altitudeEfficiency = CalculateAltitudeEfficiency();
+                
+                float boostForce = 15f * actualPowerMultiplier * altitudeEfficiency;
                 airplaneRigidbody2D.AddForce(boostDirection * boostForce, ForceMode2D.Force);
-
+                
+                Debug.Log($"Boost: Power={actualPowerMultiplier:F2}x, Altitude Eff={altitudeEfficiency:F2}, Force={boostForce:F1}");
             }
         }
         else
@@ -494,6 +530,65 @@ public class GManager : MonoBehaviour
             // Nếu hết boost thì tắt booster
             isBoosterActive = false;
         }
+    }
+    
+    void ApplyAltitudeDrag()
+    {
+        if (airplaneRigidbody2D == null) return;
+        
+        // Tính lực kéo xuống dựa trên độ cao
+        if (currentAltitude > altitudeDragStart)
+        {
+            // Tính hệ số lực kéo (tăng dần theo độ cao)
+            float altitudeRatio = (currentAltitude - altitudeDragStart) / (maxAltitude - altitudeDragStart);
+            altitudeRatio = Mathf.Clamp01(altitudeRatio); // Giới hạn 0-1
+            
+            // Lực kéo xuống tăng theo bình phương của độ cao (mạnh hơn khi cao hơn)
+            float dragForce = altitudeDragMultiplier * altitudeRatio * altitudeRatio;
+            
+            // Áp dụng lực kéo xuống
+            Vector2 downwardForce = new Vector2(0f, -dragForce);
+            airplaneRigidbody2D.AddForce(downwardForce, ForceMode2D.Force);
+            
+            // Giảm vận tốc tổng thể khi ở độ cao lớn
+            if (currentAltitude > maxAltitude * 0.8f) // Từ 80% độ cao tối đa
+            {
+                Vector2 velocity = airplaneRigidbody2D.velocity;
+                float dampingFactor = Mathf.Lerp(1f, velocityDampingFactor, altitudeRatio);
+                airplaneRigidbody2D.velocity = velocity * dampingFactor;
+            }
+            
+            // Giới hạn cứng tại độ cao tối đa
+            if (currentAltitude >= maxAltitude)
+            {
+                Vector2 velocity = airplaneRigidbody2D.velocity;
+                if (velocity.y > 0f) // Nếu đang bay lên
+                {
+                    velocity.y = Mathf.Min(velocity.y, 0f); // Chặn không cho bay lên nữa
+                    airplaneRigidbody2D.velocity = velocity;
+                }
+                
+                // Áp dụng lực kéo xuống mạnh
+                Vector2 hardLimit = new Vector2(0f, -altitudeDragMultiplier * 2f);
+                airplaneRigidbody2D.AddForce(hardLimit, ForceMode2D.Force);
+            }
+        }
+    }
+    
+    float CalculateAltitudeEfficiency()
+    {
+        // Hiệu quả giảm dần theo độ cao
+        if (currentAltitude <= altitudeDragStart)
+        {
+            return 1f; // Hiệu quả 100% ở độ cao thấp
+        }
+        
+        float altitudeRatio = (currentAltitude - altitudeDragStart) / (maxAltitude - altitudeDragStart);
+        altitudeRatio = Mathf.Clamp01(altitudeRatio);
+        
+        // Hiệu quả giảm từ 100% xuống 30% ở độ cao tối đa
+        float efficiency = Mathf.Lerp(1f, 0.3f, altitudeRatio);
+        return efficiency;
     }
     public bool isGamePaused = false;
     public void PauseGame()
@@ -532,10 +627,10 @@ public class GManager : MonoBehaviour
         Debug.Log("Reset Game");
     }
 
-    public void SettingGame()
-    {
-        Settings.instance.settingsImage.gameObject.SetActive(true);
-    }
+    // public void SettingGame()
+    // {
+    //     Settings.instance.settingsImage.gameObject.SetActive(true);
+    // }
 
     // Giảm fuel theo thời gian
     private IEnumerator DecreaseSliderFuel(float durationFuel)
@@ -754,6 +849,18 @@ public class GManager : MonoBehaviour
             float smoothSpeed = 2f; // Tốc độ cập nhật (càng cao càng nhanh)
             sliderAchievement.value = Mathf.Lerp(sliderAchievement.value, targetValue, smoothSpeed * Time.deltaTime);
         }
+        
+        // Debug thông tin độ cao và hiệu quả boost
+        if (currentAltitude > altitudeDragStart)
+        {
+            float altitudeRatio = (currentAltitude - altitudeDragStart) / (maxAltitude - altitudeDragStart);
+            float efficiency = CalculateAltitudeEfficiency();
+            
+            if (currentAltitude % 50f < 1f) // Log mỗi 50m để tránh spam
+            {
+                Debug.Log($"Altitude: {currentAltitude:F0}m/{maxAltitude}m - Efficiency: {efficiency:F1}% - Drag: {altitudeRatio:F2}");
+            }
+        }
     }
 
     public void leaderBoard()
@@ -797,7 +904,29 @@ public class GManager : MonoBehaviour
             // }
             arrowAngleZ.transform.rotation = Quaternion.Euler(0f, 0f, angle);
         }
-        
+
+    }
+    
+    public void SaveTotalMoney()
+    {
+        totalMoney = PlayerPrefs.GetInt("TotalMoney", 0);
+        if (totalMoney > 999)
+        {
+
+            if (totalMoney >= 1000 && totalMoney < 1000000)
+            {
+                totalMoneyText.text = (totalMoney / 1000f).ToString("F1") + "k";
+            }
+            else if (totalMoney >= 1000000 && totalMoney < 1000000000)
+            {
+                totalMoneyText.fontSize = 28;
+                totalMoneyText.text = (totalMoney / 1000000f).ToString("F1") + "m";
+            }
+        }
+        else
+        {
+            totalMoneyText.text = "" + totalMoney;
+        }
     }
 
 

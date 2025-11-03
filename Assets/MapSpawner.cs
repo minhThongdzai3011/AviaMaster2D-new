@@ -105,7 +105,7 @@ public class MapSpawner : MonoBehaviour
 
         if (isBeachMap)
         {
-            Instantiate(mapBeachStartPrefab, new Vector3(spawnRangeX, spawnRangeYmin + (-2.7f), 0f), mapBeachStartPrefab.transform.rotation);
+            Instantiate(mapBeachStartPrefab, new Vector3(spawnRangeX, -4.195f, 0f), mapBeachStartPrefab.transform.rotation);
             isBeachMap = false;
             isBeachStartSpawned = true;
             spawnRangeX += 30f;
@@ -113,7 +113,7 @@ public class MapSpawner : MonoBehaviour
         }
         else if (isDesertMap)
         {
-            Instantiate(mapDesertStartPrefab, new Vector3(spawnRangeX, spawnRangeYmin + (-2.7f), 0f), mapDesertStartPrefab.transform.rotation);
+            Instantiate(mapDesertStartPrefab, new Vector3(spawnRangeX, -4.195f, 0f), mapDesertStartPrefab.transform.rotation);
             isDesertMap = false;
             isBeachStartSpawned = false;
             isDesertStartSpawned = true;
@@ -122,7 +122,7 @@ public class MapSpawner : MonoBehaviour
         }
         else if (isFieldMap)
         {
-            Instantiate(mapFieldStartPrefab, new Vector3(spawnRangeX, spawnRangeYmin + (-2.7f), 0f), mapFieldStartPrefab.transform.rotation);
+            Instantiate(mapFieldStartPrefab, new Vector3(spawnRangeX, -4.195f, 0f), mapFieldStartPrefab.transform.rotation);
             isFieldMap = false;
             isDesertStartSpawned = false;
             isFieldStartSpawned = true;
@@ -131,7 +131,7 @@ public class MapSpawner : MonoBehaviour
         }
         else if (isIceMap)
         {
-            Instantiate(mapIceStartPrefab, new Vector3(spawnRangeX, spawnRangeYmin + (-2.7f), 0f), mapIceStartPrefab.transform.rotation);
+            Instantiate(mapIceStartPrefab, new Vector3(spawnRangeX, -4.195f, 0f), mapIceStartPrefab.transform.rotation);
             isIceMap = false;
             isFieldStartSpawned = false;
             isIceStartSpawned = true;
@@ -140,7 +140,7 @@ public class MapSpawner : MonoBehaviour
         }
         else if (isLavaMap)
         {
-            Instantiate(mapLavaStartPrefab, new Vector3(spawnRangeX, spawnRangeYmin + (-2.7f), 0f), mapLavaStartPrefab.transform.rotation);
+            Instantiate(mapLavaStartPrefab, new Vector3(spawnRangeX, -4.195f, 0f), mapLavaStartPrefab.transform.rotation);
             isLavaMap = false;
             isIceStartSpawned = false;
             isLavaStartSpawned = true;
