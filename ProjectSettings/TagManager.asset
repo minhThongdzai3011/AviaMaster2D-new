@@ -16,6 +16,15 @@ TagManager:
   - Bonus10
   - Map
   - Coin
+  - bule1
+  - blue2
+  - red1
+  - red2
+  - green1
+  - green2
+  - yellow1
+  - yellow2
+  - blue1
   layers:
   - Default
   - TransparentFX

@@ -77,7 +77,10 @@ public class Plane : MonoBehaviour
             }
 
             // Giữ máy bay trên mặt đất (không rơi xuống nữa)
-            if (velocity.y < 0) velocity.y = 0f;
+            if (velocity.y < 0)
+            {
+                velocity.y = 0f;
+            }
 
             // Cập nhật velocity
             rb.velocity = velocity;

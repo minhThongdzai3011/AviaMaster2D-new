@@ -13,6 +13,7 @@ public class Settings : MonoBehaviour
     public TextMeshProUGUI musicText;
     public TextMeshProUGUI soundText;
     public TextMeshProUGUI totalMoneyPlayText;
+    public TextMeshProUGUI lastDistanceText;
 
     [Header("Image Settings")]
     public Image musicImageOn;
@@ -21,6 +22,7 @@ public class Settings : MonoBehaviour
     public Image soundImageOff;
     public Image settingsImage;
     public Image winImage;
+    public Image luckyWheelImage;
 
     [Header("Bool Settings")]
     public bool isMusicOn = true;
@@ -60,7 +62,6 @@ public class Settings : MonoBehaviour
         PlayerPrefs.SetInt("MusicOn", isMusicOn ? 1 : 0);
         PlayerPrefs.SetInt("SoundOn", isSoundOn ? 1 : 0);
         PlayerPrefs.Save();
-        Debug.Log("Settings saved. Music: " + isMusicOn + ", Sound: " + isSoundOn);
     }
     
     void UpdateUI()
@@ -305,6 +306,63 @@ public class Settings : MonoBehaviour
                 GManager.instance.AgainGame();
                 isAnimating = false;
                 Debug.Log("Win Image animation đóng hoàn thành!");
+            });
+    }
+
+
+    
+    public void openWheel()
+    {
+        if (isAnimating) return;
+
+        Debug.Log("Mở Win Image!");
+
+        // Dừng tất cả animation đang chạy
+        DOTween.Kill(luckyWheelImage.transform);
+        isAnimating = true;
+
+        // Hiển thị lucky wheel image
+        lastDistanceText.gameObject.SetActive(false);
+        luckyWheelImage.gameObject.SetActive(true);
+
+        // Cập nhật UI trước khi hiển thị
+        UpdateUI();
+
+        // Animation mở lucky wheel image
+        luckyWheelImage.transform.localScale = Vector3.zero;
+        luckyWheelImage.transform.DOScale(Vector3.one, openDuration)
+            .SetEase(openEase)
+            .OnComplete(() => {
+                isAnimating = false;
+                Debug.Log("Lucky Wheel Image animation mở hoàn thành!");
+            });
+    }
+
+    public void closeWheel()
+    {
+        if (isAnimating) return;
+        if (Settings.instance == null)
+        {
+            Debug.LogError("Settings.instance is null!");
+            return;
+        }
+
+        Debug.Log("Đóng Lucky Wheel Image!");
+
+        // Dừng tất cả animation đang chạy
+        DOTween.Kill(luckyWheelImage.transform);
+        isAnimating = true;
+
+        // Animation đóng lucky wheel image
+        luckyWheelImage.transform.DOScale(Vector3.zero, closeDuration)
+            .SetEase(closeEase)
+            .OnComplete(() =>
+            {
+                lastDistanceText.gameObject.SetActive(true);
+                luckyWheelImage.gameObject.SetActive(false);
+                GManager.instance.AgainGame();
+                isAnimating = false;
+                Debug.Log("Lucky Wheel Image animation đóng hoàn thành!");
             });
     }
         

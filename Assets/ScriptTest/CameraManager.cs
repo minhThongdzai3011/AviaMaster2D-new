@@ -13,7 +13,7 @@ public class CameraManager : MonoBehaviour
     public float smoothSpeed = 5f;
 
     [Header("Camera tự động theo máy bay")]
-    public float baseOrthoSize = 9f; // Ortho size ban đầu khi máy bay sát đất
+    public float baseOrthoSize = 7f; // Ortho size ban đầu khi máy bay sát đất
     public float altitudeZoomFactor = 0.3f; // Hệ số zoom theo độ cao
     public float followThreshold = 15f; // Ngưỡng orthoSize để bắt đầu follow máy bay
     public float cameraFollowSpeed = 2f; // Tốc độ di chuyển camera theo máy bay
@@ -91,12 +91,12 @@ void HandleAltitudeBasedZoom()
         if (altitude <= 0f)
         {
             // Máy bay sát đất → orthoSize = 9
-            calculatedOrthoSize = 9f;
+            calculatedOrthoSize = 7f;
         }
         else if (altitude <= 10f)  // THAY ĐỔI: <= 10f thay vì >= 10f
         {
             // Nội suy tuyến tính giữa 0-10m: orthoSize từ 9-14
-            calculatedOrthoSize = Mathf.Lerp(9f, 14f, altitude / 10f);
+            calculatedOrthoSize = Mathf.Lerp(7f, 14f, altitude / 10f);
         }
         else
         {
