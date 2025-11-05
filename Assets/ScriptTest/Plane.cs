@@ -124,7 +124,7 @@ public class Plane : MonoBehaviour
             // Lưu TotalMoney và đảm bảo lưu ngay
             PlayerPrefs.SetInt("TotalMoney", GManager.instance.totalMoney);
             PlayerPrefs.Save();
-            Settings.instance.winImage.gameObject.SetActive(true);
+            Settings.instance.OpenWinImage();
         }
     }
 

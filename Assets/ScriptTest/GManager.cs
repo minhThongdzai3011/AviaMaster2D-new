@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 using System;
+using Unity.VisualScripting;
 
 public class GManager : MonoBehaviour
 {
@@ -48,7 +49,7 @@ public class GManager : MonoBehaviour
     public bool isPlaying = true;
 
     [Header("Nâng cấp")]
-    public float durationFuel = 2;
+    public float durationFuel = 5;
     public float totalBoost = 100;
     public int levelPower;
     public int levelFuel;
@@ -85,6 +86,7 @@ public class GManager : MonoBehaviour
     public TextMeshProUGUI powerMoneyText;
     public TextMeshProUGUI fuelMoneyText;
     public TextMeshProUGUI boostMoneyText;
+    public TextMeshProUGUI newMapText;
 
     [Header("Thành tích")]
     public Slider sliderAchievement;
@@ -103,7 +105,6 @@ public class GManager : MonoBehaviour
     public float rotationForce = 100f;        // tốc độ xoay ban đầu
     public float angularFriction = 5f;        // hệ số ma sát góc
     public float currentRotationSpeed = 0f;  // tốc độ xoay hiện tại
-
 
     void Awake()
     {
@@ -135,6 +136,13 @@ public class GManager : MonoBehaviour
             airplaneRigidbody2D.gravityScale = gravityScale;
 
             airplaneRigidbody2D.freezeRotation = true;
+
+        
+        
+            // THÊM: Tăng drag tự nhiên của Rigidbody2D thay vì dùng LimitAirspeed()
+            airplaneRigidbody2D.drag = 0.2f; // Drag tự nhiên
+            airplaneRigidbody2D.angularDrag = 0.1f; // Angular drag
+    
         }
         Physics2D.gravity = new Vector2(0f, -9.81f * gravityScale);
     }
@@ -166,6 +174,10 @@ public class GManager : MonoBehaviour
         arrowAngleZ.SetActive(false);
         rotationXObject.SetActive(false);
         yield return new WaitForSeconds(1.5f);
+        
+        // THÊM: Set flag bay ngang
+        isHorizontalFlying = true;
+        
         // Bước 1: Di chuyển ngang một đoạn r
         float r = 10f;
         float horizontalSpeed = 10f;
@@ -177,10 +189,20 @@ public class GManager : MonoBehaviour
         // Giữ góc 0 khi bay ngang
         airplaneRigidbody2D.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
 
+        Debug.Log($"Bắt đầu bay ngang - Target: {targetX}, Current: {airplaneRigidbody2D.position.x}");
+
         while (airplaneRigidbody2D.position.x < targetX)
         {
+            // THÊM: Đảm bảo máy bay bay ngang
+            airplaneRigidbody2D.velocity = new Vector2(horizontalSpeed, 0f);
+            airplaneRigidbody2D.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
             yield return null;
         }
+        
+        Debug.Log($"Hoàn thành bay ngang - Distance: {airplaneRigidbody2D.position.x - (targetX - r):F1}f");
+        
+        // SỬA: Set false SAU KHI hoàn thành bay ngang
+        isHorizontalFlying = false;
 
         // Bước 2: Bay lên với rotation dần dần
         float climbForce = launchForce;
@@ -211,8 +233,13 @@ public class GManager : MonoBehaviour
             altitudeProgress = Mathf.Clamp01(altitudeProgress);
 
             // Xoay dần dần theo tiến độ bay lên
-            float currentRotation = Mathf.Lerp(startRotation, targetRotation, altitudeProgress);
+
+            float easedProgress = Mathf.SmoothStep(0f, 2f, altitudeProgress);
+            float currentRotation = Mathf.Lerp(startRotation, targetRotation, easedProgress);
+            // float currentRotation = Mathf.Lerp(startRotation, targetRotation, altitudeProgress);
             airplaneRigidbody2D.transform.rotation = Quaternion.Euler(0f, 0f, currentRotation);
+
+            
 
             yield return null;
         }
@@ -222,6 +249,11 @@ public class GManager : MonoBehaviour
         Debug.Log($"Hoàn thành bay lên - Final rotation: {climbAngle}°");
 
         // Bước 4: Giữ độ cao và cho phép điều khiển
+
+        // Sửa lại: Trả lại drag tự nhiên của Rigidbody2D
+            airplaneRigidbody2D.drag = 0f; // Drag ban đầu
+        airplaneRigidbody2D.angularDrag = 0.05f; // Angular drag ban đầu
+            
         airplaneRigidbody2D.gravityScale = 0.2f;
         airplaneRigidbody2D.velocity = new Vector2(airplaneRigidbody2D.velocity.x, 0f);
 
@@ -247,7 +279,7 @@ public class GManager : MonoBehaviour
                 // Xoay máy bay lên
                 float currentZ = airplaneRigidbody2D.transform.eulerAngles.z;
                 if (currentZ > 180f) currentZ -= 360f;
-                float newTargetRotation = Mathf.Min(currentZ + Time.deltaTime * 10f, maxUpAngle);
+                float newTargetRotation = Mathf.Min(currentZ + Time.deltaTime * 1f, maxUpAngle);
                 airplaneRigidbody2D.transform.rotation = Quaternion.Euler(0f, 0f, newTargetRotation);
 
                 // ĐIỀU CHỈNH VELOCITY thay vì cộng dồn lực
@@ -270,7 +302,7 @@ public class GManager : MonoBehaviour
                 // Xoay máy bay xuống
                 float currentZ = airplaneRigidbody2D.transform.eulerAngles.z;
                 if (currentZ > 180f) currentZ -= 360f;
-                float newTargetRotation = Mathf.Max(currentZ - Time.deltaTime * 10f, maxDownAngle);
+                float newTargetRotation = Mathf.Max(currentZ - Time.deltaTime * 1f, maxDownAngle);
                 airplaneRigidbody2D.transform.rotation = Quaternion.Euler(0f, 0f, newTargetRotation);
 
                 // ĐIỀU CHỈNH VELOCITY thay vì cộng dồn lực
@@ -341,6 +373,7 @@ public class GManager : MonoBehaviour
     }
 
     public bool isVelocity = true;
+    public bool isHorizontalFlying = false;
     void Update()
     {
         if (airplaneRigidbody2D == null) return;
@@ -358,7 +391,7 @@ public class GManager : MonoBehaviour
         ApplyAltitudeDrag();
 
 
-        if (isVelocity)
+        if (isVelocity && !isHorizontalFlying && !isPlay)
         {
             airplaneRigidbody2D.velocity = 0.5f * airplaneRigidbody2D.velocity;
             isVelocity = false;
@@ -394,13 +427,16 @@ public class GManager : MonoBehaviour
             }
         }
 
-        if (Input.GetKey(KeyCode.A))
+        if (!isHorizontalFlying && isPlay)
         {
-            PlainUp();
-        }
-        if (Input.GetKey(KeyCode.D) && !isControllable && !isBoosterActive)
-        {
-            PlainDown();
+            if (Input.GetKey(KeyCode.A))
+            {
+                PlainUp();
+            }
+            if (Input.GetKey(KeyCode.D) && !isControllable && !isBoosterActive)
+            {
+                PlainDown();
+            }
         }
         if (Input.GetKeyDown(KeyCode.Keypad1))
         {
@@ -436,6 +472,7 @@ public class GManager : MonoBehaviour
         moneyText.text = money.ToString() + " $";
 
     }
+
 
     // void FixedUpdate()
     // {
@@ -1038,6 +1075,16 @@ public class GManager : MonoBehaviour
             //     speed = 1f;
             // }
             arrowAngleZ.transform.rotation = Quaternion.Euler(0f, 0f, angle);
+        }
+        else
+        {
+            float angleAverange = (angleRangeMax + angleRangeMin) / 2;
+            // Debug.Log("angleAverange: " + angleAverange);
+            float angle = Mathf.Sin(Time.time * speed) * (angleRangeMax - angleRangeMin) / 2 + angleAverange;
+            if (angle < -3f && angle > -8f)
+            {
+                newMapText.text = "MAX POWER!";
+            }
         }
 
     }

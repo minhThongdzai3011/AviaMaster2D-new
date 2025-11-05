@@ -106,6 +106,7 @@ public class Settings : MonoBehaviour
         isAnimating = true;
         
         // Hiển thị settings panel
+        lastDistanceText.gameObject.SetActive(false);
         settingsImage.gameObject.SetActive(true);
         
         // Cập nhật UI trước khi hiển thị
@@ -144,6 +145,7 @@ public class Settings : MonoBehaviour
             .SetEase(closeEase)
             .OnComplete(() =>
             {
+                lastDistanceText.gameObject.SetActive(true);
                 settingsImage.gameObject.SetActive(false);
                 isAnimating = false;
                 Debug.Log("Settings animation đóng hoàn thành!");
@@ -267,6 +269,8 @@ public class Settings : MonoBehaviour
         isAnimating = true;
 
         // Hiển thị win image
+        lastDistanceText.gameObject.SetActive(false);
+        Debug.Log("lastDistanceText set to inactive");
         winImage.gameObject.SetActive(true);
 
         // Cập nhật UI trước khi hiển thị
@@ -302,6 +306,7 @@ public class Settings : MonoBehaviour
             .SetEase(closeEase)
             .OnComplete(() =>
             {
+                lastDistanceText.gameObject.SetActive(true);
                 winImage.gameObject.SetActive(false);
                 GManager.instance.AgainGame();
                 isAnimating = false;

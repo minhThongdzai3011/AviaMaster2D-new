@@ -18,8 +18,7 @@ public class LuckyWheel : MonoBehaviour
     {
         instance = this;
         rbody = GetComponent<Rigidbody2D>();
-        RotatePower = Random.Range(minRotatePower, maxRotatePower);
-        StopPower = Random.Range(minStopPower, maxStopPower);
+        
     }
     float t;
 
@@ -46,6 +45,8 @@ public class LuckyWheel : MonoBehaviour
 
     public void Rotate()
     {
+        RotatePower = Random.Range(minRotatePower, maxRotatePower);
+        StopPower = Random.Range(minStopPower, maxStopPower);
         if (inRotate == 0)
         {
             rbody.AddTorque(RotatePower);
@@ -58,49 +59,49 @@ public class LuckyWheel : MonoBehaviour
         float rot = transform.eulerAngles.z;
         if (rot > 0 + 22 && rot < 45 + 22)
         {
-            GetComponent<RectTransform>().eulerAngles = new Vector3(0, 0, 22.5f);
             Win(8);
         }
         else if (rot >= 45 + 22 && rot < 90 + 22)
         {
-            GetComponent<RectTransform>().eulerAngles = new Vector3(0, 0, 67.5f);
-            Win(3);
+            Win(7);
         }
         else if (rot >= 90 + 22 && rot < 135 + 22)
         {
-            GetComponent<RectTransform>().eulerAngles = new Vector3(0, 0, 112.5f);
-            Win(4);
+            Win(6);
         }
         else if (rot >= 135 + 22 && rot < 180 + 22)
         {
-            GetComponent<RectTransform>().eulerAngles = new Vector3(0, 0, 157.5f);
             Win(5);
         }
         else if (rot >= 180 + 22 && rot < 225 + 22)
         {
-            GetComponent<RectTransform>().eulerAngles = new Vector3(0, 0, 202.5f);
-            Win(6);
+            Win(4);
         }
         else if (rot >= 225 + 22 && rot < 270 + 22)
         {
-            GetComponent<RectTransform>().eulerAngles = new Vector3(0, 0, 247.5f);
-            Win(7);
+            Win(3);
         }
         else if (rot >= 270 + 22 && rot < 315 + 22)
         {
-            GetComponent<RectTransform>().eulerAngles = new Vector3(0, 0, 292.5f);
-            Win(8);
+            Win(2);
         }
         else if (rot >= 315 + 22 && rot < 360 + 22)
         {
-            GetComponent<RectTransform>().eulerAngles = new Vector3(0, 0, 337.5f);
             Win(1);
         }
+        StartCoroutine(WaitAndPrint(1f, rot));
     }
-    
+
     public void Win(int Score)
     {
         print("You Win " + Score);
+    }
+    
+    IEnumerator WaitAndPrint(float waitTime, float rot)
+    {
+        yield return new WaitForSeconds(waitTime);
+        rot = 0;
+        rbody.rotation = Quaternion.Euler(0, 0, 0).eulerAngles.z;
     }
 
 }
