@@ -137,7 +137,8 @@ public class Shop : MonoBehaviour
         // Dừng tất cả animation đang chạy
         DOTween.Kill(this);
         isTransitioning = false;
-        
+
+        Settings.instance.lastDistanceText.gameObject.SetActive(false);
         imageShop.gameObject.SetActive(true);
         
         // Đảm bảo hiển thị đúng khi mở shop
@@ -158,7 +159,11 @@ public class Shop : MonoBehaviour
         
         // Animation đóng shop
         imageShop.transform.DOScale(Vector3.zero, 0.3f).SetEase(Ease.InBack)
-            .OnComplete(() => imageShop.gameObject.SetActive(false));
+            .OnComplete(() =>
+            {
+                imageShop.gameObject.SetActive(false);
+                Settings.instance.lastDistanceText.gameObject.SetActive(true);
+            });
     }
 
     public void buttonRight()
