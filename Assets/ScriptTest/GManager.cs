@@ -4,6 +4,7 @@ using System.Collections;
 using UnityEngine.UI;
 using System;
 using Unity.VisualScripting;
+using DG.Tweening;
 
 public class GManager : MonoBehaviour
 {
@@ -100,6 +101,9 @@ public class GManager : MonoBehaviour
     public GameObject homeImage;
     public GameObject playImage;
     public Image leaderBoardImage;
+    public Image buttonUpImage;
+    public Image buttonDownImage;
+    public Image buttonBoosterPlaneImage;
 
     [Header("Wheel Settings")]
     public float rotationForce = 100f;        // tốc độ xoay ban đầu
@@ -156,18 +160,22 @@ public class GManager : MonoBehaviour
                 Debug.LogError("Rigidbody2D chưa được gán!");
                 return;
             }
-            homeImage.gameObject.SetActive(false);
+            // homeImage.gameObject.SetActive(false);
             playImage.gameObject.SetActive(true);
 
             StartCoroutine(LaunchSequence());
             isPlaying = false;
             isPlay = true;
+            isHomeDown = true;
+            isHomeUp = true;
+            homeGameDown();
+            homeGameUp();
 
             isRotationOscillating = false;
         }
     }
 
-
+    public bool controlPlane = false;
     IEnumerator LaunchSequence()
     {
         yield return new WaitForSeconds(0.5f);
@@ -273,55 +281,27 @@ public class GManager : MonoBehaviour
                 Debug.Log($"Thời gian điều khiển: {Mathf.FloorToInt(timer)}s / {durationFuel}s");
             }
 
-            // XỬ LÝ ĐIỀU KHIỂN A/D TRONG GIAI ĐOẠN durationFuel
             if (Input.GetKey(KeyCode.A))
             {
-                // Xoay máy bay lên
-                float currentZ = airplaneRigidbody2D.transform.eulerAngles.z;
-                if (currentZ > 180f) currentZ -= 360f;
-                float newTargetRotation = Mathf.Min(currentZ + Time.deltaTime * 1f, maxUpAngle);
-                airplaneRigidbody2D.transform.rotation = Quaternion.Euler(0f, 0f, newTargetRotation);
+                PlainUp();
+                buttonDownImage.color = Color.white;
+                buttonUpImage.color = Color.gray;
 
-                // ĐIỀU CHỈNH VELOCITY thay vì cộng dồn lực
-                Vector2 currentVelocity = airplaneRigidbody2D.velocity;
-                float targetVerticalSpeed = Mathf.Sin(newTargetRotation * Mathf.Deg2Rad) * maxVerticalSpeed;
-
-                // Lerp velocity để có chuyển động mượt mà
-                currentVelocity.y = Mathf.Lerp(currentVelocity.y, targetVerticalSpeed, Time.deltaTime * 3f);
-
-                // Giới hạn tốc độ tổng thể
-                if (currentVelocity.magnitude > maxVerticalSpeed * 2f)
-                {
-                    currentVelocity = currentVelocity.normalized * maxVerticalSpeed * 2f;
-                }
-
-                airplaneRigidbody2D.velocity = currentVelocity;
             }
             else if (Input.GetKey(KeyCode.D))
             {
-                // Xoay máy bay xuống
-                float currentZ = airplaneRigidbody2D.transform.eulerAngles.z;
-                if (currentZ > 180f) currentZ -= 360f;
-                float newTargetRotation = Mathf.Max(currentZ - Time.deltaTime * 1f, maxDownAngle);
-                airplaneRigidbody2D.transform.rotation = Quaternion.Euler(0f, 0f, newTargetRotation);
-
-                // ĐIỀU CHỈNH VELOCITY thay vì cộng dồn lực
-                Vector2 currentVelocity = airplaneRigidbody2D.velocity;
-                float targetVerticalSpeed = Mathf.Sin(newTargetRotation * Mathf.Deg2Rad) * maxVerticalSpeed;
-
-                // Lerp velocity để có chuyển động mượt mà
-                currentVelocity.y = Mathf.Lerp(currentVelocity.y, targetVerticalSpeed, Time.deltaTime * 3f);
-
-                // Giới hạn tốc độ tổng thể
-                if (currentVelocity.magnitude > maxVerticalSpeed * 2f)
-                {
-                    currentVelocity = currentVelocity.normalized * maxVerticalSpeed * 2f;
-                }
-
-                airplaneRigidbody2D.velocity = currentVelocity;
+                PlainDown();
+                buttonDownImage.color = Color.gray;
+                buttonUpImage.color = Color.white;
             }
+
+            // XỬ LÝ ĐIỀU KHIỂN A/D TRONG GIAI ĐOẠN durationFuel
             else
             {
+                if (!isUseClicker){
+                    buttonDownImage.color = Color.white;
+                    buttonUpImage.color = Color.white;
+                }
                 // Khi không điều khiển thủ công, tự động xoay theo velocity và ổn định
                 Vector2 vel = airplaneRigidbody2D.velocity;
 
@@ -405,10 +385,26 @@ public class GManager : MonoBehaviour
         if (isControllable)
         {
             HandleAircraftControl();
+            if (isHoldingButtonUp)
+            {
+                PlainUp();
+            }
+            if (isHoldingButtonDown)
+            {
+                PlainDown();
+            }
         }
         else
         {
             UpdateRotationFromVelocity();
+            if (isHoldingButtonUp)
+            {
+                PlainUp();
+            }
+            if (isHoldingButtonDown)
+            {
+                PlainDown();
+            }
         }
 
         if (isPlay)
@@ -416,28 +412,34 @@ public class GManager : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 StartBoostDecrease();
+                buttonBoosterPlaneImage.color = Color.gray;
             }
             if (Input.GetKeyUp(KeyCode.Space))
             {
                 StopBoostDecrease();
+                buttonBoosterPlaneImage.color = Color.white;
             }
             if (Input.GetKey(KeyCode.Space))
             {
                 BoosterUp();
+                buttonBoosterPlaneImage.color = Color.gray;
             }
         }
 
-        if (!isHorizontalFlying && isPlay)
-        {
-            if (Input.GetKey(KeyCode.A))
-            {
-                PlainUp();
-            }
-            if (Input.GetKey(KeyCode.D) && !isControllable && !isBoosterActive)
-            {
-                PlainDown();
-            }
-        }
+        
+
+        // if (!isHorizontalFlying && isPlay)
+        // {
+        //     if (Input.GetKey(KeyCode.A))
+        //     {
+        //         PlainUp();
+        //     }
+        //     if (Input.GetKey(KeyCode.D) && !isControllable && !isBoosterActive)
+        //     {
+        //         PlainDown();
+        //     }
+        // }
+
         if (Input.GetKeyDown(KeyCode.Keypad1))
         {
             PauseGame();
@@ -476,7 +478,7 @@ public class GManager : MonoBehaviour
 
     // void FixedUpdate()
     // {
-        
+
     //     if(isTurnWheel){
     //         if (Mathf.Abs(currentRotationSpeed) > 0.1f)
     //         {
@@ -500,8 +502,12 @@ public class GManager : MonoBehaviour
         float currentZ = airplaneRigidbody2D.transform.eulerAngles.z;
         if (currentZ > 180f) currentZ -= 360f;
 
-        // Điều khiển lên (A key)
-        if (Input.GetKey(KeyCode.A))
+        // THÊM: Kiểm tra cả keyboard VÀ button
+        bool isUpPressed = Input.GetKey(KeyCode.A) || isHoldingButtonUp;
+        bool isDownPressed = Input.GetKey(KeyCode.D) || isHoldingButtonDown;
+
+        // Điều khiển lên (A key HOẶC button Up)
+        if (isUpPressed)
         {
             // Xoay máy bay lên nhưng giới hạn tối đa 45 độ
             float targetRotation = Mathf.Min(currentZ + Time.deltaTime * 60f, maxUpAngle);
@@ -514,11 +520,10 @@ public class GManager : MonoBehaviour
                 Vector2 forceDirection = new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad));
                 airplaneRigidbody2D.AddForce(forceDirection * controlForce * 0.3f, ForceMode2D.Force);
             }
-
         }
 
-        // Điều khiển xuống (D key)
-        if (Input.GetKey(KeyCode.D))
+        // Điều khiển xuống (D key HOẶC button Down)
+        if (isDownPressed)
         {
             // Xoay máy bay xuống nhưng giới hạn tối đa -45 độ
             float targetRotation = Mathf.Max(currentZ - Time.deltaTime * 60f, maxDownAngle);
@@ -531,11 +536,10 @@ public class GManager : MonoBehaviour
                 Vector2 forceDirection = new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad));
                 airplaneRigidbody2D.AddForce(forceDirection * controlForce * 0.3f, ForceMode2D.Force);
             }
-
         }
 
-        // Khi không nhấn A hoặc D, từ từ trở về góc 0
-        if (!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
+        // Khi không nhấn A/D VÀ KHÔNG nhấn button, từ từ trở về góc 0
+        if (!isUpPressed && !isDownPressed)
         {
             float targetRotation;
 
@@ -556,7 +560,7 @@ public class GManager : MonoBehaviour
             airplaneRigidbody2D.transform.rotation = Quaternion.Euler(0f, 0f, targetRotation);
         }
     }
-
+    
     float ComputeUpTargetAngle(Vector2 velocity)
     {
         // Tính góc từ vector vận tốc, nhưng ưu tiên cảm giác "bay lên"
@@ -742,15 +746,78 @@ public class GManager : MonoBehaviour
         isVelocity = true;
         UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
     }
+    public bool isHoldingButtonUp = false;
+    public bool isHoldingButtonDown = false;
+    public bool isUseClicker = false;
+    public void OnPointerDownButtonUp()
+    {
+        isHoldingButtonUp = true;
+        buttonUpImage.color = Color.gray;
+        isUseClicker = true;
+    }
+    public void OnPointerUpButtonUp()
+    {
+        isHoldingButtonUp = false;
+        buttonUpImage.color = Color.white;
+        isUseClicker = false;
+    }
+    public void OnPointerDownButtonDown()
+    {
+        isHoldingButtonDown = true;
+        buttonDownImage.color = Color.gray;
+        isUseClicker = true;
+    }
+    public void OnPointerUpButtonDown()
+    {
+        isHoldingButtonDown = false;
+        buttonDownImage.color = Color.white;
+        isUseClicker = false;
+    }
 
     public void PlainUp()
     {
-        rotationZ = airplaneRigidbody2D.transform.eulerAngles.z + 0f;
+        float currentZ = airplaneRigidbody2D.transform.eulerAngles.z;
+        if (currentZ > 180f) currentZ -= 360f;
+        float newTargetRotation = Mathf.Min(currentZ + Time.deltaTime * 1f, maxUpAngle);
+        airplaneRigidbody2D.transform.rotation = Quaternion.Euler(0f, 0f, newTargetRotation);
+
+        // ĐIỀU CHỈNH VELOCITY thay vì cộng dồn lực
+        Vector2 currentVelocity = airplaneRigidbody2D.velocity;
+        float targetVerticalSpeed = Mathf.Sin(newTargetRotation * Mathf.Deg2Rad) * maxVerticalSpeed;
+
+        // Lerp velocity để có chuyển động mượt mà
+        currentVelocity.y = Mathf.Lerp(currentVelocity.y, targetVerticalSpeed, Time.deltaTime * 3f);
+
+        // Giới hạn tốc độ tổng thể
+        if (currentVelocity.magnitude > maxVerticalSpeed * 2f)
+        {
+            currentVelocity = currentVelocity.normalized * maxVerticalSpeed * 2f;
+        }
+
+        airplaneRigidbody2D.velocity = currentVelocity;
     }
 
     public void PlainDown()
     {
-        rotationZ = airplaneRigidbody2D.transform.eulerAngles.z - 0f;
+        float currentZ = airplaneRigidbody2D.transform.eulerAngles.z;
+        if (currentZ > 180f) currentZ -= 360f;
+        float newTargetRotation = Mathf.Max(currentZ - Time.deltaTime * 1f, maxDownAngle);
+        airplaneRigidbody2D.transform.rotation = Quaternion.Euler(0f, 0f, newTargetRotation);
+
+        // ĐIỀU CHỈNH VELOCITY thay vì cộng dồn lực
+        Vector2 currentVelocity = airplaneRigidbody2D.velocity;
+        float targetVerticalSpeed = Mathf.Sin(newTargetRotation * Mathf.Deg2Rad) * maxVerticalSpeed;
+
+        // Lerp velocity để có chuyển động mượt mà
+        currentVelocity.y = Mathf.Lerp(currentVelocity.y, targetVerticalSpeed, Time.deltaTime * 3f);
+
+        // Giới hạn tốc độ tổng thể
+        if (currentVelocity.magnitude > maxVerticalSpeed * 2f)
+        {
+            currentVelocity = currentVelocity.normalized * maxVerticalSpeed * 2f;
+        }
+
+        airplaneRigidbody2D.velocity = currentVelocity;
     }
 
     public void ResetGame()
@@ -1163,9 +1230,71 @@ public class GManager : MonoBehaviour
 
 
     public bool isTurnWheel = false;
-    public void turnWheel(){
+    public void turnWheel()
+    {
         isTurnWheel = true;
         Debug.Log("isTurnWheel: " + isTurnWheel);
+    }
+    
+    public RectTransform upHomeImage;
+    public RectTransform downHomeImage;
+    public RectTransform downFuelImage;
+    public RectTransform upAircraftImage;
+    public bool isHomeUp = false;
+    public bool isHomeDown = false;
+    public bool isFuelDown = false;
+    public bool isAircraftUp = false;
+
+    public void homeGameUp()
+    {
+        if (isHomeUp)
+        {
+            upHomeImage.DOAnchorPosY(upHomeImage.anchoredPosition.y + 1200f, duration)
+                .SetEase(Ease.OutCubic).OnComplete(() =>
+                {
+                    isHomeUp = false;
+                    isFuelDown = true;
+                    fuelPlayDown();
+                });
+        }
+    }
+
+    public void homeGameDown()
+    {
+        if (isHomeDown)
+        {
+            downHomeImage.DOAnchorPosY(downHomeImage.anchoredPosition.y - 300f, duration)
+                .SetEase(Ease.OutCubic).OnComplete(() =>
+                {
+                    isHomeDown = false;
+                    isAircraftUp = true;
+                    StartCoroutine(AircraftPlayUp());
+                });
+        }
+    }
+
+    public void fuelPlayDown()
+    {
+        if (isFuelDown)
+        {
+            downFuelImage.DOAnchorPosY(downFuelImage.anchoredPosition.y - 250f, duration)
+                .SetEase(Ease.OutCubic).OnComplete(() =>
+                {
+                    isFuelDown = false;
+                });
+        }
+    }
+    IEnumerator AircraftPlayUp()
+    {
+        if (isAircraftUp)
+        yield return new WaitForSeconds(1f);
+        {
+            upAircraftImage.DOAnchorPosY(upAircraftImage.anchoredPosition.y + 250f, duration)
+                .SetEase(Ease.OutCubic).OnComplete(() =>
+                {
+                    isAircraftUp = false;
+                });
+        }
     }
 
 }

@@ -2006,7 +2006,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 7.029916
+  orthographic size: 7.029946
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -2030,7 +2030,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 51100465}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -54.177456, y: 4.116625, z: -11}
+  m_LocalPosition: {x: -54.377426, y: 4.116642, z: -11}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6614,6 +6614,7 @@ GameObject:
   - component: {fileID: 188105871}
   - component: {fileID: 188105870}
   - component: {fileID: 188105869}
+  - component: {fileID: 188105872}
   m_Layer: 5
   m_Name: Button Down
   m_TagString: Untagged
@@ -6685,19 +6686,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 188105870}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1438053754}
-        m_TargetAssemblyTypeName: GManager, Assembly-CSharp
-        m_MethodName: PlainDown
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &188105870
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6736,6 +6725,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 188105867}
   m_CullTransparentMesh: 1
+--- !u!114 &188105872
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 188105867}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1438053754}
+          m_TargetAssemblyTypeName: GManager, Assembly-CSharp
+          m_MethodName: OnPointerDownButtonDown
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 3
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1438053754}
+          m_TargetAssemblyTypeName: GManager, Assembly-CSharp
+          m_MethodName: OnPointerUpButtonDown
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &190281692
 GameObject:
   m_ObjectHideFlags: 0
@@ -9111,7 +9145,7 @@ GameObject:
   - component: {fileID: 247481451}
   - component: {fileID: 247481450}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Image Button Up
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11108,7 +11142,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &285618265
 RectTransform:
   m_ObjectHideFlags: 0
@@ -16111,8 +16145,8 @@ RectTransform:
   m_Father: {fileID: 1174829088}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -17020,6 +17054,7 @@ MonoBehaviour:
   closeDuration: 0.3
   openEase: 27
   closeEase: 26
+  prizeSlider: {fileID: 1108582431}
 --- !u!4 &426532504
 Transform:
   m_ObjectHideFlags: 0
@@ -18940,8 +18975,8 @@ RectTransform:
   m_Father: {fileID: 1203882256}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -20446,6 +20481,7 @@ GameObject:
   - component: {fileID: 527870029}
   - component: {fileID: 527870031}
   - component: {fileID: 527870030}
+  - component: {fileID: 527870032}
   m_Layer: 5
   m_Name: Image Button
   m_TagString: Untagged
@@ -20512,6 +20548,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 527870028}
   m_CullTransparentMesh: 1
+--- !u!114 &527870032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 527870028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1438053754}
+          m_TargetAssemblyTypeName: GManager, Assembly-CSharp
+          m_MethodName: OnPointerDownButtonDown
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 3
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1438053754}
+          m_TargetAssemblyTypeName: GManager, Assembly-CSharp
+          m_MethodName: OnPointerDownButtonUp
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &528957054
 GameObject:
   m_ObjectHideFlags: 0
@@ -21862,7 +21943,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 45.7, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -21938,7 +22019,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 45.7, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -32717,7 +32798,7 @@ RectTransform:
   m_GameObject: {fileID: 824564696}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 50, y: 50, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 724437792}
@@ -47664,6 +47745,7 @@ GameObject:
   - component: {fileID: 988153077}
   - component: {fileID: 988153076}
   - component: {fileID: 988153075}
+  - component: {fileID: 988153078}
   m_Layer: 5
   m_Name: Button Up
   m_TagString: Untagged
@@ -47735,19 +47817,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 988153076}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1438053754}
-        m_TargetAssemblyTypeName: GManager, Assembly-CSharp
-        m_MethodName: PlainUp
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &988153076
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -47786,6 +47856,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 988153073}
   m_CullTransparentMesh: 1
+--- !u!114 &988153078
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 988153073}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1438053754}
+          m_TargetAssemblyTypeName: GManager, Assembly-CSharp
+          m_MethodName: OnPointerDownButtonUp
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 3
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1438053754}
+          m_TargetAssemblyTypeName: GManager, Assembly-CSharp
+          m_MethodName: OnPointerUpButtonUp
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &990452588
 GameObject:
   m_ObjectHideFlags: 0
@@ -51829,7 +51944,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 1
+  m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -55259,7 +55374,7 @@ GameObject:
   - component: {fileID: 1183728533}
   - component: {fileID: 1183728532}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Image Button Down
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -58393,7 +58508,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.8679245, g: 0.13510147, b: 0.13510147, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -64555,12 +64670,19 @@ MonoBehaviour:
   homeImage: {fileID: 855496885}
   playImage: {fileID: 285618264}
   leaderBoardImage: {fileID: 1901315465}
+  buttonUpImage: {fileID: 247481450}
+  buttonDownImage: {fileID: 1183728532}
+  buttonBoosterPlaneImage: {fileID: 527870030}
   rotationForce: 250
   angularFriction: 15
   currentRotationSpeed: 0
+  controlPlane: 0
   isVelocity: 1
   isHorizontalFlying: 0
   isGamePaused: 0
+  isHoldingButtonUp: 0
+  isHoldingButtonDown: 0
+  isUseClicker: 0
   ratePower: 0
   rateFuel: 0
   rateBoost: 0
@@ -64575,6 +64697,14 @@ MonoBehaviour:
   speed: 1
   isRotationOscillating: 1
   isTurnWheel: 0
+  upHomeImage: {fileID: 855496886}
+  downHomeImage: {fileID: 918598281}
+  downFuelImage: {fileID: 1360902140}
+  upAircraftImage: {fileID: 2111997841}
+  isHomeUp: 0
+  isHomeDown: 0
+  isFuelDown: 0
+  isAircraftUp: 0
 --- !u!4 &1438053755
 Transform:
   m_ObjectHideFlags: 0
@@ -70174,7 +70304,7 @@ MonoBehaviour:
   m_Follow: {fileID: 2043786948}
   m_Lens:
     FieldOfView: 60
-    OrthographicSize: 7.029916
+    OrthographicSize: 7.029946
     NearClipPlane: 0.3
     FarClipPlane: 1000
     Dutch: 0
@@ -70198,7 +70328,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1575166892}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -54.177456, y: 4.116625, z: -11}
+  m_LocalPosition: {x: -54.377426, y: 4.116642, z: -11}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -78847,7 +78977,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 9, y: 0}
   m_SizeDelta: {x: 0, y: -20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -86469,8 +86599,8 @@ RectTransform:
   m_Father: {fileID: 318099738}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -93009,6 +93139,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe4854d4a1b5c52479c2a145844b7356, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moneyTotal: 0
 --- !u!1 &2045136857
 GameObject:
   m_ObjectHideFlags: 0

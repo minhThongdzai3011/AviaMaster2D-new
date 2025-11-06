@@ -5,9 +5,10 @@ using UnityEngine;
 
 public class Plane : MonoBehaviour
 {
+    public static Plane instance;
 
     private int moneyDistance = 0;
-    private int moneyTotal = 0;
+    public int moneyTotal = 0;
     // Start is called before the first frame update
     void Start()
     {

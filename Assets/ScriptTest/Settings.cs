@@ -33,8 +33,11 @@ public class Settings : MonoBehaviour
     public float closeDuration = 0.3f;
     public Ease openEase = Ease.OutBack;
     public Ease closeEase = Ease.InBack;
-    
+
     private bool isAnimating = false;
+    
+    [Header("Slider Settings")]
+    public Slider prizeSlider;
 
     void Start()
     {
@@ -280,10 +283,13 @@ public class Settings : MonoBehaviour
         winImage.transform.localScale = Vector3.zero;
         winImage.transform.DOScale(Vector3.one, openDuration)
             .SetEase(openEase)
-            .OnComplete(() => {
+            .OnComplete(() =>
+            {
                 isAnimating = false;
+                UpdateSliderPrizeCoin();
                 Debug.Log("Win Image animation mở hoàn thành!");
             });
+            
     }
 
     public void CloseWinImage()
@@ -370,5 +376,21 @@ public class Settings : MonoBehaviour
                 Debug.Log("Lucky Wheel Image animation đóng hoàn thành!");
             });
     }
+
+
+    void UpdateSliderPrizeCoin()
+    {
+        if (prizeSlider != null)
+        {
+            // Tính toán giá trị mục tiêu dựa trên khoảng cách bay được
+            float maxDistanceCoin = 1000f; // Khoảng cách tối đa để đạt 100%
+            float targetValue = Mathf.Clamp01(Plane.instance.moneyTotal / maxDistanceCoin);
+
+            // Cập nhật slider với hiệu ứng mượt mà
+            float smoothSpeed = 2f; // Tốc độ cập nhật (càng cao càng nhanh)
+            prizeSlider.value = Mathf.Lerp(prizeSlider.value, targetValue, smoothSpeed * Time.deltaTime);
+        }
+    }
+        
         
 }
