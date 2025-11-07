@@ -409,22 +409,36 @@ public class GManager : MonoBehaviour
 
         if (isPlay)
         {
+            bool isBoostPressed = Input.GetKey(KeyCode.Space) || isUseClickerBooster;
+            
+            // Xử lý keyboard Space - chỉ cho start/stop decrease
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 StartBoostDecrease();
-                buttonBoosterPlaneImage.color = Color.gray;
             }
             if (Input.GetKeyUp(KeyCode.Space))
             {
                 StopBoostDecrease();
-                buttonBoosterPlaneImage.color = Color.white;
             }
-            if (Input.GetKey(KeyCode.Space))
+            
+            // Xử lý boost và màu button
+            if (isBoostPressed)
             {
                 BoosterUp();
                 buttonBoosterPlaneImage.color = Color.gray;
             }
+            else
+            {
+                // Dừng boost khi thả button/key
+                isBoosterActive = false;
+                if (isBoostDecreasing && !Input.GetKey(KeyCode.Space) && !isUseClickerBooster)
+                {
+                    StopBoostDecrease();
+                }
+                buttonBoosterPlaneImage.color = Color.white;
+            }
         }
+
 
         
 
@@ -632,11 +646,19 @@ public class GManager : MonoBehaviour
         }
     }
 
+    
     public void BoosterUp()
     {
         if (airplaneRigidbody2D != null && totalBoost > 0)
         {
             isBoosterActive = true;
+            
+            // Bắt đầu giảm boost nếu chưa bắt đầu
+            if (!isBoostDecreasing)
+            {
+                StartBoostDecrease();
+            }
+            
             if (isBoosterActive)
             {
                 // Lấy góc hiện tại của máy bay (chuyển về radian)
@@ -657,14 +679,32 @@ public class GManager : MonoBehaviour
 
                 float boostForce = 15f * actualPowerMultiplier * altitudeEfficiency;
                 airplaneRigidbody2D.AddForce(boostDirection * boostForce, ForceMode2D.Force);
-
             }
         }
         else
         {
             // Nếu hết boost thì tắt booster
             isBoosterActive = false;
+            StopBoostDecrease();
         }
+    }
+
+    public bool isBoosterUp = false;
+    public bool isUseClickerBooster = false;
+    
+    // Thay thế PointerDownBooster() và PointerUpBooster() bằng:
+    public void OnPointerDownButtonBooster()
+    {
+        isUseClickerBooster = true;
+        buttonBoosterPlaneImage.color = Color.gray;
+        Debug.Log("OnPointerDownButtonBooster - isUseClickerBooster = true");
+    }
+
+    public void OnPointerUpButtonBooster()
+    {
+        isUseClickerBooster = false;
+        buttonBoosterPlaneImage.color = Color.white;
+        Debug.Log("OnPointerUpButtonBooster - isUseClickerBooster = false");
     }
 
     void ApplyAltitudeDrag()

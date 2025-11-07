@@ -23,6 +23,7 @@ public class Settings : MonoBehaviour
     public Image settingsImage;
     public Image winImage;
     public Image luckyWheelImage;
+    public Image jackpotImage;
 
     [Header("Bool Settings")]
     public bool isMusicOn = true;
@@ -33,7 +34,7 @@ public class Settings : MonoBehaviour
     public float closeDuration = 0.3f;
     public Ease openEase = Ease.OutBack;
     public Ease closeEase = Ease.InBack;
-
+    public float targetValue = 0f;
     private bool isAnimating = false;
     
     [Header("Slider Settings")]
@@ -42,14 +43,24 @@ public class Settings : MonoBehaviour
     void Start()
     {
         instance = this;
-        
+
         // Load settings từ PlayerPrefs
         LoadSettings();
-        
+
         // Cập nhật UI ban đầu
         UpdateUI();
-        
+
         Debug.Log("Settings initialized. Music: " + isMusicOn + ", Sound: " + isSoundOn);
+        targetValue = PlayerPrefs.GetFloat("PrizeSliderValue", 0f);
+        prizeSlider.value = targetValue;
+    }
+
+    public void Update()
+    {
+        if (isPrizeCoin)
+        {
+            UpdateSliderPrizeCoin();
+        }
     }
 
     void LoadSettings()
@@ -286,7 +297,8 @@ public class Settings : MonoBehaviour
             .OnComplete(() =>
             {
                 isAnimating = false;
-                UpdateSliderPrizeCoin();
+                isPrizeCoin = true;
+                StartCountingCoin();
                 Debug.Log("Win Image animation mở hoàn thành!");
             });
             
@@ -377,20 +389,75 @@ public class Settings : MonoBehaviour
             });
     }
 
-
+    public bool isPrizeCoin = false;
+    bool isCheckAddTargetValue = true;
     void UpdateSliderPrizeCoin()
     {
         if (prizeSlider != null)
         {
             // Tính toán giá trị mục tiêu dựa trên khoảng cách bay được
             float maxDistanceCoin = 1000f; // Khoảng cách tối đa để đạt 100%
-            float targetValue = Mathf.Clamp01(Plane.instance.moneyTotal / maxDistanceCoin);
 
+            if (Plane.instance == null)
+            {
+                Debug.LogError("Plane.instance is null!");
+                return;
+            }
+            float temp = targetValue;
+
+            if (isCheckAddTargetValue)
+            {
+                targetValue = temp + Mathf.Clamp01(Plane.instance.moneyTotal / maxDistanceCoin);
+                isCheckAddTargetValue = false;
+            }
+
+            PlayerPrefs.SetFloat("PrizeSliderValue", targetValue);
+            PlayerPrefs.Save();
             // Cập nhật slider với hiệu ứng mượt mà
             float smoothSpeed = 2f; // Tốc độ cập nhật (càng cao càng nhanh)
             prizeSlider.value = Mathf.Lerp(prizeSlider.value, targetValue, smoothSpeed * Time.deltaTime);
+            if (prizeSlider. value >= 1f)
+            {
+                isShakeZ = true;
+                ShakeZ();
+            }
         }
     }
+    
+    public Image chestImage;
+    public float duration = 5f;
+    public float strength = 15f;
+    public int vibrato = 10;
+    public bool isShakeZ = false;
+    public bool isButtonChestClicked = false;
+
+    public void ShakeZ()
+    {
+        if (isShakeZ)
+        {
+            RectTransform rect = chestImage.rectTransform;
+
+            rect.DOShakeRotation(1, new Vector3(0, 0, 10), 1)
+                .SetEase(Ease.OutQuad);
+            isShakeZ = false;
+            isButtonChestClicked = true;
+        }
+    }
+
+
+    public void StartCountingCoin()
+    {
+        float startValue = 0f;
+
+        DOVirtual.Float(startValue, Plane.instance.moneyTotal, 2f, value =>
+        {
+            totalMoneyPlayText.text = Mathf.FloorToInt(value).ToString();
+        }).SetEase(Ease.OutCubic);
+    }
+    
+
+
+
         
         
 }
