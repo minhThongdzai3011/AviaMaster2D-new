@@ -14,6 +14,9 @@ public class Settings : MonoBehaviour
     public TextMeshProUGUI soundText;
     public TextMeshProUGUI totalMoneyPlayText;
     public TextMeshProUGUI lastDistanceText;
+    public TextMeshProUGUI countdownText;
+    public TextMeshProUGUI resultText;
+    public TextMeshProUGUI prizeText;
 
     [Header("Image Settings")]
     public Image musicImageOn;
@@ -24,6 +27,8 @@ public class Settings : MonoBehaviour
     public Image winImage;
     public Image luckyWheelImage;
     public Image jackpotImage;
+    public Image pannel;
+    public Image prizeImage;
 
     [Header("Bool Settings")]
     public bool isMusicOn = true;
@@ -36,6 +41,7 @@ public class Settings : MonoBehaviour
     public Ease closeEase = Ease.InBack;
     public float targetValue = 0f;
     private bool isAnimating = false;
+    public bool isSpinning = true;
     
     [Header("Slider Settings")]
     public Slider prizeSlider;
@@ -53,6 +59,7 @@ public class Settings : MonoBehaviour
         Debug.Log("Settings initialized. Music: " + isMusicOn + ", Sound: " + isSoundOn);
         targetValue = PlayerPrefs.GetFloat("PrizeSliderValue", 0f);
         prizeSlider.value = targetValue;
+        StartCountdown();
     }
 
     public void Update()
@@ -61,6 +68,7 @@ public class Settings : MonoBehaviour
         {
             UpdateSliderPrizeCoin();
         }
+        
     }
 
     void LoadSettings()
@@ -383,7 +391,6 @@ public class Settings : MonoBehaviour
             {
                 lastDistanceText.gameObject.SetActive(true);
                 luckyWheelImage.gameObject.SetActive(false);
-                GManager.instance.AgainGame();
                 isAnimating = false;
                 Debug.Log("Lucky Wheel Image animation đóng hoàn thành!");
             });
@@ -430,19 +437,34 @@ public class Settings : MonoBehaviour
     public int vibrato = 10;
     public bool isShakeZ = false;
     public bool isButtonChestClicked = false;
+    public bool isShake = true;
 
     public void ShakeZ()
     {
-        if (isShakeZ)
+        if (isShakeZ && isShake)
         {
             RectTransform rect = chestImage.rectTransform;
 
-            rect.DOShakeRotation(1, new Vector3(0, 0, 10), 1)
-                .SetEase(Ease.OutQuad);
+            rect.DOShakeRotation(0.2f, new Vector3(0, 0, 20), 10, 90, false)
+                .SetEase(Ease.OutQuad)
+                .SetLoops(4, LoopType.Restart);
+
             isShakeZ = false;
+            isShake = false;
             isButtonChestClicked = true;
         }
     }
+
+    // IEnumerator StopShakeZ()
+    // {
+    //     while (isShakeZ)
+    //     {
+    //         yield return new WaitForSeconds(1f);
+    //         isShakeZ = false;
+    //         yield return new WaitForSeconds(1f);
+    //         isShakeZ = true;
+    //     }
+    // }
 
 
     public void StartCountingCoin()
@@ -454,8 +476,44 @@ public class Settings : MonoBehaviour
             totalMoneyPlayText.text = Mathf.FloorToInt(value).ToString();
         }).SetEase(Ease.OutCubic);
     }
-    
+    public bool isCountingDown = false;
+    public void StartCountdown()
+    {
+        if (isCountingDown)
+        {
+            StartCoroutine(CountdownCoroutine());
+        }
+    }
 
+    public IEnumerator CountdownCoroutine()
+    {
+        if (isSpinning)
+        {
+            int currentTime = 9;
+
+            while (currentTime > 0)
+            {
+                int minutes = currentTime / 60;
+                int seconds = currentTime % 60;
+
+                countdownText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+
+                yield return new WaitForSeconds(1f);
+                currentTime--;
+            }
+
+            countdownText.text = " ";
+            Debug.Log("Countdown finished!");
+            resultText.text = "Spin";
+            isSpinning = true;
+            isCountingDown = false;
+        }
+    }
+    
+    public void Exitpannel()
+    {
+        pannel.gameObject.SetActive(false);
+    }
 
 
         
