@@ -29,7 +29,8 @@ public class Settings : MonoBehaviour
     public Image jackpotImage;
     public Image pannel;
     public Image prizeImage;
-
+    public Image prizeChestImage;
+    
     [Header("Bool Settings")]
     public bool isMusicOn = true;
     public bool isSoundOn = true;
@@ -489,7 +490,7 @@ public class Settings : MonoBehaviour
     {
         if (isSpinning)
         {
-            int currentTime = 9;
+            int currentTime = 900;
 
             while (currentTime > 0)
             {
@@ -509,10 +510,63 @@ public class Settings : MonoBehaviour
             isCountingDown = false;
         }
     }
-    
+
     public void Exitpannel()
     {
         pannel.gameObject.SetActive(false);
+    }
+
+    public void buttonChestClicked()
+    {
+        if (isAnimating) return;
+
+        Debug.Log("Mở Win Image!");
+
+        // Dừng tất cả animation đang chạy
+        DOTween.Kill(prizeChestImage.transform);
+        isAnimating = true;
+
+        // Hiển thị prize chest image
+        prizeChestImage.gameObject.SetActive(true);
+
+        // Cập nhật UI trước khi hiển thị
+        UpdateUI();
+
+        // Animation mở prize chest image
+        prizeChestImage.transform.localScale = Vector3.zero;
+        prizeChestImage.transform.DOScale(Vector3.one, openDuration)
+            .SetEase(openEase)
+            .OnComplete(() =>
+            {
+                isAnimating = false;
+                Debug.Log("Lucky Wheel Image animation mở hoàn thành!");
+            });
+    }
+    
+    public void buttonExitChestClicked()
+    {
+        if (isAnimating) return;
+        if (Settings.instance == null)
+        {
+            Debug.LogError("Settings.instance is null!");
+            return;
+        }
+
+        Debug.Log("Đóng Prize Chest Image!");
+
+        // Dừng tất cả animation đang chạy
+        DOTween.Kill(prizeChestImage.transform);
+        isAnimating = true;
+
+        // Animation đóng prize chest image
+        prizeChestImage.transform.DOScale(Vector3.zero, closeDuration)
+            .SetEase(closeEase)
+            .OnComplete(() =>
+            {
+                prizeChestImage.gameObject.SetActive(false);
+                isAnimating = false;
+                Debug.Log("Prize Chest Image animation đóng hoàn thành!");
+            });
     }
 
 

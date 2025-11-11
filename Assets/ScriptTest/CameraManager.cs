@@ -1,10 +1,15 @@
 using UnityEngine;
-using Cinemachine; // Thêm thư viện Cinemachine
+using Cinemachine;
+using UnityEngine.Animations; // Thêm thư viện Cinemachine
 
 public class CameraManager : MonoBehaviour
 {
+    public static CameraManager instance;
     // Gán Virtual Camera vào trường này trong Inspector
     public CinemachineVirtualCamera virtualCamera;
+
+    public CinemachineFollowZoom followZoom;
+    public LookAtConstraint lookAtConstraint;
 
     // Các thiết lập cho hiệu ứng zoom
     public float zoomSpeed = 2f;
@@ -34,6 +39,7 @@ public class CameraManager : MonoBehaviour
             Debug.LogError("Virtual Camera chưa được gán!");
             return;
         }
+        instance = this;
 
         // Thiết lập kích thước ban đầu
         targetOrthoSize = baseOrthoSize;
@@ -220,5 +226,69 @@ Vector3 CalculateGroundVisiblePosition()
     public void ForceFollowAircraft(bool follow)
     {
         isFollowingAircraft = follow;
+        Debug.Log($"CameraManager: Force follow set to {follow}");
+    }
+    
+    // THÊM: Method để force follow ngay lập tức với aircraft hiện tại
+    public void ForceFollowCurrentAircraft()
+    {
+        if (aircraftTransform != null)
+        {
+            isFollowingAircraft = true;
+            Vector3 aircraftPos = aircraftTransform.position;
+            Vector3 targetCameraPos = new Vector3(
+                aircraftPos.x, 
+                aircraftPos.y, 
+                originalCameraPosition.z
+            );
+            virtualCamera.transform.position = targetCameraPos;
+            Debug.Log($"CameraManager: Force follow current aircraft {aircraftTransform.name} at {targetCameraPos}");
+        }
+        else
+        {
+            Debug.LogError("CameraManager: Cannot force follow - aircraftTransform is null");
+        }
+    }
+    
+    // THÊM: Method để cập nhật target aircraft khi đổi máy bay
+    public void UpdateAircraftTarget(Transform newAircraftTransform)
+    {
+        aircraftTransform = newAircraftTransform;
+        Debug.Log($"CameraManager: Aircraft target updated to {newAircraftTransform.name} at position {newAircraftTransform.position}");
+        
+        // Nếu đang follow thì cập nhật ngay vị trí camera
+        if (isFollowingAircraft)
+        {
+            Vector3 aircraftPos = aircraftTransform.position;
+            Vector3 targetCameraPos = new Vector3(
+                aircraftPos.x, 
+                aircraftPos.y, 
+                originalCameraPosition.z
+            );
+            virtualCamera.transform.position = targetCameraPos;
+            Debug.Log($"CameraManager: Camera position updated immediately to {targetCameraPos}");
+        }
+    }
+    
+    // THÊM: Method để cập nhật Virtual Camera follow target (nếu sử dụng Cinemachine Follow)
+    public void UpdateCinemachineFollow(Transform newTarget)
+    {
+        if (virtualCamera != null && newTarget != null)
+        {
+            virtualCamera.Follow = newTarget;
+            virtualCamera.LookAt = newTarget;
+            Debug.Log($"CameraManager: Cinemachine Follow/LookAt updated to {newTarget.name}");
+            
+            // FORCE camera follow ngay lập tức nếu đang ở độ cao thích hợp
+            if (targetOrthoSize > 15f)
+            {
+                isFollowingAircraft = true;
+                Debug.Log("CameraManager: Force following aircraft due to high ortho size");
+            }
+        }
+        else
+        {
+            Debug.LogError($"CameraManager: UpdateCinemachineFollow failed - VirtualCamera: {virtualCamera != null}, NewTarget: {newTarget != null}");
+        }
     }
 }

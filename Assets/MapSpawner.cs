@@ -15,6 +15,7 @@ public class MapSpawner : MonoBehaviour
     [Header("MapCity")]
     public int mapCityIndex = 5;
     public bool isCityMap = false;
+    public GameObject mapCityBeachPrefab;
     public GameObject mapCityStartPrefab;
     public GameObject[] mapCityPrefabs;
 
@@ -22,6 +23,7 @@ public class MapSpawner : MonoBehaviour
     public int mapBeachIndex = 10;
     public bool isBeachMap = false;
     public bool isBeachStartSpawned = false;
+    public GameObject mapBeachDesertPrefab;
     public GameObject mapBeachStartPrefab;
     public GameObject[] mapBeachPrefabs;
 
@@ -29,6 +31,7 @@ public class MapSpawner : MonoBehaviour
     public int mapDesertIndex = 15;
     public bool isDesertMap = false;
     public bool isDesertStartSpawned = false;
+    public GameObject mapDesertFieldPrefab;
     public GameObject mapDesertStartPrefab;
     public GameObject[] mapDesertPrefabs;
 
@@ -36,6 +39,7 @@ public class MapSpawner : MonoBehaviour
     public int mapFieldIndex = 20;
     public bool isFieldMap = false;
     public bool isFieldStartSpawned = false;
+    public GameObject mapFieldIcePrefab;
     public GameObject mapFieldStartPrefab;
     public GameObject[] mapFieldPrefabs;
 
@@ -43,6 +47,7 @@ public class MapSpawner : MonoBehaviour
     public int mapIceIndex = 25;
     public bool isIceMap = false;
     public bool isIceStartSpawned = false;
+    public GameObject mapIceLavaPrefab;
     public GameObject mapIceStartPrefab;
     public GameObject[] mapIcePrefabs;
 
@@ -55,7 +60,7 @@ public class MapSpawner : MonoBehaviour
 
     [Header("Spawn Range 2D")]
     public float spawnRangeYmin = -1.5f;
-    public float spawnRangeYBeachMin = 3783.31f;
+    private float spawnRangeYBeachMin = 3783.31f;
     public float spawnRangeYDesertMin = 1165.4051f;
     public float spawnRangeYFieldMin = 1165.4051f;
     public float spawnRangeYIceMin = 1165.4051f;
@@ -105,6 +110,9 @@ public class MapSpawner : MonoBehaviour
 
         if (isBeachMap)
         {
+            Instantiate(mapCityBeachPrefab, new Vector3(spawnRangeX, -32.1f, 0f), mapBeachStartPrefab.transform.rotation);
+            spawnRangeX += 30f;
+
             Instantiate(mapBeachStartPrefab, new Vector3(spawnRangeX, -4.195f, 0f), mapBeachStartPrefab.transform.rotation);
             isBeachMap = false;
             isBeachStartSpawned = true;
@@ -113,6 +121,9 @@ public class MapSpawner : MonoBehaviour
         }
         else if (isDesertMap)
         {
+            Instantiate(mapBeachDesertPrefab, new Vector3(spawnRangeX, -32.1f, 0f), mapBeachStartPrefab.transform.rotation);
+            spawnRangeX += 30f;
+
             Instantiate(mapDesertStartPrefab, new Vector3(spawnRangeX, -4.195f, 0f), mapDesertStartPrefab.transform.rotation);
             isDesertMap = false;
             isBeachStartSpawned = false;
@@ -122,6 +133,9 @@ public class MapSpawner : MonoBehaviour
         }
         else if (isFieldMap)
         {
+            Instantiate(mapDesertFieldPrefab, new Vector3(spawnRangeX, -32.1f, 0f), mapBeachStartPrefab.transform.rotation);
+            spawnRangeX += 30f;
+            
             Instantiate(mapFieldStartPrefab, new Vector3(spawnRangeX, -4.195f, 0f), mapFieldStartPrefab.transform.rotation);
             isFieldMap = false;
             isDesertStartSpawned = false;
@@ -131,6 +145,9 @@ public class MapSpawner : MonoBehaviour
         }
         else if (isIceMap)
         {
+            Instantiate(mapIceLavaPrefab, new Vector3(spawnRangeX, -32.1f, 0f), mapBeachStartPrefab.transform.rotation);
+            spawnRangeX += 30f;
+            
             Instantiate(mapIceStartPrefab, new Vector3(spawnRangeX, -4.195f, 0f), mapIceStartPrefab.transform.rotation);
             isIceMap = false;
             isFieldStartSpawned = false;

@@ -84,6 +84,10 @@ public class GManager : MonoBehaviour
     public AnimationCurve airplaneRotationXCurve = AnimationCurve.EaseInOut(0f, -1f, 1f, 1f); // Curve để làm mượt
     private float currentAirplaneRotationX = 0f;
     private float targetAirplaneRotationX = 0f;
+    
+    [Header("Ground Collision Detection")]
+    public bool isPlaneOnGround = false; // Flag để theo dõi máy bay chạm đất
+    public bool isGroundCollisionDetected = false; // Flag collision từ Plane.cs
 
     [Header("UI Texts")]
     public TextMeshProUGUI distanceText;
@@ -120,6 +124,9 @@ public class GManager : MonoBehaviour
     public float rotationForce = 100f;        // tốc độ xoay ban đầu
     public float angularFriction = 5f;        // hệ số ma sát góc
     public float currentRotationSpeed = 0f;  // tốc độ xoay hiện tại
+
+    [Header("Camera Management")]
+    public CameraManager cameraManager; // Reference tới CameraManager
 
     void Awake()
     {
@@ -181,6 +188,10 @@ public class GManager : MonoBehaviour
             isPlay = true;
             isHomeDown = true;
             isHomeUp = true;
+            
+            // THÊM: Reset trạng thái chạm đất khi bắt đầu game mới
+            ResetGroundCollision();
+            
             homeGameDown();
             homeGameUp();
 
@@ -203,7 +214,12 @@ public class GManager : MonoBehaviour
         float r = 10f;
         float horizontalSpeed = 10f;
         float targetX = airplaneRigidbody2D.position.x + r;
-        RotaryFront.instance.StartRotation();
+
+        if(Shop.instance.isCurrentIndex)
+        {
+            RotaryFront.instance.StartRotation();
+        }
+        // 
 
         airplaneRigidbody2D.gravityScale = 0f;
         airplaneRigidbody2D.velocity = new Vector2(horizontalSpeed, 0f);
@@ -303,7 +319,10 @@ public class GManager : MonoBehaviour
 
         // Đảm bảo rotation = 0 chính xác
         airplaneRigidbody2D.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
-        Debug.Log($"Hoàn thành xoay về 0° - Máy bay đã ổn định");
+        
+        // THÊM: Reset currentAirplaneRotationX để tránh frame đầu bị gắn giá trị ngẫu nhiên
+        currentAirplaneRotationX = 0f;
+        Debug.Log($"Hoàn thành xoay về 0° - Máy bay đã ổn định, currentAirplaneRotationX reset = {currentAirplaneRotationX}°");
 
         // Bước 4: Giữ độ cao và cho phép điều khiển
 
@@ -778,35 +797,30 @@ public class GManager : MonoBehaviour
             return;
         }
         
-        // CẢI THIỆN điều kiện để nhận biết máy bay chạm đất
-        bool isOnGround = false;
+        // SỬ DỤNG collision detection từ Plane.cs kết hợp với altitude/velocity
+        bool isOnGround = isGroundCollisionDetected || 
+                         (currentAltitude <= 2f && airplaneRigidbody2D.velocity.magnitude < 5f);
         
-        // Kiểm tra máy bay có đang chạm đất không - dựa vào altitude và velocity
-        if (currentAltitude <= 3f && airplaneRigidbody2D.velocity.magnitude < 8f)
+        // Điều kiện máy bay đang bay (CHÍNH XÁC HÓA điều kiện)
+        bool isAirborne = isPlay && !isOnGround && 
+                         (currentAltitude > 2f || // Ở trên 2m
+                          airplaneRigidbody2D.velocity.magnitude > 5f || // Hoặc đang di chuyển nhanh
+                          isControllable); // Hoặc đang trong giai đoạn điều khiển
+        
+        if (isOnGround) 
         {
-            isOnGround = true;
-        }
-        
-        // Điều kiện máy bay đang bay (không chạm đất)
-        bool isAirborne = isPlay && !isOnGround && (isControllable || 
-                                   (!isControllable && airplaneRigidbody2D.velocity.magnitude > 1f) ||
-                                   currentAltitude > 5f);
-        
-        if (!isAirborne || isOnGround) 
-        {
-            // Khi trên đất hoặc chạm đất, từ từ reset rotation X về 0
+            // Khi chạm đất, reset rotation X về 0
             if (Mathf.Abs(currentAirplaneRotationX) > 0.1f)
             {
-                // Tăng tốc độ reset khi chạm đất để có cảm giác tự nhiên
-                float resetSpeed = isOnGround ? 4f : 2.5f;
+                float resetSpeed = isGroundCollisionDetected ? 6f : 4f;
                 currentAirplaneRotationX = Mathf.Lerp(currentAirplaneRotationX, 0f, Time.deltaTime * resetSpeed);
                 Vector3 groundRotation = airplaneRigidbody2D.transform.eulerAngles;
                 airplaneRigidbody2D.transform.rotation = Quaternion.Euler(currentAirplaneRotationX, groundRotation.y, groundRotation.z);
                 
+                Debug.Log($"Ground Reset RotationX: {currentAirplaneRotationX:F2}° (Collision: {isGroundCollisionDetected})");
             }
             else
             {
-                // Đảm bảo rotation.x = 0 khi đã reset xong
                 currentAirplaneRotationX = 0f;
                 Vector3 groundRotation = airplaneRigidbody2D.transform.eulerAngles;
                 airplaneRigidbody2D.transform.rotation = Quaternion.Euler(0f, groundRotation.y, groundRotation.z);
@@ -814,19 +828,42 @@ public class GManager : MonoBehaviour
             return;
         }
         
-        // Tính toán target rotation dựa trên sin wave
-        float time = Time.time * airplaneRotationXSpeed;
-        targetAirplaneRotationX = Mathf.Sin(time) * airplaneRotationXAmplitude;
-        
-        // ĐƠN GIẢN HÓA: Bỏ curve, dùng sin wave trực tiếp
-        // Lerp từ current đến target để có chuyển động mượt mà hơn
-        currentAirplaneRotationX = Mathf.Lerp(currentAirplaneRotationX, targetAirplaneRotationX, Time.deltaTime * 5f);
+        // KHI ĐANG BAY - DAO ĐỘNG ROTATION.X
+        if (isAirborne) 
+        {
+            // Tính toán target rotation dựa trên sin wave
+            float time = Time.time * airplaneRotationXSpeed;
+            targetAirplaneRotationX = Mathf.Sin(time) * airplaneRotationXAmplitude;
+            
+            // THÊM: Nếu vừa bắt đầu bay (currentAirplaneRotationX gần 0), lerp chậm hơn để tránh nhảy
+            float lerpSpeed = 5f;
+            if (Mathf.Abs(currentAirplaneRotationX) < 0.5f && Mathf.Abs(targetAirplaneRotationX) > 3f)
+            {
+                lerpSpeed = 1.5f; // Chậm hơn để chuyển tiếp mượt từ 0
+            }
+            
+            // Lerp từ current đến target với tốc độ điều chỉnh
+            currentAirplaneRotationX = Mathf.Lerp(currentAirplaneRotationX, targetAirplaneRotationX, Time.deltaTime * lerpSpeed);
+            
+            
+        }
+        else 
+        {
+            // Khi không bay và không chạm đất (trạng thái trung gian), từ từ về 0
+            if (Mathf.Abs(currentAirplaneRotationX) > 0.1f)
+            {
+                currentAirplaneRotationX = Mathf.Lerp(currentAirplaneRotationX, 0f, Time.deltaTime * 2.5f);
+            }
+            else
+            {
+                currentAirplaneRotationX = 0f;
+            }
+        }
         
         // Áp dụng rotation X cho máy bay - CHỈ THAY ĐỔI X, GIỮ NGUYÊN Y và Z
         Vector3 currentRotation = airplaneRigidbody2D.transform.eulerAngles;
         Vector3 newRotation = new Vector3(currentAirplaneRotationX, currentRotation.y, currentRotation.z);
         airplaneRigidbody2D.transform.rotation = Quaternion.Euler(newRotation);
-       
     }
 
     // Hàm để dừng rotation X (có thể gọi khi cần)
@@ -848,6 +885,22 @@ public class GManager : MonoBehaviour
     {
         isAirplaneRotationXActive = true;
         Debug.Log("Started airplane rotation X oscillation");
+    }
+
+    // THÊM: Hàm để Plane.cs gọi khi chạm đất
+    public void OnPlaneGroundCollision()
+    {
+        isGroundCollisionDetected = true;
+        isPlaneOnGround = true;
+        Debug.Log("GManager: Nhận thông báo máy bay chạm đất từ Plane.cs");
+    }
+
+    // THÊM: Hàm để reset trạng thái chạm đất
+    public void ResetGroundCollision()
+    {
+        isGroundCollisionDetected = false;
+        isPlaneOnGround = false;
+        Debug.Log("GManager: Reset trạng thái chạm đất");
     }
 
     

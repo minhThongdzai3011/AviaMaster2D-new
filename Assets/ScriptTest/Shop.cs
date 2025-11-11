@@ -16,6 +16,19 @@ public class Shop : MonoBehaviour
     public Image imageBackgroundPlane3;
     public Sprite[] spritePlanes;
     public Sprite[] spriteBackgrounds; // Thêm array cho background sprites
+
+    public Button button1;
+    public Button button2;
+    public Button button3;
+
+    [Header("Thay đổi nhân vật")]
+    public GameObject[] gameObjectsPlanes;
+
+    [Header("Nhân vật ban đầu")]
+    public GameObject defaultPlane;
+
+    [Header ("Rigidbody2D của máy bay")]
+    public Rigidbody2D[] airplanesRigidbody2D;
     
     private int currentIndex = 1;
     
@@ -420,10 +433,106 @@ public class Shop : MonoBehaviour
         ResetPlaneStates();
         ResetBackgroundStates();
     }
-    
+
     void OnDestroy()
     {
         // Cleanup DOTween để tránh memory leak
         DOTween.Kill(this);
+    }
+
+    public bool isCurrentIndex = false;
+
+    public void btn1BuyCurrentPlane()
+    {
+        int selectedIndex = currentIndex;
+        Debug.Log($"btn1BuyCurrentPlane: Mua máy bay tại index {selectedIndex} - {gameObjectsPlanes[selectedIndex].name}");
+        
+        defaultPlane = gameObjectsPlanes[selectedIndex];
+        GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[selectedIndex];
+        if (CameraManager.instance == null)
+        {
+            Debug.LogError("CameraManager instance is NULL!");
+            return;
+        }
+        else if (airplanesRigidbody2D[selectedIndex] == null)
+        {
+            Debug.LogError($"Airplane Rigidbody2D at index {selectedIndex} is NULL!");
+            return;
+        }
+        CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[selectedIndex].transform;
+        CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[selectedIndex].transform;
+        airplanesRigidbody2D[selectedIndex].velocity = Vector2.zero; // Đặt vận tốc về 0 khi chuyển máy bay
+        
+        Debug.Log($"Calling UpdateAircraftForCamera with: {airplanesRigidbody2D[selectedIndex].name}");
+
+        for (int i = 0; i < gameObjectsPlanes.Length; i++)
+        {
+            if (i == selectedIndex)
+            {
+                gameObjectsPlanes[i].SetActive(true);
+                Debug.Log($"Activated aircraft: {gameObjectsPlanes[i].name}");
+            }
+            else
+            {
+                gameObjectsPlanes[i].SetActive(false);
+            }
+        }
+        if (currentIndex == 12){
+            isCurrentIndex = true;
+        }
+    }
+
+    public void btn2BuyCurrentPlane()
+    {
+        Debug.Log($"vị trí máy bay tại index {currentIndex + 1}");
+        defaultPlane = gameObjectsPlanes[currentIndex + 1];
+        GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[currentIndex + 1];
+        CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[currentIndex + 1].transform;
+        CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[currentIndex + 1].transform;
+        airplanesRigidbody2D[currentIndex + 1].velocity = Vector2.zero; // Đặt vận tốc về 0 khi chuyển máy bay
+
+
+
+        for (int i = 0; i < gameObjectsPlanes.Length; i++)
+        {
+            if (i == currentIndex + 1)
+            {
+                gameObjectsPlanes[i].SetActive(true);
+            }
+            else
+            {
+                gameObjectsPlanes[i].SetActive(false);
+            }
+        }
+        
+        if (currentIndex+1 == 12){
+            isCurrentIndex = true;
+        }
+    }
+    public void btn3BuyCurrentPlane()
+    {
+        Debug.Log($"vị trí máy bay tại index {currentIndex + 2}");
+        defaultPlane = gameObjectsPlanes[currentIndex + 2];
+        GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[currentIndex + 2];
+        CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[currentIndex + 2].transform;
+        CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[currentIndex + 2].transform;
+        airplanesRigidbody2D[currentIndex + 2].velocity = Vector2.zero; // Đặt vận tốc về 0 khi chuyển máy bay
+
+
+
+        for (int i = 0; i < gameObjectsPlanes.Length; i++)
+        {
+            if (i == currentIndex + 2)
+            {
+                gameObjectsPlanes[i].SetActive(true);
+            }
+            else
+            {
+                gameObjectsPlanes[i].SetActive(false);
+            }
+        }
+        if (currentIndex+2 == 12){
+            isCurrentIndex = true;
+        }
     }
 }

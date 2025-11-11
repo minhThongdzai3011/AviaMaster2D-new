@@ -25,6 +25,8 @@ TagManager:
   - yellow1
   - yellow2
   - blue1
+  - bird
+  - airport
   layers:
   - Default
   - TransparentFX

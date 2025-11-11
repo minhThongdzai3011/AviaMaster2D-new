@@ -29,12 +29,16 @@ public class Plane : MonoBehaviour
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
+            // THÊM: Thông báo cho GManager biết máy bay đã chạm đất
+            if (GManager.instance != null)
+            {
+                GManager.instance.OnPlaneGroundCollision();
+            }
+            
             RotaryFront.instance.StopWithDeceleration(3.0f);
-
             smokeEffect.Stop();
             StartCoroutine(UpMass());
         }
-
     }
 
     void OnTriggerEnter2D(Collider2D other)
