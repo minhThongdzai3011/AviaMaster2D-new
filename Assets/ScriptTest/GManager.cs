@@ -138,6 +138,8 @@ public class GManager : MonoBehaviour
 
     void Start()
     {
+        Debug.Log("Airplane GManager Start called " + airplaneRigidbody2D.name);
+        
         
         sliderAchievement.value = 0f;
         startZ = airplaneRigidbody2D.transform.rotation.eulerAngles.z;
@@ -188,7 +190,16 @@ public class GManager : MonoBehaviour
             isPlay = true;
             isHomeDown = true;
             isHomeUp = true;
-            
+            ChangePlane currentChangePlane = airplaneRigidbody2D.GetComponent<ChangePlane>();
+            if (currentChangePlane != null)
+            {
+                Debug.Log("Setting isRotationChangePlane to false in LaunchAirplane");
+                currentChangePlane.isRotationChangePlane = false;
+            }
+            else
+            {
+                Debug.LogWarning($"ChangePlane component not found on {airplaneRigidbody2D.name}");
+            }
             // THÊM: Reset trạng thái chạm đất khi bắt đầu game mới
             ResetGroundCollision();
             
@@ -215,11 +226,24 @@ public class GManager : MonoBehaviour
         float horizontalSpeed = 10f;
         float targetX = airplaneRigidbody2D.position.x + r;
 
-        if(Shop.instance.isCurrentIndex)
+        // Thay thế đoạn code trong LaunchSequence():
+        if(airplaneRigidbody2D.name == "Forest" || airplaneRigidbody2D.name == "Avocado" || airplaneRigidbody2D.name == "BeeGee" || airplaneRigidbody2D.name == "Pancake" || airplaneRigidbody2D.name == "Scruffy") 
         {
-            RotaryFront.instance.StartRotation();
+            Debug.Log("Start Rotation Front");
+            
+            // THAY ĐỔI: Tìm RotaryFront trên máy bay hiện tại thay vì dùng singleton
+            RotaryFront currentRotaryFront = airplaneRigidbody2D.GetComponentInChildren<RotaryFront>();
+            if (currentRotaryFront != null)
+            {
+                currentRotaryFront.StartRotation();
+                Debug.Log($"Started rotation on {airplaneRigidbody2D.name}");
+            }
+            else
+            {
+                Debug.LogWarning($"RotaryFront not found on {airplaneRigidbody2D.name}");
+            }
         }
-        // 
+        
 
         airplaneRigidbody2D.gravityScale = 0f;
         airplaneRigidbody2D.velocity = new Vector2(horizontalSpeed, 0f);
@@ -817,7 +841,6 @@ public class GManager : MonoBehaviour
                 Vector3 groundRotation = airplaneRigidbody2D.transform.eulerAngles;
                 airplaneRigidbody2D.transform.rotation = Quaternion.Euler(currentAirplaneRotationX, groundRotation.y, groundRotation.z);
                 
-                Debug.Log($"Ground Reset RotationX: {currentAirplaneRotationX:F2}° (Collision: {isGroundCollisionDetected})");
             }
             else
             {

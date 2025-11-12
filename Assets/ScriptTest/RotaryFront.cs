@@ -28,7 +28,6 @@ public class RotaryFront : MonoBehaviour
         // Singleton nhẹ, nếu cần thay đổi behavior hãy điều chỉnh
         if (instance != null && instance != this)
         {
-            Destroy(gameObject);
             return;
         }
         instance = this;
@@ -54,10 +53,12 @@ public class RotaryFront : MonoBehaviour
     // Bắt đầu quay nếu chưa chạy
     public void StartRotation()
     {
+        Debug.Log("RotaryFront StartRotation called" + rotRoutine);
         if (rotRoutine == null)
         {
             rotRoutine = StartCoroutine(RotateRoutine());
             isRunning = true;
+            Debug.Log("RotaryFront StartRotation started coroutine: " + rotRoutine);
         }
     }
 

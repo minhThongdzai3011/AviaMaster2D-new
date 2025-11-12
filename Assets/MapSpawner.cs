@@ -145,7 +145,7 @@ public class MapSpawner : MonoBehaviour
         }
         else if (isIceMap)
         {
-            Instantiate(mapIceLavaPrefab, new Vector3(spawnRangeX, -32.1f, 0f), mapBeachStartPrefab.transform.rotation);
+            Instantiate(mapFieldIcePrefab, new Vector3(spawnRangeX, -32.1f, 0f), mapBeachStartPrefab.transform.rotation);
             spawnRangeX += 30f;
             
             Instantiate(mapIceStartPrefab, new Vector3(spawnRangeX, -4.195f, 0f), mapIceStartPrefab.transform.rotation);
@@ -157,6 +157,9 @@ public class MapSpawner : MonoBehaviour
         }
         else if (isLavaMap)
         {
+            Instantiate(mapIceLavaPrefab, new Vector3(spawnRangeX, -32.1f, 0f), mapBeachStartPrefab.transform.rotation);
+            spawnRangeX += 30f;
+
             Instantiate(mapLavaStartPrefab, new Vector3(spawnRangeX, -4.195f, 0f), mapLavaStartPrefab.transform.rotation);
             isLavaMap = false;
             isIceStartSpawned = false;
@@ -169,27 +172,22 @@ public class MapSpawner : MonoBehaviour
         if (isBeachStartSpawned)
         {
             spawnRangeYmin = spawnRangeYBeachMin;
-            Debug.Log("SpawnRangeYmin Beach: " + spawnRangeYmin);
         }
         else if (isDesertStartSpawned)
         {
             spawnRangeYmin = spawnRangeYDesertMin;
-            Debug.Log("SpawnRangeYmin Desert: " + spawnRangeYmin);
         }
         else if (isFieldStartSpawned)
         {
             spawnRangeYmin = spawnRangeYFieldMin;
-            Debug.Log("SpawnRangeYmin Field: " + spawnRangeYmin);
         }
         else if (isIceStartSpawned)
         {
             spawnRangeYmin = spawnRangeYIceMin;
-            Debug.Log("SpawnRangeYmin Ice: " + spawnRangeYmin);
         }
         else if (isLavaStartSpawned)
         {
             spawnRangeYmin = spawnRangeYLavaMin;
-            Debug.Log("SpawnRangeYmin Lava: " + spawnRangeYmin);
         }
 
         Vector3 spawnPosition = new Vector3(spawnRangeX,

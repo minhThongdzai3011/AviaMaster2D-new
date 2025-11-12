@@ -8,6 +8,7 @@ public class Shop : MonoBehaviour
 {
     public static Shop instance;
     public Image imageShop;
+    public Button Image;
     public Image imagePlane1;
     public Image imagePlane2;
     public Image imagePlane3;
@@ -17,9 +18,11 @@ public class Shop : MonoBehaviour
     public Sprite[] spritePlanes;
     public Sprite[] spriteBackgrounds; // Thêm array cho background sprites
 
+    public Button button0;
     public Button button1;
     public Button button2;
     public Button button3;
+    public Button button4;
 
     [Header("Thay đổi nhân vật")]
     public GameObject[] gameObjectsPlanes;

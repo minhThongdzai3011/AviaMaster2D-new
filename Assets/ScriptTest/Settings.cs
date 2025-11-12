@@ -338,6 +338,9 @@ public class Settings : MonoBehaviour
                 GManager.instance.AgainGame();
                 isAnimating = false;
                 Debug.Log("Win Image animation đóng hoàn thành!");
+                targetValue = 0f;
+                PlayerPrefs.SetFloat("PrizeSliderValue", targetValue);
+                PlayerPrefs.Save();
             });
     }
 
@@ -566,6 +569,7 @@ public class Settings : MonoBehaviour
                 prizeChestImage.gameObject.SetActive(false);
                 isAnimating = false;
                 Debug.Log("Prize Chest Image animation đóng hoàn thành!");
+                
             });
     }
 
