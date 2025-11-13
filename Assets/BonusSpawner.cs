@@ -15,7 +15,7 @@ public class BonusSpawner : MonoBehaviour
     public float startDelay = 0f;
     public float spawnInterval = 0.2f;
     public int count = 0;
-    public int maxSpawnedItems = 30;
+    public int maxSpawnedItems = 10;
     public float rangeXmin = 5f;
     public float rangeXmax = 10f;
     public float startRangeX = -18f;
@@ -38,7 +38,7 @@ public class BonusSpawner : MonoBehaviour
 
         while (true)
         {
-            count = GameObject.FindGameObjectsWithTag("Bonus2").Length + GameObject.FindGameObjectsWithTag("Bonus3").Length + GameObject.FindGameObjectsWithTag("Bonus4").Length + GameObject.FindGameObjectsWithTag("Bonus5").Length + GameObject.FindGameObjectsWithTag("Bonus10").Length;
+            count = GameObject.FindGameObjectsWithTag("bird").Length; 
             if (count < maxSpawnedItems)
             {
                 SpawnBonusItem();
@@ -66,7 +66,7 @@ public class BonusSpawner : MonoBehaviour
         List<GameObject> allBonusItems = new List<GameObject>();
         
         // Danh sách các tag bonus cần xóa
-        string[] bonusTags = { "Bonus2", "Bonus3", "Bonus4", "Bonus5", "Bonus10" };
+        string[] bonusTags = { "bird" };
         
         // Tìm và thêm tất cả các object có tag bonus vào list
         foreach (string tag in bonusTags)

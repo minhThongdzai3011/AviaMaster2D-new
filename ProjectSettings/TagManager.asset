@@ -27,6 +27,7 @@ TagManager:
   - blue1
   - bird
   - airport
+  - Cloud
   layers:
   - Default
   - TransparentFX

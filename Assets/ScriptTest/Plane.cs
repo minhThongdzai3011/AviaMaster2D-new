@@ -8,9 +8,10 @@ public class Plane : MonoBehaviour
     public static Plane instance;
     public ParticleSystem smokeEffect;
     public TrailRenderer trailEffect;
-    
 
-    private int moneyDistance = 0;
+
+    public int moneyDistance = 0;
+    public int moneyCollect = 0;
     public int moneyTotal = 0;
     // Start is called before the first frame update
     void Start()
@@ -22,6 +23,7 @@ public class Plane : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
 
     }
 
@@ -34,7 +36,7 @@ public class Plane : MonoBehaviour
             {
                 GManager.instance.OnPlaneGroundCollision();
             }
-            
+
             RotaryFront.instance.StopWithDeceleration(3.0f);
             smokeEffect.Stop();
             StartCoroutine(UpMass());
@@ -45,8 +47,20 @@ public class Plane : MonoBehaviour
     {
         if (other.CompareTag("Coin"))
         {
-            Destroy(other.gameObject);
-            GManager.instance.money += 1;
+            AnimCoin anim = other.GetComponent<AnimCoin>();
+            if (anim != null)
+            {
+                // tăng tiền ngay (hoặc bạn có thể tăng tiền khi animation hoàn tất trong AnimCoin)
+                moneyCollect += 1;
+
+                anim.collected = true;
+                anim.Collect();
+            }
+            else
+            {
+                moneyCollect += 1;
+                Destroy(other.gameObject);
+            }
         }
     }
 
@@ -102,11 +116,6 @@ public class Plane : MonoBehaviour
             // Tăng mass từ từ để tạo cảm giác nặng dần
             rb.mass += massIncreaseRate;
             
-            // Debug mỗi giây
-            if (Mathf.FloorToInt(slideTimer) != Mathf.FloorToInt(slideTimer - 0.05f))
-            {
-                Debug.Log($"Trượt - Time: {slideTimer:F1}s, Speed: {currentVelocity.x:F1}, Friction: {currentFriction:F3}");
-            }
             
             yield return wait;
         }
@@ -115,7 +124,6 @@ public class Plane : MonoBehaviour
         rb.velocity = Vector2.zero;
         rb.mass = 100f; // Set mass cuối cùng
         
-        Debug.Log($"Máy bay dừng sau {slideTimer:F1}s trượt");
         
         // Bắt đầu tính tiền sau khi trượt xong
         yield return new WaitForSeconds(1f);
@@ -130,18 +138,18 @@ public class Plane : MonoBehaviour
         yield return new WaitForSeconds(2f);
         if (!isAddMoneyDone)
         {
+            GManager.instance.coinEffect.Stop();
             isAddMoneyDone = true;
             moneyDistance = (int)(GManager.instance.distanceTraveled / 1.34f);
-            moneyTotal = moneyDistance + GManager.instance.money;
-            Debug.Log("Money from Distance: " + moneyDistance + " | Current Money: " + GManager.instance.money + " | Total Money: " + moneyTotal);
+            moneyTotal = moneyDistance + moneyCollect;
+            Debug.Log("Money from Distance: " + moneyDistance + " | Current Money: " + moneyCollect + " | Total Money: " + moneyTotal);
             GManager.instance.totalMoney += moneyTotal;
             Debug.Log("Updated Total Money: " + GManager.instance.totalMoney);
-            GManager.instance.money = 0;
-            Settings.instance.totalMoneyPlayText.text = "" + moneyTotal;
+            // Settings.instance.totalMoneyPlayText.text = "" + moneyTotal;
 
             // Cập nhật UI
             GManager.instance.totalMoneyText.text = "" + GManager.instance.totalMoney;
-            GManager.instance.moneyText.text = "" + GManager.instance.money;
+            GManager.instance.moneyText.text = "" + moneyCollect;
 
 
             // Lưu TotalMoney và đảm bảo lưu ngay

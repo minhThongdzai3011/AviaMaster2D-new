@@ -12,11 +12,15 @@ public class Settings : MonoBehaviour
     [Header("Text Settings")]
     public TextMeshProUGUI musicText;
     public TextMeshProUGUI soundText;
+    public TextMeshProUGUI distanceMoneyText;
+    public TextMeshProUGUI collectMoneyText;
+    public TextMeshProUGUI bonusText;
     public TextMeshProUGUI totalMoneyPlayText;
     public TextMeshProUGUI lastDistanceText;
     public TextMeshProUGUI countdownText;
     public TextMeshProUGUI resultText;
     public TextMeshProUGUI prizeText;
+    public TextMeshProUGUI altitudeText;
 
     [Header("Image Settings")]
     public Image musicImageOn;
@@ -30,6 +34,7 @@ public class Settings : MonoBehaviour
     public Image pannel;
     public Image prizeImage;
     public Image prizeChestImage;
+    public Image altitudeImage;
     
     [Header("Bool Settings")]
     public bool isMusicOn = true;
@@ -61,6 +66,7 @@ public class Settings : MonoBehaviour
         targetValue = PlayerPrefs.GetFloat("PrizeSliderValue", 0f);
         prizeSlider.value = targetValue;
         StartCountdown();
+        GManager.instance.coinEffect.Stop();
     }
 
     public void Update()
@@ -69,7 +75,15 @@ public class Settings : MonoBehaviour
         {
             UpdateSliderPrizeCoin();
         }
-        
+        altitudeText.text = "" + (int)GManager.instance.currentAltitude + " m";
+        if (GManager.instance.currentAltitude >= 30)
+        {
+            altitudeImage.gameObject.SetActive(true);
+        }
+        else
+        {
+            altitudeImage.gameObject.SetActive(false);
+        }
     }
 
     void LoadSettings()
@@ -286,7 +300,7 @@ public class Settings : MonoBehaviour
         if (isAnimating) return;
 
         Debug.Log("Mở Win Image!");
-
+        GManager.instance.coinEffect.Stop();
         // Dừng tất cả animation đang chạy
         DOTween.Kill(winImage.transform);
         isAnimating = true;
@@ -306,9 +320,9 @@ public class Settings : MonoBehaviour
             .OnComplete(() =>
             {
                 isAnimating = false;
-                isPrizeCoin = true;
                 StartCountingCoin();
                 Debug.Log("Win Image animation mở hoàn thành!");
+                
             });
             
     }
@@ -341,6 +355,9 @@ public class Settings : MonoBehaviour
                 targetValue = 0f;
                 PlayerPrefs.SetFloat("PrizeSliderValue", targetValue);
                 PlayerPrefs.Save();
+                Plane.instance.moneyCollect = 0;
+                Plane.instance.moneyDistance = 0;
+                Plane.instance.moneyTotal = 0;
             });
     }
 
@@ -473,13 +490,75 @@ public class Settings : MonoBehaviour
 
     public void StartCountingCoin()
     {
-        float startValue = 0f;
-
-        DOVirtual.Float(startValue, Plane.instance.moneyTotal, 2f, value =>
+        if (Plane.instance == null)
         {
-            totalMoneyPlayText.text = Mathf.FloorToInt(value).ToString();
-        }).SetEase(Ease.OutCubic);
+            Debug.LogWarning("Plane.instance is null");
+            return;
+        }
+
+        float distanceValue = Plane.instance.moneyDistance;
+        float collectValue  = Plane.instance.moneyCollect;
+        float totalValue    = Plane.instance.moneyTotal;
+
+        Debug.Log("Tiền khoảng cách: " + distanceValue + " | Tiền thu thập: " + collectValue + " | Tổng tiền: " + totalValue + "isBonus: " + GManager.instance.isBonus);
+
+        // Sequence để chạy lần lượt: distance -> collect -> (x2 bonus) -> total
+        Sequence seq = DOTween.Sequence();
+
+        // 1) Đếm distance
+        seq.Append(DOVirtual.Float(0f, distanceValue, 2f, value =>
+        {
+            if (distanceMoneyText != null) distanceMoneyText.text = Mathf.FloorToInt(value).ToString();
+        }).SetEase(Ease.OutCubic));
+
+        // 2) Đếm collect
+        seq.Append(DOVirtual.Float(0f, collectValue, 2f, value =>
+        {
+            if (collectMoneyText != null) collectMoneyText.text = Mathf.FloorToInt(value).ToString();
+        }).SetEase(Ease.OutCubic));
+        float duration = 2f;
+        // 3) Xử lý bonus trước khi đếm total, sau đó đếm total
+        seq.AppendCallback(() =>
+        {
+            if (GManager.instance != null && GManager.instance.isBonus)
+            {
+                Debug.Log("Áp dụng bonus x2!");
+                if (bonusText != null) bonusText.text = "Bonus : x2";
+                Debug.Log("Tổng tiền trước bonus: " + totalValue);
+                totalValue *= 2f;
+                duration = 4f;
+                Debug.Log("Tổng tiền sau bonus: " + totalValue);
+                GManager.instance.isBonus = false;
+            }
+            else
+            {
+                Debug.Log("Không áp dụng bonus");
+                if (bonusText != null) bonusText.text = "No Bonus";
+                duration = 2f;
+            }
+
+            // Cập nhật Plane.instance.moneyTotal nếu bạn muốn ghi lại giá trị mới
+            if (Plane.instance != null) Plane.instance.moneyTotal = (int)totalValue;
+            Debug.Log("Final Total Value to count: " + totalValue);
+
+            // 4) Đếm total
+            Debug.Log("Bắt đầu đếm tổng tiền: " + totalValue);
+            seq.Append(DOVirtual.Float(0f, totalValue, duration, value =>
+            {
+                if (totalMoneyPlayText != null) totalMoneyPlayText.text = Mathf.FloorToInt(value).ToString();
+            }).SetEase(Ease.OutCubic)).OnComplete(() =>
+            {
+                GManager.instance.coinEffect.Play();
+                
+                isPrizeCoin = true;
+            });
+        });
+
+        
+
+        seq.Play();
     }
+
     public bool isCountingDown = false;
     public void StartCountdown()
     {

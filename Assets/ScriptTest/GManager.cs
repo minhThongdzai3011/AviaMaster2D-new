@@ -71,6 +71,7 @@ public class GManager : MonoBehaviour
 
     public GameObject arrowAngleZ;
     public GameObject rotationXObject;
+    public ParticleSystem coinEffect;
 
     [Header("RotationX settings")]
     public float amplitude = 15.0f; // Góc nghiêng tối đa
@@ -149,7 +150,7 @@ public class GManager : MonoBehaviour
 
         // Tính toán lại các giá trị nâng cấp dựa trên rate đã load
         CalculateUpgradeValues();
-
+        LoadMoneyUpgrade();
         // Cập nhật UI
         SaveTotalMoney();
         SaveTotalDiamond();
@@ -543,10 +544,12 @@ public class GManager : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 StartBoostDecrease();
+                Plane.instance.trailEffect.enabled = true; 
             }
             if (Input.GetKeyUp(KeyCode.Space))
             {
                 StopBoostDecrease();
+                Plane.instance.trailEffect.enabled = false;
             }
             
             // Xử lý boost và màu button
@@ -1243,9 +1246,9 @@ public class GManager : MonoBehaviour
     public int ratePower = 0;
     public int rateFuel = 0;
     public int rateBoost = 0;
-    public float moneyPower = 50f;
-    public float moneyFuel = 50f;
-    public float moneyBoost = 50f;
+    private float moneyPower = 20f;
+    private float moneyFuel = 20f;
+    private float moneyBoost = 20f;
     public bool isFuelMax = false;
     public bool isPowerMax = false;
     public bool isBoostMax = false;
@@ -1257,13 +1260,7 @@ public class GManager : MonoBehaviour
             levelFuel += 1;
             rateFuel += 5;
 
-            if (levelFuel >= 60)
-            {
-                fuelMoneyText.text = "MAX";
-                fuelMoneyText.color = Color.yellow;
-                isFuelMax = true;
-            }
-            moneyFuel = moneyFuel * 1.34f;
+            moneyFuel = moneyFuel * 1.25f;
             moneyFuel = (int)Math.Round(moneyFuel, 1);
             if (moneyFuel > 999)
             {
@@ -1319,13 +1316,7 @@ public class GManager : MonoBehaviour
         {
             levelBoost += 1;
             rateBoost += 5;
-            if (levelBoost >= 60)
-            {
-                boostMoneyText.text = "MAX";
-                boostMoneyText.color = Color.yellow;
-                isBoostMax = true;
-            }
-            moneyBoost = moneyBoost * 1.34f;
+            moneyBoost = moneyBoost * 1.25f;
             moneyBoost = (int)Math.Round(moneyBoost, 1);
             if (moneyBoost > 999)
             {
@@ -1364,13 +1355,7 @@ public class GManager : MonoBehaviour
         {
             levelPower += 1;
             ratePower += 5;
-            if (levelPower >= 60)
-            {
-                powerMoneyText.text = "MAX";
-                powerMoneyText.color = Color.yellow;
-                isPowerMax = true;
-            }
-            moneyPower = moneyPower * 1.34f;
+            moneyPower = moneyPower * 1.25f;
             moneyPower = (int)Math.Round(moneyPower, 1);
             if (moneyPower > 999)
             {
@@ -1399,6 +1384,55 @@ public class GManager : MonoBehaviour
             levelPowerText.text = "Character is " + ratePower + " % power";
             Debug.Log($"UpgradePower: Level {levelPower}, Rate {ratePower}%, Force {launchForce}");
         }
+    }
+
+    public void LoadMoneyUpgrade()
+    {
+        if (moneyPower > 999)
+        {
+
+            if (moneyPower >= 1000 && moneyPower < 1000000)
+            {
+                powerMoneyText.text = (moneyPower / 1000f).ToString("F1") + "K";
+            }
+            else if (moneyPower >= 1000000 && moneyPower < 1000000000)
+            {
+                powerMoneyText.fontSize = 28;
+                powerMoneyText.text = (moneyPower / 1000000f).ToString("F1") + "M";
+            }
+        }
+        if (moneyBoost > 999)
+        {
+
+            if (moneyBoost >= 1000 && moneyBoost < 1000000)
+            {
+                boostMoneyText.text = (moneyBoost / 1000f).ToString("F1") + "K";
+            }
+            else if (moneyBoost >= 1000000 && moneyBoost < 1000000000)
+            {
+                boostMoneyText.fontSize = 28;
+                boostMoneyText.text = (moneyBoost / 1000000f).ToString("F1") + "M";
+            }
+        }
+        if (moneyFuel > 999)
+        {
+            if (moneyFuel >= 1000 && moneyFuel < 1000000)
+            {
+                fuelMoneyText.text = (moneyFuel / 1000f).ToString("F1") + "K";
+            }
+            else if (moneyFuel >= 1000000 && moneyFuel < 1000000000)
+            {
+                fuelMoneyText.fontSize = 28;
+                fuelMoneyText.text = (moneyFuel / 1000000f).ToString("F1") + "M";
+            }
+        }
+        else
+        {
+            powerMoneyText.text = "" + moneyPower;
+            boostMoneyText.text = "" + moneyBoost;
+            fuelMoneyText.text = "" + moneyFuel;
+        }
+        
     }
 
     void UpdateSliderAchievement()
@@ -1442,8 +1476,10 @@ public class GManager : MonoBehaviour
     public float angleRangeMin = -30f;        // Phạm vi góc dao động ±20 độ
     public float speed = 1f;            // Tốc độ dao động
     public bool isRotationOscillating = true;
+    public bool isCheckBonus = true;
     private float startZ;
     private float startWheelZ;
+    public bool isBonus = false;
     public void rotationAngleZ()
     {
         if (isRotationOscillating)
@@ -1471,12 +1507,23 @@ public class GManager : MonoBehaviour
         }
         else
         {
-            float angleAverange = (angleRangeMax + angleRangeMin) / 2;
-            // Debug.Log("angleAverange: " + angleAverange);
-            float angle = Mathf.Sin(Time.time * speed) * (angleRangeMax - angleRangeMin) / 2 + angleAverange;
-            if (angle < -3f && angle > -8f)
+            if (isCheckBonus)
             {
-                newMapText.text = "MAX POWER!";
+                float angleNew = arrowAngleZ.transform.eulerAngles.z;
+                float angle = angleNew > 180f ? angleNew - 360f : angleNew;
+                if (angle < -3f && angle > -8f)
+                {
+                    newMapText.text = "MAX POWER!";
+                    isBonus = true;
+                    Debug.Log("isBonus: " + isBonus);
+                    isCheckBonus = false;
+                }
+                else{
+                    newMapText.text = "MIN POWER!";
+                    isBonus = false;
+                    Debug.Log("isBonus: " + isBonus);
+                    isCheckBonus = false;
+                }
             }
         }
 
@@ -1492,9 +1539,9 @@ public class GManager : MonoBehaviour
         rateFuel = PlayerPrefs.GetInt("RateFuel", 0);
         rateBoost = PlayerPrefs.GetInt("RateBoost", 0);
 
-        moneyPower = PlayerPrefs.GetFloat("MoneyPower", 50f);
-        moneyFuel = PlayerPrefs.GetFloat("MoneyFuel", 50f);
-        moneyBoost = PlayerPrefs.GetFloat("MoneyBoost", 50f);
+        moneyPower = PlayerPrefs.GetFloat("MoneyPower", 20f);
+        moneyFuel = PlayerPrefs.GetFloat("MoneyFuel", 20f);
+        moneyBoost = PlayerPrefs.GetFloat("MoneyBoost", 20f);
 
         isPowerMax = PlayerPrefs.GetInt("IsPowerMax", 0) == 1;
         isFuelMax = PlayerPrefs.GetInt("IsFuelMax", 0) == 1;
