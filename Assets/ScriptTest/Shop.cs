@@ -1,164 +1,373 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using DG.Tweening; // Import DOTween
+using DG.Tweening;
+using System.Collections;
+using TMPro;
 
 public class Shop : MonoBehaviour
 {
     public static Shop instance;
     public Image imageShop;
-    public Button Image;
-    public Image imagePlane1;
-    public Image imagePlane2;
-    public Image imagePlane3;
-    public Image imageBackgroundPlane1;
-    public Image imageBackgroundPlane2;
-    public Image imageBackgroundPlane3;
-    public Sprite[] spritePlanes;
-    public Sprite[] spriteBackgrounds; // Thêm array cho background sprites
+    [Header("Text UI")]
+    public TextMeshProUGUI[] planePriceText;
+    public TextMeshProUGUI[] planeBuyText;
 
-    public Button button0;
-    public Button button1;
-    public Button button2;
-    public Button button3;
-    public Button button4;
-
-    [Header("Thay đổi nhân vật")]
+    [Header("Enhanced Carousel System")]
+    public Image[] planeImages; 
+    
+    [Header("Visual Settings")]
+    public float moveDuration = 0.5f;
+    public Ease moveEase = Ease.OutQuart;
+    
+    [Header("Advanced Effects")]
+    public float rotationAngle = 20f;
+    public float parallaxIntensity = 50f;
+    public Color highlightColor = new Color(1f, 0.9f, 0.4f, 1f);
+    public float glowPulseSpeed = 2f;
+    
+    [Header("Purchase Effects")]
+    public ParticleSystem purchaseParticles;
+    public AudioClip purchaseSound;
+    
+    private Vector2[] originalPositions;
+    private int[] currentOrder;
+    private bool isAnimating = false;
+    
+    // Tính toán centerIndex động dựa trên số lượng máy bay
+    private int CenterIndex => planeImages.Length / 2;
+    
+    // Game Objects reference
+    [Header("Aircraft GameObjects")]
     public GameObject[] gameObjectsPlanes;
-
-    [Header("Nhân vật ban đầu")]
+    public Rigidbody2D[] airplanesRigidbody2D;
     public GameObject defaultPlane;
 
-    [Header ("Rigidbody2D của máy bay")]
-    public Rigidbody2D[] airplanesRigidbody2D;
-    
-    private int currentIndex = 1;
-    
-    [Header("DOTween Settings")]
-    public float transitionDuration = 0.5f;
-    public Ease transitionEase = Ease.OutQuad;
-    public float scaleEffect = 1.2f;
-    
-    [Header("Background Effects")]
-    public float backgroundFadeSpeed = 0.3f;
-    public float backgroundScaleEffect = 1.1f;
-    public Color backgroundTintColor = new Color(1f, 1f, 1f, 0.8f);
-    
-    private bool isTransitioning = false;
-    
-    // LƯU VỊ TRÍ GỐC CỦA CÁC IMAGE
-    private Vector3 originalPosPlane1;
-    private Vector3 originalPosPlane2;
-    private Vector3 originalPosPlane3;
-    private Vector3 originalPosBg1;
-    private Vector3 originalPosBg2;
-    private Vector3 originalPosBg3;
-    
     void Start()
     {
         instance = this;
-        
-        // Lưu vị trí gốc của các image
-        SaveOriginalPositions();
-        
-        // Khởi tạo ban đầu với spritePlanes[1,2,3]
-        InitializePlanes();
+        Application.targetFrameRate = 60;
+        InitializeCarousel();
+    }
+    void Update()
+    {
+        foreach (var text in planeBuyText)
+        {
+            if(text.text == "Play"){
+                text.color = highlightColor;
+            }
+            else {
+                text.color = Color.white;
+            }
+        }
     }
 
-    void SaveOriginalPositions()
+    void InitializeCarousel()
     {
-        // Lưu vị trí Plane
-        originalPosPlane1 = imagePlane1.transform.localPosition;
-        originalPosPlane2 = imagePlane2.transform.localPosition;
-        originalPosPlane3 = imagePlane3.transform.localPosition;
+        int length = planeImages.Length;
+        originalPositions = new Vector2[length];
+        currentOrder = new int[length];
         
-        // Lưu vị trí Background
-        originalPosBg1 = imageBackgroundPlane1.transform.localPosition;
-        originalPosBg2 = imageBackgroundPlane2.transform.localPosition;
-        originalPosBg3 = imageBackgroundPlane3.transform.localPosition;
-        
-        Debug.Log($"Saved original positions - Planes & Backgrounds");
-    }
-    
-    void ResetToOriginalPositions()
-    {
-        // Reset Plane positions
-        imagePlane1.transform.localPosition = originalPosPlane1;
-        imagePlane2.transform.localPosition = originalPosPlane2;
-        imagePlane3.transform.localPosition = originalPosPlane3;
-        
-        // Reset Background positions
-        imageBackgroundPlane1.transform.localPosition = originalPosBg1;
-        imageBackgroundPlane2.transform.localPosition = originalPosBg2;
-        imageBackgroundPlane3.transform.localPosition = originalPosBg3;
-    }
-    
-    void InitializePlanes()
-    {
-        if (spritePlanes != null && spritePlanes.Length >= 4)
+        // Lưu vị trí ban đầu và khởi tạo thứ tự
+        for (int i = 0; i < length; i++)
         {
-            // Khởi tạo Plane sprites
-            imagePlane1.sprite = spritePlanes[1];
-            imagePlane2.sprite = spritePlanes[2];
-            imagePlane3.sprite = spritePlanes[3];
+            originalPositions[i] = planeImages[i].rectTransform.anchoredPosition;
+            currentOrder[i] = i;
+        }
+        
+        // Thiết lập trạng thái ban đầu với hiệu ứng
+        StartCoroutine(InitialShowcase());
+    }
+    
+    // Method để reinitialize carousel khi cần
+    public void ReinitializeCarousel()
+    {
+        // Reset về trạng thái ban đầu
+        for (int i = 0; i < planeImages.Length; i++)
+        {
+            currentOrder[i] = i;
+        }
+        UpdateCarouselDisplay();
+    }
+    
+    IEnumerator InitialShowcase()
+    {
+        // Hiệu ứng xuất hiện đơn giản
+        foreach (var img in planeImages)
+        {
+            img.transform.localScale = Vector3.one;
+            img.color = Color.white;
+        }
+        
+        yield return new WaitForSeconds(0.1f);
+        
+        // Áp dụng trạng thái carousel
+        UpdateCarouselDisplay();
+    }
+    
+    IEnumerator ShowPlaneWithEffect(int index, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        
+        Image plane = planeImages[index];
+        
+        // Scale animation với bounce - giữ nguyên scale = 1
+        plane.transform.DOScale(1f, 0.5f)
+            .SetEase(Ease.OutBounce);
             
-            // Khởi tạo Background sprites (nếu có)
-            if (spriteBackgrounds != null && spriteBackgrounds.Length >= 4)
-            {
-                imageBackgroundPlane1.sprite = spriteBackgrounds[1];
-                imageBackgroundPlane2.sprite = spriteBackgrounds[2];
-                imageBackgroundPlane3.sprite = spriteBackgrounds[3];
-            }
+        // Fade in
+        plane.DOFade(1f, 0.3f);
+        
+        // Rotation effect
+        plane.transform.DORotate(Vector3.forward * Random.Range(-5f, 5f), 0.2f)
+            .OnComplete(() => plane.transform.DORotate(Vector3.zero, 0.3f));
+    }
+
+    public void OnClickRightArrow()
+    {
+        if (!isAnimating) StartCoroutine(SlideToDirection(-1));
+    }
+
+    public void OnClickLeftArrow()
+    {
+        if (!isAnimating) StartCoroutine(SlideToDirection(1));
+    }
+    
+    IEnumerator SlideToDirection(int direction)
+    {
+        isAnimating = true;
+        
+        // Phase 1: Slide out với hiệu ứng 3D
+        yield return StartCoroutine(SlideOutEffect(direction));
+        
+        // Cập nhật thứ tự
+        ShiftOrder(direction);
+        
+        // Phase 2: Slide in với hiệu ứng mới
+        yield return StartCoroutine(SlideInEffect(-direction));
+        
+        // Phase 3: Cập nhật trạng thái carousel
+        UpdateCarouselDisplay();
+        
+        isAnimating = false;
+    }
+    
+    IEnumerator SlideOutEffect(int direction)
+    {
+        Sequence slideOut = DOTween.Sequence();
+        
+        for (int i = 0; i < planeImages.Length; i++)
+        {
+            Image plane = planeImages[i];
+            Vector3 targetPos = plane.rectTransform.anchoredPosition + 
+                               new Vector2(direction * 200f, 0f);
             
-            currentIndex = 1;
+            slideOut.Join(plane.rectTransform.DOAnchorPos(targetPos, moveDuration)
+                .SetEase(Ease.OutQuart));
+        }
+        
+        yield return slideOut.WaitForCompletion();
+    }
+    
+    IEnumerator SlideInEffect(int direction)
+    {
+        // Reset positions for slide in
+        for (int i = 0; i < planeImages.Length; i++)
+        {
+            Vector3 startPos = originalPositions[currentOrder[i]] + 
+                              new Vector2(direction * 300f, 0f);
+            planeImages[i].rectTransform.anchoredPosition = startPos;
+        }
+        
+        Sequence slideIn = DOTween.Sequence();
+        
+        for (int i = 0; i < planeImages.Length; i++)
+        {
+            Image plane = planeImages[i];
+            Vector2 targetPos = originalPositions[currentOrder[i]];
             
-            // Reset về vị trí gốc
-            ResetToOriginalPositions();
+            slideIn.Join(plane.rectTransform.DOAnchorPos(targetPos, moveDuration)
+                .SetEase(moveEase));
+        }
+        
+        yield return slideIn.WaitForCompletion();
+    }
+    
+    void UpdateCarouselDisplay()
+    {
+        for (int i = 0; i < planeImages.Length; i++)
+        {
+            Image plane = planeImages[i];
             
-            // Đặt scale và alpha ban đầu cho Planes
-            ResetPlaneStates();
+            // Giữ scale = 1 cho tất cả máy bay
+            plane.transform.localScale = Vector3.one;
             
-            // Đặt scale và alpha ban đầu cho Backgrounds
-            ResetBackgroundStates();
-            
-            Debug.Log("Khởi tạo máy bay và background: Index 1, 2, 3");
+            // Giữ màu trắng cho tất cả máy bay
+            plane.color = Color.white;
         }
     }
     
-    void ResetPlaneStates()
+    IEnumerator PulseGlowEffect(Image centerPlane)
     {
-        imagePlane1.transform.localScale = Vector3.one;
-        imagePlane2.transform.localScale = Vector3.one;
-        imagePlane3.transform.localScale = Vector3.one;
-        imagePlane1.color = Color.white;
-        imagePlane2.color = Color.white;
-        imagePlane3.color = Color.white;
+        float timer = 0f;
+        Color originalColor = Color.white;
+        
+        while (timer < 1f)
+        {
+            timer += Time.deltaTime * glowPulseSpeed;
+            float pulse = (Mathf.Sin(timer * Mathf.PI * 2f) + 1f) * 0.5f;
+            centerPlane.color = Color.Lerp(originalColor, highlightColor, pulse * 0.3f);
+            yield return null;
+        }
+        
+        centerPlane.color = originalColor;
+    }
+    void ShiftOrder(int direction)
+    {
+        int length = currentOrder.Length;
+        int[] newOrder = new int[length];
+        
+        for (int i = 0; i < length; i++)
+        {
+            int newIndex = (i - direction + length) % length;
+            newOrder[newIndex] = currentOrder[i];
+        }
+        
+        currentOrder = newOrder;
     }
     
-    void ResetBackgroundStates()
+    // Hiệu ứng đẹp cho button máy bay
+    IEnumerator PlayButtonEffect(int planeIndex)
     {
-        imageBackgroundPlane1.transform.localScale = Vector3.one;
-        imageBackgroundPlane2.transform.localScale = Vector3.one;
-        imageBackgroundPlane3.transform.localScale = Vector3.one;
-        imageBackgroundPlane1.color = Color.white;
-        imageBackgroundPlane2.color = Color.white;
-        imageBackgroundPlane3.color = Color.white;
+        if (planeIndex < 0 || planeIndex >= planeImages.Length) yield break;
+        
+        Image targetPlane = planeImages[planeIndex];
+        
+        // Hiệu ứng scale: 0.9 -> 1.2 -> 1
+        Sequence scaleSeq = DOTween.Sequence();
+        scaleSeq.Append(targetPlane.transform.DOScale(0.9f, 0.1f).SetEase(Ease.OutQuart));
+        scaleSeq.Append(targetPlane.transform.DOScale(1.2f, 0.2f).SetEase(Ease.OutBack));
+        scaleSeq.Append(targetPlane.transform.DOScale(1f, 0.3f).SetEase(Ease.OutBounce));
+        
+        yield return scaleSeq.WaitForCompletion();
     }
-
+    
+    // Buy functions với enhanced effects
+    public void BuyCenterPlane()
+    {
+        if (isAnimating) return;
+        StartCoroutine(PurchaseEffect());
+    }
+    
+    // Helper method để lấy index của máy bay đang ở giữa
+    int GetCenterPlaneIndex()
+    {
+        return currentOrder[CenterIndex];
+    }
+    
+    IEnumerator PurchaseEffect()
+    {
+        Image centerPlane = planeImages[CenterIndex];
+        
+        // Purchase animation sequence
+        Sequence purchaseSeq = DOTween.Sequence();
+        
+        // Pulse effect - giữ scale từ 1 đến 1.2 rồi về 1
+        purchaseSeq.Append(centerPlane.transform.DOScale(1.2f, 0.2f)
+            .SetEase(Ease.OutQuart));
+        purchaseSeq.Append(centerPlane.transform.DOScale(1f, 0.3f)
+            .SetEase(Ease.OutBounce));
+            
+        // Color flash
+        purchaseSeq.Join(centerPlane.DOColor(Color.green, 0.1f)
+            .SetLoops(6, LoopType.Yoyo));
+            
+        // Rotation celebration
+        purchaseSeq.Join(centerPlane.transform.DORotate(
+            Vector3.forward * 360f, 0.8f, RotateMode.FastBeyond360)
+            .SetEase(Ease.OutQuart));
+        
+        // Particle effect
+        if (purchaseParticles != null)
+        {
+            purchaseParticles.transform.position = centerPlane.transform.position;
+            purchaseParticles.Play();
+        }
+        
+        yield return purchaseSeq.WaitForCompletion();
+        
+        // Apply purchase logic - sử dụng helper method
+        int planeIndex = GetCenterPlaneIndex();
+        if (gameObjectsPlanes != null && planeIndex < gameObjectsPlanes.Length)
+        {
+            BuyPlane(planeIndex);
+        }
+    }
+    
+    void BuyPlane(int planeIndex)
+    {
+        if (gameObjectsPlanes == null || planeIndex >= gameObjectsPlanes.Length) return;
+        
+        defaultPlane = gameObjectsPlanes[planeIndex];
+        GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[planeIndex];
+        
+        // Activate selected plane, deactivate others
+        for (int i = 0; i < gameObjectsPlanes.Length; i++)
+        {
+            gameObjectsPlanes[i].SetActive(i == planeIndex);
+        }
+        
+        // Camera update
+        CameraManager cameraManager = FindObjectOfType<CameraManager>();
+        if (cameraManager != null)
+        {
+            cameraManager.UpdateAircraftTarget(airplanesRigidbody2D[planeIndex].transform);
+            cameraManager.UpdateCinemachineFollow(airplanesRigidbody2D[planeIndex].transform);
+        }
+        
+        Debug.Log($"Purchased plane: {gameObjectsPlanes[planeIndex].name}");
+    }
+    
+    // Additional visual effects
+    public void AddSparkleEffect(Transform target)
+    {
+        StartCoroutine(SparkleAnimation(target));
+    }
+    
+    IEnumerator SparkleAnimation(Transform target)
+    {
+        for (int i = 0; i < 8; i++)
+        {
+            GameObject sparkle = new GameObject("Sparkle");
+            Image sparkleImg = sparkle.AddComponent<Image>();
+            sparkleImg.color = highlightColor;
+            
+            sparkle.transform.SetParent(target);
+            sparkle.transform.localPosition = Vector3.zero;
+            sparkle.transform.localScale = Vector3.zero;
+            
+            // Animate sparkle - giữ scale ổn định
+            Vector3 randomDir = Random.insideUnitCircle * 100f;
+            sparkle.transform.DOLocalMove(randomDir, 0.5f);
+            sparkle.transform.DOScale(0.3f, 0.2f).OnComplete(() => 
+                sparkle.transform.DOScale(0f, 0.3f).OnComplete(() => 
+                    Destroy(sparkle)));
+            sparkleImg.DOFade(0f, 0.5f);
+            
+            yield return new WaitForSeconds(0.1f);
+        }
+    }
+    
+    
+    // Shop open/close effects
     public void OpenShop()
     {
         Debug.Log("Mở cửa hàng!");
         
         // Dừng tất cả animation đang chạy
         DOTween.Kill(this);
-        isTransitioning = false;
 
         Settings.instance.lastDistanceText.gameObject.SetActive(false);
         imageShop.gameObject.SetActive(true);
-        
-        // Đảm bảo hiển thị đúng khi mở shop
-        InitializePlanes();
         
         // Animation mở shop
         imageShop.transform.localScale = Vector3.zero;
@@ -171,7 +380,6 @@ public class Shop : MonoBehaviour
         
         // Dừng tất cả animation
         DOTween.Kill(this);
-        isTransitioning = false;
         
         // Animation đóng shop
         imageShop.transform.DOScale(Vector3.zero, 0.3f).SetEase(Ease.InBack)
@@ -182,360 +390,612 @@ public class Shop : MonoBehaviour
             });
     }
 
-    public void buttonRight()
-    {
-        if (spritePlanes == null || spritePlanes.Length == 0 || isTransitioning) 
-        {
-            Debug.Log("Button Right bị block - isTransitioning: " + isTransitioning);
-            return;
-        }
-        
-        // Tính index mới
-        int newIndex = currentIndex + 1;
-        if (newIndex >= spritePlanes.Length - 2)
-        {
-            newIndex = 0;
-        }
-        
-        // Chạy animation chuyển đổi
-        StartCoroutine(TransitionSprites(newIndex, true));
-    }
-    
-    public void buttonLeft()
-    {
-        if (spritePlanes == null || spritePlanes.Length == 0 || isTransitioning) 
-        {
-            Debug.Log("Button Left bị block - isTransitioning: " + isTransitioning);
-            return;
-        }
-        
-        // Tính index mới
-        int newIndex = currentIndex - 1;
-        if (newIndex < 0)
-        {
-            newIndex = spritePlanes.Length - 3;
-        }
-        
-        // Chạy animation chuyển đổi
-        StartCoroutine(TransitionSprites(newIndex, false));
-    }
-    
-    IEnumerator TransitionSprites(int newIndex, bool isMovingRight)
-    {
-        isTransitioning = true;
-        
-        // DỪNG TẤT CẢ ANIMATION ĐANG CHẠY
-        KillAllAnimations();
-        
-        // RESET VỀ VỊ TRÍ GỐC TRƯỚC KHI BẮT ĐẦU ANIMATION MỚI
-        ResetToOriginalPositions();
-        
-        // Đảm bảo alpha = 1
-        ResetPlaneStates();
-        ResetBackgroundStates();
-        
-        Debug.Log($"Bắt đầu transition từ index {currentIndex} → {newIndex}, Direction: {(isMovingRight ? "Right" : "Left")}");
-        
-        // Hiệu ứng slide out (trượt ra)
-        float slideDistance = 200f;
-        Vector3 slideOutDirection = isMovingRight ? Vector3.left : Vector3.right;
-        slideOutDirection *= slideDistance;
-        
-        // Phase 1: Background Animation Out (chạy trước, nhanh hơn)
-        yield return StartCoroutine(AnimateBackgroundOut(slideOutDirection));
-        
-        // Phase 2: Plane Animation Out
-        yield return StartCoroutine(AnimatePlaneOut(slideOutDirection));
-        
-        // Cập nhật sprite mới
-        UpdateSprites(newIndex);
-        
-        // Đặt vị trí ban đầu cho slide in (từ phía ngược lại)
-        Vector3 slideInDirection = isMovingRight ? Vector3.right : Vector3.left;
-        slideInDirection *= slideDistance;
-        SetSlideInPositions(slideInDirection);
-        
-        // Phase 3: Background Animation In (chạy trước)
-        yield return StartCoroutine(AnimateBackgroundIn(slideInDirection));
-        
-        // Phase 4: Plane Animation In (chạy sau, có hiệu ứng đẹp hơn)
-        yield return StartCoroutine(AnimatePlaneIn(slideInDirection));
-        
-        // ĐẢM BẢO RESET VỀ TRẠNG THÁI BAN ĐẦU
-        FinalizeTransition();
-        
-        isTransitioning = false;
-        Debug.Log($"Transition hoàn thành - Current Index: {currentIndex}");
-    }
-    
-    void KillAllAnimations()
-    {
-        // Kill Plane animations
-        DOTween.Kill(imagePlane1.transform);
-        DOTween.Kill(imagePlane2.transform);
-        DOTween.Kill(imagePlane3.transform);
-        DOTween.Kill(imagePlane1);
-        DOTween.Kill(imagePlane2);
-        DOTween.Kill(imagePlane3);
-        
-        // Kill Background animations
-        DOTween.Kill(imageBackgroundPlane1.transform);
-        DOTween.Kill(imageBackgroundPlane2.transform);
-        DOTween.Kill(imageBackgroundPlane3.transform);
-        DOTween.Kill(imageBackgroundPlane1);
-        DOTween.Kill(imageBackgroundPlane2);
-        DOTween.Kill(imageBackgroundPlane3);
-    }
-    
-    IEnumerator AnimateBackgroundOut(Vector3 slideDirection)
-    {
-        Sequence bgOutSequence = DOTween.Sequence();
-        
-        // Background slide out với rotation và scale
-        bgOutSequence.Append(imageBackgroundPlane1.transform.DOLocalMove(
-            originalPosBg1 + slideDirection, backgroundFadeSpeed)
-            .SetEase(Ease.InCubic));
-        bgOutSequence.Join(imageBackgroundPlane2.transform.DOLocalMove(
-            originalPosBg2 + slideDirection, backgroundFadeSpeed)
-            .SetEase(Ease.InCubic));
-        bgOutSequence.Join(imageBackgroundPlane3.transform.DOLocalMove(
-            originalPosBg3 + slideDirection, backgroundFadeSpeed)
-            .SetEase(Ease.InCubic));
-        
-        // Background fade và scale out
-        bgOutSequence.Join(imageBackgroundPlane1.DOFade(0f, backgroundFadeSpeed));
-        bgOutSequence.Join(imageBackgroundPlane2.DOFade(0f, backgroundFadeSpeed));
-        bgOutSequence.Join(imageBackgroundPlane3.DOFade(0f, backgroundFadeSpeed));
-        
-        bgOutSequence.Join(imageBackgroundPlane1.transform.DOScale(0.8f, backgroundFadeSpeed));
-        bgOutSequence.Join(imageBackgroundPlane2.transform.DOScale(0.8f, backgroundFadeSpeed));
-        bgOutSequence.Join(imageBackgroundPlane3.transform.DOScale(0.8f, backgroundFadeSpeed));
-        
-        yield return bgOutSequence.WaitForCompletion();
-    }
-    
-    IEnumerator AnimatePlaneOut(Vector3 slideDirection)
-    {
-        Sequence planeOutSequence = DOTween.Sequence();
-        
-        // Plane slide out
-        planeOutSequence.Append(imagePlane1.transform.DOLocalMove(
-            originalPosPlane1 + slideDirection, transitionDuration * 0.5f)
-            .SetEase(transitionEase));
-        planeOutSequence.Join(imagePlane2.transform.DOLocalMove(
-            originalPosPlane2 + slideDirection, transitionDuration * 0.5f)
-            .SetEase(transitionEase));
-        planeOutSequence.Join(imagePlane3.transform.DOLocalMove(
-            originalPosPlane3 + slideDirection, transitionDuration * 0.5f)
-            .SetEase(transitionEase));
-        
-        // Plane fade out
-        planeOutSequence.Join(imagePlane1.DOFade(0f, transitionDuration * 0.5f));
-        planeOutSequence.Join(imagePlane2.DOFade(0f, transitionDuration * 0.5f));
-        planeOutSequence.Join(imagePlane3.DOFade(0f, transitionDuration * 0.5f));
-        
-        yield return planeOutSequence.WaitForCompletion();
-    }
-    
-    void UpdateSprites(int newIndex)
-    {
-        currentIndex = newIndex;
-        
-        // Update Plane sprites
-        imagePlane1.sprite = spritePlanes[currentIndex];
-        imagePlane2.sprite = spritePlanes[currentIndex + 1];
-        imagePlane3.sprite = spritePlanes[currentIndex + 2];
-        
-        // Update Background sprites (nếu có)
-        if (spriteBackgrounds != null && spriteBackgrounds.Length > currentIndex + 2)
-        {
-            imageBackgroundPlane1.sprite = spriteBackgrounds[currentIndex];
-            imageBackgroundPlane2.sprite = spriteBackgrounds[currentIndex + 1];
-            imageBackgroundPlane3.sprite = spriteBackgrounds[currentIndex + 2];
-        }
-    }
-    
-    void SetSlideInPositions(Vector3 slideDirection)
-    {
-        // Set Plane positions
-        imagePlane1.transform.localPosition = originalPosPlane1 + slideDirection;
-        imagePlane2.transform.localPosition = originalPosPlane2 + slideDirection;
-        imagePlane3.transform.localPosition = originalPosPlane3 + slideDirection;
-        
-        // Set Background positions
-        imageBackgroundPlane1.transform.localPosition = originalPosBg1 + slideDirection;
-        imageBackgroundPlane2.transform.localPosition = originalPosBg2 + slideDirection;
-        imageBackgroundPlane3.transform.localPosition = originalPosBg3 + slideDirection;
-    }
-    
-    IEnumerator AnimateBackgroundIn(Vector3 slideDirection)
-    {
-        Sequence bgInSequence = DOTween.Sequence();
-        
-        // Background slide in với hiệu ứng đẹp
-        bgInSequence.Append(imageBackgroundPlane1.transform.DOLocalMove(
-            originalPosBg1, backgroundFadeSpeed)
-            .SetEase(Ease.OutBack));
-        bgInSequence.Join(imageBackgroundPlane2.transform.DOLocalMove(
-            originalPosBg2, backgroundFadeSpeed)
-            .SetEase(Ease.OutBack));
-        bgInSequence.Join(imageBackgroundPlane3.transform.DOLocalMove(
-            originalPosBg3, backgroundFadeSpeed)
-            .SetEase(Ease.OutBack));
-        
-        // Background fade in với color tint
-        bgInSequence.Join(imageBackgroundPlane1.DOFade(1f, backgroundFadeSpeed));
-        bgInSequence.Join(imageBackgroundPlane2.DOFade(1f, backgroundFadeSpeed));
-        bgInSequence.Join(imageBackgroundPlane3.DOFade(1f, backgroundFadeSpeed));
-        
-        // Background scale effect
-        bgInSequence.Join(imageBackgroundPlane1.transform.DOScale(backgroundScaleEffect, backgroundFadeSpeed * 0.5f)
-            .SetLoops(2, LoopType.Yoyo));
-        bgInSequence.Join(imageBackgroundPlane2.transform.DOScale(backgroundScaleEffect, backgroundFadeSpeed * 0.5f)
-            .SetLoops(2, LoopType.Yoyo));
-        bgInSequence.Join(imageBackgroundPlane3.transform.DOScale(backgroundScaleEffect, backgroundFadeSpeed * 0.5f)
-            .SetLoops(2, LoopType.Yoyo));
-        
-        yield return bgInSequence.WaitForCompletion();
-    }
-    
-    IEnumerator AnimatePlaneIn(Vector3 slideDirection)
-    {
-        Sequence planeInSequence = DOTween.Sequence();
-        
-        // Plane slide in về vị trí gốc
-        planeInSequence.Append(imagePlane1.transform.DOLocalMove(
-            originalPosPlane1, transitionDuration * 0.5f)
-            .SetEase(transitionEase));
-        planeInSequence.Join(imagePlane2.transform.DOLocalMove(
-            originalPosPlane2, transitionDuration * 0.5f)
-            .SetEase(transitionEase));
-        planeInSequence.Join(imagePlane3.transform.DOLocalMove(
-            originalPosPlane3, transitionDuration * 0.5f)
-            .SetEase(transitionEase));
-        
-        // Plane fade in
-        planeInSequence.Join(imagePlane1.DOFade(1f, transitionDuration * 0.5f));
-        planeInSequence.Join(imagePlane2.DOFade(1f, transitionDuration * 0.5f));
-        planeInSequence.Join(imagePlane3.DOFade(1f, transitionDuration * 0.5f));
-        
-        // Hiệu ứng scale bounce cho Plane
-        planeInSequence.Join(imagePlane1.transform.DOScale(scaleEffect, transitionDuration * 0.25f)
-            .SetLoops(2, LoopType.Yoyo).SetEase(Ease.OutBounce));
-        planeInSequence.Join(imagePlane2.transform.DOScale(scaleEffect, transitionDuration * 0.25f)
-            .SetLoops(2, LoopType.Yoyo).SetEase(Ease.OutBounce));
-        planeInSequence.Join(imagePlane3.transform.DOScale(scaleEffect, transitionDuration * 0.25f)
-            .SetLoops(2, LoopType.Yoyo).SetEase(Ease.OutBounce));
-        
-        yield return planeInSequence.WaitForCompletion();
-    }
-    
-    void FinalizeTransition()
-    {
-        ResetToOriginalPositions();
-        ResetPlaneStates();
-        ResetBackgroundStates();
-    }
 
-    void OnDestroy()
-    {
-        // Cleanup DOTween để tránh memory leak
-        DOTween.Kill(this);
-    }
+    public bool isBuyPlane1Done = false;
+    public bool isBuyPlane2Done = false;
+    public bool isBuyPlane3Done = false;
+    public bool isBuyPlane4Done = false;
+    public bool isBuyPlane5Done = false;
+    public bool isBuyPlane6Done = false;
+    public bool isBuyPlane7Done = false;
+    public bool isBuyPlane8Done = false;
+    public bool isBuyPlane9Done = false;
+    public bool isBuyPlane10Done = false;
+    public bool isBuyPlane11Done = false;
+    public bool isBuyPlane12Done = false;
+    public bool isBuyPlane13Done = false;
+    public bool isBuyPlane14Done = false;
+    public bool isBuyPlane15Done = false;
+    public bool isRotaryFrontZDone = false;
 
-    public bool isCurrentIndex = false;
-
-    public void btn1BuyCurrentPlane()
-    {
-        int selectedIndex = currentIndex;
-        Debug.Log($"btn1BuyCurrentPlane: Mua máy bay tại index {selectedIndex} - {gameObjectsPlanes[selectedIndex].name}");
-        
-        defaultPlane = gameObjectsPlanes[selectedIndex];
-        GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[selectedIndex];
-        if (CameraManager.instance == null)
-        {
-            Debug.LogError("CameraManager instance is NULL!");
-            return;
-        }
-        else if (airplanesRigidbody2D[selectedIndex] == null)
-        {
-            Debug.LogError($"Airplane Rigidbody2D at index {selectedIndex} is NULL!");
-            return;
-        }
-        CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[selectedIndex].transform;
-        CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[selectedIndex].transform;
-        airplanesRigidbody2D[selectedIndex].velocity = Vector2.zero; // Đặt vận tốc về 0 khi chuyển máy bay
-        
-        Debug.Log($"Calling UpdateAircraftForCamera with: {airplanesRigidbody2D[selectedIndex].name}");
-
-        for (int i = 0; i < gameObjectsPlanes.Length; i++)
-        {
-            if (i == selectedIndex)
-            {
-                gameObjectsPlanes[i].SetActive(true);
-                Debug.Log($"Activated aircraft: {gameObjectsPlanes[i].name}");
+    public void buyPlane1(){
+        StartCoroutine(PlayButtonEffect(0));
+        if(!isBuyPlane1Done){
+            planeBuyText[0].gameObject.SetActive(true);
+            planeBuyText[0].text = "Play";
+            for(int i=0; i<planeBuyText.Length; i++){
+                if(i != 0){
+                    planeBuyText[i].text = "Select";
+                }
             }
-            else
-            {
-                gameObjectsPlanes[i].SetActive(false);
-            }
+            planePriceText[0].gameObject.SetActive(false);
+            isBuyPlane1Done = true;
         }
-        if (currentIndex == 12){
-            isCurrentIndex = true;
-        }
-    }
-
-    public void btn2BuyCurrentPlane()
-    {
-        Debug.Log($"vị trí máy bay tại index {currentIndex + 1}");
-        defaultPlane = gameObjectsPlanes[currentIndex + 1];
-        GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[currentIndex + 1];
-        CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[currentIndex + 1].transform;
-        CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[currentIndex + 1].transform;
-        airplanesRigidbody2D[currentIndex + 1].velocity = Vector2.zero; // Đặt vận tốc về 0 khi chuyển máy bay
-
-
-
-        for (int i = 0; i < gameObjectsPlanes.Length; i++)
-        {
-            if (i == currentIndex + 1)
-            {
-                gameObjectsPlanes[i].SetActive(true);
-            }
-            else
-            {
-                gameObjectsPlanes[i].SetActive(false);
+        else {
+            if(planeBuyText[0].text == "Play") return;
+            else{
+                planeBuyText[0].text = "Play";
+                for(int i=0; i<planeBuyText.Length; i++){
+                    if(i != 0){
+                        planeBuyText[i].text = "Select";
+                    }
+                }
             }
         }
         
-        if (currentIndex+1 == 12){
-            isCurrentIndex = true;
-        }
-    }
-    public void btn3BuyCurrentPlane()
-    {
-        Debug.Log($"vị trí máy bay tại index {currentIndex + 2}");
-        defaultPlane = gameObjectsPlanes[currentIndex + 2];
-        GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[currentIndex + 2];
-        CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[currentIndex + 2].transform;
-        CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[currentIndex + 2].transform;
-        airplanesRigidbody2D[currentIndex + 2].velocity = Vector2.zero; // Đặt vận tốc về 0 khi chuyển máy bay
-
-
-
-        for (int i = 0; i < gameObjectsPlanes.Length; i++)
-        {
-            if (i == currentIndex + 2)
-            {
-                gameObjectsPlanes[i].SetActive(true);
-            }
-            else
-            {
-                gameObjectsPlanes[i].SetActive(false);
+        // Thay đổi defaultPlane
+        if(gameObjectsPlanes != null && gameObjectsPlanes.Length > 0){
+            defaultPlane = gameObjectsPlanes[0];
+            CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[0].transform;
+            CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[0].transform;
+            GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[0];
+            gameObjectsPlanes[0].SetActive(true);
+            for (int i=0; i<gameObjectsPlanes.Length; i++){
+                if(i != 0){
+                    gameObjectsPlanes[i].SetActive(false);
+                }
             }
         }
-        if (currentIndex+2 == 12){
-            isCurrentIndex = true;
+    }
+    public void buyPlane2(){
+        StartCoroutine(PlayButtonEffect(1));
+        if(!isBuyPlane2Done){
+            planeBuyText[1].gameObject.SetActive(true);
+            planeBuyText[1].text = "Play";
+            for(int i=0; i<planeBuyText.Length; i++){
+                if(i != 1){
+                    planeBuyText[i].text = "Select";
+                }
+            }
+            planePriceText[1].gameObject.SetActive(false);
+            isBuyPlane2Done = true;
+        }
+        else {
+            if(planeBuyText[1].text == "Play") return;
+            else{
+                planeBuyText[1].text = "Play";
+                for(int i=0; i<planeBuyText.Length; i++){
+                    if(i != 1){
+                        planeBuyText[i].text = "Select";
+                    }
+                }
+            }
+        }
+        
+        // Thay đổi defaultPlane
+        if(gameObjectsPlanes != null && gameObjectsPlanes.Length > 1){
+            defaultPlane = gameObjectsPlanes[1];
+            CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[1].transform;
+            CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[1].transform;
+            GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[1];
+            gameObjectsPlanes[1].SetActive(true);
+            for (int i=0; i<gameObjectsPlanes.Length; i++){
+                if(i != 1){
+                    gameObjectsPlanes[i].SetActive(false);
+                }
+            }
         }
     }
+    public void buyPlane3(){
+        StartCoroutine(PlayButtonEffect(2));
+        if(!isBuyPlane3Done){
+            planeBuyText[2].gameObject.SetActive(true);
+            planeBuyText[2].text = "Play";
+            for(int i=0; i<planeBuyText.Length; i++){
+                if(i != 2){
+                    planeBuyText[i].text = "Select";
+                }
+            }
+            planePriceText[2].gameObject.SetActive(false);
+            isBuyPlane3Done = true;
+        }
+        else {
+            if(planeBuyText[2].text == "Play") return;
+            else{
+                planeBuyText[2].text = "Play";
+                for(int i=0; i<planeBuyText.Length; i++){
+                    if(i != 2){
+                        planeBuyText[i].text = "Select";
+                    }
+                }
+            }
+        }
+        
+        // Thay đổi defaultPlane
+        if(gameObjectsPlanes != null && gameObjectsPlanes.Length > 2){
+            defaultPlane = gameObjectsPlanes[2];
+            CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[2].transform;
+            CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[2].transform;
+            GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[2];
+            gameObjectsPlanes[2].SetActive(true);
+            for (int i=0; i<gameObjectsPlanes.Length; i++){
+                if(i != 2){
+                    gameObjectsPlanes[i].SetActive(false);
+                }
+            }
+        }
+    }
+    public void buyPlane4(){
+        StartCoroutine(PlayButtonEffect(3));
+        if(!isBuyPlane4Done){
+            planeBuyText[3].gameObject.SetActive(true);
+            planeBuyText[3].text = "Play";
+            for(int i=0; i<planeBuyText.Length; i++){
+                if(i != 3){
+                    planeBuyText[i].text = "Select";
+                }
+            }
+            planePriceText[3].gameObject.SetActive(false);
+            isBuyPlane4Done = true;
+        }
+        else {
+            if(planeBuyText[3].text == "Play") return;
+            else{
+                planeBuyText[3].text = "Play";
+                for(int i=0; i<planeBuyText.Length; i++){
+                    if(i != 3){
+                        planeBuyText[i].text = "Select";
+                    }
+                }
+            }
+        }
+        
+        // Thay đổi defaultPlane
+        if(gameObjectsPlanes != null && gameObjectsPlanes.Length > 3){
+            defaultPlane = gameObjectsPlanes[3];
+            GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[3];
+            CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[3].transform;
+            CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[3].transform;
+            gameObjectsPlanes[3].SetActive(true);
+            for (int i=0; i<gameObjectsPlanes.Length; i++){
+                if(i != 3){
+                    gameObjectsPlanes[i].SetActive(false);
+                }
+            }
+        }
+    }
+    public void buyPlane5(){
+        StartCoroutine(PlayButtonEffect(4));
+        if(!isBuyPlane5Done){
+            planeBuyText[4].gameObject.SetActive(true);
+            planeBuyText[4].text = "Play";
+            for(int i=0; i<planeBuyText.Length; i++){
+                if(i != 4){
+                    planeBuyText[i].text = "Select";
+                }
+            }
+            planePriceText[4].gameObject.SetActive(false);
+            isBuyPlane5Done = true;
+        }
+        else {
+            if(planeBuyText[4].text == "Play") return;
+            else{
+                planeBuyText[4].text = "Play";
+                for(int i=0; i<planeBuyText.Length; i++){
+                    if(i != 4){
+                        planeBuyText[i].text = "Select";
+                    }
+                }
+            }
+        }
+        
+        // Thay đổi defaultPlane
+        if(gameObjectsPlanes != null && gameObjectsPlanes.Length > 4){
+            defaultPlane = gameObjectsPlanes[4];
+            GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[4];
+            CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[4].transform;
+            CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[4].transform;
+            gameObjectsPlanes[4].SetActive(true);
+            for (int i=0; i<gameObjectsPlanes.Length; i++){
+                if(i != 4){
+                    gameObjectsPlanes[i].SetActive(false);
+                }
+            }
+        }
+    }
+    public void buyPlane6(){
+        StartCoroutine(PlayButtonEffect(5));
+        if(!isBuyPlane6Done){
+            planeBuyText[5].gameObject.SetActive(true);
+            planeBuyText[5].text = "Play";
+            for(int i=0; i<planeBuyText.Length; i++){
+                if(i != 5){
+                    planeBuyText[i].text = "Select";
+                }
+            }
+            planePriceText[5].gameObject.SetActive(false);
+            isBuyPlane6Done = true;
+        }
+        else {
+            if(planeBuyText[5].text == "Play") return;
+            else{
+                planeBuyText[5].text = "Play";
+                for(int i=0; i<planeBuyText.Length; i++){
+                    if(i != 5){
+                        planeBuyText[i].text = "Select";
+                    }
+                }
+            }
+        }
+        
+        // Thay đổi defaultPlane
+        if(gameObjectsPlanes != null && gameObjectsPlanes.Length > 5){
+            defaultPlane = gameObjectsPlanes[5];
+            GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[5];
+            CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[5].transform;
+            CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[5].transform;
+            gameObjectsPlanes[5].SetActive(true);
+            for (int i=0; i<gameObjectsPlanes.Length; i++){
+                if(i != 5){
+                    gameObjectsPlanes[i].SetActive(false);
+                }
+            }
+        }
+    }
+    public void buyPlane7(){
+        StartCoroutine(PlayButtonEffect(6));
+        if(!isBuyPlane7Done){
+            planeBuyText[6].gameObject.SetActive(true);
+            planeBuyText[6].text = "Play";
+            for(int i=0; i<planeBuyText.Length; i++){
+                if(i != 6){
+                    planeBuyText[i].text = "Select";
+                }
+            }
+            planePriceText[6].gameObject.SetActive(false);
+            isBuyPlane7Done = true;
+        }
+        else {
+            if(planeBuyText[6].text == "Play") return;
+            else{
+                planeBuyText[6].text = "Play";
+                for(int i=0; i<planeBuyText.Length; i++){
+                    if(i != 6){
+                        planeBuyText[i].text = "Select";
+                    }
+                }
+            }
+        }
+        
+        // Thay đổi defaultPlane
+        if(gameObjectsPlanes != null && gameObjectsPlanes.Length > 6){
+            defaultPlane = gameObjectsPlanes[6];
+            GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[6];
+            CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[6].transform;
+            CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[6].transform;
+            gameObjectsPlanes[6].SetActive(true);
+            for (int i=0; i<gameObjectsPlanes.Length; i++){
+                if(i != 6){
+                    gameObjectsPlanes[i].SetActive(false);
+                }
+            }
+        }
+    }
+    public void buyPlane8(){
+        StartCoroutine(PlayButtonEffect(7));
+        if(!isBuyPlane8Done){
+            planeBuyText[7].gameObject.SetActive(true);
+            planeBuyText[7].text = "Play";
+            for(int i=0; i<planeBuyText.Length; i++){
+                if(i != 7){
+                    planeBuyText[i].text = "Select";
+                }
+            }
+            planePriceText[7].gameObject.SetActive(false);
+            isBuyPlane8Done = true;
+        }
+        else {
+            if(planeBuyText[7].text == "Play") return;
+            else{
+                planeBuyText[7].text = "Play";
+                for(int i=0; i<planeBuyText.Length; i++){
+                    if(i != 7){
+                        planeBuyText[i].text = "Select";
+                    }
+                }
+            }
+        }
+        
+        // Thay đổi defaultPlane
+        if(gameObjectsPlanes != null && gameObjectsPlanes.Length > 7){
+            defaultPlane = gameObjectsPlanes[7];
+            GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[7];
+            CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[7].transform;
+            CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[7].transform;
+            isRotaryFrontZDone = true;
+            gameObjectsPlanes[7].SetActive(true);
+            for (int i=0; i<gameObjectsPlanes.Length; i++){
+                if(i != 7){
+                    gameObjectsPlanes[i].SetActive(false);
+                }
+            }
+        }
+    }
+    public void buyPlane9(){
+        StartCoroutine(PlayButtonEffect(8));
+        if(!isBuyPlane9Done){
+            planeBuyText[8].gameObject.SetActive(true);
+            planeBuyText[8].text = "Play";
+            for(int i=0; i<planeBuyText.Length; i++){
+                if(i != 8){
+                    planeBuyText[i].text = "Select";
+                }
+            }
+            planePriceText[8].gameObject.SetActive(false);
+            isBuyPlane9Done = true;
+        }
+        else {
+            if(planeBuyText[8].text == "Play") return;
+            else{
+                planeBuyText[8].text = "Play";
+                for(int i=0; i<planeBuyText.Length; i++){
+                    if(i != 8){
+                        planeBuyText[i].text = "Select";
+                    }
+                }
+            }
+        }
+        
+        // Thay đổi defaultPlane
+        if(gameObjectsPlanes != null && gameObjectsPlanes.Length > 8){
+            defaultPlane = gameObjectsPlanes[8];
+            GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[8];
+            CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[8].transform;
+            CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[8].transform;
+            gameObjectsPlanes[8].SetActive(true);
+            for (int i=0; i<gameObjectsPlanes.Length; i++){
+                if(i != 8){
+                    gameObjectsPlanes[i].SetActive(false);
+                }
+            }
+        }
+    }
+    public void buyPlane10(){
+        StartCoroutine(PlayButtonEffect(9));
+        if(!isBuyPlane10Done){
+            planeBuyText[9].gameObject.SetActive(true);
+            planeBuyText[9].text = "Play";
+            for(int i=0; i<planeBuyText.Length; i++){
+                if(i != 9){
+                    planeBuyText[i].text = "Select";
+                }
+            }
+            planePriceText[9].gameObject.SetActive(false);
+            isBuyPlane10Done = true;
+        }
+        else {
+            if(planeBuyText[9].text == "Play") return;
+            else{
+                planeBuyText[9].text = "Play";
+                for(int i=0; i<planeBuyText.Length; i++){
+                    if(i != 9){
+                        planeBuyText[i].text = "Select";
+                    }
+                }
+            }
+        }
+        
+        // Thay đổi defaultPlane
+        if(gameObjectsPlanes != null && gameObjectsPlanes.Length > 9){
+            defaultPlane = gameObjectsPlanes[9];
+            GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[9];
+            CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[9].transform;
+            CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[9].transform;
+            gameObjectsPlanes[9].SetActive(true);
+            for (int i=0; i<gameObjectsPlanes.Length; i++){
+                if(i != 9){
+                    gameObjectsPlanes[i].SetActive(false);
+                }
+            }
+        }
+    }
+    public void buyPlane11(){
+        StartCoroutine(PlayButtonEffect(10));
+        if(!isBuyPlane11Done){
+            planeBuyText[10].gameObject.SetActive(true);
+            planeBuyText[10].text = "Play";
+            for(int i=0; i<planeBuyText.Length; i++){
+                if(i != 10){
+                    planeBuyText[i].text = "Select";
+                }
+            }
+            planePriceText[10].gameObject.SetActive(false);
+            isBuyPlane11Done = true;
+        }
+        else {
+            if(planeBuyText[10].text == "Play") return;
+            else{
+                planeBuyText[10].text = "Play";
+                for(int i=0; i<planeBuyText.Length; i++){
+                    if(i != 10){
+                        planeBuyText[i].text = "Select";
+                    }
+                }
+            }
+        }
+        
+        // Thay đổi defaultPlane
+        if(gameObjectsPlanes != null && gameObjectsPlanes.Length > 10){
+            defaultPlane = gameObjectsPlanes[10];
+            GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[10];
+            CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[10].transform;
+            CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[10].transform;
+            gameObjectsPlanes[10].SetActive(true);
+            for (int i=0; i<gameObjectsPlanes.Length; i++){
+                if(i != 10){
+                    gameObjectsPlanes[i].SetActive(false);
+                }
+            }
+        }
+    }
+    public void buyPlane12(){
+        StartCoroutine(PlayButtonEffect(11));
+        if(!isBuyPlane12Done){
+            planeBuyText[11].gameObject.SetActive(true);
+            planeBuyText[11].text = "Play";
+            for(int i=0; i<planeBuyText.Length; i++){
+                if(i != 11){
+                    planeBuyText[i].text = "Select";
+                }
+            }
+            planePriceText[11].gameObject.SetActive(false);
+            isBuyPlane12Done = true;
+        }
+        else {
+            if(planeBuyText[11].text == "Play") return;
+            else{
+                planeBuyText[11].text = "Play";
+                for(int i=0; i<planeBuyText.Length; i++){
+                    if(i != 11){
+                        planeBuyText[i].text = "Select";
+                    }
+                }
+            }
+        }
+        
+        // Thay đổi defaultPlane
+        if(gameObjectsPlanes != null && gameObjectsPlanes.Length > 11){
+            defaultPlane = gameObjectsPlanes[11];
+            GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[11];
+            CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[11].transform;
+            CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[11].transform;
+            gameObjectsPlanes[11].SetActive(true);
+            for (int i=0; i<gameObjectsPlanes.Length; i++){
+                if(i != 11){
+                    gameObjectsPlanes[i].SetActive(false);
+                }
+            }
+        }
+    }
+    public void buyPlane13(){
+        StartCoroutine(PlayButtonEffect(12));
+        if(!isBuyPlane13Done){
+            planeBuyText[12].gameObject.SetActive(true);
+            planeBuyText[12].text = "Play";
+            for(int i=0; i<planeBuyText.Length; i++){
+                if(i != 12){
+                    planeBuyText[i].text = "Select";
+                }
+            }
+            planePriceText[12].gameObject.SetActive(false);
+            isBuyPlane13Done = true;
+        }
+        else {
+            if(planeBuyText[12].text == "Play") return;
+            else{
+                planeBuyText[12].text = "Play";
+                for(int i=0; i<planeBuyText.Length; i++){
+                    if(i != 12){
+                        planeBuyText[i].text = "Select";
+                    }
+                }
+            }
+        }
+        
+        // Thay đổi defaultPlane
+        if(gameObjectsPlanes != null && gameObjectsPlanes.Length > 12){
+            defaultPlane = gameObjectsPlanes[12];
+            GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[12];
+            CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[12].transform;
+            CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[12].transform;
+            gameObjectsPlanes[12].SetActive(true);
+            for (int i=0; i<gameObjectsPlanes.Length; i++){
+                if(i != 12){
+                    gameObjectsPlanes[i].SetActive(false);
+                }
+            }
+        }
+    }
+    public void buyPlane14(){
+        StartCoroutine(PlayButtonEffect(13));
+        if(!isBuyPlane14Done){
+            planeBuyText[13].gameObject.SetActive(true);
+            planeBuyText[13].text = "Play";
+            for(int i=0; i<planeBuyText.Length; i++){
+                if(i != 13){
+                    planeBuyText[i].text = "Select";
+                }
+            }
+            planePriceText[13].gameObject.SetActive(false);
+            isBuyPlane14Done = true;
+        }
+        else {
+            if(planeBuyText[13].text == "Play") return;
+            else{
+                planeBuyText[13].text = "Play";
+                for(int i=0; i<planeBuyText.Length; i++){
+                    if(i != 13){
+                        planeBuyText[i].text = "Select";
+                    }
+                }
+            }
+        }
+        
+        // Thay đổi defaultPlane
+        if(gameObjectsPlanes != null && gameObjectsPlanes.Length > 13){
+            defaultPlane = gameObjectsPlanes[13];
+            GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[13];
+            CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[13].transform;
+            CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[13].transform;
+            gameObjectsPlanes[13].SetActive(true);
+            for (int i=0; i<gameObjectsPlanes.Length; i++){
+                if(i != 13){
+                    gameObjectsPlanes[i].SetActive(false);
+                }
+            }
+        }
+    }
+    public void buyPlane15(){
+        StartCoroutine(PlayButtonEffect(14));
+        if(!isBuyPlane15Done){
+            planeBuyText[14].gameObject.SetActive(true);
+            planeBuyText[14].text = "Play";
+            for(int i=0; i<planeBuyText.Length; i++){
+                if(i != 14){
+                    planeBuyText[i].text = "Select";
+                }
+            }
+            planePriceText[14].gameObject.SetActive(false);
+            isBuyPlane15Done = true;
+        }
+        else {
+            if(planeBuyText[14].text == "Play") return;
+            else{
+                planeBuyText[14].text = "Play";
+                for(int i=0; i<planeBuyText.Length; i++){
+                    if(i != 14){
+                        planeBuyText[i].text = "Select";
+                    }
+                }
+            }
+        }
+        
+        // Thay đổi defaultPlane
+        if(gameObjectsPlanes != null && gameObjectsPlanes.Length > 14){
+            defaultPlane = gameObjectsPlanes[14];
+            GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[14];
+            CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[14].transform;
+            CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[14].transform;
+            gameObjectsPlanes[14].SetActive(true);
+            for (int i=0; i<gameObjectsPlanes.Length; i++){
+                if(i != 14){
+                    gameObjectsPlanes[i].SetActive(false);
+                }
+            }
+        }
+    }
+
+    
+
+
 }

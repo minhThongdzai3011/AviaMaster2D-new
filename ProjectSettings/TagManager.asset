@@ -28,6 +28,7 @@ TagManager:
   - bird
   - airport
   - Cloud
+  - sky
   layers:
   - Default
   - TransparentFX

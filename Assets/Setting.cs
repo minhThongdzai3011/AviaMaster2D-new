@@ -1,266 +1,72 @@
-using System.Collections;
-using System.Collections.Generic;
-using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
+using DG.Tweening;
 
 public class Setting : MonoBehaviour
 {
-    // Start is called before the first frame update
-    [Header("Setting Panel")]
-    public Image imageCircle;
-    public Image settingsPanel;
-    public Image playPanel;
-    public Image loopPanel;
-    public Image imageHighQuality;
-    public Image imageHoverHighQuality;
-    public Image imageAudioPlay;
-    public Image imageAudioSetting;
-    public Image imageInformation;
-    public Image imageInformationSetting;
-    public Image imageMenuSetting;
-    [Header("Text UI")]
-    public TextMeshProUGUI textLoop;
-
-    [Header("Sprite UI")]
-    public Sprite spriteNoClick;
-    public Sprite spriteClick;
-    public Sprite spriteHoverButton;
-
-    [Header("Save Rigidbody2D")]
-    public Vector2 saveVelocity;
-    public float saveAngularVelocity;
-
-    [Header("Reset Settings")]
-    public Slider sliderSound;
-    public Slider sliderMusic;
-    public Slider sliderButtonSize;
-    public Slider sliderButtonOpacity;
-
-    [Header("Settings Button Play UI")]
-    public Image imageSettings;
-    public Image arrowRight;
-    public Image arrowLeft;
-    public Image arrowUp;
-    public Image arrowDown;
-    public Image loopImageSettings;
-
-    public TextMeshProUGUI textSpinPlace;
-
-    [Header("Change Sprite UI")]
-    public Sprite spriteAudioOffPlay;
-    public Sprite spriteAudioOnPlay;
-    public Sprite spriteAudioOffSetting;
-    public Sprite spriteAudioOnSetting;
-    // public Sprite spriteInformationOn;
-    // public Sprite spriteInformationOff;
+    public Image[] planeImages; 
+    private Vector2[] positions; 
+    private int[] currentIndexOfImage; // currentIndexOfImage[i] = vị trí hiện tại của planeImages[i]
+    public float moveDuration = 0.5f;
 
     void Start()
     {
+        int len = planeImages.Length;
+        positions = new Vector2[len];
+        currentIndexOfImage = new int[len];
 
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
-    public void AnimDoscaleCircleBigSetting()
-    {
-        LoadSettings();
-
-        saveVelocity = GameManager.instance.airplaneRigidbody2D.velocity;
-        saveAngularVelocity = GameManager.instance.airplaneRigidbody2D.angularVelocity;
-        GameManager.instance.airplaneRigidbody2D.velocity = Vector2.zero;
-        GameManager.instance.airplaneRigidbody2D.angularVelocity = 0f;
-        GameManager.instance.airplaneRigidbody2D.isKinematic = true;
-        imageCircle.gameObject.SetActive(true);
-        imageCircle.rectTransform.DOScale(25f, 0.1f).SetEase(Ease.Linear).OnComplete(() =>
+        for (int i = 0; i < len; i++)
         {
-            settingsPanel.gameObject.SetActive(true);
-        });
-    }
-
-    public void AnimDoscaleCircleSmallSetting()
-    {
-        //SaveSetting();
-        SaveSettings();
-
-        settingsPanel.gameObject.SetActive(false);
-        imageCircle.rectTransform.DOScale(1f, 0.1f).SetEase(Ease.Linear).OnComplete(() =>
-        {
-            imageCircle.gameObject.SetActive(false);
-            GameManager.instance.airplaneRigidbody2D.isKinematic = false;
-            GameManager.instance.airplaneRigidbody2D.velocity = saveVelocity;
-            GameManager.instance.airplaneRigidbody2D.angularVelocity = saveAngularVelocity;
-        });
-    }
-
-    public void AnimDoscaleCircleBigLoop()
-    {
-        saveVelocity = GameManager.instance.airplaneRigidbody2D.velocity;
-        saveAngularVelocity = GameManager.instance.airplaneRigidbody2D.angularVelocity;
-        GameManager.instance.airplaneRigidbody2D.velocity = Vector2.zero;
-        GameManager.instance.airplaneRigidbody2D.angularVelocity = 0f;
-        GameManager.instance.airplaneRigidbody2D.isKinematic = true;
-        imageCircle.gameObject.SetActive(true);
-        imageCircle.rectTransform.DOScale(25f, 0.1f).SetEase(Ease.Linear).OnComplete(() =>
-        {
-            loopPanel.gameObject.SetActive(true);
-        });
-    }
-
-    public void AnimDoscaleCircleSmallLoop()
-    {
-
-        loopPanel.gameObject.SetActive(false);
-        imageCircle.rectTransform.DOScale(1f, 0.1f).SetEase(Ease.Linear).OnComplete(() =>
-        {
-            imageCircle.gameObject.SetActive(false);
-            GameManager.instance.airplaneRigidbody2D.isKinematic = false;
-            GameManager.instance.airplaneRigidbody2D.velocity = saveVelocity;
-            GameManager.instance.airplaneRigidbody2D.angularVelocity = saveAngularVelocity;
-        });
-    }
-
-
-    public void EnterBtnMenuSetting(Image image)
-    {
-        image.color = Color.gray;
-    }
-    public void ExitBtnMenuSetting(Image image)
-    {
-        Color color = image.color;
-        color.a = 0;
-        image.color = color;
-    }
-
-
-    // High Quality
-    public bool checkHighQuality = true;
-    public void highQuality()
-    {
-        if (checkHighQuality)
-        {
-            imageHighQuality.sprite = spriteClick;
-            checkHighQuality = false;
-            QualitySettings.SetQualityLevel(5);
-        }
-        else
-        {
-            imageHighQuality.sprite = spriteNoClick;
-            checkHighQuality = true;
-            QualitySettings.SetQualityLevel(0);
-        }
-    }
-    public void EnterBtnHighQuality()
-    {
-        imageHoverHighQuality.gameObject.SetActive(true);
-    }
-    public void ExitBtnHighQuality()
-    {
-        imageHoverHighQuality.gameObject.SetActive(false);
-    }
-
-
-    public void ResetSetting()
-    {
-        sliderSound.value = 1f;
-        sliderMusic.value = 1f;
-        sliderButtonSize.value = 1f;
-        sliderButtonOpacity.value = 1f;
-    }
-    public void SaveSettings()
-    {
-        PlayerPrefs.SetFloat("Sound", sliderSound.value);
-        PlayerPrefs.SetFloat("Music", sliderMusic.value);
-        PlayerPrefs.SetFloat("ButtonSize", sliderButtonSize.value);
-        PlayerPrefs.SetFloat("ButtonOpacity", sliderButtonOpacity.value);
-    }
-
-    public void LoadSettings()
-    {
-        sliderSound.value = PlayerPrefs.GetFloat("Sound", 1f);
-        sliderMusic.value = PlayerPrefs.GetFloat("Music", 1f);
-        sliderButtonSize.value = PlayerPrefs.GetFloat("ButtonSize", 1f);
-        sliderButtonOpacity.value = PlayerPrefs.GetFloat("ButtonOpacity", 1f);
-    }
-
-    public void ChangeButtonSettingsOpacity()
-    {
-        Color newColor = imageSettings.color;
-        newColor.a = sliderButtonOpacity.value;
-        imageSettings.color = newColor;
-        arrowRight.color = newColor;
-        arrowLeft.color = newColor;
-        arrowUp.color = newColor;
-        arrowDown.color = newColor;
-        textSpinPlace.color = newColor;
-        loopImageSettings.color = newColor;
-
-    }
-
-    public void ChangeButtonSettingsSize()
-    {
-        Vector3 newSize = imageSettings.rectTransform.localScale;
-        newSize.x = sliderButtonSize.value;
-        newSize.y = sliderButtonSize.value;
-        imageSettings.rectTransform.localScale = newSize;
-        arrowRight.rectTransform.localScale = newSize;
-        arrowLeft.rectTransform.localScale = newSize;
-        arrowUp.rectTransform.localScale = newSize;
-        arrowDown.rectTransform.localScale = newSize;
-        textSpinPlace.rectTransform.localScale = newSize;
-        loopImageSettings.rectTransform.localScale = newSize;
-
-    }
-
-    public bool isChangeAudioPlay = true;
-    public void ChangeSpriteAudioPlay()
-    {
-        if (isChangeAudioPlay)
-        {
-            isChangeAudioPlay = false;
-            imageAudioPlay.sprite = spriteAudioOffPlay;
-            imageAudioSetting.sprite = spriteAudioOffSetting;
-            AudioListener.volume = 0f;
-        }
-        else
-        {
-            isChangeAudioPlay = true;
-            imageAudioPlay.sprite = spriteAudioOnPlay;
-            imageAudioSetting.sprite = spriteAudioOnSetting;
-            AudioListener.volume = 1f;
-        }
-    }
-    public void ChangeSpriteAudioSetting()
-    {
-        if (isChangeAudioPlay)
-        {
-            isChangeAudioPlay = false;
-            imageAudioPlay.sprite = spriteAudioOffPlay;
-            imageAudioSetting.sprite = spriteAudioOffSetting;
-            AudioListener.volume = 0f;
-        }
-        else
-        {
-            isChangeAudioPlay = true;
-            imageAudioPlay.sprite = spriteAudioOnPlay;
-            imageAudioSetting.sprite = spriteAudioOnSetting;
-            AudioListener.volume = 1f;
+            positions[i] = planeImages[i].rectTransform.anchoredPosition;
+            currentIndexOfImage[i] = i; // ban đầu image i nằm ở vị trí i
         }
     }
 
-    public bool isInformationOn = true;
-    public void ChangeSpriteInformation()
+    public void OnClickRightArrow()
     {
-        if (isInformationOn)
+        Shift(-1); // shift right nghĩa là mỗi ảnh giảm index 1 (mod len)
+    }
+
+    public void OnClickLeftArrow()
+    {
+        Shift(+1); // shift left nghĩa là mỗi ảnh tăng index 1 (mod len)
+    }
+
+    // dir = +1 (left), dir = -1 (right)
+    private void Shift(int dir)
+    {
+        int len = planeImages.Length;
+
+        for (int i = 0; i < len; i++)
         {
-            isInformationOn = false;
-            imageInformationSetting.gameObject.SetActive(true);
-            imageMenuSetting.gameObject.SetActive(false);
+            int cur = currentIndexOfImage[i];
+            int target = (cur + dir + len) % len;
+
+            // detect wrap: nếu di chuyển từ đầu sang cuối hoặc ngược lại
+            bool wrapToEnd = (cur == 0 && target == len - 1);
+            bool wrapToStart = (cur == len - 1 && target == 0);
+            Image img = planeImages[i];
+
+            if (wrapToEnd || wrapToStart)
+            {
+                // ẩn hình trước khi tween (không dùng SetActive)
+                img.enabled = false;
+
+                // tween vị trí vẫn chạy, khi hoàn tất bật hiển thị
+                img.rectTransform.DOAnchorPos(positions[target], moveDuration).OnComplete(() =>
+                {
+                    img.enabled = true;
+                });
+            }
+            else
+            {
+                // bình thường: đảm bảo hiển thị và tween
+                img.enabled = true;
+                img.rectTransform.DOAnchorPos(positions[target], moveDuration);
+            }
+
+            // cập nhật index cho ảnh này (quan trọng để lần sau tính đúng)
+            currentIndexOfImage[i] = target;
         }
     }
 }

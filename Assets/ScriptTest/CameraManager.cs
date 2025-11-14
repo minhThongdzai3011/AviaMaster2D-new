@@ -23,6 +23,12 @@ public class CameraManager : MonoBehaviour
     public float followThreshold = 15f; // Ngưỡng orthoSize để bắt đầu follow máy bay
     public float cameraFollowSpeed = 2f; // Tốc độ di chuyển camera theo máy bay
     
+    [Header("Screen Position Settings")]
+    public float screenYGround = 0.7f; // ScreenY khi máy bay ở đất
+    public float screenYFlying = 0.5f; // ScreenY khi máy bay đang bay
+    public float screenTransitionSpeed = 1f; // Tốc độ chuyển đổi screenY
+    private float currentScreenY; // ScreenY hiện tại
+    
     [Header("Ground và Aircraft references")]
     public Transform groundTransform; // Reference đến Ground
     public Transform aircraftTransform; // Reference đến máy bay
@@ -45,6 +51,15 @@ public class CameraManager : MonoBehaviour
         targetOrthoSize = baseOrthoSize;
         virtualCamera.m_Lens.OrthographicSize = baseOrthoSize;
         
+        // Thiết lập screenY ban đầu
+        currentScreenY = screenYGround;
+        var composer = virtualCamera.GetCinemachineComponent<CinemachineComposer>();
+        if (composer != null)
+        {
+            composer.m_ScreenX = 0.5f;
+            composer.m_ScreenY = currentScreenY;
+        }
+        
         // Lưu vị trí camera ban đầu
         originalCameraPosition = virtualCamera.transform.position;
         
@@ -62,6 +77,9 @@ public class CameraManager : MonoBehaviour
         
         // Xử lý zoom tự động theo độ cao máy bay
         HandleAltitudeBasedZoom();
+        
+        // Xử lý thay đổi ScreenY mượt mà
+        HandleScreenYTransition();
         
         // Xử lý camera follow máy bay
         HandleCameraFollow();
@@ -118,6 +136,43 @@ void HandleAltitudeBasedZoom()
         // Cập nhật target
         targetOrthoSize = calculatedOrthoSize;
         
+    }
+}
+
+void HandleScreenYTransition()
+{
+    if (GManager.instance == null || virtualCamera == null) return;
+    
+    var composer = virtualCamera.GetCinemachineComponent<CinemachineComposer>();
+    if (composer == null) return;
+    
+    // Xác định target screenY dựa trên trạng thái máy bay
+    float targetScreenY;
+    float altitude = GManager.instance.currentAltitude;
+    bool isFlying = altitude > 5f; // Coi như đang bay nếu độ cao > 5m
+    bool hasFuel = GManager.instance.isPlay; // Đang có fuel và đang chơi
+    
+    if (isFlying && hasFuel)
+    {
+        // Đang bay và có fuel → screenY = 0.5
+        targetScreenY = screenYFlying;
+    }
+    else
+    {
+        // Máy bay ở đất hoặc hết fuel → screenY = 0.7
+        targetScreenY = screenYGround;
+    }
+    
+    // Chuyển đổi mượt mà
+    currentScreenY = Mathf.Lerp(currentScreenY, targetScreenY, screenTransitionSpeed * Time.deltaTime);
+    
+    // Áp dụng vào composer
+    composer.m_ScreenY = currentScreenY;
+    
+    // Debug log để theo dõi (chỉ khi có thay đổi đáng kể)
+    if (Mathf.Abs(currentScreenY - targetScreenY) > 0.01f)
+    {
+        Debug.Log($"ScreenY transition: {currentScreenY:F2} → {targetScreenY:F2} (Flying: {isFlying}, Fuel: {hasFuel})");
     }
 }
 
@@ -220,6 +275,14 @@ Vector3 CalculateGroundVisiblePosition()
         targetOrthoSize = baseOrthoSize;
         isFollowingAircraft = false;
         virtualCamera.transform.position = originalCameraPosition;
+        
+        // Reset screenY về giá trị đất
+        currentScreenY = screenYGround;
+        var composer = virtualCamera.GetCinemachineComponent<CinemachineComposer>();
+        if (composer != null)
+        {
+            composer.m_ScreenY = currentScreenY;
+        }
     }
     
     // Method để force follow máy bay

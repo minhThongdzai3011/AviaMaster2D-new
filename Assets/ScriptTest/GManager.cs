@@ -231,17 +231,24 @@ public class GManager : MonoBehaviour
         if(airplaneRigidbody2D.name == "Forest" || airplaneRigidbody2D.name == "Avocado" || airplaneRigidbody2D.name == "BeeGee" || airplaneRigidbody2D.name == "Pancake" || airplaneRigidbody2D.name == "Scruffy") 
         {
             Debug.Log("Start Rotation Front");
-            
+
             // THAY ĐỔI: Tìm RotaryFront trên máy bay hiện tại thay vì dùng singleton
-            RotaryFront currentRotaryFront = airplaneRigidbody2D.GetComponentInChildren<RotaryFront>();
-            if (currentRotaryFront != null)
+            if (Shop.instance.isRotaryFrontZDone)
             {
-                currentRotaryFront.StartRotation();
-                Debug.Log($"Started rotation on {airplaneRigidbody2D.name}");
+                RotaryFrontZ currentRotaryFront = airplaneRigidbody2D.GetComponentInChildren<RotaryFrontZ>();
+                if (currentRotaryFront != null && currentRotaryFront.gameObject.activeInHierarchy)
+                {
+                    currentRotaryFront.StartRotation();
+                    Debug.Log($"Started rotation on Z {airplaneRigidbody2D.name}");
+                }
             }
-            else
-            {
-                Debug.LogWarning($"RotaryFront not found on {airplaneRigidbody2D.name}");
+            else{
+                RotaryFront currentRotaryFront = airplaneRigidbody2D.GetComponentInChildren<RotaryFront>();
+                if (currentRotaryFront != null && currentRotaryFront.gameObject.activeInHierarchy)
+                {
+                    currentRotaryFront.StartRotation();
+                    Debug.Log($"Started rotation on {airplaneRigidbody2D.name}");
+                }
             }
         }
         
