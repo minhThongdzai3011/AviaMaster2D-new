@@ -48,6 +48,7 @@ public class Settings : MonoBehaviour
     public float targetValue = 0f;
     private bool isAnimating = false;
     public bool isSpinning = true;
+    public bool isButtonChestClickeds = false;
     
     [Header("Slider Settings")]
     public Slider prizeSlider;
@@ -448,6 +449,7 @@ public class Settings : MonoBehaviour
             {
                 isShakeZ = true;
                 ShakeZ();
+                isButtonChestClickeds = true;
             }
         }
     }
@@ -457,7 +459,6 @@ public class Settings : MonoBehaviour
     public float strength = 15f;
     public int vibrato = 10;
     public bool isShakeZ = false;
-    public bool isButtonChestClicked = false;
     public bool isShake = true;
 
     public void ShakeZ()
@@ -472,7 +473,7 @@ public class Settings : MonoBehaviour
 
             isShakeZ = false;
             isShake = false;
-            isButtonChestClicked = true;
+            isButtonChestClickeds = true;
         }
     }
 
@@ -600,29 +601,33 @@ public class Settings : MonoBehaviour
 
     public void buttonChestClicked()
     {
-        if (isAnimating) return;
+        if (isButtonChestClickeds)
+        {
+            if (isAnimating) return;
 
-        Debug.Log("Mở Win Image!");
+            Debug.Log("Mở Win Image!");
 
-        // Dừng tất cả animation đang chạy
-        DOTween.Kill(prizeChestImage.transform);
-        isAnimating = true;
+            // Dừng tất cả animation đang chạy
+            DOTween.Kill(prizeChestImage.transform);
+            isAnimating = true;
 
-        // Hiển thị prize chest image
-        prizeChestImage.gameObject.SetActive(true);
+            // Hiển thị prize chest image
+            prizeChestImage.gameObject.SetActive(true);
 
-        // Cập nhật UI trước khi hiển thị
-        UpdateUI();
+            // Cập nhật UI trước khi hiển thị
+            UpdateUI();
 
-        // Animation mở prize chest image
-        prizeChestImage.transform.localScale = Vector3.zero;
-        prizeChestImage.transform.DOScale(Vector3.one, openDuration)
-            .SetEase(openEase)
-            .OnComplete(() =>
-            {
-                isAnimating = false;
-                Debug.Log("Lucky Wheel Image animation mở hoàn thành!");
-            });
+            // Animation mở prize chest image
+            prizeChestImage.transform.localScale = Vector3.zero;
+            prizeChestImage.transform.DOScale(Vector3.one, openDuration)
+                .SetEase(openEase)
+                .OnComplete(() =>
+                {
+                    isAnimating = false;
+                    Debug.Log("Lucky Wheel Image animation mở hoàn thành!");
+                });
+            isButtonChestClickeds = false;
+        }
     }
     
     public void buttonExitChestClicked()

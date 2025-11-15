@@ -93,6 +93,7 @@ public class GManager : MonoBehaviour
     [Header("UI Texts")]
     public TextMeshProUGUI distanceText;
     public TextMeshProUGUI altitudeText;
+    public TextMeshProUGUI velocityText;
     public TextMeshProUGUI rotationZText;
     public TextMeshProUGUI levelPowerText;
     public TextMeshProUGUI levelFuelText;
@@ -203,6 +204,9 @@ public class GManager : MonoBehaviour
             }
             // THÊM: Reset trạng thái chạm đất khi bắt đầu game mới
             ResetGroundCollision();
+            
+            // THÊM: Reset flag falling sequence
+            isFallingInSequence = false;
             
             homeGameDown();
             homeGameUp();
@@ -416,34 +420,163 @@ public class GManager : MonoBehaviour
             yield return null;
         }
 
-        // Bước 5: Kết thúc điều khiển và rơi
-        Plane.instance.trailEffect.enabled = false; // Dừng vệt khói khi rơi
-        isControllable = false;
+        // Bước 5: Kết thúc fuel và tính toán vật lý rơi chân thực
+        Plane.instance.trailEffect.enabled = false; // Dừng vệt lửa
+        isControllable = false; // Tắt controllable bình thường
+        isFallingInSequence = true; // THÊM: Báo hiệu đang trong giai đoạn rơi
         airplaneRigidbody2D.gravityScale = gravityScale;
         Physics2D.gravity = new Vector2(0f, -9.81f * gravityScale);
 
         Plane.instance.smokeEffect.Play();
 
-        // Trong giai đoạn rơi, tự động xoay theo velocity
+        Debug.Log("Bắt đầu giai đoạn rơi - Tính toán vật lý chân thực được kích hoạt");
+
+        Vector2 initialVelocity = airplaneRigidbody2D.velocity;
+        Debug.Log($"Initial Velocity trước khi tính toán vật lý thực tế: {initialVelocity}");
+        if (initialVelocity.x < 10f)
+        {
+            initialVelocity.x = 10f;
+            airplaneRigidbody2D.velocity = initialVelocity;
+            Debug.Log($"Tăng velocity.x lên 10: {initialVelocity}");
+        }
+
+        // Các thông số vật lý máy bay
+        float aircraftMass = airplaneRigidbody2D.mass; // Khối lượng máy bay
+        float wingArea = 2.5f; // Diện tích cánh (m²)
+        float airDensity = 1.225f; // Mật độ không khí (kg/m³)
+        
+        // THÊM: Debug velocity sau khi áp dụng lực khí động
+        int debugCounter = 0;
+        
+        // Trong giai đoạn rơi với tính toán vật lý thực tế
         while (airplaneRigidbody2D.velocity.x > 0.1f)
         {
-            Vector2 vel = airplaneRigidbody2D.velocity;
-            if (vel.magnitude > 1f)
+            Vector2 velocity = airplaneRigidbody2D.velocity;
+            float speed = velocity.magnitude;
+            
+            // Debug velocity mỗi 60 frame (1 giây)
+            if (debugCounter % 60 == 0)
             {
-                float angle = Mathf.Atan2(vel.y, vel.x) * Mathf.Rad2Deg;
-                angle = Mathf.Clamp(angle, -45f, 45f);
-
-                float currentZ = airplaneRigidbody2D.transform.eulerAngles.z;
-                if (currentZ > 180f) currentZ -= 360f;
-
-                float targetAngle = Mathf.LerpAngle(currentZ, angle, Time.deltaTime * 2f);
-                
-                // GIỮ NGUYÊN rotation.x hiện tại khi set rotation.z
-                Vector3 existingRotation = airplaneRigidbody2D.transform.eulerAngles;
-                airplaneRigidbody2D.transform.rotation = Quaternion.Euler(existingRotation.x, existingRotation.y, targetAngle);
+                Debug.Log($"Frame {debugCounter}: Velocity thực tế = {velocity}, Speed = {speed:F2}");
             }
+            debugCounter++;
+            
+            // Tính toán dynamic pressure
+            float dynamicPressure = 0.5f * airDensity * speed * speed;
+            
+            // Lấy góc máy bay hiện tại
+            float currentZ = airplaneRigidbody2D.transform.eulerAngles.z;
+            if (currentZ > 180f) currentZ -= 360f;
+            
+            // Tính angle of attack (góc tấn công) - góc giữa máy bay và hướng bay
+            float angleOfAttack = currentZ - Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
+            angleOfAttack = Mathf.DeltaAngle(0f, angleOfAttack); // Normalize về [-180, 180]
+            
+            // Tính hệ số nâng và lực nâng
+            float liftCoeff = Mathf.Sin(angleOfAttack * Mathf.Deg2Rad) * 0.8f; // Hệ số nâng đơn giản
+            float liftForce = liftCoeff * dynamicPressure * wingArea;
+            
+            // Tính hệ số cản và lực cản (GIẢM để velocity không bị kéo xuống quá nhanh)
+            float dragCoeff = 0.02f + 0.1f * Mathf.Abs(liftCoeff * liftCoeff); // Cản cơ bản + cản cảm ứng (giảm từ 0.05 + 0.3)
+            float dragForce = dragCoeff * dynamicPressure * wingArea;
+            
+            // Tính hướng lực nâng và cản (vuông góc và song song với velocity)
+            Vector2 velocityNorm = velocity.normalized;
+            Vector2 liftDirection = new Vector2(-velocityNorm.y, velocityNorm.x); // Vuông góc với velocity
+            Vector2 dragDirection = -velocityNorm; // Ngược lại velocity
+            
+            // Áp dụng lực nâng và cản
+            Vector2 liftForceVec = liftDirection * liftForce;
+            Vector2 dragForceVec = dragDirection * dragForce;
+            
+            // THÊM: Debug lực khí động mỗi giây
+            if (debugCounter % 60 == 0)
+            {
+                Debug.Log($"Aerodynamic Forces - Lift: {liftForceVec}, Drag: {dragForceVec}, DragCoeff: {dragCoeff:F3}");
+            }
+            
+            airplaneRigidbody2D.AddForce(liftForceVec, ForceMode2D.Force);
+            airplaneRigidbody2D.AddForce(dragForceVec, ForceMode2D.Force);
+            
+            // THÊM: Duy trì velocity.x tối thiểu 15 m/s để không bị lực cản kéo xuống quá thấp
+            Vector2 currentVel = airplaneRigidbody2D.velocity;
+            float minVelocityX = launchForce / 2f;
+            if (minVelocityX < 15f) minVelocityX = 15f; // Đảm bảo tối thiểu 15 m/s
+            if (currentVel.x < minVelocityX)
+            {
+                currentVel.x = minVelocityX;
+                airplaneRigidbody2D.velocity = currentVel;
+                if (debugCounter % 60 == 0)
+                {
+                    Debug.Log($"Duy trì velocity.x tối thiểu 8 m/s: {currentVel}");
+                }
+            }
+            
+            // Kiểm tra input A/D để điều khiển góc rơi
+            bool hasPlayerInput = Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D);
+            
+            if (hasPlayerInput)
+            {
+                float targetAngle = currentZ;
+                float controlSpeed = 80f; // Tốc độ điều khiển (độ/giây)
+                
+                if (Input.GetKey(KeyCode.A))
+                {
+                    // A: Xoay lên (ít nghiêng xuống) - hướng về -10°
+                    targetAngle = Mathf.MoveTowards(currentZ, -10f, controlSpeed * Time.deltaTime);
+                }
+                else if (Input.GetKey(KeyCode.D))
+                {
+                    // D: Xoay xuống (nghiêng xuống nhiều) - hướng về -45°
+                    targetAngle = Mathf.MoveTowards(currentZ, -45f, controlSpeed * Time.deltaTime);
+                }
+                
+                // Giới hạn góc trong khoảng cho phép
+                targetAngle = Mathf.Clamp(targetAngle, -45f, -5f);
+                
+                // Áp dụng góc với tính đến lực khí động
+                float smoothAngle = Mathf.LerpAngle(currentZ, targetAngle, Time.deltaTime * 6f);
+                
+                Vector3 existingRotation = airplaneRigidbody2D.transform.eulerAngles;
+                airplaneRigidbody2D.transform.rotation = Quaternion.Euler(existingRotation.x, existingRotation.y, smoothAngle);
+                
+                // Tính toán tỷ lệ lượn (glide ratio)
+                float glideRatio = Mathf.Abs(velocity.x / velocity.y);
+                
+                // Tính khoảng cách đáp đất ước tính
+                float currentAltitude = airplaneRigidbody2D.transform.position.y;
+                float estimatedDistance = currentAltitude * glideRatio;
+                
+            }
+            else
+            {
+                // Không có input - tự động ổn định theo tỷ lệ lượn tối ưu
+                Vector2 vel = airplaneRigidbody2D.velocity;
+                if (vel.magnitude > 1f)
+                {
+                    // Tính góc lượn tối ưu (best glide angle)
+                    float optimalGlideAngle = -12f; // Góc lượn tối ưu cho hiệu suất tốt nhất
+                    
+                    float targetAngle = Mathf.LerpAngle(currentZ, optimalGlideAngle, Time.deltaTime * 1.5f);
+                    
+                    Vector3 existingRotation = airplaneRigidbody2D.transform.eulerAngles;
+                    airplaneRigidbody2D.transform.rotation = Quaternion.Euler(existingRotation.x, existingRotation.y, targetAngle);
+                    
+                    // Tính toán tỷ lệ lượn hiện tại
+                    float currentGlideRatio = Mathf.Abs(vel.x / vel.y);
+                    float currentAltitude = airplaneRigidbody2D.transform.position.y;
+                    float estimatedDistance = currentAltitude * currentGlideRatio;
+                    
+                    
+                }
+            }
+            
             yield return null;
         }
+
+        // THÊM: Kết thúc giai đoạn rơi
+        isFallingInSequence = false;
+        Debug.Log("Kết thúc giai đoạn rơi - Tắt A/D điều khiển");
 
         Debug.Log("Máy bay đã hoàn thành chuỗi bay: ngang → bay lên (xoay dần) → giữ (có điều khiển) → rơi");
     }
@@ -451,6 +584,8 @@ public class GManager : MonoBehaviour
     public bool isVelocity = true;
     public bool isHorizontalFlying = false;
     public bool isSlidingOnGround = false; // THÊM: Kiểm tra trượt trên đất
+    public bool checkControlPlane = false;
+    public bool isFallingInSequence = false; // THÊM: Flag để biết đang trong giai đoạn rơi của LaunchSequence
     void Update()
     {
         
@@ -461,7 +596,7 @@ public class GManager : MonoBehaviour
         if (currentAltitude < 0f) currentAltitude = 0f;
         rotationZ = airplaneRigidbody2D.transform.eulerAngles.z;
         if (rotationZ > 180f) rotationZ -= 360f;
-
+        velocityText.text = airplaneRigidbody2D.velocity.magnitude.ToString("F2") + " m/s";
         rotationAngleZ();
         UpdateSliderAchievement();
 
@@ -488,6 +623,7 @@ public class GManager : MonoBehaviour
             HandleAircraftControl(); // Đã bao gồm auto-rotation theo velocity
             if (isHoldingButtonUp)
             {
+                
                 PlainUp();
             }
             if (isHoldingButtonDown)
@@ -495,7 +631,11 @@ public class GManager : MonoBehaviour
                 PlainDown();
             }
         }
-        else
+        if (!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D) && !isHoldingButtonUp && !isHoldingButtonDown && isControllable && !isHorizontalFlying)
+        {
+            checkControlPlane = true;
+        }
+        else if (!isFallingInSequence) // CHỈ áp dụng logic Update() khi KHÔNG trong giai đoạn rơi của LaunchSequence
         {
             // Kiểm tra xem có đang bay không
             bool isAirborne = isPlay && (airplaneRigidbody2D.velocity.magnitude > 1f || currentAltitude > 5f);
@@ -623,29 +763,10 @@ public class GManager : MonoBehaviour
         if (rotationZText != null) rotationZText.text = rotationZ.ToString("F2") + " °";
 
 
-        moneyText.text = money.ToString() + " $";
+        moneyText.text = Plane.instance.moneyCollect.ToString() + " $";
 
     }
 
-
-    // void FixedUpdate()
-    // {
-
-    //     if(isTurnWheel){
-    //         if (Mathf.Abs(currentRotationSpeed) > 0.1f)
-    //         {
-    //             currentRotationSpeed -= Mathf.Sign(currentRotationSpeed) * angularFriction * Time.fixedDeltaTime;
-    //         }
-    //         else
-    //         {
-    //             currentRotationSpeed = 0f;
-    //         }
-
-    //         // Tính góc xoay mới
-    //         float newRotation = wheelRigidbody2D.rotation + currentRotationSpeed * Time.fixedDeltaTime;
-    //         wheelRigidbody2D.MoveRotation(newRotation);
-    //     }
-    // }
     void HandleAircraftControl()
     {
         if (airplaneRigidbody2D == null) return;
@@ -672,7 +793,7 @@ public class GManager : MonoBehaviour
         if (isUpPressed)
         {
             // Điều chỉnh góc lên từ góc hiện tại
-            float adjustment = Time.deltaTime * 120f;
+            float adjustment = Time.deltaTime * 360f;
             float targetRotation = Mathf.Min(currentZ + adjustment, maxUpAngle);
             
             // GIỮ NGUYÊN rotation.x hiện tại khi set rotation.z
@@ -684,7 +805,7 @@ public class GManager : MonoBehaviour
             {
                 float angleRad = targetRotation * Mathf.Deg2Rad;
                 Vector2 forceDirection = new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad));
-                airplaneRigidbody2D.AddForce(forceDirection * controlForce * 0.3f, ForceMode2D.Force);
+                airplaneRigidbody2D.AddForce(forceDirection * controlForce * 0.4f, ForceMode2D.Force);
             }
         }
 
@@ -692,7 +813,7 @@ public class GManager : MonoBehaviour
         else if (isDownPressed)
         {
             // Điều chỉnh góc xuống từ góc hiện tại
-            float adjustment = Time.deltaTime * 120f;
+            float adjustment = Time.deltaTime * 180f;
             float targetRotation = Mathf.Max(currentZ - adjustment, maxDownAngle);
             
             // GIỮ NGUYÊN rotation.x hiện tại khi set rotation.z
@@ -1253,9 +1374,9 @@ public class GManager : MonoBehaviour
     public int ratePower = 0;
     public int rateFuel = 0;
     public int rateBoost = 0;
-    private float moneyPower = 20f;
-    private float moneyFuel = 20f;
-    private float moneyBoost = 20f;
+    private float moneyPower = 30f;
+    private float moneyFuel = 30f;
+    private float moneyBoost = 30f;
     public bool isFuelMax = false;
     public bool isPowerMax = false;
     public bool isBoostMax = false;
@@ -1294,7 +1415,7 @@ public class GManager : MonoBehaviour
             // THÊM: Lưu ngay sau khi nâng cấp
             SaveUpgradeData();
 
-            levelFuelText.text = "Character is " + rateFuel + " % fuel";
+            levelFuelText.text = "Fuel capacity increased by " + rateFuel + "%";
             Debug.Log($"UpgradeFuel: Level {levelFuel}, Rate {rateFuel}%, Duration {durationFuel}s");
         }
     }
@@ -1349,7 +1470,7 @@ public class GManager : MonoBehaviour
             // THÊM: Lưu ngay sau khi nâng cấp
             SaveUpgradeData();
 
-            levelBoostText.text = "Character is " + rateBoost + " % boost";
+            levelBoostText.text = "Flight stability increased " + rateBoost + "%";
             Debug.Log($"UpgradeBoost: Level {levelBoost}, Rate {rateBoost}%, TotalBoost {totalBoost}");
         }
 
@@ -1388,7 +1509,7 @@ public class GManager : MonoBehaviour
             // THÊM: Lưu ngay sau khi nâng cấp
             SaveUpgradeData();
 
-            levelPowerText.text = "Character is " + ratePower + " % power";
+            levelPowerText.text = "Initial thrust increased by " + ratePower + "%";
             Debug.Log($"UpgradePower: Level {levelPower}, Rate {ratePower}%, Force {launchForce}");
         }
     }
@@ -1493,24 +1614,17 @@ public class GManager : MonoBehaviour
         {
             if (arrowAngleZ == null) return;
             float angleAverange = (angleRangeMax + angleRangeMin) / 2;
-            // Debug.Log("angleAverange: " + angleAverange);
-
 
             float angle = Mathf.Sin(Time.time * speed) * (angleRangeMax - angleRangeMin) / 2 + angleAverange;
 
-            // if (angle < -3f && angle > -8f)
-            // {
-            //     speed = 1.5f;
-            // }
-            // else if (angle <= -8f && angle >= -25f || angle >= -3f && angle <= 12f)
-            // {
-            //     speed = 1.2f;
-            // }
-            // else
-            // {
-            //     speed = 1f;
-            // }
             arrowAngleZ.transform.rotation = Quaternion.Euler(0f, 0f, angle);
+            if(angle > -3f && angle < -8f)
+            {
+                speed = 3f;
+            }
+            else{
+                speed = 1f;
+            }
         }
         else
         {
@@ -1546,18 +1660,18 @@ public class GManager : MonoBehaviour
         rateFuel = PlayerPrefs.GetInt("RateFuel", 0);
         rateBoost = PlayerPrefs.GetInt("RateBoost", 0);
 
-        moneyPower = PlayerPrefs.GetFloat("MoneyPower", 20f);
-        moneyFuel = PlayerPrefs.GetFloat("MoneyFuel", 20f);
-        moneyBoost = PlayerPrefs.GetFloat("MoneyBoost", 20f);
+        moneyPower = PlayerPrefs.GetFloat("MoneyPower", 30f);
+        moneyFuel = PlayerPrefs.GetFloat("MoneyFuel", 30f);
+        moneyBoost = PlayerPrefs.GetFloat("MoneyBoost", 30f);
 
         isPowerMax = PlayerPrefs.GetInt("IsPowerMax", 0) == 1;
         isFuelMax = PlayerPrefs.GetInt("IsFuelMax", 0) == 1;
         isBoostMax = PlayerPrefs.GetInt("IsBoostMax", 0) == 1;
 
         Debug.Log($"Loaded upgrade data - rateFuel: {rateFuel}%, ratePower: {ratePower}%, rateBoost: {rateBoost}%");
-        levelPowerText.text = "Character is " + ratePower + " % power";
-        levelFuelText.text = "Character is " + rateFuel + " % fuel";
-        levelBoostText.text = "Character is " + rateBoost + " % boost";
+        levelPowerText.text = "Initial thrust increased by " + ratePower + "%";
+        levelFuelText.text = "Flight stability increased " + rateFuel + "%";
+        levelBoostText.text = "Fuel capacity increased by " + rateBoost + "%";
 
         powerMoneyText.text = isPowerMax ? "MAX" : moneyPower.ToString("F0");
         fuelMoneyText.text = isFuelMax ? "MAX" : moneyFuel.ToString("F0");

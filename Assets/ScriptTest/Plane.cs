@@ -31,6 +31,7 @@ public class Plane : MonoBehaviour
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
+            // GManager.instance.isControllable = false;
             // THÊM: Thông báo cho GManager biết máy bay đã chạm đất
             if (GManager.instance != null)
             {
@@ -60,6 +61,35 @@ public class Plane : MonoBehaviour
             {
                 moneyCollect += 1;
                 Destroy(other.gameObject);
+            }
+        }
+        if (other.CompareTag("bird"))
+        {
+            Destroy(other.gameObject);
+        }
+        if (other.CompareTag("Bonus"))
+        {
+            Destroy(other.gameObject);
+            GManager.instance.durationFuel += (GManager.instance.durationFuel * 0.2f);
+        }
+        if (other.CompareTag("Bonus2"))
+        {
+            Destroy(other.gameObject);
+            GManager.instance.totalBoost += (GManager.instance.totalBoost * 0.2f);
+        }
+        if (other.CompareTag("Bonus3"))
+        {
+            Destroy(other.gameObject);
+            GManager.instance.totalDiamond += 10;
+            
+            // THÊM: Kiểm tra null safety trước khi gọi AnimDiamond
+            if (AnimDiamond.instance != null)
+            {
+                AnimDiamond.instance.MoveUp();
+            }
+            else
+            {
+                Debug.LogWarning("AnimDiamond.instance is null! Make sure AnimDiamond component exists in scene.");
             }
         }
     }
