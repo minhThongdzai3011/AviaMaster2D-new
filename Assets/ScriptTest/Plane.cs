@@ -99,18 +99,23 @@ public class Plane : MonoBehaviour
         if (GManager.instance == null) { Debug.Log("GManager instance is null!"); yield break; }
         Rigidbody2D rb = GManager.instance.airplaneRigidbody2D;
         if (rb == null) { Debug.Log("AirplaneRigidbody2D chưa được khởi tạo!"); yield break; }
+        
+        // THÊM: Lấy rotation.z khi chạm đất
+        float landingRotationZ = rb.transform.eulerAngles.z;
+        if (landingRotationZ > 180f) landingRotationZ -= 360f; // Chuyển về [-180, 180]
+        
 
-        // Tham số trượt tự nhiên
-        float groundDrag = 1f; // Drag nhẹ hơn để không dừng đột ngột
-        float minimumSlideSpeed = 0.2f; // Tốc độ tối thiểu để tiếp tục trượt
-        float massIncreaseRate = 0.1f; // Tăng mass chậm hơn để kéo dài quá trình trượt
+        // Tham số trượt tự nhiên - SỬA để tránh giật
+        float groundDrag = 0.5f; // Drag nhẹ hơn để tránh giật
+        float minimumSlideSpeed = 0.1f; // Giảm threshold để smooth hơn
+        float rotationSmoothSpeed = 1.5f; // Tốc độ giảm rotation
 
         // Lưu giá trị ban đầu
         float originalDrag = rb.drag;
         float originalMass = rb.mass;
         Vector2 landingVelocity = rb.velocity;
         
-        Debug.Log($"Máy bay chạm đất - Velocity: {landingVelocity.magnitude:F1}, Landing speed: {landingVelocity.x:F1}");
+        Debug.Log($"Máy bay chạm đất - Velocity: {landingVelocity.magnitude:F1}, Landing speed: {landingVelocity.x:F1}, Rotation Z: {landingRotationZ:F1}°");
 
         // Áp dụng drag nhẹ để trượt tự nhiên
         rb.drag = groundDrag;
@@ -118,23 +123,22 @@ public class Plane : MonoBehaviour
         // Đảm bảo máy bay không bounce trên mặt đất
         if (rb.velocity.y < 0) rb.velocity = new Vector2(rb.velocity.x, 0f);
 
-        WaitForSeconds wait = new WaitForSeconds(0.1f); // Update thường xuyên hơn để mượt mà
+        WaitForSeconds wait = new WaitForSeconds(0.02f); // 50 FPS thay vì 10 FPS
 
-        // Giai đoạn 1: Trượt với ma sát dần dần
+        // Giai đoạn 1: Trượt với ma sát dần dần và giảm rotation
         float slideTimer = 0f;
-        float maxSlideTime = 8f; // Thời gian trượt tối đa (giây)
+        float maxSlideTime = 5f; // Giảm thời gian để tránh kéo dài
         
         while (slideTimer < maxSlideTime && Mathf.Abs(rb.velocity.x) > minimumSlideSpeed)
         {
-            slideTimer += 0.5f;
+            slideTimer += 0.02f; // Update mỗi frame
             
-            // Áp dụng ma sát dần dần
+            // SỬA: Ma sát mượt mà hơn
             Vector2 currentVelocity = rb.velocity;
             
-            // Ma sát tăng dần theo thời gian (trượt chậm lại dần)
+            // Ma sát nhẹ và đều - tránh giật
             float frictionProgress = slideTimer / maxSlideTime;
-            // float currentFriction = Mathf.Lerp(0.995f, 0.92f, frictionProgress); // Từ ma sát nhẹ đến nặng
-            float currentFriction = Mathf.Lerp(0.998f, 0.995f, frictionProgress);
+            float currentFriction = Mathf.Lerp(0.998f, 0.995f, frictionProgress); // Ma sát rất nhẹ
             currentVelocity.x *= currentFriction;
             
             // Đảm bảo không có chuyển động dọc
@@ -143,8 +147,22 @@ public class Plane : MonoBehaviour
             // Áp dụng velocity mới
             rb.velocity = currentVelocity;
             
-            // Tăng mass từ từ để tạo cảm giác nặng dần
-            rb.mass += massIncreaseRate;
+            // THÊM: Giảm rotation.z từ từ về 0
+            Vector3 currentRotation = rb.transform.eulerAngles;
+            float currentZ = currentRotation.z;
+            if (currentZ > 180f) currentZ -= 360f;
+            
+            if (Mathf.Abs(currentZ) > 0.1f)
+            {
+                float targetZ = Mathf.LerpAngle(currentZ, 0f, Time.deltaTime * rotationSmoothSpeed);
+                rb.transform.rotation = Quaternion.Euler(currentRotation.x, currentRotation.y, targetZ);
+            }
+            if ( rb.velocity.x > minimumSlideSpeed )
+            {
+                rb.velocity -= new Vector2(-0.001f, 0f);
+                Debug.Log("Giảm velocity.x dần đều trong trượt" + rb.velocity.x);
+                break;
+            }
             
             
             yield return wait;
@@ -152,7 +170,12 @@ public class Plane : MonoBehaviour
         
         // Giai đoạn 2: Dừng hoàn toàn
         rb.velocity = Vector2.zero;
-        rb.mass = 100f; // Set mass cuối cùng
+        
+        // THÊM: Đảm bảo rotation.z = 0 khi dừng
+        Vector3 finalRotation = rb.transform.eulerAngles;
+        rb.transform.rotation = Quaternion.Euler(finalRotation.x, finalRotation.y, 0f);
+        
+        Debug.Log("Máy bay đã dừng hoàn toàn và rotation.z đã reset về 0°");
         
         
         // Bắt đầu tính tiền sau khi trượt xong
@@ -183,7 +206,7 @@ public class Plane : MonoBehaviour
 
 
             // Lưu TotalMoney và đảm bảo lưu ngay
-            PlayerPrefs.SetInt("TotalMoney", GManager.instance.totalMoney);
+            PlayerPrefs.SetFloat("TotalMoney", GManager.instance.totalMoney);
             PlayerPrefs.Save();
             Settings.instance.OpenWinImage();
         }

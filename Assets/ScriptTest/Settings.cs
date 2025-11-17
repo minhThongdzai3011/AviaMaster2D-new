@@ -354,8 +354,6 @@ public class Settings : MonoBehaviour
                 isAnimating = false;
                 Debug.Log("Win Image animation đóng hoàn thành!");
                 targetValue = 0f;
-                PlayerPrefs.SetFloat("PrizeSliderValue", targetValue);
-                PlayerPrefs.Save();
                 Plane.instance.moneyCollect = 0;
                 Plane.instance.moneyDistance = 0;
                 Plane.instance.moneyTotal = 0;
@@ -638,7 +636,9 @@ public class Settings : MonoBehaviour
             Debug.LogError("Settings.instance is null!");
             return;
         }
-
+        GManager.instance.totalMoney += 1000;
+        PlayerPrefs.SetFloat("TotalMoney", GManager.instance.totalMoney);
+        PlayerPrefs.Save();
         Debug.Log("Đóng Prize Chest Image!");
 
         // Dừng tất cả animation đang chạy

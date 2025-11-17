@@ -45,7 +45,7 @@ public class GManager : MonoBehaviour
     private Coroutine boostCoroutine;
     public int money = 0; 
     public int diamonds = 0; 
-    public int totalMoney = 0;
+    public float totalMoney = 0;
     public int totalDiamond = 0;
     public float targetValue = 0f;
     public float duration = 1f;
@@ -173,6 +173,8 @@ public class GManager : MonoBehaviour
     
         }
         Physics2D.gravity = new Vector2(0f, -9.81f * gravityScale);
+        totalMoney = PlayerPrefs.GetFloat("TotalMoney", 0);
+        totalMoneyText.text = totalMoney.ToString("F0");
     }
 
     public void LaunchAirplane()
@@ -500,7 +502,7 @@ public class GManager : MonoBehaviour
             
             // THÊM: Duy trì velocity.x tối thiểu 15 m/s để không bị lực cản kéo xuống quá thấp
             Vector2 currentVel = airplaneRigidbody2D.velocity;
-            float minVelocityX = launchForce / 2f;
+            float minVelocityX = launchForce / 1.34f;
             if (minVelocityX < 15f) minVelocityX = 15f; // Đảm bảo tối thiểu 15 m/s
             if (currentVel.x < minVelocityX)
             {
@@ -527,12 +529,12 @@ public class GManager : MonoBehaviour
                 }
                 else if (Input.GetKey(KeyCode.D))
                 {
-                    // D: Xoay xuống (nghiêng xuống nhiều) - hướng về -45°
-                    targetAngle = Mathf.MoveTowards(currentZ, -45f, controlSpeed * Time.deltaTime);
+                    // D: Xoay xuống (nghiêng xuống nhiều) - hướng về -35°
+                    targetAngle = Mathf.MoveTowards(currentZ, -35f, controlSpeed * Time.deltaTime);
                 }
                 
                 // Giới hạn góc trong khoảng cho phép
-                targetAngle = Mathf.Clamp(targetAngle, -45f, -5f);
+                targetAngle = Mathf.Clamp(targetAngle, -35f, -10f);
                 
                 // Áp dụng góc với tính đến lực khí động
                 float smoothAngle = Mathf.LerpAngle(currentZ, targetAngle, Time.deltaTime * 6f);
@@ -555,7 +557,7 @@ public class GManager : MonoBehaviour
                 if (vel.magnitude > 1f)
                 {
                     // Tính góc lượn tối ưu (best glide angle)
-                    float optimalGlideAngle = -12f; // Góc lượn tối ưu cho hiệu suất tốt nhất
+                    float optimalGlideAngle = -20f; // Góc lượn tối ưu cho hiệu suất tốt nhất
                     
                     float targetAngle = Mathf.LerpAngle(currentZ, optimalGlideAngle, Time.deltaTime * 1.5f);
                     
@@ -1383,12 +1385,16 @@ public class GManager : MonoBehaviour
 
     public void UpgradeFuel()
     {
-        if (!isFuelMax)
+        if (!isFuelMax && totalMoney >= moneyFuel)
         {
             levelFuel += 1;
             rateFuel += 5;
 
             moneyFuel = moneyFuel * 1.25f;
+            totalMoney -= moneyFuel;
+            totalMoneyText.text = totalMoney.ToString("F0");
+            PlayerPrefs.SetFloat("TotalMoney", totalMoney);
+            PlayerPrefs.Save();
             moneyFuel = (int)Math.Round(moneyFuel, 1);
             if (moneyFuel > 999)
             {
@@ -1440,11 +1446,15 @@ public class GManager : MonoBehaviour
 
     public void UpgradeBoost()
     {
-        if (!isBoostMax)
+        if (!isBoostMax && totalMoney >= moneyBoost)
         {
             levelBoost += 1;
             rateBoost += 5;
             moneyBoost = moneyBoost * 1.25f;
+            totalMoney -= moneyBoost;
+            totalMoneyText.text = totalMoney.ToString("F0");
+            PlayerPrefs.SetFloat("TotalMoney", totalMoney);
+            PlayerPrefs.Save();
             moneyBoost = (int)Math.Round(moneyBoost, 1);
             if (moneyBoost > 999)
             {
@@ -1479,11 +1489,16 @@ public class GManager : MonoBehaviour
 
     public void UpgradePower()
     {
-        if (!isPowerMax)
+        if (!isPowerMax && totalMoney >= moneyPower)
         {
             levelPower += 1;
             ratePower += 5;
             moneyPower = moneyPower * 1.25f;
+            totalMoney -= moneyPower;
+            totalMoney = (int)Math.Round(totalMoney, 0);
+            totalMoneyText.text = totalMoney.ToString("F0");
+            PlayerPrefs.SetFloat("TotalMoney", totalMoney);
+            PlayerPrefs.Save();
             moneyPower = (int)Math.Round(moneyPower, 1);
             if (moneyPower > 999)
             {
@@ -1702,7 +1717,9 @@ public class GManager : MonoBehaviour
 
     public void SaveTotalMoney()
     {
-        totalMoney = PlayerPrefs.GetInt("TotalMoney", 0);
+        
+        
+        totalMoney = PlayerPrefs.GetFloat("TotalMoney", 0);
         if (totalMoney > 999)
         {
 
@@ -1816,7 +1833,7 @@ public class GManager : MonoBehaviour
     {
         totalMoney += coinAmount;
         totalMoneyText.text = totalMoney.ToString();
-        PlayerPrefs.SetInt("TotalMoney", totalMoney);
+        PlayerPrefs.SetFloat("TotalMoney", totalMoney);
         PlayerPrefs.Save();
         SaveTotalMoney();
     }
