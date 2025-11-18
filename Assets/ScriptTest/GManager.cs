@@ -435,7 +435,7 @@ public class GManager : MonoBehaviour
 
         Vector2 initialVelocity = airplaneRigidbody2D.velocity;
         Debug.Log($"Initial Velocity trước khi tính toán vật lý thực tế: {initialVelocity}");
-        if (initialVelocity.x < 10f)
+        if (initialVelocity.x < 10f && !Plane.instance.isGrounded)
         {
             initialVelocity.x = 10f;
             airplaneRigidbody2D.velocity = initialVelocity;
@@ -592,6 +592,8 @@ public class GManager : MonoBehaviour
     {
         
         if (airplaneRigidbody2D == null) return;
+        
+        // Cập nhật thông tin cơ bản
         Vector2 currentPos = airplaneRigidbody2D.transform.position;
         distanceTraveled = Vector2.Distance(startPosition, currentPos);
         currentAltitude = currentPos.y - startPosition.y;
@@ -601,6 +603,12 @@ public class GManager : MonoBehaviour
         velocityText.text = airplaneRigidbody2D.velocity.magnitude.ToString("F2") + " m/s";
         rotationAngleZ();
         UpdateSliderAchievement();
+        
+        // *** QUAN TRỌNG: Nếu máy bay đã chạm đất, KHÔNG can thiệp vào physics ***
+        if (Plane.instance != null && Plane.instance.isGrounded)
+        {
+            return; // Thoát sớm, không chạy logic physics
+        }
 
         // Áp dụng lực kéo xuống theo độ cao
         ApplyAltitudeDrag();

@@ -9,6 +9,7 @@ public class Plane : MonoBehaviour
     public ParticleSystem smokeEffect;
     public TrailRenderer trailEffect;
 
+    public bool isGrounded = false;
 
     public int moneyDistance = 0;
     public int moneyCollect = 0;
@@ -29,8 +30,9 @@ public class Plane : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Ground") && !isGrounded)
         {
+            isGrounded = true;
             Debug.Log("*** MÁY BAY CHẠM ĐẤT - BẮT ĐẦU HỆ THỐNG DỪNG ***");
             
             // THÊM: Thông báo cho GManager biết máy bay đã chạm đất
@@ -48,6 +50,8 @@ public class Plane : MonoBehaviour
             
             smokeEffect.Stop();
             
+            // *** QUAN TRỌNG: Gọi UpMass() để giảm tốc độ ***
+            StartCoroutine(UpMass());
         }
     }
 
@@ -107,62 +111,67 @@ public class Plane : MonoBehaviour
         Rigidbody2D rb = GManager.instance.airplaneRigidbody2D;
         if (rb == null) { Debug.Log("AirplaneRigidbody2D chưa được khởi tạo!"); yield break; }
         
-        // THÊM: Lấy rotation.z khi chạm đất
+        // Lưu góc máy bay khi chạm đất
         float landingRotationZ = rb.transform.eulerAngles.z;
         if (landingRotationZ > 180f) landingRotationZ -= 360f; // Chuyển về [-180, 180]
         
+        Debug.Log($"*** BẮT ĐẦU UpMass() - Góc: {landingRotationZ:F1}°, Velocity: {rb.velocity.magnitude:F2}, VelocityX: {rb.velocity.x:F2} ***");
 
-        // Tham số trượt tự nhiên - SỬA để tránh giật
-        float groundDrag = 0.5f; // Drag nhẹ hơn để tránh giật
-        float minimumSlideSpeed = 0.1f; // Giảm threshold để smooth hơn
-        float rotationSmoothSpeed = 1.5f; // Tốc độ giảm rotation
+        // Tham số điều khiển - ĐIỀU CHỈNH để trượt mượt mà
+        float rotationDecaySpeed = 1.5f; // Tốc độ giảm góc (giảm xuống để chậm hơn)
+        float velocityDecayRate = 0.98f; // Tỷ lệ giảm tốc độ mỗi frame (0.98 = giảm 2%/frame - cao hơn để trượt lâu hơn)
+        float frictionMultiplier = 0.3f; // Lực ma sát (giảm xuống để ít ma sát hơn)
+        float minimumSpeed = 0.1f; // Tốc độ tối thiểu trước khi dừng hẳn
         
-        // THÊM: Các tham số ma sát nhẹ hơn để trượt lâu hơn
-        float groundFriction = 0.995f; // Ma sát cơ bản nhẹ hơn (từ 0.98)
-        float additionalDrag = 0.2f; // Lực cản thêm nhẹ hơn (từ 0.5)
-
-        // Lưu giá trị ban đầu
-        float originalDrag = rb.drag;
-        float originalMass = rb.mass;
-        Vector2 landingVelocity = rb.velocity;
-        
-        Debug.Log($"Máy bay chạm đất - Velocity: {landingVelocity.magnitude:F1}, Landing speed: {landingVelocity.x:F1}, Rotation Z: {landingRotationZ:F1}°");
-
-        // Áp dụng drag nhẹ để trượt tự nhiên
-        rb.drag = groundDrag;
-
-        // Đảm bảo máy bay không bounce trên mặt đất
-        if (rb.velocity.y < 0) rb.velocity = new Vector2(rb.velocity.x, 0f);
-
-        WaitForSeconds wait = new WaitForSeconds(0.02f); // 50 FPS thay vì 10 FPS
-
-        // Giai đoạn 1: Trượt với ma sát dần dần và giảm rotation
-        float slideTimer = 0f;
-        float maxSlideTime = 8f; // Tăng thời gian trượt (từ 5s lên 8s)
-        
-        while (slideTimer < maxSlideTime && Mathf.Abs(rb.velocity.x) > minimumSlideSpeed)
+        // Đảm bảo không bounce và giữ velocity.x
+        Vector2 currentVel = rb.velocity;
+        if (currentVel.y != 0f) 
         {
-            slideTimer += 0.06f; // Update mỗi frame
+            rb.velocity = new Vector2(currentVel.x, 0f);
+            Debug.Log($"Reset velocity.y = 0, giữ velocity.x = {currentVel.x:F2}");
+        }
+        
+        // Tắt gravity để không bị ảnh hưởng
+        float originalGravity = rb.gravityScale;
+        rb.gravityScale = 0f;
+        
+        // Giảm drag để trượt xa hơn
+        float originalDrag = rb.drag;
+        rb.drag = 0.2f; // Drag rất nhẹ
+
+        WaitForFixedUpdate waitFixed = new WaitForFixedUpdate();
+        
+        float elapsedTime = 0f;
+        int frameCount = 0;
+        
+        // Vòng lặp giảm dần rotation và velocity
+        while (Mathf.Abs(rb.velocity.x) > minimumSpeed || Mathf.Abs(GetCurrentRotationZ(rb)) > 0.5f)
+        {
+            elapsedTime += Time.fixedDeltaTime;
+            frameCount++;
             
-            // SỬA: Ma sát nhẹ hơn để trượt lâu hơn
+            // === XỬ LÝ ROTATION ===
+            float currentZ = GetCurrentRotationZ(rb);
+            
+            // Giảm rotation từ từ về 0 bằng Lerp
+            float targetZ = Mathf.LerpAngle(currentZ, 0f, Time.fixedDeltaTime * rotationDecaySpeed);
+            rb.transform.rotation = Quaternion.Euler(0f, 0f, targetZ);
+            
+            // === XỬ LÝ VELOCITY - TRƯỢT MƯỢT MÀ ===
             Vector2 currentVelocity = rb.velocity;
             
-            // Ma sát tăng dần theo thời gian - NHẸ HƠN
-            float frictionProgress = slideTimer / maxSlideTime;
-            float currentFriction = Mathf.Lerp(groundFriction, 0.985f, frictionProgress); // Từ 0.995 xuống 0.985
-            currentVelocity.x *= currentFriction;
+            // Giảm velocity theo tỷ lệ phần trăm (mượt mà)
+            currentVelocity.x *= velocityDecayRate;
             
-            // THÊM: Lực cản thêm dựa trên tốc độ hiện tại
-            float velocityBasedDrag = Mathf.Abs(currentVelocity.x) * additionalDrag;
+            // Thêm lực ma sát nhỏ dựa trên tốc độ hiện tại
+            float frictionForce = Mathf.Abs(currentVelocity.x) * frictionMultiplier * Time.fixedDeltaTime;
             if (currentVelocity.x > 0)
             {
-                currentVelocity.x -= velocityBasedDrag * Time.deltaTime;
-                currentVelocity.x = Mathf.Max(currentVelocity.x, 0f); // Không cho âm
+                currentVelocity.x -= frictionForce;
             }
             else if (currentVelocity.x < 0)
             {
-                currentVelocity.x += velocityBasedDrag * Time.deltaTime;
-                currentVelocity.x = Mathf.Min(currentVelocity.x, 0f); // Không cho dương
+                currentVelocity.x += frictionForce;
             }
             
             // Đảm bảo không có chuyển động dọc
@@ -171,58 +180,40 @@ public class Plane : MonoBehaviour
             // Áp dụng velocity mới
             rb.velocity = currentVelocity;
             
-            // THÊM: Debug ma sát mỗi 1 giây
-            if (Mathf.FloorToInt(slideTimer) != Mathf.FloorToInt(slideTimer - 0.06f))
+            // Debug mỗi 30 frame (0.5 giây)
+            if (frameCount % 30 == 0)
             {
-                Debug.Log($"Ma sát: Friction={currentFriction:F3}, VelDrag={velocityBasedDrag:F3}, Speed={currentVelocity.x:F2}");
+                Debug.Log($"[Frame {frameCount}, {elapsedTime:F1}s] Rotation: {currentZ:F2}° → {targetZ:F2}°, VelocityX: {currentVelocity.x:F2}, DecayRate: {velocityDecayRate}");
             }
             
-            // THÊM: Giảm rotation.z từ từ về 0
-            Vector3 currentRotation = rb.transform.eulerAngles;
-            float currentZ = currentRotation.z;
-            if (currentZ > 180f) currentZ -= 360f;
-            
-            if (Mathf.Abs(currentZ) > 0.1f)
+            // Kiểm tra nếu quá lâu (10 giây) thì dừng cưỡng bức
+            if (elapsedTime > 10f)
             {
-                float targetZ = Mathf.LerpAngle(currentZ, 0f, Time.deltaTime * rotationSmoothSpeed);
-                rb.transform.rotation = Quaternion.Euler(currentRotation.x, currentRotation.y, targetZ);
-            }
-            
-            // THÊM: Kiểm tra dừng sớm nếu velocity quá thấp - TĂNG THRESHOLD
-            if (Mathf.Abs(currentVelocity.x) < 0.3f)
-            {
-                rb.velocity = Vector2.zero;
-                Debug.Log($"Dừng sớm do velocity quá thấp: {currentVelocity.x:F3}");
+                Debug.Log($"TIMEOUT - Dừng cưỡng bức sau {elapsedTime:F1}s");
                 break;
             }
             
-            yield return wait;
+            yield return waitFixed;
         }
         
-        // Giai đoạn 2: Chỉ dừng khi velocity thật sự thấp
-        if (Mathf.Abs(rb.velocity.x) <= minimumSlideSpeed)
-        {
-            rb.velocity = Vector2.zero;
-            Debug.Log("Máy bay dừng tự nhiên do velocity thấp");
-        }
-        else
-        {
-            Debug.Log($"Máy bay vẫn còn trượt với velocity: {rb.velocity.x:F3}");
-        }
+        // Dừng hoàn toàn
+        rb.velocity = Vector2.zero;
+        rb.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+        rb.drag = originalDrag;
         
-        // THÊM: Đảm bảo rotation.z = 0 khi dừng
-        Vector3 finalRotation = rb.transform.eulerAngles;
-        rb.transform.rotation = Quaternion.Euler(finalRotation.x, finalRotation.y, 0f);
-        
-        Debug.Log("Máy bay đã dừng hoàn toàn và rotation.z đã reset về 0°");
-        
+        Debug.Log($"*** MÁY BAY DỪNG HOÀN TOÀN - Thời gian: {elapsedTime:F2}s, Frames: {frameCount} ***");
         
         // Bắt đầu tính tiền sau khi trượt xong
         yield return new WaitForSeconds(1f);
         StartCoroutine(OpenImageWIn());
-
-        // Khôi phục drag ban đầu (tùy chọn)
-        // rb.drag = originalDrag;
+    }
+    
+    // Hàm helper lấy rotation Z chuẩn hóa về [-180, 180]
+    float GetCurrentRotationZ(Rigidbody2D rb)
+    {
+        float z = rb.transform.eulerAngles.z;
+        if (z > 180f) z -= 360f;
+        return z;
     }
     private bool isAddMoneyDone = false;
     IEnumerator OpenImageWIn()
