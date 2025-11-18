@@ -31,16 +31,23 @@ public class Plane : MonoBehaviour
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
-            // GManager.instance.isControllable = false;
+            Debug.Log("*** MÁY BAY CHẠM ĐẤT - BẮT ĐẦU HỆ THỐNG DỪNG ***");
+            
             // THÊM: Thông báo cho GManager biết máy bay đã chạm đất
             if (GManager.instance != null)
             {
                 GManager.instance.OnPlaneGroundCollision();
+                // Tắt các hệ thống có thể can thiệp velocity
+                GManager.instance.isControllable = false;
+                GManager.instance.isBoosterActive = false;
             }
 
-            RotaryFront.instance.StopWithDeceleration(3.0f);
+            // Dừng các hiệu ứng
+            if (RotaryFront.instance != null)
+                RotaryFront.instance.StopWithDeceleration(3.0f);
+            
             smokeEffect.Stop();
-            StartCoroutine(UpMass());
+            
         }
     }
 
@@ -109,6 +116,10 @@ public class Plane : MonoBehaviour
         float groundDrag = 0.5f; // Drag nhẹ hơn để tránh giật
         float minimumSlideSpeed = 0.1f; // Giảm threshold để smooth hơn
         float rotationSmoothSpeed = 1.5f; // Tốc độ giảm rotation
+        
+        // THÊM: Các tham số ma sát nhẹ hơn để trượt lâu hơn
+        float groundFriction = 0.995f; // Ma sát cơ bản nhẹ hơn (từ 0.98)
+        float additionalDrag = 0.2f; // Lực cản thêm nhẹ hơn (từ 0.5)
 
         // Lưu giá trị ban đầu
         float originalDrag = rb.drag;
@@ -127,25 +138,44 @@ public class Plane : MonoBehaviour
 
         // Giai đoạn 1: Trượt với ma sát dần dần và giảm rotation
         float slideTimer = 0f;
-        float maxSlideTime = 5f; // Giảm thời gian để tránh kéo dài
+        float maxSlideTime = 8f; // Tăng thời gian trượt (từ 5s lên 8s)
         
         while (slideTimer < maxSlideTime && Mathf.Abs(rb.velocity.x) > minimumSlideSpeed)
         {
-            slideTimer += 0.02f; // Update mỗi frame
+            slideTimer += 0.06f; // Update mỗi frame
             
-            // SỬA: Ma sát mượt mà hơn
+            // SỬA: Ma sát nhẹ hơn để trượt lâu hơn
             Vector2 currentVelocity = rb.velocity;
             
-            // Ma sát nhẹ và đều - tránh giật
+            // Ma sát tăng dần theo thời gian - NHẸ HƠN
             float frictionProgress = slideTimer / maxSlideTime;
-            float currentFriction = Mathf.Lerp(0.998f, 0.995f, frictionProgress); // Ma sát rất nhẹ
+            float currentFriction = Mathf.Lerp(groundFriction, 0.985f, frictionProgress); // Từ 0.995 xuống 0.985
             currentVelocity.x *= currentFriction;
+            
+            // THÊM: Lực cản thêm dựa trên tốc độ hiện tại
+            float velocityBasedDrag = Mathf.Abs(currentVelocity.x) * additionalDrag;
+            if (currentVelocity.x > 0)
+            {
+                currentVelocity.x -= velocityBasedDrag * Time.deltaTime;
+                currentVelocity.x = Mathf.Max(currentVelocity.x, 0f); // Không cho âm
+            }
+            else if (currentVelocity.x < 0)
+            {
+                currentVelocity.x += velocityBasedDrag * Time.deltaTime;
+                currentVelocity.x = Mathf.Min(currentVelocity.x, 0f); // Không cho dương
+            }
             
             // Đảm bảo không có chuyển động dọc
             currentVelocity.y = 0f;
             
             // Áp dụng velocity mới
             rb.velocity = currentVelocity;
+            
+            // THÊM: Debug ma sát mỗi 1 giây
+            if (Mathf.FloorToInt(slideTimer) != Mathf.FloorToInt(slideTimer - 0.06f))
+            {
+                Debug.Log($"Ma sát: Friction={currentFriction:F3}, VelDrag={velocityBasedDrag:F3}, Speed={currentVelocity.x:F2}");
+            }
             
             // THÊM: Giảm rotation.z từ từ về 0
             Vector3 currentRotation = rb.transform.eulerAngles;
@@ -157,19 +187,28 @@ public class Plane : MonoBehaviour
                 float targetZ = Mathf.LerpAngle(currentZ, 0f, Time.deltaTime * rotationSmoothSpeed);
                 rb.transform.rotation = Quaternion.Euler(currentRotation.x, currentRotation.y, targetZ);
             }
-            if ( rb.velocity.x > minimumSlideSpeed )
+            
+            // THÊM: Kiểm tra dừng sớm nếu velocity quá thấp - TĂNG THRESHOLD
+            if (Mathf.Abs(currentVelocity.x) < 0.3f)
             {
-                rb.velocity -= new Vector2(-0.001f, 0f);
-                Debug.Log("Giảm velocity.x dần đều trong trượt" + rb.velocity.x);
+                rb.velocity = Vector2.zero;
+                Debug.Log($"Dừng sớm do velocity quá thấp: {currentVelocity.x:F3}");
                 break;
             }
-            
             
             yield return wait;
         }
         
-        // Giai đoạn 2: Dừng hoàn toàn
-        rb.velocity = Vector2.zero;
+        // Giai đoạn 2: Chỉ dừng khi velocity thật sự thấp
+        if (Mathf.Abs(rb.velocity.x) <= minimumSlideSpeed)
+        {
+            rb.velocity = Vector2.zero;
+            Debug.Log("Máy bay dừng tự nhiên do velocity thấp");
+        }
+        else
+        {
+            Debug.Log($"Máy bay vẫn còn trượt với velocity: {rb.velocity.x:F3}");
+        }
         
         // THÊM: Đảm bảo rotation.z = 0 khi dừng
         Vector3 finalRotation = rb.transform.eulerAngles;
@@ -191,6 +230,9 @@ public class Plane : MonoBehaviour
         yield return new WaitForSeconds(2f);
         if (!isAddMoneyDone)
         {
+            // THÊM: Lưu GameObject máy bay hiện tại trước khi kết thúc game
+            SaveCurrentAirplane();
+            
             GManager.instance.coinEffect.Stop();
             isAddMoneyDone = true;
             moneyDistance = (int)(GManager.instance.distanceTraveled / 1.34f);
@@ -211,6 +253,20 @@ public class Plane : MonoBehaviour
             Settings.instance.OpenWinImage();
         }
     }
+    
+    // THÊM: Hàm lưu tên GameObject máy bay hiện tại
+    void SaveCurrentAirplane()
+    {
+        if (GManager.instance != null && GManager.instance.airplaneRigidbody2D != null)
+        {
+            string currentAirplaneName = GManager.instance.airplaneRigidbody2D.gameObject.name;
+            PlayerPrefs.SetString("LastUsedAirplane", currentAirplaneName);
+            PlayerPrefs.Save();
+            Debug.Log($"Lưu máy bay hiện tại: {currentAirplaneName}");
+        }
+    }
+
+    
     
 
 }

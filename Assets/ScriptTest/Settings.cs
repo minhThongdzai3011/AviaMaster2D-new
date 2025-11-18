@@ -53,6 +53,9 @@ public class Settings : MonoBehaviour
     [Header("Slider Settings")]
     public Slider prizeSlider;
 
+    [Header("Input Settings")]
+    public TMP_InputField inputField;
+
     void Start()
     {
         instance = this;
@@ -65,6 +68,7 @@ public class Settings : MonoBehaviour
 
         Debug.Log("Settings initialized. Music: " + isMusicOn + ", Sound: " + isSoundOn);
         targetValue = PlayerPrefs.GetFloat("PrizeSliderValue", 0f);
+        inputField.text = PlayerPrefs.GetString("PlayerName", "");
         prizeSlider.value = targetValue;
         StartCountdown();
         GManager.instance.coinEffect.Stop();
@@ -85,6 +89,7 @@ public class Settings : MonoBehaviour
         {
             altitudeImage.gameObject.SetActive(false);
         }
+        saveNameInputField();
     }
 
     void LoadSettings()
@@ -657,6 +662,12 @@ public class Settings : MonoBehaviour
             });
     }
 
+    public void saveNameInputField()
+    {
+        string playerName = inputField.text;
+        PlayerPrefs.SetString("PlayerName", playerName);
+        PlayerPrefs.Save();
+    }
 
         
         

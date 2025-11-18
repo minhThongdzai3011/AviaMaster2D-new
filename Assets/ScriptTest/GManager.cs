@@ -830,8 +830,6 @@ public class GManager : MonoBehaviour
                 airplaneRigidbody2D.AddForce(forceDirection * controlForce * 0.3f, ForceMode2D.Force);
             }
         }
-        
-        // KHÔNG CÓN logic "về góc 0" - để auto-rotation xử lý
     }
     
     float ComputeUpTargetAngle(Vector2 velocity)

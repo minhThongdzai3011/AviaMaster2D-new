@@ -327,6 +327,44 @@ public class Shop : MonoBehaviour
         Debug.Log($"Purchased plane: {gameObjectsPlanes[planeIndex].name}");
     }
     
+    // THÊM: Hàm thiết lập máy bay theo tên (cho hệ thống lưu/load)
+    public void SetAirplaneByName(string airplaneName)
+    {
+        if (gameObjectsPlanes == null) 
+        {
+            Debug.LogWarning("gameObjectsPlanes is null!");
+            return;
+        }
+        
+        // Tìm index của máy bay theo tên
+        int targetIndex = -1;
+        for (int i = 0; i < gameObjectsPlanes.Length; i++)
+        {
+            if (gameObjectsPlanes[i].name.Equals(airplaneName, System.StringComparison.OrdinalIgnoreCase))
+            {
+                targetIndex = i;
+                break;
+            }
+        }
+        
+        if (targetIndex == -1)
+        {
+            Debug.LogWarning($"Không tìm thấy máy bay với tên: {airplaneName}");
+            return;
+        }
+        
+        // Thiết lập máy bay được tìm thấy
+        defaultPlane = gameObjectsPlanes[targetIndex];
+        
+        // Cập nhật GManager để sử dụng Rigidbody2D của máy bay này
+        if (GManager.instance != null && airplanesRigidbody2D != null && targetIndex < airplanesRigidbody2D.Length)
+        {
+            GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[targetIndex];
+        }
+        
+        Debug.Log($"Đã khôi phục máy bay: {airplaneName} (Index: {targetIndex})");
+    }
+    
     // Additional visual effects
     public void AddSparkleEffect(Transform target)
     {
@@ -416,6 +454,7 @@ public class Shop : MonoBehaviour
             for(int i=0; i<planeBuyText.Length; i++){
                 if(i != 0){
                     planeBuyText[i].text = "Select";
+                    
                 }
             }
             planePriceText[0].gameObject.SetActive(false);
@@ -995,6 +1034,10 @@ public class Shop : MonoBehaviour
         }
     }
 
+    public void savePlaneSelection(){
+        
+        PlayerPrefs.Save();
+    }
     
 
 
