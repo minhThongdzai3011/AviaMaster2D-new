@@ -153,8 +153,6 @@ public class GManager : MonoBehaviour
         CalculateUpgradeValues();
         LoadMoneyUpgrade();
         // Cập nhật UI
-        SaveTotalMoney();
-        SaveTotalDiamond();
         Debug.Log("money , totalMoney at Start: " + money + ", " + totalMoney);
         if (airplaneRigidbody2D != null)
         {
@@ -175,6 +173,9 @@ public class GManager : MonoBehaviour
         Physics2D.gravity = new Vector2(0f, -9.81f * gravityScale);
         totalMoney = PlayerPrefs.GetFloat("TotalMoney", 0);
         totalMoneyText.text = totalMoney.ToString("F0");
+        
+        SaveTotalMoney();
+        SaveTotalDiamond();
     }
 
     public void LaunchAirplane()
@@ -372,6 +373,7 @@ public class GManager : MonoBehaviour
         airplaneRigidbody2D.velocity = new Vector2(airplaneRigidbody2D.velocity.x, 0f);
 
         isControllable = true;
+        RocketSpawner.instance.StartSpawning();
         Debug.Log($"Máy bay bắt đầu điều khiển với durationFuel = {durationFuel}s (rateFuel = {rateFuel}%)");
         StartCoroutine(DecreaseSliderFuel(durationFuel));
 
@@ -429,7 +431,9 @@ public class GManager : MonoBehaviour
         airplaneRigidbody2D.gravityScale = gravityScale;
         Physics2D.gravity = new Vector2(0f, -9.81f * gravityScale);
 
-        Plane.instance.smokeEffect.Play();
+        if(!Plane.instance.isGrounded){
+            Plane.instance.smokeEffect.Play();
+        }
 
         Debug.Log("Bắt đầu giai đoạn rơi - Tính toán vật lý chân thực được kích hoạt");
 
@@ -503,8 +507,8 @@ public class GManager : MonoBehaviour
             // THÊM: Duy trì velocity.x tối thiểu 15 m/s để không bị lực cản kéo xuống quá thấp
             Vector2 currentVel = airplaneRigidbody2D.velocity;
             float minVelocityX = launchForce / 1.34f;
-            if (minVelocityX < 15f) minVelocityX = 15f; // Đảm bảo tối thiểu 15 m/s
-            if (currentVel.x < minVelocityX)
+            if (minVelocityX < 15f && !Plane.instance.isGrounded) minVelocityX = 15f; // Đảm bảo tối thiểu 15 m/s
+            if (currentVel.x < minVelocityX && !Plane.instance.isGrounded)
             {
                 currentVel.x = minVelocityX;
                 airplaneRigidbody2D.velocity = currentVel;
@@ -749,6 +753,14 @@ public class GManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Keypad0))
         {
             AgainGame();
+        }
+        if (Input.GetKeyDown(KeyCode.Keypad2))
+        {
+            totalMoney += 1000;
+            PlayerPrefs.SetFloat("TotalMoney", totalMoney);
+            PlayerPrefs.Save();
+            SaveTotalMoney();
+
         }
 
         if (distanceText != null) distanceText.text = distanceTraveled.ToString("F0") + " ft";
@@ -1198,13 +1210,21 @@ public class GManager : MonoBehaviour
             isGamePaused = false;
         }
     }
-
+    public int saveTime = 0;
     public void AgainGame()
     {
         money = 0;
+        saveTime = Settings.instance.currentTime;
+        PlayerPrefs.SetInt("SaveTime", saveTime);
+        PlayerPrefs.Save();
         isVelocity = true;
         UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
+        
+            SaveTotalMoney();
     }
+
+
+
     public bool isHoldingButtonUp = false;
     public bool isHoldingButtonDown = false;
     public bool isUseClicker = false;
@@ -1398,6 +1418,7 @@ public class GManager : MonoBehaviour
 
             moneyFuel = moneyFuel * 1.25f;
             totalMoney -= moneyFuel;
+            totalMoney = (int)Math.Round(totalMoney, 0);
             totalMoneyText.text = totalMoney.ToString("F0");
             PlayerPrefs.SetFloat("TotalMoney", totalMoney);
             PlayerPrefs.Save();
@@ -1426,7 +1447,7 @@ public class GManager : MonoBehaviour
 
             // THÊM: Lưu ngay sau khi nâng cấp
             SaveUpgradeData();
-
+            SaveTotalMoney();
             levelFuelText.text = "Fuel capacity increased by " + rateFuel + "%";
             Debug.Log($"UpgradeFuel: Level {levelFuel}, Rate {rateFuel}%, Duration {durationFuel}s");
         }
@@ -1458,6 +1479,7 @@ public class GManager : MonoBehaviour
             rateBoost += 5;
             moneyBoost = moneyBoost * 1.25f;
             totalMoney -= moneyBoost;
+            totalMoney = (int)Math.Round(totalMoney, 0);
             totalMoneyText.text = totalMoney.ToString("F0");
             PlayerPrefs.SetFloat("TotalMoney", totalMoney);
             PlayerPrefs.Save();
@@ -1485,7 +1507,7 @@ public class GManager : MonoBehaviour
 
             // THÊM: Lưu ngay sau khi nâng cấp
             SaveUpgradeData();
-
+            SaveTotalMoney();
             levelBoostText.text = "Flight stability increased " + rateBoost + "%";
             Debug.Log($"UpgradeBoost: Level {levelBoost}, Rate {rateBoost}%, TotalBoost {totalBoost}");
         }
@@ -1529,6 +1551,7 @@ public class GManager : MonoBehaviour
 
             // THÊM: Lưu ngay sau khi nâng cấp
             SaveUpgradeData();
+            SaveTotalMoney();
 
             levelPowerText.text = "Initial thrust increased by " + ratePower + "%";
             Debug.Log($"UpgradePower: Level {levelPower}, Rate {ratePower}%, Force {launchForce}");
@@ -1610,15 +1633,7 @@ public class GManager : MonoBehaviour
         }
     }
 
-    public void leaderBoard()
-    {
-        leaderBoardImage.gameObject.SetActive(true);
-    }
-
-    public void exitLeaderBoard()
-    {
-        leaderBoardImage.gameObject.SetActive(false);
-    }
+    
     [Header("RotationZ Oscillation")]
 
     public float angleRangeMax = 22f;
@@ -1641,10 +1656,10 @@ public class GManager : MonoBehaviour
             arrowAngleZ.transform.rotation = Quaternion.Euler(0f, 0f, angle);
             if(angle > -3f && angle < -8f)
             {
-                speed = 3f;
+                speed = 5f;
             }
             else{
-                speed = 1f;
+                speed = 3f;
             }
         }
         else

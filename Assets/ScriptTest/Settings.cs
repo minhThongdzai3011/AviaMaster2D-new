@@ -56,9 +56,21 @@ public class Settings : MonoBehaviour
     [Header("Input Settings")]
     public TMP_InputField inputField;
 
+    [Header ("Countdown Settings")]
+    public int currentTime = 0;
+
     void Start()
     {
         instance = this;
+        currentTime = PlayerPrefs.GetInt("SaveTime", 900);
+        if (currentTime < 900)
+        {
+            countdownText.text = currentTime.ToString();
+            StartCoroutine(CountdownCoroutine());
+            resultText.text = "Waiting...";
+            isSpinning = false;
+
+        }
 
         // Load settings từ PlayerPrefs
         LoadSettings();
@@ -421,6 +433,62 @@ public class Settings : MonoBehaviour
             });
     }
 
+    public void leaderBoard()
+    {
+        
+        if (isAnimating) return;
+
+        Debug.Log("Mở Win Image!");
+
+        // Dừng tất cả animation đang chạy
+        DOTween.Kill(GManager.instance.leaderBoardImage.transform);
+        isAnimating = true;
+
+        // Hiển thị lucky wheel image
+        lastDistanceText.gameObject.SetActive(false);
+        GManager.instance.leaderBoardImage.gameObject.SetActive(true);
+
+        // Cập nhật UI trước khi hiển thị
+        UpdateUI();
+
+        // Animation mở lucky wheel image
+        GManager.instance.leaderBoardImage.transform.localScale = Vector3.zero;
+        GManager.instance.leaderBoardImage.transform.DOScale(Vector3.one, openDuration)
+            .SetEase(openEase)
+            .OnComplete(() => {
+                isAnimating = false;
+                Debug.Log("Lucky Wheel Image animation mở hoàn thành!");
+            });
+    }
+
+    public void exitLeaderBoard()
+    {
+        if (isAnimating) return;
+        if (Settings.instance == null)
+        {
+            Debug.LogError("Settings.instance is null!");
+            return;
+        }
+
+        Debug.Log("Đóng Lucky Wheel Image!");
+
+        // Dừng tất cả animation đang chạy
+        DOTween.Kill(GManager.instance.leaderBoardImage.transform);
+        isAnimating = true;
+
+        // Animation đóng lucky wheel image
+        GManager.instance.leaderBoardImage.transform.DOScale(Vector3.zero, closeDuration)
+            .SetEase(closeEase)
+            .OnComplete(() =>
+            {
+                lastDistanceText.gameObject.SetActive(true);
+                GManager.instance.leaderBoardImage.gameObject.SetActive(false);
+                isAnimating = false;
+                Debug.Log("Lucky Wheel Image animation đóng hoàn thành!");
+            });
+    }
+
+
     public bool isPrizeCoin = false;
     bool isCheckAddTargetValue = true;
     void UpdateSliderPrizeCoin()
@@ -572,11 +640,11 @@ public class Settings : MonoBehaviour
         }
     }
 
+    
     public IEnumerator CountdownCoroutine()
     {
         if (isSpinning)
         {
-            int currentTime = 900;
 
             while (currentTime > 0)
             {
@@ -669,6 +737,5 @@ public class Settings : MonoBehaviour
         PlayerPrefs.Save();
     }
 
-        
-        
+    
 }

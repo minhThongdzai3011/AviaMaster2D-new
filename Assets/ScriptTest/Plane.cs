@@ -33,6 +33,7 @@ public class Plane : MonoBehaviour
         if (collision.gameObject.layer == LayerMask.NameToLayer("Ground") && !isGrounded)
         {
             isGrounded = true;
+
             Debug.Log("*** MÁY BAY CHẠM ĐẤT - BẮT ĐẦU HỆ THỐNG DỪNG ***");
             
             // THÊM: Thông báo cho GManager biết máy bay đã chạm đất
@@ -104,110 +105,65 @@ public class Plane : MonoBehaviour
             }
         }
     }
-
     IEnumerator UpMass()
     {
-        if (GManager.instance == null) { Debug.Log("GManager instance is null!"); yield break; }
-        Rigidbody2D rb = GManager.instance.airplaneRigidbody2D;
-        if (rb == null) { Debug.Log("AirplaneRigidbody2D chưa được khởi tạo!"); yield break; }
+        // Lấy Rigidbody2D từ GManager
+        Rigidbody2D airplaneRb = GManager.instance.airplaneRigidbody2D;
         
-        // Lưu góc máy bay khi chạm đất
-        float landingRotationZ = rb.transform.eulerAngles.z;
-        if (landingRotationZ > 180f) landingRotationZ -= 360f; // Chuyển về [-180, 180]
-        
-        Debug.Log($"*** BẮT ĐẦU UpMass() - Góc: {landingRotationZ:F1}°, Velocity: {rb.velocity.magnitude:F2}, VelocityX: {rb.velocity.x:F2} ***");
-
-        // Tham số điều khiển - ĐIỀU CHỈNH để trượt mượt mà
-        float rotationDecaySpeed = 1.5f; // Tốc độ giảm góc (giảm xuống để chậm hơn)
-        float velocityDecayRate = 0.98f; // Tỷ lệ giảm tốc độ mỗi frame (0.98 = giảm 2%/frame - cao hơn để trượt lâu hơn)
-        float frictionMultiplier = 0.3f; // Lực ma sát (giảm xuống để ít ma sát hơn)
-        float minimumSpeed = 0.1f; // Tốc độ tối thiểu trước khi dừng hẳn
-        
-        // Đảm bảo không bounce và giữ velocity.x
-        Vector2 currentVel = rb.velocity;
-        if (currentVel.y != 0f) 
+        if (airplaneRb == null)
         {
-            rb.velocity = new Vector2(currentVel.x, 0f);
-            Debug.Log($"Reset velocity.y = 0, giữ velocity.x = {currentVel.x:F2}");
+            Debug.LogWarning("Airplane Rigidbody2D not found!");
+            yield break;
         }
         
-        // Tắt gravity để không bị ảnh hưởng
-        float originalGravity = rb.gravityScale;
-        rb.gravityScale = 0f;
+        // Lấy góc ban đầu khi máy bay chạm đất
+        float initialAngleZ = GetCurrentRotationZ(airplaneRb);
+        float initialAngleX = airplaneRb.transform.eulerAngles.x;
+        if (initialAngleX > 180f) initialAngleX -= 360f; // Chuẩn hóa về [-180, 180]
         
-        // Giảm drag để trượt xa hơn
-        float originalDrag = rb.drag;
-        rb.drag = 0.2f; // Drag rất nhẹ
-
-        WaitForFixedUpdate waitFixed = new WaitForFixedUpdate();
+        // Lấy velocity ban đầu
+        Vector2 initialVelocity = airplaneRb.velocity;
         
+        // Thời gian để giảm góc và velocity về 0 (có thể điều chỉnh)
+        float duration = 3f;
         float elapsedTime = 0f;
-        int frameCount = 0;
         
-        // Vòng lặp giảm dần rotation và velocity
-        while (Mathf.Abs(rb.velocity.x) > minimumSpeed || Mathf.Abs(GetCurrentRotationZ(rb)) > 0.5f)
+        while (elapsedTime < duration)
         {
-            elapsedTime += Time.fixedDeltaTime;
-            frameCount++;
+            elapsedTime += Time.deltaTime;
             
-            // === XỬ LÝ ROTATION ===
-            float currentZ = GetCurrentRotationZ(rb);
+            // Tính tỷ lệ giảm dần (từ 1 về 0)
+            float t = elapsedTime / duration;
+            float smoothT = 1f - t; // Giảm từ 1 về 0
             
-            // Giảm rotation từ từ về 0 bằng Lerp
-            float targetZ = Mathf.LerpAngle(currentZ, 0f, Time.fixedDeltaTime * rotationDecaySpeed);
-            rb.transform.rotation = Quaternion.Euler(0f, 0f, targetZ);
+            // Giảm từ từ rotation về 0
+            float targetAngleZ = initialAngleZ * smoothT;
+            float targetAngleX = initialAngleX * smoothT;
+            Vector3 currentRotation = airplaneRb.transform.eulerAngles;
+            currentRotation.z = targetAngleZ;
+            currentRotation.x = targetAngleX;
+            airplaneRb.transform.eulerAngles = currentRotation;
             
-            // === XỬ LÝ VELOCITY - TRƯỢT MƯỢT MÀ ===
-            Vector2 currentVelocity = rb.velocity;
+            // Giảm từ từ velocity về 0
+            Vector2 targetVelocity = initialVelocity * smoothT;
+            airplaneRb.velocity = targetVelocity;
             
-            // Giảm velocity theo tỷ lệ phần trăm (mượt mà)
-            currentVelocity.x *= velocityDecayRate;
-            
-            // Thêm lực ma sát nhỏ dựa trên tốc độ hiện tại
-            float frictionForce = Mathf.Abs(currentVelocity.x) * frictionMultiplier * Time.fixedDeltaTime;
-            if (currentVelocity.x > 0)
-            {
-                currentVelocity.x -= frictionForce;
-            }
-            else if (currentVelocity.x < 0)
-            {
-                currentVelocity.x += frictionForce;
-            }
-            
-            // Đảm bảo không có chuyển động dọc
-            currentVelocity.y = 0f;
-            
-            // Áp dụng velocity mới
-            rb.velocity = currentVelocity;
-            
-            // Debug mỗi 30 frame (0.5 giây)
-            if (frameCount % 30 == 0)
-            {
-                Debug.Log($"[Frame {frameCount}, {elapsedTime:F1}s] Rotation: {currentZ:F2}° → {targetZ:F2}°, VelocityX: {currentVelocity.x:F2}, DecayRate: {velocityDecayRate}");
-            }
-            
-            // Kiểm tra nếu quá lâu (10 giây) thì dừng cưỡng bức
-            if (elapsedTime > 10f)
-            {
-                Debug.Log($"TIMEOUT - Dừng cưỡng bức sau {elapsedTime:F1}s");
-                break;
-            }
-            
-            yield return waitFixed;
+            yield return null;
         }
         
-        // Dừng hoàn toàn
-        rb.velocity = Vector2.zero;
-        rb.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
-        rb.drag = originalDrag;
+        // Đảm bảo rotation và velocity về 0 hoàn toàn
+        Vector3 finalRotation = airplaneRb.transform.eulerAngles;
+        finalRotation.z = 0f;
+        finalRotation.x = 0f;
+        airplaneRb.transform.eulerAngles = finalRotation;
+        airplaneRb.velocity = Vector2.zero;
         
-        Debug.Log($"*** MÁY BAY DỪNG HOÀN TOÀN - Thời gian: {elapsedTime:F2}s, Frames: {frameCount} ***");
-        
-        // Bắt đầu tính tiền sau khi trượt xong
-        yield return new WaitForSeconds(1f);
+        // Có thể thêm logic khi máy bay đã dừng hoàn toàn
+        Debug.Log("Airplane stopped sliding");
         StartCoroutine(OpenImageWIn());
     }
-    
+
+
     // Hàm helper lấy rotation Z chuẩn hóa về [-180, 180]
     float GetCurrentRotationZ(Rigidbody2D rb)
     {
