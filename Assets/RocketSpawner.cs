@@ -2,14 +2,14 @@ using System.Collections;
 using UnityEngine;
 using Cinemachine;
 
-
+[RequireComponent(typeof(CinemachineVirtualCamera))]
 public class RocketSpawner : MonoBehaviour
 {
     public static RocketSpawner instance;
-    
+
     [Header("Vật phẩm Rocket")]
     public GameObject[] rocketPrefabs;
-    
+
     [Header("Spawn Range 2D")]
     public float spawnRangeYmin = -2f;
     public float spawnRangeYmax = 2f;
@@ -23,20 +23,20 @@ public class RocketSpawner : MonoBehaviour
     public float rangeXmin = 5f;
     public float rangeXmax = 10f;
     public float startRangeX = -14f;
-    public CinemachineVirtualCamera mainCamera;
+
+    private CinemachineVirtualCamera mainCamera;
     public Vector3 someVector;
 
     void Start()
     {
         instance = this;
-        mainCamera = Camera.main.GetComponent<CinemachineVirtualCamera>();
-        
+        mainCamera = GetComponent<CinemachineVirtualCamera>();
     }
 
     void Update()
     {
-        
         someVector = mainCamera.transform.position;
+        spawnRangeX = Mathf.Max(spawnRangeX, someVector.x + 100f);
     }
 
     public void StartSpawning()
@@ -48,47 +48,45 @@ public class RocketSpawner : MonoBehaviour
     IEnumerator SpawnRocketCoroutine()
     {
         yield return new WaitForSeconds(startDelay);
-        Debug.Log("Starting Rocket Spawn Coroutine");
         while (true)
         {
             count = GameObject.FindGameObjectsWithTag("Coin").Length;
+
             if (count < maxRocketItems)
             {
                 SpawnRocketItem();
-                Debug.Log("Rocket item spawned");
                 yield return new WaitForSeconds(spawnInterval);
             }
             else
             {
                 yield return null;
-            } 
+            }
         }
     }
-    
+
     void SpawnRocketItem()
     {
         if (rocketPrefabs.Length == 0) return;
         if (GManager.instance.isControllable)
         {
             int prefabIndex = Random.Range(0, rocketPrefabs.Length);
-            Vector3 spawnPosition = new Vector3(spawnRangeX,
-                                                Random.Range(someVector.y-5, someVector.y+5),
-                                                someVector.z); 
-            
+            Vector3 spawnPosition = new Vector3(
+                someVector.x + spawnRangeX,
+                Random.Range(someVector.y - 5, someVector.y + 5),
+                someVector.z
+            );
+
             Instantiate(rocketPrefabs[prefabIndex], spawnPosition, rocketPrefabs[prefabIndex].transform.rotation);
             spawnRangeX += Random.Range(rangeXmin, rangeXmax);
-            Debug.Log("Rocket Spawned at X: " + spawnRangeX + " Y: " + spawnPosition.y + " | Prefab Index: " + prefabIndex);
-            return;
         }
     }
-    
+
     public void DeleteSpawnedItems()
     {
         GameObject[] spawnedItems = GameObject.FindGameObjectsWithTag("Coin");
         foreach (GameObject item in spawnedItems)
-        {
             Destroy(item);
-        }
-        spawnRangeX = startRangeX; 
+
+        spawnRangeX = startRangeX;
     }
 }
