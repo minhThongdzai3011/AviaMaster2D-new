@@ -8,6 +8,7 @@ public class Plane : MonoBehaviour
     public static Plane instance;
     public ParticleSystem smokeEffect;
     public TrailRenderer trailEffect;
+    public TrailRenderer trailRenderer;
 
     public bool isGrounded = false;
 

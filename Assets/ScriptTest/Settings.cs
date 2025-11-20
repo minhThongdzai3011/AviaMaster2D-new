@@ -491,6 +491,7 @@ public class Settings : MonoBehaviour
 
     public bool isPrizeCoin = false;
     bool isCheckAddTargetValue = true;
+    public bool isPrizeCoinDone = true;
     void UpdateSliderPrizeCoin()
     {
         if (prizeSlider != null)
@@ -520,7 +521,11 @@ public class Settings : MonoBehaviour
             {
                 isShakeZ = true;
                 ShakeZ();
-                isButtonChestClickeds = true;
+                if (isPrizeCoinDone)
+                {
+                    isButtonChestClickeds = true;
+                    isPrizeCoinDone = false;
+                }
             }
         }
     }
@@ -696,6 +701,7 @@ public class Settings : MonoBehaviour
                 {
                     isAnimating = false;
                     Debug.Log("Lucky Wheel Image animation mở hoàn thành!");
+                    prizeSlider.value = 0f;
                 });
             isButtonChestClickeds = false;
         }

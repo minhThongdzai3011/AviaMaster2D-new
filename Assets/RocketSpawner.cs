@@ -36,7 +36,7 @@ public class RocketSpawner : MonoBehaviour
     void Update()
     {
         someVector = mainCamera.transform.position;
-        spawnRangeX = Mathf.Max(spawnRangeX, someVector.x + 100f);
+        spawnRangeX = Mathf.Max(spawnRangeX, someVector.x + 70f);
     }
 
     public void StartSpawning()

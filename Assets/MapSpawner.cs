@@ -75,9 +75,12 @@ public class MapSpawner : MonoBehaviour
     void Start()
     {
         instance = this;
+        
+        mapPrefabs = mapDesertPrefabs;
+        isDesertMap = true;
         StartCoroutine(SpawnMapCoroutine());
-        mapPrefabs = mapCityPrefabs;
     }
+    
 
     void Update()
     {
@@ -110,25 +113,25 @@ public class MapSpawner : MonoBehaviour
 
         if (isBeachMap)
         {
-            Instantiate(mapCityBeachPrefab, new Vector3(spawnRangeX, -32.1f, 0f), mapBeachStartPrefab.transform.rotation);
-            spawnRangeX += 30f;
+            // Instantiate(mapCityBeachPrefab, new Vector3(spawnRangeX, -32.1f, 0f), mapBeachStartPrefab.transform.rotation);
+            // spawnRangeX += 30f;
 
-            Instantiate(mapBeachStartPrefab, new Vector3(spawnRangeX, -4.195f, 0f), mapBeachStartPrefab.transform.rotation);
+            // Instantiate(mapBeachStartPrefab, new Vector3(spawnRangeX, -4.195f, 0f), mapBeachStartPrefab.transform.rotation);
             isBeachMap = false;
             isBeachStartSpawned = true;
-            spawnRangeX += 30f;
+            // spawnRangeX += 30f;
             return;
         }
         else if (isDesertMap)
         {
-            Instantiate(mapBeachDesertPrefab, new Vector3(spawnRangeX, -32.1f, 0f), mapBeachStartPrefab.transform.rotation);
-            spawnRangeX += 30f;
+            // Instantiate(mapBeachDesertPrefab, new Vector3(spawnRangeX, -32.1f, 0f), mapBeachStartPrefab.transform.rotation);
+            // spawnRangeX += 30f;
 
-            Instantiate(mapDesertStartPrefab, new Vector3(spawnRangeX, -4.195f, 0f), mapDesertStartPrefab.transform.rotation);
+            // Instantiate(mapDesertStartPrefab, new Vector3(spawnRangeX, -4.195f, 0f), mapDesertStartPrefab.transform.rotation);
             isDesertMap = false;
             isBeachStartSpawned = false;
             isDesertStartSpawned = true;
-            spawnRangeX += 30f;
+            // spawnRangeX += 30f;
             return;
         }
         else if (isFieldMap)
