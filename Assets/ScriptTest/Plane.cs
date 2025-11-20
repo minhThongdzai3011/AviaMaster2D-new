@@ -105,7 +105,53 @@ public class Plane : MonoBehaviour
                 Debug.LogWarning("AnimDiamond.instance is null! Make sure AnimDiamond component exists in scene.");
             }
         }
+        if (other.CompareTag("MapStartCity"))
+        {
+            MapSpawner.instance.isMapCityUnlocked = true;
+            Debug.Log("Map City Unlocked");
+            Settings.instance.NotificationNewMapText.text = "You have unlocked the City Map!";
+            Settings.instance.NotificationNewMap();
+        }
+        if (other.CompareTag("MapStartBeach"))
+        {
+            MapSpawner.instance.isMapBeachUnlocked = true;
+            Debug.Log("Map Beach Unlocked");
+            Settings.instance.NotificationNewMapText.text = "You have unlocked the Beach Map!";
+            Settings.instance.NotificationNewMap();
+        }
+        if (other.CompareTag("MapStartDesert"))
+        {
+            MapSpawner.instance.isMapDesertUnlocked = true;
+            Debug.Log("Map Desert Unlocked");
+            Settings.instance.NotificationNewMapText.text = "You have unlocked the Desert Map!";
+            Settings.instance.NotificationNewMap();
+        }
+        if (other.CompareTag("MapStartField"))
+        {
+            MapSpawner.instance.isMapFieldUnlocked = true;
+            Debug.Log("Map Field Unlocked");
+            Settings.instance.NotificationNewMapText.text = "You have unlocked the Field Map!";
+            Settings.instance.NotificationNewMap();
+        }
+        if (other.CompareTag("MapStartIce"))
+        {
+            MapSpawner.instance.isMapIceUnlocked = true;
+            Debug.Log("Map Ice Unlocked");
+            Settings.instance.NotificationNewMapText.text = "You have unlocked the Ice Map!";
+            Settings.instance.NotificationNewMap();
+        }
+        if (other.CompareTag("MapStartLava"))
+        {
+            MapSpawner.instance.isMapLavaUnlocked = true;
+            Debug.Log("Map Lava Unlocked");
+            Settings.instance.NotificationNewMapText.text = "You have unlocked the Lava Map!";
+            Settings.instance.NotificationNewMap();
+        }
+        
     }
+    
+    
+    
     IEnumerator UpMass()
     {
         // Lấy Rigidbody2D từ GManager

@@ -21,6 +21,7 @@ public class Settings : MonoBehaviour
     public TextMeshProUGUI resultText;
     public TextMeshProUGUI prizeText;
     public TextMeshProUGUI altitudeText;
+    public TextMeshProUGUI NotificationNewMapText;
 
     [Header("Image Settings")]
     public Image musicImageOn;
@@ -35,6 +36,7 @@ public class Settings : MonoBehaviour
     public Image prizeImage;
     public Image prizeChestImage;
     public Image altitudeImage;
+    public RectTransform NotificationNewMapImage;
     
     [Header("Bool Settings")]
     public bool isMusicOn = true;
@@ -742,6 +744,20 @@ public class Settings : MonoBehaviour
         PlayerPrefs.SetString("PlayerName", playerName);
         PlayerPrefs.Save();
     }
+
+    public void NotificationNewMap()
+    {
+        if (NotificationNewMapImage == null) return;
+        Vector2 originalPos = NotificationNewMapImage .anchoredPosition;
+        Sequence seq = DOTween.Sequence();
+        // 1. Di chuyển xuống y = -114f
+        seq.Append(NotificationNewMapImage .DOAnchorPosY(-114f, 1f).SetEase(Ease.OutQuad));
+        // 2. Giữ nguyên vị trí trong 2 giây
+        seq.AppendInterval(2f);
+        // 3. Trở lại vị trí ban đầu 
+        seq.Append(NotificationNewMapImage .DOAnchorPosY(originalPos.y, 1f).SetEase(Ease.OutQuad));
+    }
+
 
     
 }

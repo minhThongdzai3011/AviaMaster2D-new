@@ -211,8 +211,8 @@ public class GManager : MonoBehaviour
             // THÊM: Reset flag falling sequence
             isFallingInSequence = false;
             
-            homeGameDown();
-            homeGameUp();
+            homeGameLeft();
+            homeGameRight();
 
             isRotationOscillating = false;
         }
@@ -1789,8 +1789,8 @@ public class GManager : MonoBehaviour
         Debug.Log("isTurnWheel: " + isTurnWheel);
     }
     
-    public RectTransform upHomeImage;
-    public RectTransform downHomeImage;
+    public RectTransform leftHomeImage;
+    public RectTransform rightHomeImage;
     public RectTransform downFuelImage;
     public RectTransform upAircraftImage;
     public bool isHomeUp = false;
@@ -1798,11 +1798,11 @@ public class GManager : MonoBehaviour
     public bool isFuelDown = false;
     public bool isAircraftUp = false;
 
-    public void homeGameUp()
+    public void homeGameLeft()
     {
         if (isHomeUp)
         {
-            upHomeImage.DOAnchorPosY(upHomeImage.anchoredPosition.y + 1200f, duration)
+            leftHomeImage.DOAnchorPosX(leftHomeImage.anchoredPosition.x - 600f, duration)
                 .SetEase(Ease.OutCubic).OnComplete(() =>
                 {
                     isHomeUp = false;
@@ -1812,11 +1812,11 @@ public class GManager : MonoBehaviour
         }
     }
 
-    public void homeGameDown()
+    public void homeGameRight()
     {
         if (isHomeDown)
         {
-            downHomeImage.DOAnchorPosY(downHomeImage.anchoredPosition.y - 300f, duration)
+            rightHomeImage.DOAnchorPosX(rightHomeImage.anchoredPosition.x + 600f, duration)
                 .SetEase(Ease.OutCubic).OnComplete(() =>
                 {
                     isHomeDown = false;

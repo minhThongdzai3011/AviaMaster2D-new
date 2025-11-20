@@ -13,14 +13,14 @@ public class MapSpawner : MonoBehaviour
     public GameObject[] mapPrefabs;
 
     [Header("MapCity")]
-    public int mapCityIndex = 5;
+    public int mapCityIndex = 10;
     public bool isCityMap = false;
     public GameObject mapCityBeachPrefab;
     public GameObject mapCityStartPrefab;
     public GameObject[] mapCityPrefabs;
 
     [Header("MapBeach")]
-    public int mapBeachIndex = 10;
+    public int mapBeachIndex = 20;
     public bool isBeachMap = false;
     public bool isBeachStartSpawned = false;
     public GameObject mapBeachDesertPrefab;
@@ -28,7 +28,7 @@ public class MapSpawner : MonoBehaviour
     public GameObject[] mapBeachPrefabs;
 
     [Header("MapDesert")]
-    public int mapDesertIndex = 15;
+    public int mapDesertIndex = 30;
     public bool isDesertMap = false;
     public bool isDesertStartSpawned = false;
     public GameObject mapDesertFieldPrefab;
@@ -36,7 +36,7 @@ public class MapSpawner : MonoBehaviour
     public GameObject[] mapDesertPrefabs;
 
     [Header("MapField")]
-    public int mapFieldIndex = 20;
+    public int mapFieldIndex = 40;
     public bool isFieldMap = false;
     public bool isFieldStartSpawned = false;
     public GameObject mapFieldIcePrefab;
@@ -44,7 +44,7 @@ public class MapSpawner : MonoBehaviour
     public GameObject[] mapFieldPrefabs;
 
     [Header("MapIce")]
-    public int mapIceIndex = 25;
+    public int mapIceIndex = 50;
     public bool isIceMap = false;
     public bool isIceStartSpawned = false;
     public GameObject mapIceLavaPrefab;
@@ -52,7 +52,7 @@ public class MapSpawner : MonoBehaviour
     public GameObject[] mapIcePrefabs;
 
     [Header("MapLava")]
-    public int mapLavaIndex = 30;
+    public int mapLavaIndex = 60;
     public bool isLavaMap = false;
     public bool isLavaStartSpawned = false;
     public GameObject mapLavaStartPrefab;
@@ -71,14 +71,170 @@ public class MapSpawner : MonoBehaviour
     private float startDelay = 0f;
     private float spawnInterval = 0.05f;
     public int count = 0;
+
+    [Header("Kiem tra Map da Unlock")]
+    public bool isMapCityUnlocked = true;
+    public bool isMapBeachUnlocked = true;
+    public bool isMapDesertUnlocked = false;
+    public bool isMapFieldUnlocked = false;
+    public bool isMapIceUnlocked = false;
+    public bool isMapLavaUnlocked = false;
+
+    [Header("Spawned Map Start")]
+    public GameObject[] mapStart;
     
     void Start()
     {
         instance = this;
-        
-        mapPrefabs = mapDesertPrefabs;
-        isDesertMap = true;
+        // mapPrefabs = mapCityPrefabs;
+        // isCityMap = true;
+        if (isMapCityUnlocked && !isMapBeachUnlocked)
+        {
+            mapPrefabs = mapBeachPrefabs;
+            isBeachMap = true;
+        }
+        if (isMapBeachUnlocked && !isMapDesertUnlocked)
+        {
+            int isRandomIndexMapStart = Random.Range(0, 2);
+            if (isRandomIndexMapStart == 0)
+            {
+                mapPrefabs = mapCityPrefabs;
+                isCityMap = true;
+                mapStart[isRandomIndexMapStart].SetActive(true);
+            }
+            else
+            {
+                mapPrefabs = mapBeachPrefabs;
+                isBeachMap = true;
+                mapStart[isRandomIndexMapStart].SetActive(true);
+            }
+        }
+        if (isMapDesertUnlocked && !isMapFieldUnlocked)
+        {
+            int isRandomIndexMapStart = Random.Range(0, 3);
+            if (isRandomIndexMapStart == 0)
+            {
+                mapPrefabs = mapCityPrefabs;
+                isCityMap = true;
+                mapStart[isRandomIndexMapStart].SetActive(true);
+            }
+            else if (isRandomIndexMapStart == 1)
+            {
+                mapPrefabs = mapBeachPrefabs;
+                isBeachMap = true;
+                mapStart[isRandomIndexMapStart].SetActive(true);
+            }
+            else
+            {
+                mapPrefabs = mapDesertPrefabs;
+                isDesertMap = true;
+                mapStart[isRandomIndexMapStart].SetActive(true);
+            }
+        }
+        if (isMapFieldUnlocked && !isMapIceUnlocked)
+        {
+            int isRandomIndexMapStart = Random.Range(0, 4);
+            if (isRandomIndexMapStart == 0)
+            {
+                mapPrefabs = mapCityPrefabs;
+                isCityMap = true;
+                mapStart[isRandomIndexMapStart].SetActive(true);
+            }
+            else if (isRandomIndexMapStart == 1)
+            {
+                mapPrefabs = mapBeachPrefabs;
+                isBeachMap = true;
+                mapStart[isRandomIndexMapStart].SetActive(true);
+            }
+            else if (isRandomIndexMapStart == 2)
+            {
+                mapPrefabs = mapDesertPrefabs;
+                isDesertMap = true;
+                mapStart[isRandomIndexMapStart].SetActive(true);
+            }
+            else
+            {
+                mapPrefabs = mapFieldPrefabs;
+                isFieldMap = true;
+                mapStart[isRandomIndexMapStart].SetActive(true);
+            }
+        }
+        if (isMapIceUnlocked && !isMapLavaUnlocked)
+        {
+            int isRandomIndexMapStart = Random.Range(0, 5);
+            if (isRandomIndexMapStart == 0)
+            {
+                mapPrefabs = mapCityPrefabs;
+                isCityMap = true;
+                mapStart[isRandomIndexMapStart].SetActive(true);
+            }
+            else if (isRandomIndexMapStart == 1)
+            {
+                mapPrefabs = mapBeachPrefabs;
+                isBeachMap = true;
+                mapStart[isRandomIndexMapStart].SetActive(true);
+            }
+            else if (isRandomIndexMapStart == 2)
+            {
+                mapPrefabs = mapDesertPrefabs;
+                isDesertMap = true;
+                mapStart[isRandomIndexMapStart].SetActive(true);
+            }
+            else if (isRandomIndexMapStart == 3)
+            {
+                mapPrefabs = mapFieldPrefabs;
+                isFieldMap = true;
+                mapStart[isRandomIndexMapStart].SetActive(true);
+            }
+            else
+            {
+                mapPrefabs = mapIcePrefabs;
+                isIceMap = true;
+                mapStart[isRandomIndexMapStart].SetActive(true);
+            }
+        }
+        if (isMapLavaUnlocked)
+        {
+            int isRandomIndexMapStart = Random.Range(0, 6);
+            if (isRandomIndexMapStart == 0)
+            {
+                mapPrefabs = mapCityPrefabs;
+                isCityMap = true;
+                mapStart[isRandomIndexMapStart].SetActive(true);
+            }
+            else if (isRandomIndexMapStart == 1)
+            {
+                mapPrefabs = mapBeachPrefabs;
+                isBeachMap = true;
+                mapStart[isRandomIndexMapStart].SetActive(true);
+            }
+            else if (isRandomIndexMapStart == 2)
+            {
+                mapPrefabs = mapDesertPrefabs;
+                isDesertMap = true;
+                mapStart[isRandomIndexMapStart].SetActive(true);
+            }
+            else if (isRandomIndexMapStart == 3)
+            {
+                mapPrefabs = mapFieldPrefabs;
+                isFieldMap = true;
+                mapStart[isRandomIndexMapStart].SetActive(true);
+            }
+            else if (isRandomIndexMapStart == 4)
+            {
+                mapPrefabs = mapIcePrefabs;
+                isIceMap = true;
+                mapStart[isRandomIndexMapStart].SetActive(true);
+            }
+            else
+            {
+                mapPrefabs = mapLavaPrefabs;
+                isLavaMap = true;
+                mapStart[isRandomIndexMapStart].SetActive(true);
+            }
+        }
         StartCoroutine(SpawnMapCoroutine());
+        
     }
     
 
@@ -113,25 +269,25 @@ public class MapSpawner : MonoBehaviour
 
         if (isBeachMap)
         {
-            // Instantiate(mapCityBeachPrefab, new Vector3(spawnRangeX, -32.1f, 0f), mapBeachStartPrefab.transform.rotation);
-            // spawnRangeX += 30f;
+            Instantiate(mapCityBeachPrefab, new Vector3(spawnRangeX, -32.1f, 0f), mapBeachStartPrefab.transform.rotation);
+            spawnRangeX += 30f;
 
-            // Instantiate(mapBeachStartPrefab, new Vector3(spawnRangeX, -4.195f, 0f), mapBeachStartPrefab.transform.rotation);
+            Instantiate(mapBeachStartPrefab, new Vector3(spawnRangeX, -4.195f, 0f), mapBeachStartPrefab.transform.rotation);
             isBeachMap = false;
             isBeachStartSpawned = true;
-            // spawnRangeX += 30f;
+            spawnRangeX += 30f;
             return;
         }
         else if (isDesertMap)
         {
-            // Instantiate(mapBeachDesertPrefab, new Vector3(spawnRangeX, -32.1f, 0f), mapBeachStartPrefab.transform.rotation);
-            // spawnRangeX += 30f;
+            Instantiate(mapBeachDesertPrefab, new Vector3(spawnRangeX, -32.1f, 0f), mapBeachStartPrefab.transform.rotation);
+            spawnRangeX += 30f;
 
-            // Instantiate(mapDesertStartPrefab, new Vector3(spawnRangeX, -4.195f, 0f), mapDesertStartPrefab.transform.rotation);
+            Instantiate(mapDesertStartPrefab, new Vector3(spawnRangeX, -4.195f, 0f), mapDesertStartPrefab.transform.rotation);
             isDesertMap = false;
             isBeachStartSpawned = false;
             isDesertStartSpawned = true;
-            // spawnRangeX += 30f;
+            spawnRangeX += 30f;
             return;
         }
         else if (isFieldMap)

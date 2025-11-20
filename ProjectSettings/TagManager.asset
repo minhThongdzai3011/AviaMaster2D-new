@@ -29,6 +29,12 @@ TagManager:
   - airport
   - Cloud
   - sky
+  - MapStartCity
+  - MapStartBeach
+  - MapStartDesert
+  - MapStartField
+  - MapStartIce
+  - MapStartLava
   layers:
   - Default
   - TransparentFX
@@ -37,12 +43,12 @@ TagManager:
   - Water
   - UI
   - 1
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - MapStartCity
+  - MapStartBeach
+  - MapStartDesert
+  - MapStartField
+  - MapStartIce
+  - MapStartLava
   - 
   - 
   - 
