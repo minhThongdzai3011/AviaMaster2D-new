@@ -751,9 +751,11 @@ public class Settings : MonoBehaviour
         Vector2 originalPos = NotificationNewMapImage .anchoredPosition;
         Sequence seq = DOTween.Sequence();
         // 1. Di chuyển xuống y = -114f
-        seq.Append(NotificationNewMapImage .DOAnchorPosY(-114f, 1f).SetEase(Ease.OutQuad));
-        // 2. Giữ nguyên vị trí trong 2 giây
-        seq.AppendInterval(2f);
+        // seq.Append(NotificationNewMapImage .DOAnchorPosY(-114f, 1f).SetEase(Ease.OutQuad));
+        GManager.instance.tempDistanceTraveled -= 300f;
+        GManager.instance.sliderAchievement.value = 0f;
+        // 2. Giữ nguyên vị trí trong 1 giây
+        seq.AppendInterval(1f);
         // 3. Trở lại vị trí ban đầu 
         seq.Append(NotificationNewMapImage .DOAnchorPosY(originalPos.y, 1f).SetEase(Ease.OutQuad));
     }

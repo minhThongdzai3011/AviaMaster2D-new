@@ -196,6 +196,7 @@ public class GManager : MonoBehaviour
             isHomeDown = true;
             isHomeUp = true;
             ChangePlane currentChangePlane = airplaneRigidbody2D.GetComponent<ChangePlane>();
+           
             if (currentChangePlane != null)
             {
                 Debug.Log("Setting isRotationChangePlane to false in LaunchAirplane");
@@ -754,7 +755,7 @@ public class GManager : MonoBehaviour
         {
             AgainGame();
         }
-        if (Input.GetKeyDown(KeyCode.Keypad2))
+        if (Input.GetKey(KeyCode.Keypad2))
         {
             totalMoney += 1000;
             PlayerPrefs.SetFloat("TotalMoney", totalMoney);
@@ -1415,9 +1416,8 @@ public class GManager : MonoBehaviour
         {
             levelFuel += 1;
             rateFuel += 5;
-
-            moneyFuel = moneyFuel * 1.25f;
             totalMoney -= moneyFuel;
+            moneyFuel = moneyFuel * 1.25f;
             totalMoney = (int)Math.Round(totalMoney, 0);
             totalMoneyText.text = totalMoney.ToString("F0");
             PlayerPrefs.SetFloat("TotalMoney", totalMoney);
@@ -1477,8 +1477,8 @@ public class GManager : MonoBehaviour
         {
             levelBoost += 1;
             rateBoost += 5;
-            moneyBoost = moneyBoost * 1.25f;
             totalMoney -= moneyBoost;
+            moneyBoost = moneyBoost * 1.25f;
             totalMoney = (int)Math.Round(totalMoney, 0);
             totalMoneyText.text = totalMoney.ToString("F0");
             PlayerPrefs.SetFloat("TotalMoney", totalMoney);
@@ -1521,8 +1521,8 @@ public class GManager : MonoBehaviour
         {
             levelPower += 1;
             ratePower += 5;
-            moneyPower = moneyPower * 1.25f;
             totalMoney -= moneyPower;
+            moneyPower = moneyPower * 1.25f;
             totalMoney = (int)Math.Round(totalMoney, 0);
             totalMoneyText.text = totalMoney.ToString("F0");
             PlayerPrefs.SetFloat("TotalMoney", totalMoney);
@@ -1606,14 +1606,16 @@ public class GManager : MonoBehaviour
         }
         
     }
+    public float tempDistanceTraveled = 0f;
 
     void UpdateSliderAchievement()
     {
         if (sliderAchievement != null)
         {
+            tempDistanceTraveled = distanceTraveled;
             // Tính toán giá trị mục tiêu dựa trên khoảng cách bay được
-            float maxDistance = 600f; // Khoảng cách tối đa để đạt 100%
-            float targetValue = Mathf.Clamp01(distanceTraveled / maxDistance);
+            float maxDistance = 300f; // Khoảng cách tối đa để đạt 100%
+            float targetValue = Mathf.Clamp01(tempDistanceTraveled / maxDistance);
 
             // Cập nhật slider với hiệu ứng mượt mà
             float smoothSpeed = 2f; // Tốc độ cập nhật (càng cao càng nhanh)

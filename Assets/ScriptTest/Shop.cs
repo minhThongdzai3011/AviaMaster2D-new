@@ -3,7 +3,6 @@ using UnityEngine.UI;
 using DG.Tweening;
 using System.Collections;
 using TMPro;
-using System.Xml.Serialization;
 
 public class Shop : MonoBehaviour
 {
@@ -42,7 +41,7 @@ public class Shop : MonoBehaviour
     public GameObject[] gameObjectsPlanes;
     public Rigidbody2D[] airplanesRigidbody2D;
     public GameObject defaultPlane;
-    public int isCheckedPlaneIndex = 14; // Mặc định chọn máy bay thứ 15
+    public int isCheckedPlaneIndex = 13; // Mặc định chọn máy bay thứ 15
 
     public void Awake()
     {
@@ -56,147 +55,14 @@ public class Shop : MonoBehaviour
         Application.targetFrameRate = 60;
         InitializeCarousel();
         
-        // switch(isCheckedPlaneIndex){
-        //     case 0:
-        //         for (int i=0; i<planeBuyText.Length; i++){
-        //             if(i == 0){
-        //                 gameObjectsPlanes[i].gameObject.SetActive(true);
-        //                 CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[0].transform;
-        //                 CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[0].transform;
-        //             }
-        //         }
-
-        //         break;
-        //     case 1:
-        //         for (int i=0; i<planeBuyText.Length; i++){
-        //             if(i == 1){
-        //                 gameObjectsPlanes[i].gameObject.SetActive(true);
-        //                 CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[1].transform;
-        //                 CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[1].transform;
-        //             }
-        //         }
-        //         break;
-        //     case 2:
-        //         for (int i=0; i<planeBuyText.Length; i++){
-        //             if(i == 2){
-        //                 gameObjectsPlanes[i].gameObject.SetActive(true);
-        //                 CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[2].transform;
-        //                 CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[2].transform;
-        //             }
-        //         }
-        //         break;
-        //     case 3:
-        //         for (int i=0; i<planeBuyText.Length; i++){
-        //             if(i == 3){
-        //                 gameObjectsPlanes[i].gameObject.SetActive(true);
-        //                 CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[3].transform;
-        //                 CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[3].transform;
-        //             }
-        //         }
-        //         break;
-        //     case 4:
-        //         for (int i=0; i<planeBuyText.Length; i++){
-        //             if(i == 4){
-        //                 gameObjectsPlanes[i].gameObject.SetActive(true);
-        //                 CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[4].transform;
-        //                 CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[4].transform;
-        //             }
-        //         }
-        //         break;
-        //     case 5:
-        //         for (int i=0; i<planeBuyText.Length; i++){
-        //             if(i == 5){
-        //                 gameObjectsPlanes[i].gameObject.SetActive(true);
-        //                 CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[5].transform;
-        //                 CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[5].transform;
-        //             }
-        //         }
-        //         break;
-        //     case 6:
-        //         for (int i=0; i<planeBuyText.Length; i++){
-        //             if(i == 6){
-        //                 gameObjectsPlanes[i].gameObject.SetActive(true);
-        //                 CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[6].transform;
-        //                 CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[6].transform;
-        //             }
-        //         }
-        //         break;
-        //     case 7:
-        //         for (int i=0; i<planeBuyText.Length; i++){
-        //             if(i == 7){
-        //                 gameObjectsPlanes[i].gameObject.SetActive(true);
-        //                 CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[7].transform;
-        //                 CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[7].transform;
-        //             }
-        //         }
-        //         break;
-        //     case 8:
-        //         for (int i=0; i<planeBuyText.Length; i++){
-        //             if(i == 8){
-        //                 gameObjectsPlanes[i].gameObject.SetActive(true);
-        //                 CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[8].transform;
-        //                 CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[8].transform;
-        //             }
-        //         }
-        //         break;
-        //     case 9:
-        //         for (int i=0; i<planeBuyText.Length; i++){
-        //             if(i == 9){
-        //                 gameObjectsPlanes[i].gameObject.SetActive(true);
-        //                 CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[9].transform;
-        //                 CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[9].transform;
-        //             }
-        //         }
-        //         break;
-        //     case 10:
-        //         for (int i=0; i<planeBuyText.Length; i++){
-        //             if(i == 10){
-        //                 gameObjectsPlanes[i].gameObject.SetActive(true);
-        //                 CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[10].transform;
-        //                 CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[10].transform;
-        //             }
-        //         }
-        //         break;
-        //     case 11:
-        //         for (int i=0; i<planeBuyText.Length; i++){
-        //             if(i == 11){
-        //                 gameObjectsPlanes[i].gameObject.SetActive(true);
-        //                 CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[11].transform;
-        //                 CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[11].transform;
-        //             }
-        //         }
-        //         break;
-        //     case 12:
-        //         for (int i=0; i<planeBuyText.Length; i++){
-        //             if(i == 12){
-        //                 gameObjectsPlanes[i].gameObject.SetActive(true);
-        //                 CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[12].transform;
-        //                 CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[12].transform;
-        //             }
-        //         }
-        //         break;
-        //     case 13:
-        //         for (int i=0; i<planeBuyText.Length; i++){
-        //             if(i == 13){
-        //                 gameObjectsPlanes[i].gameObject.SetActive(true);
-        //                 CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[13].transform;
-        //                 CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[13].transform;
-        //             }
-        //         }
-        //         break;
-        //     case 14:
-        //         for (int i=0; i<planeBuyText.Length; i++){
-        //             if(i == 14){
-        //                 gameObjectsPlanes[i].gameObject.SetActive(true);
-        //                 CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[14].transform;
-        //                 CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[14].transform;
-        //             }
-        //         }
-        //         break;
-        //     default:
-        //         break;
-        // }
+        // *** SỬA: Load trạng thái bought trước ***
+        LoadBoughtStatus();
+        
+        // *** SỬA: Setup plane theo index được lưu ***
         SetupPlaneByIndex(isCheckedPlaneIndex);
+        
+        // *** SỬA: Update UI dựa vào trạng thái bought và selected ***
+        UpdateAllButtonsDisplay();
     }
     void Update()
     {
@@ -208,6 +74,89 @@ public class Shop : MonoBehaviour
             else {
                 text.color = Color.white;
             }
+        }
+    }
+
+    // THÊM: Hàm load trạng thái mua từ PlayerPrefs
+    void LoadBoughtStatus()
+    {
+        isBuyPlane1Done = PlayerPrefs.GetInt("isBuyPlane1Done", 1) == 1;
+        isBuyPlane2Done = PlayerPrefs.GetInt("isBuyPlane2Done", 0) == 1;
+        isBuyPlane3Done = PlayerPrefs.GetInt("isBuyPlane3Done", 0) == 1;
+        isBuyPlane4Done = PlayerPrefs.GetInt("isBuyPlane4Done", 0) == 1;
+        isBuyPlane5Done = PlayerPrefs.GetInt("isBuyPlane5Done", 0) == 1;
+        isBuyPlane6Done = PlayerPrefs.GetInt("isBuyPlane6Done", 0) == 1;
+        isBuyPlane7Done = PlayerPrefs.GetInt("isBuyPlane7Done", 0) == 1;
+        isBuyPlane8Done = PlayerPrefs.GetInt("isBuyPlane8Done", 0) == 1;
+        isBuyPlane9Done = PlayerPrefs.GetInt("isBuyPlane9Done", 0) == 1;
+        isBuyPlane10Done = PlayerPrefs.GetInt("isBuyPlane10Done", 0) == 1;
+        isBuyPlane11Done = PlayerPrefs.GetInt("isBuyPlane11Done", 0) == 1;
+        isBuyPlane12Done = PlayerPrefs.GetInt("isBuyPlane12Done", 0) == 1;
+        isBuyPlane13Done = PlayerPrefs.GetInt("isBuyPlane13Done", 0) == 1;
+        isBuyPlane14Done = PlayerPrefs.GetInt("isBuyPlane14Done", 0) == 1;
+        isBuyPlane15Done = PlayerPrefs.GetInt("isBuyPlane15Done", 1) == 1;
+        isRotaryFrontZDone = PlayerPrefs.GetInt("isRotaryFrontZDone", 0) == 1;
+    }
+
+    // THÊM: Hàm cập nhật hiển thị tất cả buttons
+    void UpdateAllButtonsDisplay()
+    {
+        for (int i = 0; i < planeBuyText.Length && i < 15; i++)
+        {
+            UpdateButtonDisplay(i);
+        }
+    }
+
+    // THÊM: Hàm cập nhật hiển thị cho 1 button
+    void UpdateButtonDisplay(int index)
+    {
+        if (index < 0 || index >= planeBuyText.Length) return;
+        
+        bool isBought = GetPlaneBoughtStatus(index);
+        bool isSelected = (index == isCheckedPlaneIndex);
+        
+        if (!isBought)
+        {
+            planePriceText[index].gameObject.SetActive(true);
+            planeBuyText[index].gameObject.SetActive(false);
+        }
+        else
+        {
+            planePriceText[index].gameObject.SetActive(false);
+            planeBuyText[index].gameObject.SetActive(true);
+            
+            if (isSelected)
+            {
+                planeBuyText[index].text = "Play";
+            }
+            else
+            {
+                planeBuyText[index].text = "Select";
+            }
+        }
+    }
+
+    // THÊM: Hàm lấy trạng thái bought của plane
+    bool GetPlaneBoughtStatus(int index)
+    {
+        switch (index)
+        {
+            case 0: return isBuyPlane1Done;
+            case 1: return isBuyPlane2Done;
+            case 2: return isBuyPlane3Done;
+            case 3: return isBuyPlane4Done;
+            case 4: return isBuyPlane5Done;
+            case 5: return isBuyPlane6Done;
+            case 6: return isBuyPlane7Done;
+            case 7: return isBuyPlane8Done;
+            case 8: return isBuyPlane9Done;
+            case 9: return isBuyPlane10Done;
+            case 10: return isBuyPlane11Done;
+            case 11: return isBuyPlane12Done;
+            case 12: return isBuyPlane13Done;
+            case 13: return isBuyPlane14Done;
+            case 14: return isBuyPlane15Done;
+            default: return false;
         }
     }
 
@@ -626,13 +575,16 @@ public class Shop : MonoBehaviour
                 }
             }
         }
+        SaveTextPlane();
         
         // Thay đổi defaultPlane
         if(gameObjectsPlanes != null && gameObjectsPlanes.Length > 0){
             defaultPlane = gameObjectsPlanes[0];
+            GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[0];
+            GManager.instance.airplaneRigidbody2D.constraints = RigidbodyConstraints2D.None; 
+            GManager.instance.airplaneRigidbody2D.velocity = Vector2.zero;
             CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[0].transform;
             CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[0].transform;
-            GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[0];
             gameObjectsPlanes[0].SetActive(true);
             for (int i=0; i<gameObjectsPlanes.Length; i++){
                 if(i != 0){
@@ -644,8 +596,52 @@ public class Shop : MonoBehaviour
         PlayerPrefs.Save();
     }
     public void buyPlane2(){
-        StartCoroutine(PlayButtonEffect(1));
+        StartCoroutine(PlayButtonEffect(0));
         if(!isBuyPlane2Done){
+            planeBuyText[0].gameObject.SetActive(true);
+            planeBuyText[0].text = "Play";
+            isCheckedPlaneIndex = 0;
+            for(int i=0; i<planeBuyText.Length; i++){
+                if(i != 0){
+                    planeBuyText[i].text = "Select";
+                }
+            }
+            planePriceText[0].gameObject.SetActive(false);
+            isBuyPlane2Done = true;
+        }
+        else {
+            if(planeBuyText[0].text == "Play") return;
+            else{
+                planeBuyText[0].text = "Play";
+                isCheckedPlaneIndex = 0;
+                for(int i=0; i<planeBuyText.Length; i++){
+                    if(i != 0){
+                        planeBuyText[i].text = "Select";
+                    }
+                }
+            }
+        }
+        SaveTextPlane();
+        
+        // Thay đổi defaultPlane
+        if(gameObjectsPlanes != null && gameObjectsPlanes.Length > 0){
+            defaultPlane = gameObjectsPlanes[0];
+            GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[0];
+            CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[0].transform;
+            CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[0].transform;
+            gameObjectsPlanes[0].SetActive(true);
+            for (int i=0; i<gameObjectsPlanes.Length; i++){
+                if(i != 0){
+                    gameObjectsPlanes[i].SetActive(false);
+                }
+            }
+        }
+        PlayerPrefs.SetInt("isCheckedPlaneIndex", isCheckedPlaneIndex);
+        PlayerPrefs.Save();
+    }
+    public void buyPlane3(){
+        StartCoroutine(PlayButtonEffect(2));
+        if(!isBuyPlane3Done){
             planeBuyText[1].gameObject.SetActive(true);
             planeBuyText[1].text = "Play";
             isCheckedPlaneIndex = 1;
@@ -655,7 +651,7 @@ public class Shop : MonoBehaviour
                 }
             }
             planePriceText[1].gameObject.SetActive(false);
-            isBuyPlane2Done = true;
+            isBuyPlane3Done = true;
         }
         else {
             if(planeBuyText[1].text == "Play") return;
@@ -669,6 +665,7 @@ public class Shop : MonoBehaviour
                 }
             }
         }
+        SaveTextPlane();
         
         // Thay đổi defaultPlane
         if(gameObjectsPlanes != null && gameObjectsPlanes.Length > 1){
@@ -686,9 +683,9 @@ public class Shop : MonoBehaviour
         PlayerPrefs.SetInt("isCheckedPlaneIndex", isCheckedPlaneIndex);
         PlayerPrefs.Save();
     }
-    public void buyPlane3(){
+    public void buyPlane4(){
         StartCoroutine(PlayButtonEffect(2));
-        if(!isBuyPlane3Done){
+        if(!isBuyPlane4Done){
             planeBuyText[2].gameObject.SetActive(true);
             planeBuyText[2].text = "Play";
             isCheckedPlaneIndex = 2;
@@ -698,7 +695,7 @@ public class Shop : MonoBehaviour
                 }
             }
             planePriceText[2].gameObject.SetActive(false);
-            isBuyPlane3Done = true;
+            isBuyPlane4Done = true;
         }
         else {
             if(planeBuyText[2].text == "Play") return;
@@ -712,13 +709,14 @@ public class Shop : MonoBehaviour
                 }
             }
         }
+        SaveTextPlane();
         
         // Thay đổi defaultPlane
         if(gameObjectsPlanes != null && gameObjectsPlanes.Length > 2){
             defaultPlane = gameObjectsPlanes[2];
+            GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[2];
             CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[2].transform;
             CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[2].transform;
-            GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[2];
             gameObjectsPlanes[2].SetActive(true);
             for (int i=0; i<gameObjectsPlanes.Length; i++){
                 if(i != 2){
@@ -729,9 +727,9 @@ public class Shop : MonoBehaviour
         PlayerPrefs.SetInt("isCheckedPlaneIndex", isCheckedPlaneIndex);
         PlayerPrefs.Save();
     }
-    public void buyPlane4(){
+    public void buyPlane5(){
         StartCoroutine(PlayButtonEffect(3));
-        if(!isBuyPlane4Done){
+        if(!isBuyPlane5Done){
             planeBuyText[3].gameObject.SetActive(true);
             planeBuyText[3].text = "Play";
             isCheckedPlaneIndex = 3;
@@ -741,7 +739,7 @@ public class Shop : MonoBehaviour
                 }
             }
             planePriceText[3].gameObject.SetActive(false);
-            isBuyPlane4Done = true;
+            isBuyPlane5Done = true;
         }
         else {
             if(planeBuyText[3].text == "Play") return;
@@ -755,6 +753,7 @@ public class Shop : MonoBehaviour
                 }
             }
         }
+        SaveTextPlane();
         
         // Thay đổi defaultPlane
         if(gameObjectsPlanes != null && gameObjectsPlanes.Length > 3){
@@ -772,9 +771,9 @@ public class Shop : MonoBehaviour
         PlayerPrefs.SetInt("isCheckedPlaneIndex", isCheckedPlaneIndex);
         PlayerPrefs.Save();
     }
-    public void buyPlane5(){
+    public void buyPlane6(){
         StartCoroutine(PlayButtonEffect(4));
-        if(!isBuyPlane5Done){
+        if(!isBuyPlane6Done){
             planeBuyText[4].gameObject.SetActive(true);
             planeBuyText[4].text = "Play";
             isCheckedPlaneIndex = 4;
@@ -784,7 +783,7 @@ public class Shop : MonoBehaviour
                 }
             }
             planePriceText[4].gameObject.SetActive(false);
-            isBuyPlane5Done = true;
+            isBuyPlane6Done = true;
         }
         else {
             if(planeBuyText[4].text == "Play") return;
@@ -798,6 +797,7 @@ public class Shop : MonoBehaviour
                 }
             }
         }
+        SaveTextPlane();
         
         // Thay đổi defaultPlane
         if(gameObjectsPlanes != null && gameObjectsPlanes.Length > 4){
@@ -815,9 +815,9 @@ public class Shop : MonoBehaviour
         PlayerPrefs.SetInt("isCheckedPlaneIndex", isCheckedPlaneIndex);
         PlayerPrefs.Save();
     }
-    public void buyPlane6(){
+    public void buyPlane7(){
         StartCoroutine(PlayButtonEffect(5));
-        if(!isBuyPlane6Done){
+        if(!isBuyPlane7Done){
             planeBuyText[5].gameObject.SetActive(true);
             planeBuyText[5].text = "Play";
             isCheckedPlaneIndex = 5;
@@ -827,7 +827,7 @@ public class Shop : MonoBehaviour
                 }
             }
             planePriceText[5].gameObject.SetActive(false);
-            isBuyPlane6Done = true;
+            isBuyPlane7Done = true;
         }
         else {
             if(planeBuyText[5].text == "Play") return;
@@ -841,6 +841,7 @@ public class Shop : MonoBehaviour
                 }
             }
         }
+        SaveTextPlane();
         
         // Thay đổi defaultPlane
         if(gameObjectsPlanes != null && gameObjectsPlanes.Length > 5){
@@ -858,9 +859,9 @@ public class Shop : MonoBehaviour
         PlayerPrefs.SetInt("isCheckedPlaneIndex", isCheckedPlaneIndex);
         PlayerPrefs.Save();
     }
-    public void buyPlane7(){
+    public void buyPlane8(){
         StartCoroutine(PlayButtonEffect(6));
-        if(!isBuyPlane7Done){
+        if(!isBuyPlane8Done){
             planeBuyText[6].gameObject.SetActive(true);
             planeBuyText[6].text = "Play";
             isCheckedPlaneIndex = 6;
@@ -870,7 +871,7 @@ public class Shop : MonoBehaviour
                 }
             }
             planePriceText[6].gameObject.SetActive(false);
-            isBuyPlane7Done = true;
+            isBuyPlane8Done = true;
         }
         else {
             if(planeBuyText[6].text == "Play") return;
@@ -884,13 +885,14 @@ public class Shop : MonoBehaviour
                 }
             }
         }
-        
+        SaveTextPlane();
         // Thay đổi defaultPlane
         if(gameObjectsPlanes != null && gameObjectsPlanes.Length > 6){
             defaultPlane = gameObjectsPlanes[6];
             GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[6];
             CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[6].transform;
             CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[6].transform;
+            isRotaryFrontZDone = true;
             gameObjectsPlanes[6].SetActive(true);
             for (int i=0; i<gameObjectsPlanes.Length; i++){
                 if(i != 6){
@@ -901,9 +903,9 @@ public class Shop : MonoBehaviour
         PlayerPrefs.SetInt("isCheckedPlaneIndex", isCheckedPlaneIndex);
         PlayerPrefs.Save();
     }
-    public void buyPlane8(){
+    public void buyPlane9(){
         StartCoroutine(PlayButtonEffect(7));
-        if(!isBuyPlane8Done){
+        if(!isBuyPlane9Done){
             planeBuyText[7].gameObject.SetActive(true);
             planeBuyText[7].text = "Play";
             isCheckedPlaneIndex = 7;
@@ -913,7 +915,7 @@ public class Shop : MonoBehaviour
                 }
             }
             planePriceText[7].gameObject.SetActive(false);
-            isBuyPlane8Done = true;
+            isBuyPlane9Done = true;
         }
         else {
             if(planeBuyText[7].text == "Play") return;
@@ -927,6 +929,7 @@ public class Shop : MonoBehaviour
                 }
             }
         }
+        SaveTextPlane();
         
         // Thay đổi defaultPlane
         if(gameObjectsPlanes != null && gameObjectsPlanes.Length > 7){
@@ -934,7 +937,6 @@ public class Shop : MonoBehaviour
             GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[7];
             CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[7].transform;
             CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[7].transform;
-            isRotaryFrontZDone = true;
             gameObjectsPlanes[7].SetActive(true);
             for (int i=0; i<gameObjectsPlanes.Length; i++){
                 if(i != 7){
@@ -945,9 +947,9 @@ public class Shop : MonoBehaviour
         PlayerPrefs.SetInt("isCheckedPlaneIndex", isCheckedPlaneIndex);
         PlayerPrefs.Save();
     }
-    public void buyPlane9(){
+    public void buyPlane10(){
         StartCoroutine(PlayButtonEffect(8));
-        if(!isBuyPlane9Done){
+        if(!isBuyPlane10Done){
             planeBuyText[8].gameObject.SetActive(true);
             planeBuyText[8].text = "Play";
             isCheckedPlaneIndex = 8;
@@ -957,7 +959,7 @@ public class Shop : MonoBehaviour
                 }
             }
             planePriceText[8].gameObject.SetActive(false);
-            isBuyPlane9Done = true;
+            isBuyPlane10Done = true;
         }
         else {
             if(planeBuyText[8].text == "Play") return;
@@ -971,6 +973,7 @@ public class Shop : MonoBehaviour
                 }
             }
         }
+        SaveTextPlane();
         
         // Thay đổi defaultPlane
         if(gameObjectsPlanes != null && gameObjectsPlanes.Length > 8){
@@ -988,9 +991,9 @@ public class Shop : MonoBehaviour
         PlayerPrefs.SetInt("isCheckedPlaneIndex", isCheckedPlaneIndex);
         PlayerPrefs.Save();
     }
-    public void buyPlane10(){
+    public void buyPlane11(){
         StartCoroutine(PlayButtonEffect(9));
-        if(!isBuyPlane10Done){
+        if(!isBuyPlane11Done){
             planeBuyText[9].gameObject.SetActive(true);
             planeBuyText[9].text = "Play";
             isCheckedPlaneIndex = 9;
@@ -1000,7 +1003,7 @@ public class Shop : MonoBehaviour
                 }
             }
             planePriceText[9].gameObject.SetActive(false);
-            isBuyPlane10Done = true;
+            isBuyPlane11Done = true;
         }
         else {
             if(planeBuyText[9].text == "Play") return;
@@ -1014,6 +1017,7 @@ public class Shop : MonoBehaviour
                 }
             }
         }
+        SaveTextPlane();
         
         // Thay đổi defaultPlane
         if(gameObjectsPlanes != null && gameObjectsPlanes.Length > 9){
@@ -1031,9 +1035,9 @@ public class Shop : MonoBehaviour
         PlayerPrefs.SetInt("isCheckedPlaneIndex", isCheckedPlaneIndex);
         PlayerPrefs.Save();
     }
-    public void buyPlane11(){
+    public void buyPlane12(){
         StartCoroutine(PlayButtonEffect(10));
-        if(!isBuyPlane11Done){
+        if(!isBuyPlane12Done){
             planeBuyText[10].gameObject.SetActive(true);
             planeBuyText[10].text = "Play";
             isCheckedPlaneIndex = 10;
@@ -1043,7 +1047,7 @@ public class Shop : MonoBehaviour
                 }
             }
             planePriceText[10].gameObject.SetActive(false);
-            isBuyPlane11Done = true;
+            isBuyPlane12Done = true;
         }
         else {
             if(planeBuyText[10].text == "Play") return;
@@ -1057,6 +1061,7 @@ public class Shop : MonoBehaviour
                 }
             }
         }
+        SaveTextPlane();
         
         // Thay đổi defaultPlane
         if(gameObjectsPlanes != null && gameObjectsPlanes.Length > 10){
@@ -1074,9 +1079,9 @@ public class Shop : MonoBehaviour
         PlayerPrefs.SetInt("isCheckedPlaneIndex", isCheckedPlaneIndex);
         PlayerPrefs.Save();
     }
-    public void buyPlane12(){
+    public void buyPlane13(){
         StartCoroutine(PlayButtonEffect(11));
-        if(!isBuyPlane12Done){
+        if(!isBuyPlane13Done){
             planeBuyText[11].gameObject.SetActive(true);
             planeBuyText[11].text = "Play";
             isCheckedPlaneIndex = 11;
@@ -1086,7 +1091,7 @@ public class Shop : MonoBehaviour
                 }
             }
             planePriceText[11].gameObject.SetActive(false);
-            isBuyPlane12Done = true;
+            isBuyPlane13Done = true;
         }
         else {
             if(planeBuyText[11].text == "Play") return;
@@ -1100,6 +1105,7 @@ public class Shop : MonoBehaviour
                 }
             }
         }
+        SaveTextPlane();
         
         // Thay đổi defaultPlane
         if(gameObjectsPlanes != null && gameObjectsPlanes.Length > 11){
@@ -1117,9 +1123,9 @@ public class Shop : MonoBehaviour
         PlayerPrefs.SetInt("isCheckedPlaneIndex", isCheckedPlaneIndex);
         PlayerPrefs.Save();
     }
-    public void buyPlane13(){
+    public void buyPlane14(){
         StartCoroutine(PlayButtonEffect(12));
-        if(!isBuyPlane13Done){
+        if(!isBuyPlane14Done){
             planeBuyText[12].gameObject.SetActive(true);
             planeBuyText[12].text = "Play";
             isCheckedPlaneIndex = 12;
@@ -1129,7 +1135,7 @@ public class Shop : MonoBehaviour
                 }
             }
             planePriceText[12].gameObject.SetActive(false);
-            isBuyPlane13Done = true;
+            isBuyPlane14Done = true;
         }
         else {
             if(planeBuyText[12].text == "Play") return;
@@ -1143,6 +1149,7 @@ public class Shop : MonoBehaviour
                 }
             }
         }
+        SaveTextPlane();
         
         // Thay đổi defaultPlane
         if(gameObjectsPlanes != null && gameObjectsPlanes.Length > 12){
@@ -1160,21 +1167,8 @@ public class Shop : MonoBehaviour
         PlayerPrefs.SetInt("isCheckedPlaneIndex", isCheckedPlaneIndex);
         PlayerPrefs.Save();
     }
-    public void buyPlane14(){
+    public void buyPlane15(){
         StartCoroutine(PlayButtonEffect(13));
-        if(!isBuyPlane14Done){
-            planeBuyText[13].gameObject.SetActive(true);
-            planeBuyText[13].text = "Play";
-            isCheckedPlaneIndex = 13;
-            for(int i=0; i<planeBuyText.Length; i++){
-                if(i != 13){
-                    planeBuyText[i].text = "Select";
-                }
-            }
-            planePriceText[13].gameObject.SetActive(false);
-            isBuyPlane14Done = true;
-        }
-        else {
             if(planeBuyText[13].text == "Play") return;
             else{
                 planeBuyText[13].text = "Play";
@@ -1184,7 +1178,7 @@ public class Shop : MonoBehaviour
                         planeBuyText[i].text = "Select";
                     }
                 }
-            }
+            SaveTextPlane();
         }
         
         // Thay đổi defaultPlane
@@ -1196,49 +1190,6 @@ public class Shop : MonoBehaviour
             gameObjectsPlanes[13].SetActive(true);
             for (int i=0; i<gameObjectsPlanes.Length; i++){
                 if(i != 13){
-                    gameObjectsPlanes[i].SetActive(false);
-                }
-            }
-        }
-        PlayerPrefs.SetInt("isCheckedPlaneIndex", isCheckedPlaneIndex);
-        PlayerPrefs.Save();
-    }
-    public void buyPlane15(){
-        StartCoroutine(PlayButtonEffect(14));
-        if(!isBuyPlane15Done){
-            planeBuyText[14].gameObject.SetActive(true);
-            planeBuyText[14].text = "Play";
-            isCheckedPlaneIndex = 14;
-            for(int i=0; i<planeBuyText.Length; i++){
-                if(i != 14){
-                    planeBuyText[i].text = "Select";
-                }
-            }
-            planePriceText[14].gameObject.SetActive(false);
-            isBuyPlane15Done = true;
-        }
-        else {
-            if(planeBuyText[14].text == "Play") return;
-            else{
-                planeBuyText[14].text = "Play";
-                isCheckedPlaneIndex = 14;
-                for(int i=0; i<planeBuyText.Length; i++){
-                    if(i != 14){
-                        planeBuyText[i].text = "Select";
-                    }
-                }
-            }
-        }
-        
-        // Thay đổi defaultPlane
-        if(gameObjectsPlanes != null && gameObjectsPlanes.Length > 14){
-            defaultPlane = gameObjectsPlanes[14];
-            GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[14];
-            CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[14].transform;
-            CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[14].transform;
-            gameObjectsPlanes[14].SetActive(true);
-            for (int i=0; i<gameObjectsPlanes.Length; i++){
-                if(i != 14){
                     gameObjectsPlanes[i].SetActive(false);
                 }
             }
@@ -1397,29 +1348,6 @@ public class Shop : MonoBehaviour
         
         Debug.Log($"Đã khôi phục tất cả trạng thái. Máy bay được chọn: {currentSelectedIndex}");
     }
-    // THÊM: Helper method để lấy trạng thái mua của từng máy bay
-    private bool GetPlaneBoughtStatus(int index)
-    {
-        switch (index)
-        {
-            case 0: return isBuyPlane1Done;
-            case 1: return isBuyPlane2Done;
-            case 2: return isBuyPlane3Done;
-            case 3: return isBuyPlane4Done;
-            case 4: return isBuyPlane5Done;
-            case 5: return isBuyPlane6Done;
-            case 6: return isBuyPlane7Done;
-            case 7: return isBuyPlane8Done;
-            case 8: return isBuyPlane9Done;
-            case 9: return isBuyPlane10Done;
-            case 10: return isBuyPlane11Done;
-            case 11: return isBuyPlane12Done;
-            case 12: return isBuyPlane13Done;
-            case 13: return isBuyPlane14Done;
-            case 14: return isBuyPlane15Done;
-            default: return false;
-        }
-    }
 
 
     // THÊM: Coroutine để delay load text
@@ -1429,4 +1357,30 @@ public class Shop : MonoBehaviour
         LoadTextPlaySelect();
     }
 
+    // ...existing code...
+
+// THÊM: Hàm reset trạng thái game khi chọn máy bay mới
+   
+   public void SaveTextPlane(){
+       // *** LƯU TRẠNG THÁI MUA, KHÔNG LƯU TEXT CONTENT ***
+       PlayerPrefs.SetInt("isBuyPlane1Done", isBuyPlane1Done ? 1 : 0);
+       PlayerPrefs.SetInt("isBuyPlane2Done", isBuyPlane2Done ? 1 : 0);
+       PlayerPrefs.SetInt("isBuyPlane3Done", isBuyPlane3Done ? 1 : 0);
+       PlayerPrefs.SetInt("isBuyPlane4Done", isBuyPlane4Done ? 1 : 0);
+       PlayerPrefs.SetInt("isBuyPlane5Done", isBuyPlane5Done ? 1 : 0);
+       PlayerPrefs.SetInt("isBuyPlane6Done", isBuyPlane6Done ? 1 : 0);
+       PlayerPrefs.SetInt("isBuyPlane7Done", isBuyPlane7Done ? 1 : 0);
+       PlayerPrefs.SetInt("isBuyPlane8Done", isBuyPlane8Done ? 1 : 0);
+       PlayerPrefs.SetInt("isBuyPlane9Done", isBuyPlane9Done ? 1 : 0);
+       PlayerPrefs.SetInt("isBuyPlane10Done", isBuyPlane10Done ? 1 : 0);
+       PlayerPrefs.SetInt("isBuyPlane11Done", isBuyPlane11Done ? 1 : 0);
+       PlayerPrefs.SetInt("isBuyPlane12Done", isBuyPlane12Done ? 1 : 0);
+       PlayerPrefs.SetInt("isBuyPlane13Done", isBuyPlane13Done ? 1 : 0);
+       PlayerPrefs.SetInt("isBuyPlane14Done", isBuyPlane14Done ? 1 : 0);
+       PlayerPrefs.SetInt("isBuyPlane15Done", isBuyPlane15Done ? 1 : 0);
+       PlayerPrefs.SetInt("isRotaryFrontZDone", isRotaryFrontZDone ? 1 : 0);
+       
+       PlayerPrefs.SetInt("isCheckedPlaneIndex", isCheckedPlaneIndex);
+       PlayerPrefs.Save();
+   }
 }
