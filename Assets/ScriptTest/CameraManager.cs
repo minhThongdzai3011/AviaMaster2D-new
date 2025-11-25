@@ -33,9 +33,21 @@ public class CameraManager : MonoBehaviour
     public Transform groundTransform; // Reference đến Ground
     public Transform aircraftTransform; // Reference đến máy bay
     
+    [Header("Camera Delay Settings")]
+    public float cameraDelayTime = 3f; // Thời gian delay trước khi camera bắt đầu theo máy bay
+    public float cameraBlendTime = 2f; // Thời gian blend mượt mà khi bật Follow/LookAt
+    
     private float targetOrthoSize;
     private bool isFollowingAircraft = false;
     private Vector3 originalCameraPosition;
+    private bool isCameraDelayActive = false; // Flag để biết đang trong thời gian delay
+    private float gameStartTime = 0f; // Thời điểm bắt đầu chơi
+    private bool isBlending = false; // Flag để biết đang blend
+    private float blendStartTime = 0f; // Thời điểm bắt đầu blend
+    private Vector3 blendStartPosition; // Vị trí bắt đầu blend
+    private bool wasFollowDisabled = false; // Follow có bị tắt không
+    private float blendStartOrthoSize = 0f; // OrthoSize bắt đầu blend
+    private float blendStartScreenY = 0f; // ScreenY bắt đầu blend
 
     void Start()
     {
@@ -72,8 +84,92 @@ public class CameraManager : MonoBehaviour
 
     void Update()
     {
-        // Xử lý zoom thủ công bằng chuột
-        HandleManualZoom();
+        // Kiểm tra delay và bật lại Follow/LookAt sau 3s
+        if (isCameraDelayActive)
+        {
+            float timeSinceStart = Time.time - gameStartTime;
+            if (timeSinceStart >= cameraDelayTime)
+            {
+                isCameraDelayActive = false;
+                BeginBlend();
+            }
+
+            return; // Không xử lý gì khác trong thời gian delay
+        }
+        
+        // Xử lý blend mượt mà: Di chuyển manual từ vị trí cũ đến vị trí Follow
+        if (isBlending)
+        {
+            float blendProgress = (Time.time - blendStartTime) / cameraBlendTime;
+            
+            if (blendProgress >= 1f)
+            {
+                // Kết thúc blend - bật Follow/LookAt
+                isBlending = false;
+                wasFollowDisabled = false;
+                virtualCamera.Follow = aircraftTransform;
+                virtualCamera.LookAt = aircraftTransform;
+                
+                // Đặt screenY về giá trị target cuối cùng
+                var composer = virtualCamera.GetCinemachineComponent<CinemachineComposer>();
+                if (composer != null)
+                {
+                    float altitude = GManager.instance != null ? GManager.instance.currentAltitude : 0f;
+                    bool isFlying = altitude > 5f;
+                    bool hasFuel = GManager.instance != null && GManager.instance.isPlay;
+                    float targetScreenY = (isFlying && hasFuel) ? screenYFlying : screenYGround;
+                    // composer.m_ScreenY = targetScreenY;
+                    // currentScreenY = targetScreenY;
+                    currentScreenY = currentScreenY;
+                }
+                
+                Debug.Log("Camera blend hoàn tất - Follow/LookAt enabled");
+            }
+            else
+            {
+                // Đang blend - tính toán vị trí target và lerp mượt mà
+                if (aircraftTransform != null)
+                {
+                    Vector3 targetPosition = new Vector3(
+                        aircraftTransform.position.x,
+                        aircraftTransform.position.y,
+                        originalCameraPosition.z
+                    );
+                    
+                    // Sử dụng SmoothStep để blend mượt mà hơn
+                    float smoothProgress = Mathf.SmoothStep(0f, 1f, blendProgress);
+                    virtualCamera.transform.position = Vector3.Lerp(blendStartPosition, targetPosition, smoothProgress);
+                    
+                    // BLEND ORTHOSIZE MƯỢT MÀ - Tính orthoSize target dựa trên altitude hiện tại
+                    float currentAltitude = GManager.instance != null ? GManager.instance.currentAltitude : 0f;
+                    float targetOrthoSizeNow = CalculateOrthoSizeFromAltitude(currentAltitude);
+                    
+                    // Lerp từ orthoSize ban đầu đến orthoSize target
+                    virtualCamera.m_Lens.OrthographicSize = Mathf.Lerp(blendStartOrthoSize, targetOrthoSizeNow, smoothProgress);
+                    
+                    // BLEND SCREEN Y MƯỢT MÀ - Tính screenY target
+                    bool isFlying = currentAltitude > 5f;
+                    bool hasFuel = GManager.instance != null && GManager.instance.isPlay;
+                    float targetScreenY = (isFlying && hasFuel) ? screenYFlying : screenYGround;
+                    
+                    // Lerp screenY mượt mà
+                    var composer = virtualCamera.GetCinemachineComponent<CinemachineComposer>();
+                    if (composer != null)
+                    {
+                        float blendedScreenY = Mathf.Lerp(blendStartScreenY, targetScreenY, smoothProgress);
+                        composer.m_ScreenY = blendedScreenY;
+                        currentScreenY = blendedScreenY;
+                    }
+                    
+                    // Debug mỗi 0.2s
+                    if (Mathf.FloorToInt(blendProgress * 5f) != Mathf.FloorToInt((blendProgress - Time.deltaTime / cameraBlendTime) * 5f))
+                    {
+                        Debug.Log($"Blending: {blendProgress * 100f:F0}% - Pos: {virtualCamera.transform.position}, OrthoSize: {virtualCamera.m_Lens.OrthographicSize:F1}, ScreenY: {currentScreenY:F2}");
+                    }
+                }
+            }
+            return; // Không xử lý zoom/screenY trong khi blend
+        }
         
         // Xử lý zoom tự động theo độ cao máy bay
         HandleAltitudeBasedZoom();
@@ -81,62 +177,42 @@ public class CameraManager : MonoBehaviour
         // Xử lý thay đổi ScreenY mượt mà
         HandleScreenYTransition();
         
-        // Xử lý camera follow máy bay
-        HandleCameraFollow();
-        
         // Áp dụng zoom mượt mà
         ApplySmoothZoom();
     }
     
-    void HandleManualZoom()
-    {
-        // Lấy giá trị cuộn chuột
-        float scroll = Input.GetAxis("Mouse ScrollWheel");
-
-        if (scroll != 0.0f)
-        {
-            // Thay đổi kích thước mục tiêu
-            targetOrthoSize -= scroll * zoomSpeed;
-
-            // Giới hạn kích thước camera trong một khoảng nhất định
-            targetOrthoSize = Mathf.Clamp(targetOrthoSize, minOrthoSize, maxOrthoSize);
-        }
-    }
 void HandleAltitudeBasedZoom()
 {
     // Chỉ zoom tự động nếu không có input chuột gần đây
     if (GManager.instance != null && Mathf.Abs(Input.GetAxis("Mouse ScrollWheel")) < 0.01f)
     {
         float altitude = GManager.instance.currentAltitude;
-        
-        // Tính toán orthoSize dựa trên độ cao - LOGIC SỬA LẠI
-        float calculatedOrthoSize;
-        
-        if (altitude <= 0f)
-        {
-            // Máy bay sát đất → orthoSize = 9
-            calculatedOrthoSize = 7f;
-        }
-        else if (altitude <= 10f)  // THAY ĐỔI: <= 10f thay vì >= 10f
-        {
-            // Nội suy tuyến tính giữa 0-10m: orthoSize từ 9-14
-            calculatedOrthoSize = Mathf.Lerp(7f, 14f, altitude / 10f);
-        }
-        else
-        {
-            // Máy bay cao hơn 10m, tiếp tục tăng orthoSize
-            // Từ altitude 10m trở lên, mỗi 5m tăng thêm 1 orthoSize
-            float extraAltitude = altitude - 10f;
-            calculatedOrthoSize = 14f + (extraAltitude / 5f);
-        }
-        
-        // Giới hạn trong khoảng min-max
-        calculatedOrthoSize = Mathf.Clamp(calculatedOrthoSize, minOrthoSize, maxOrthoSize);
-        
-        // Cập nhật target
+        float calculatedOrthoSize = CalculateOrthoSizeFromAltitude(altitude);
         targetOrthoSize = calculatedOrthoSize;
-        
     }
+}
+
+// Helper function để tính orthoSize từ altitude
+float CalculateOrthoSizeFromAltitude(float altitude)
+{
+    float calculatedOrthoSize;
+    
+    if (altitude <= 0f)
+    {
+        calculatedOrthoSize = 7f;
+    }
+    else if (altitude <= 10f)
+    {
+        calculatedOrthoSize = Mathf.Lerp(7f, 14f, altitude / 10f);
+    }
+    else
+    {
+        float extraAltitude = altitude - 10f;
+        calculatedOrthoSize = 14f + (extraAltitude / 5f);
+    }
+    
+    calculatedOrthoSize = Mathf.Clamp(calculatedOrthoSize, minOrthoSize, maxOrthoSize);
+    return calculatedOrthoSize;
 }
 
 void HandleScreenYTransition()
@@ -147,38 +223,44 @@ void HandleScreenYTransition()
     if (composer == null) return;
     
     // Xác định target screenY dựa trên trạng thái máy bay
-    float targetScreenY;
     float altitude = GManager.instance.currentAltitude;
-    bool isFlying = altitude > 5f; // Coi như đang bay nếu độ cao > 5m
-    bool hasFuel = GManager.instance.isPlay; // Đang có fuel và đang chơi
+    bool isFlying = altitude > 5f;
+    bool hasFuel = GManager.instance.isPlay;
     
-    if (isFlying && hasFuel)
-    {
-        // Đang bay và có fuel → screenY = 0.5
-        targetScreenY = screenYFlying;
-    }
-    else
-    {
-        // Máy bay ở đất hoặc hết fuel → screenY = 0.7
-        targetScreenY = screenYGround;
-    }
+    float targetScreenY = (isFlying && hasFuel) ? screenYFlying : screenYGround;
     
     // Chuyển đổi mượt mà
     currentScreenY = Mathf.Lerp(currentScreenY, targetScreenY, screenTransitionSpeed * Time.deltaTime);
-    
-    // Áp dụng vào composer
     composer.m_ScreenY = currentScreenY;
-    
-    // Debug log để theo dõi (chỉ khi có thay đổi đáng kể)
-    if (Mathf.Abs(currentScreenY - targetScreenY) > 0.01f)
-    {
-        Debug.Log($"ScreenY transition: {currentScreenY:F2} → {targetScreenY:F2} (Flying: {isFlying}, Fuel: {hasFuel})");
-    }
 }
 
 void HandleCameraFollow()
 {
     if (virtualCamera == null || aircraftTransform == null) return;
+    
+    // KIỂM TRA: Nếu đang trong thời gian delay, giữ nguyên camera tại vị trí ban đầu
+    if (isCameraDelayActive)
+    {
+        float timeSinceStart = Time.time - gameStartTime;
+        if (timeSinceStart < cameraDelayTime)
+        {
+            // Vẫn đang trong thời gian delay - giữ nguyên vị trí ban đầu
+            virtualCamera.transform.position = originalCameraPosition;
+            
+            // Debug mỗi 0.5 giây
+            if (Mathf.FloorToInt(timeSinceStart * 2f) != Mathf.FloorToInt((timeSinceStart - Time.deltaTime) * 2f))
+            {
+                Debug.Log($"Camera DELAY active: {timeSinceStart:F1}s / {cameraDelayTime}s - Position locked at {originalCameraPosition}");
+            }
+            return;
+        }
+        else
+        {
+            // Hết thời gian delay - cho phép camera di chuyển
+            isCameraDelayActive = false;
+            Debug.Log($"Camera delay kết thúc sau {cameraDelayTime}s - Bắt đầu follow logic");
+        }
+    }
     
     // LOGIC MỚI: Chỉ follow khi orthoSize > 15
     bool shouldFollow = targetOrthoSize > 15f;
@@ -261,6 +343,12 @@ Vector3 CalculateGroundVisiblePosition()
 }
     void ApplySmoothZoom()
     {
+        // KHÔNG áp dụng zoom trong thời gian delay
+        if (isCameraDelayActive)
+        {
+            return;
+        }
+        
         // Di chuyển kích thước hiện tại đến kích thước mục tiêu một cách mượt mà
         virtualCamera.m_Lens.OrthographicSize = Mathf.Lerp(
             virtualCamera.m_Lens.OrthographicSize, 
@@ -275,6 +363,7 @@ Vector3 CalculateGroundVisiblePosition()
         targetOrthoSize = baseOrthoSize;
         isFollowingAircraft = false;
         virtualCamera.transform.position = originalCameraPosition;
+        isCameraDelayActive = false;
         
         // Reset screenY về giá trị đất
         currentScreenY = screenYGround;
@@ -284,6 +373,28 @@ Vector3 CalculateGroundVisiblePosition()
             composer.m_ScreenY = currentScreenY;
         }
     }
+    
+    // THÊM: Method để bắt đầu game và kích hoạt delay
+    public void StartGameWithDelay()
+    {
+        isCameraDelayActive = true;
+        gameStartTime = Time.time;
+        isFollowingAircraft = false;
+        isBlending = false;
+
+        // Đặt camera về vị trí ban đầu
+        virtualCamera.transform.position = originalCameraPosition;
+
+        // KHÓA camera: tắt Follow và LookAt
+        virtualCamera.Follow = null;
+        virtualCamera.LookAt = null;
+
+        targetOrthoSize = baseOrthoSize;
+        virtualCamera.m_Lens.OrthographicSize = baseOrthoSize;
+
+        Debug.Log($"*** CAMERA DELAY START ({cameraDelayTime}s) — Follow/LookAt DISABLED ***");
+    }
+
     
     // Method để force follow máy bay
     public void ForceFollowAircraft(bool follow)
@@ -354,4 +465,24 @@ Vector3 CalculateGroundVisiblePosition()
             Debug.LogError($"CameraManager: UpdateCinemachineFollow failed - VirtualCamera: {virtualCamera != null}, NewTarget: {newTarget != null}");
         }
     }
+
+    void BeginBlend()
+    {
+        isBlending = true;
+        blendStartTime = Time.time;
+
+        blendStartPosition = virtualCamera.transform.position;
+        blendStartOrthoSize = virtualCamera.m_Lens.OrthographicSize;
+
+        var composer = virtualCamera.GetCinemachineComponent<CinemachineComposer>();
+        if (composer != null)
+            blendStartScreenY = composer.m_ScreenY;
+
+        // TẮT FOLLOW/LOOKAT DÙ ĐANG Ở TRẠNG THÁI NÀO
+        virtualCamera.Follow = null;
+        virtualCamera.LookAt = null;
+
+        wasFollowDisabled = true;
+    }
+
 }
