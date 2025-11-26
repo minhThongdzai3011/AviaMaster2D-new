@@ -1,106 +1,89 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
 
 public class BonusSpawner : MonoBehaviour
 {
     public static BonusSpawner instance;
-    [Header("Vật phẩm Bonus")]
-    public GameObject[] bonusPrefabs;
+
+    [Header("Vật phẩm Rocket")]
+    public GameObject[] rocketPrefabs;
+
+    [Header("Spawn Range 2D")]
     public float spawnRangeYmin = -2f;
     public float spawnRangeYmax = 2f;
-    public float spawnRangeX = -18f;
+    public float spawnRangeX = -14f;
 
     [Header("Spawn Settings")]
     public float startDelay = 0f;
     public float spawnInterval = 0.2f;
     public int count = 0;
-    public int maxSpawnedItems = 10;
+    public int maxRocketItems = 20;
     public float rangeXmin = 5f;
     public float rangeXmax = 10f;
-    public float startRangeX = -18f;
+    public float startRangeX = -14f;
+    public Vector3 someVector;
 
     void Start()
     {
         instance = this;
-        StartCoroutine(SpawnBonusCoroutine());
     }
 
-    // Update is called once per frame
     void Update()
     {
-
+        if (Plane.instance != null)
+            someVector = Plane.instance.transform.position;
+        spawnRangeX = Mathf.Max(spawnRangeX, someVector.x + 100f);
     }
-    IEnumerator SpawnBonusCoroutine()
+
+    public void StartSpawning()
+    {
+        StartCoroutine(SpawnRocketCoroutine());
+        Debug.Log("Rocket Spawning Started");
+    }
+
+    IEnumerator SpawnRocketCoroutine()
     {
         yield return new WaitForSeconds(startDelay);
-        Debug.Log("count: " + count);
-
         while (true)
         {
-            count = GameObject.FindGameObjectsWithTag("bird").Length; 
-            if (count < maxSpawnedItems)
+            count = GameObject.FindGameObjectsWithTag("bird").Length;
+
+            if (count < maxRocketItems)
             {
-                SpawnBonusItem();
+                SpawnRocketItem();
                 yield return new WaitForSeconds(spawnInterval);
             }
             else
             {
                 yield return null;
-            } 
+            }
         }
     }
-    void SpawnBonusItem()
+
+    void SpawnRocketItem()
     {
-        int prefabIndex = Random.Range(0, bonusPrefabs.Length);
-        Vector3 spawnPosition = new Vector3(spawnRangeX,
-                                            Random.Range(spawnRangeYmin, spawnRangeYmax),
-                                            0);
-        Instantiate(bonusPrefabs[prefabIndex], spawnPosition, bonusPrefabs[prefabIndex].transform.rotation);
-        // Debug.Log("Spawned Bonus Item at X: " + spawnRangeX + " Y: " + spawnPosition.y + " | Prefab Index: " + prefabIndex);
-        spawnRangeX += Random.Range(rangeXmin, rangeXmax);
+        if (rocketPrefabs.Length == 0) return;
+        if (GManager.instance.isControllable)
+        {
+            int prefabIndex = Random.Range(0, rocketPrefabs.Length);
+            Vector3 spawnPosition = new Vector3(
+                someVector.x + spawnRangeX,
+                Random.Range(someVector.y - 5, someVector.y + 5),
+                someVector.z
+            );
+
+            Instantiate(rocketPrefabs[prefabIndex], spawnPosition, rocketPrefabs[prefabIndex].transform.rotation);
+            spawnRangeX += Random.Range(rangeXmin, rangeXmax);
+        }
     }
 
     public void DeleteSpawnedItems()
     {
-        List<GameObject> allBonusItems = new List<GameObject>();
-        
-        // Danh sách các tag bonus cần xóa
-        string[] bonusTags = { "bird" };
-        
-        // Tìm và thêm tất cả các object có tag bonus vào list
-        foreach (string tag in bonusTags)
-        {
-            GameObject[] itemsWithTag = GameObject.FindGameObjectsWithTag(tag);
-            if (itemsWithTag != null && itemsWithTag.Length > 0)
-            {
-                allBonusItems.AddRange(itemsWithTag);
-                Debug.Log($"Tìm thấy {itemsWithTag.Length} items với tag '{tag}'");
-            }
-        }
-        
-        if (allBonusItems.Count == 0)
-        {
-            Debug.Log("Không tìm thấy bonus items nào để xóa.");
-            // return; // No items to delete
-        }
-        
-        Debug.Log($"Tổng cộng {allBonusItems.Count} bonus items sẽ bị xóa");
-        
-        // Xóa tất cả bonus items
-        foreach (GameObject item in allBonusItems)
-        {
-            if (item != null)
-            {
-                Destroy(item);
-            }
-        }
+        GameObject[] spawnedItems = GameObject.FindGameObjectsWithTag("bird");
+        foreach (GameObject item in spawnedItems)
+            Destroy(item);
 
-        spawnRangeX = startRangeX; // Reset spawnRangeX to initial value
-        Debug.Log("GameObj" + gameObject.name);
-
-        Debug.Log("Đã xóa tất cả bonus items và reset spawnRangeX");
+        spawnRangeX = startRangeX;
     }
-
-    
 }

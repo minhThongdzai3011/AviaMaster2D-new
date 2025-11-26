@@ -527,6 +527,7 @@ public class Shop : MonoBehaviour
             {
                 imageShop.gameObject.SetActive(false);
                 Settings.instance.lastDistanceText.gameObject.SetActive(true);
+                GManager.instance.AgainGame();
             });
         Plane.instance.smokeEffect.Stop();
     }

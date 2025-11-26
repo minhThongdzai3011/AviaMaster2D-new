@@ -135,6 +135,7 @@ public class GManager : MonoBehaviour
 
         instance = this;
         currentRotationSpeed = rotationForce;
+        airplaneRigidbody2D.rotation = -10f;
 
     }
 
@@ -211,6 +212,12 @@ public class GManager : MonoBehaviour
             
             // THÊM: Reset flag falling sequence
             isFallingInSequence = false;
+            
+            // THÊM: Kích hoạt camera delay 3s
+            if (CameraManager.instance != null)
+            {
+                CameraManager.instance.StartGameWithDelay();
+            }
             
             homeGameLeft();
             homeGameRight();
@@ -362,10 +369,10 @@ public class GManager : MonoBehaviour
         
         // THÊM: Reset currentAirplaneRotationX để tránh frame đầu bị gắn giá trị ngẫu nhiên
         currentAirplaneRotationX = 0f;
-        Debug.Log($"Hoàn thành xoay về 0° - Máy bay đã ổn định, currentAirplaneRotationX reset = {currentAirplaneRotationX}°");
 
         // Bước 4: Giữ độ cao và cho phép điều khiển
-
+        
+        StartCoroutine(FadeOutTrail(Plane.instance.trailEffect, 2.0f));
         // Sửa lại: Trả lại drag tự nhiên của Rigidbody2D
         airplaneRigidbody2D.drag = 0f; // Drag ban đầu
         airplaneRigidbody2D.angularDrag = 0.05f; // Angular drag ban đầu
@@ -374,7 +381,8 @@ public class GManager : MonoBehaviour
         airplaneRigidbody2D.velocity = new Vector2(airplaneRigidbody2D.velocity.x, 0f);
 
         isControllable = true;
-        RocketSpawner.instance.StartSpawning();
+        // RocketSpawner.instance.StartSpawning();
+        // BonusSpawner.instance.StartSpawning();
         Debug.Log($"Máy bay bắt đầu điều khiển với durationFuel = {durationFuel}s (rateFuel = {rateFuel}%)");
         StartCoroutine(DecreaseSliderFuel(durationFuel));
 
@@ -383,9 +391,7 @@ public class GManager : MonoBehaviour
         while (timer < durationFuel)
         {
             timer += Time.deltaTime;
-
-            // Log mỗi giây để không spam console
-            if (Mathf.FloorToInt(timer) != Mathf.FloorToInt(timer - Time.deltaTime))
+if (Mathf.FloorToInt(timer) != Mathf.FloorToInt(timer - Time.deltaTime))
             {
                 Debug.Log($"Thời gian điều khiển: {Mathf.FloorToInt(timer)}s / {durationFuel}s");
             }
@@ -1608,34 +1614,47 @@ public class GManager : MonoBehaviour
     }
     public float tempDistanceTraveled = 0f;
 
+    // ...existing code...
+
+    [Header("Achievement Milestone System")]
+    public float achievementStartDistance = 0f; // Khoảng cách bắt đầu milestone
+    public float milestoneDistance = 600f; // Khoảng cách mỗi milestone
+
     void UpdateSliderAchievement()
     {
         if (sliderAchievement != null)
         {
-            tempDistanceTraveled = distanceTraveled;
-            // Tính toán giá trị mục tiêu dựa trên khoảng cách bay được
-            float maxDistance = 300f; // Khoảng cách tối đa để đạt 100%
-            float targetValue = Mathf.Clamp01(tempDistanceTraveled / maxDistance);
+            // Tính khoảng cách trong milestone hiện tại
+            float distanceInCurrentMilestone = distanceTraveled - achievementStartDistance;
+            
+            // Tính toán giá trị slider dựa trên progress trong milestone
+            float targetValue = Mathf.Clamp01(distanceInCurrentMilestone / milestoneDistance);
 
             // Cập nhật slider với hiệu ứng mượt mà
-            float smoothSpeed = 2f; // Tốc độ cập nhật (càng cao càng nhanh)
+            float smoothSpeed = 2f;
             sliderAchievement.value = Mathf.Lerp(sliderAchievement.value, targetValue, smoothSpeed * Time.deltaTime);
         }
 
-        // Debug thông tin độ cao và hiệu quả boost
+        // Debug info
         if (currentAltitude > altitudeDragStart)
         {
             float altitudeRatio = (currentAltitude - altitudeDragStart) / (maxAltitude - altitudeDragStart);
             float efficiency = CalculateAltitudeEfficiency();
 
-            if (currentAltitude % 50f < 1f) // Log mỗi 50m để tránh spam
+            if (currentAltitude % 50f < 1f)
             {
                 Debug.Log($"Altitude: {currentAltitude:F0}m/{maxAltitude}m - Efficiency: {efficiency:F1}% - Drag: {altitudeRatio:F2}");
             }
         }
     }
 
-    
+    public void ResetAchievementSlider()
+    {
+        achievementStartDistance = distanceTraveled; // Reset điểm bắt đầu
+        sliderAchievement.value = 0f; // Reset slider về 0
+        Debug.Log($"Achievement slider reset at distance: {achievementStartDistance:F0}m");
+    }
+
     [Header("RotationZ Oscillation")]
 
     public float angleRangeMax = 22f;
@@ -1832,7 +1851,7 @@ public class GManager : MonoBehaviour
     {
         if (isFuelDown)
         {
-            downFuelImage.DOAnchorPosY(downFuelImage.anchoredPosition.y - 250f, duration)
+            downFuelImage.DOAnchorPosY(downFuelImage.anchoredPosition.y - 280f, duration)
                 .SetEase(Ease.OutCubic).OnComplete(() =>
                 {
                     isFuelDown = false;
@@ -1844,7 +1863,7 @@ public class GManager : MonoBehaviour
         if (isAircraftUp)
             yield return new WaitForSeconds(1f);
         {
-            upAircraftImage.DOAnchorPosY(upAircraftImage.anchoredPosition.y + 250f, duration)
+            upAircraftImage.DOAnchorPosY(upAircraftImage.anchoredPosition.y + 280f, duration)
                 .SetEase(Ease.OutCubic).OnComplete(() =>
                 {
                     isAircraftUp = false;
@@ -1870,4 +1889,19 @@ public class GManager : MonoBehaviour
         SaveTotalDiamond();
     }
 
+    IEnumerator FadeOutTrail(TrailRenderer trail, float duration)
+    {
+        float startTime = trail.time;
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            trail.time = Mathf.Lerp(startTime, 0f, elapsed / duration);
+            yield return null;
+        }
+
+        trail.enabled = false; // tắt hẳn sau khi fade xong
+    }
+    
 }

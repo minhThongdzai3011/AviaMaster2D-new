@@ -120,7 +120,7 @@ public class CameraManager : MonoBehaviour
                     float targetScreenY = (isFlying && hasFuel) ? screenYFlying : screenYGround;
                     // composer.m_ScreenY = targetScreenY;
                     // currentScreenY = targetScreenY;
-                    currentScreenY = currentScreenY;
+                    // currentScreenY = currentScreenY;
                 }
                 
                 Debug.Log("Camera blend hoàn tất - Follow/LookAt enabled");

@@ -78,75 +78,100 @@ public class Plane : MonoBehaviour
         }
         if (other.CompareTag("bird"))
         {
-            Destroy(other.gameObject);
+           RandomPrizeBird();
+           Destroy(other.gameObject);
         }
-        if (other.CompareTag("Bonus"))
+        if (other.CompareTag("Bonus4"))
         {
             Destroy(other.gameObject);
-            GManager.instance.durationFuel += (GManager.instance.durationFuel * 0.2f);
+            StartCoroutine(FadeBlackScreen());
+            
         }
         if (other.CompareTag("Bonus2"))
         {
             Destroy(other.gameObject);
-            GManager.instance.totalBoost += (GManager.instance.totalBoost * 0.2f);
+            GManager.instance.durationFuel = 0f;
+            StartCoroutine(DelaytoEndGame());
+            Debug.Log("Bonus2 collected - Ending game soon");
+            GManager.instance.newMapText.text = "Fastest balloon pop ever… and you lost!";
+            StartCoroutine(FadeInText(1f));
+            
         }
         if (other.CompareTag("Bonus3"))
         {
-            Destroy(other.gameObject);
-            GManager.instance.totalDiamond += 10;
-            
-            // THÊM: Kiểm tra null safety trước khi gọi AnimDiamond
-            if (AnimDiamond.instance != null)
-            {
-                AnimDiamond.instance.MoveUp();
-            }
-            else
-            {
-                Debug.LogWarning("AnimDiamond.instance is null! Make sure AnimDiamond component exists in scene.");
-            }
+             Destroy(other.gameObject);
+            GManager.instance.durationFuel += 5f;
+            Debug.Log("Rocket collected - +5s fuel" + GManager.instance.durationFuel);
+            GManager.instance.newMapText.text = "Bonus - +5s fuel";
+            StartCoroutine(FadeInText(1f));
         }
         if (other.CompareTag("MapStartCity"))
         {
             MapSpawner.instance.isMapCityUnlocked = true;
-            Debug.Log("Map City Unlocked");
+            
+            // THÊM: Reset achievement slider
+            GManager.instance.ResetAchievementSlider();
+            
             Settings.instance.NotificationNewMapText.text = "You have unlocked the City Map!";
             Settings.instance.NotificationNewMap();
         }
+        
         if (other.CompareTag("MapStartBeach"))
         {
             MapSpawner.instance.isMapBeachUnlocked = true;
-            Debug.Log("Map Beach Unlocked");
+            
+            // THÊM: Reset achievement slider
+            GManager.instance.ResetAchievementSlider();
+            
             Settings.instance.NotificationNewMapText.text = "You have unlocked the Beach Map!";
             Settings.instance.NotificationNewMap();
         }
+        
         if (other.CompareTag("MapStartDesert"))
         {
             MapSpawner.instance.isMapDesertUnlocked = true;
-            Debug.Log("Map Desert Unlocked");
+            
+            // THÊM: Reset achievement slider
+            GManager.instance.ResetAchievementSlider();
+            
             Settings.instance.NotificationNewMapText.text = "You have unlocked the Desert Map!";
             Settings.instance.NotificationNewMap();
         }
+        
         if (other.CompareTag("MapStartField"))
         {
             MapSpawner.instance.isMapFieldUnlocked = true;
-            Debug.Log("Map Field Unlocked");
+            
+            // THÊM: Reset achievement slider
+            GManager.instance.ResetAchievementSlider();
+            
             Settings.instance.NotificationNewMapText.text = "You have unlocked the Field Map!";
             Settings.instance.NotificationNewMap();
         }
+        
         if (other.CompareTag("MapStartIce"))
         {
             MapSpawner.instance.isMapIceUnlocked = true;
-            Debug.Log("Map Ice Unlocked");
+            
+            // THÊM: Reset achievement slider
+            GManager.instance.ResetAchievementSlider();
+            
             Settings.instance.NotificationNewMapText.text = "You have unlocked the Ice Map!";
             Settings.instance.NotificationNewMap();
         }
+        
         if (other.CompareTag("MapStartLava"))
         {
             MapSpawner.instance.isMapLavaUnlocked = true;
-            Debug.Log("Map Lava Unlocked");
+            
+            // THÊM: Reset achievement slider
+            GManager.instance.ResetAchievementSlider();
+            
             Settings.instance.NotificationNewMapText.text = "You have unlocked the Lava Map!";
             Settings.instance.NotificationNewMap();
         }
+        
+    
         
     }
     
@@ -260,7 +285,90 @@ public class Plane : MonoBehaviour
         }
     }
 
-    
-    
+    IEnumerator DelaytoEndGame()
+    {
+        yield return new WaitForSeconds(2f);
+        if (GManager.instance != null)
+        {
+            GManager.instance.isControllable = false;
+            GManager.instance.isBoosterActive = false;
+        }
+        if (RotaryFront.instance != null)
+            RotaryFront.instance.StopWithDeceleration(3.0f);
+        
+        smokeEffect.Stop();
+        StartCoroutine(OpenImageWIn());
+    }
+
+    IEnumerator FadeInText(float duration)
+    {
+        Color c = GManager.instance.newMapText.color;
+        c.a = 0;
+        GManager.instance.newMapText.color = c;
+
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            c.a = Mathf.Clamp01(elapsed / duration);
+            GManager.instance.newMapText.color = c;
+            yield return null;
+        }
+    }
+
+    IEnumerator FadeBlackScreen()
+    {
+        // Fade in
+        float elapsed = 0f;
+        Settings.instance.iamgeBlackScreen.gameObject.SetActive(true);
+        while (elapsed < 1f)
+        {
+            elapsed += Time.deltaTime;
+            Color c = Settings.instance.iamgeBlackScreen.color;
+            c.a = Mathf.Clamp01(elapsed / 1f); // 1 giây fade in
+            Settings.instance.iamgeBlackScreen.color = c;
+            yield return null;
+        }
+        GManager.instance.newMapText.text = "Grounded by an umbrella—enjoy the darkness!";
+        StartCoroutine(FadeInText(1f));
+        // Giữ nguyên đen trong 3 giây
+        yield return new WaitForSeconds(4f);
+
+        // Fade out
+        elapsed = 0f;
+        while (elapsed < 1f)
+        {
+            elapsed += Time.deltaTime;
+            Color c = Settings.instance.iamgeBlackScreen.color;
+            c.a = 1f - Mathf.Clamp01(elapsed / 1f); // 1 giây fade out
+            Settings.instance.iamgeBlackScreen.color = c;
+            yield return null;
+        }
+        Settings.instance.iamgeBlackScreen.gameObject.SetActive(false);
+    }
+
+    public void RandomPrizeBird(){
+        int[] coinPrize = {10000, 20000, 50000};
+        int[] diamondPrize = {100, 300, 1000};
+        int count = Random.Range(0, 3); //random 0,1,2
+        if(count == 0){
+            int randomIndex = Random.Range(0, coinPrize.Length);
+            int prize = coinPrize[randomIndex];
+            GManager.instance.totalMoney += prize;
+            GManager.instance.newMapText.text = $"You grabbed {prize} shiny coins!";
+            StartCoroutine(FadeInText(1f));
+        }
+        else if(count == 1){
+            int randomIndex = Random.Range(0, diamondPrize.Length);
+            int prize = diamondPrize[randomIndex];
+            GManager.instance.totalDiamond += prize;
+            GManager.instance.newMapText.text = $"You grabbed {prize} shiny diamonds!";
+            StartCoroutine(FadeInText(1f));
+        }
+        else{
+            GManager.instance.newMapText.text = "Congrats… you just unlocked absolutely nothing!";
+            StartCoroutine(FadeInText(1f));
+        }
+    }
 
 }

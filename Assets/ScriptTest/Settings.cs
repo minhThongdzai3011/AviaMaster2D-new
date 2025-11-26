@@ -36,6 +36,7 @@ public class Settings : MonoBehaviour
     public Image prizeImage;
     public Image prizeChestImage;
     public Image altitudeImage;
+    public Image iamgeBlackScreen;
     public RectTransform NotificationNewMapImage;
     
     [Header("Bool Settings")]
@@ -747,11 +748,13 @@ public class Settings : MonoBehaviour
 
     public void NotificationNewMap()
     {
+        Debug.Log("Hiển thị thông báo bản đồ mới! is : " + NotificationNewMapImage.ToString());
         if (NotificationNewMapImage == null) return;
+        Debug.Log("NotificationNewMapImage is not null.");
         Vector2 originalPos = NotificationNewMapImage .anchoredPosition;
         Sequence seq = DOTween.Sequence();
         // 1. Di chuyển xuống y = -114f
-        // seq.Append(NotificationNewMapImage .DOAnchorPosY(-114f, 1f).SetEase(Ease.OutQuad));
+        seq.Append(NotificationNewMapImage .DOAnchorPosY(-114f, 1f).SetEase(Ease.OutQuad));
         GManager.instance.tempDistanceTraveled -= 300f;
         GManager.instance.sliderAchievement.value = 0f;
         // 2. Giữ nguyên vị trí trong 1 giây
