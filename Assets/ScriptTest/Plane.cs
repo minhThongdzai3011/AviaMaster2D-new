@@ -108,10 +108,8 @@ public class Plane : MonoBehaviour
         if (other.CompareTag("MapStartCity"))
         {
             MapSpawner.instance.isMapCityUnlocked = true;
-            
-            // THÊM: Reset achievement slider
-            GManager.instance.ResetAchievementSlider();
-            
+            PlayerPrefs.SetInt("IsMapCityUnlocked", 1); // Lưu trạng thái mở khóa
+            PlayerPrefs.Save();
             Settings.instance.NotificationNewMapText.text = "You have unlocked the City Map!";
             Settings.instance.NotificationNewMap();
         }
@@ -119,10 +117,8 @@ public class Plane : MonoBehaviour
         if (other.CompareTag("MapStartBeach"))
         {
             MapSpawner.instance.isMapBeachUnlocked = true;
-            
-            // THÊM: Reset achievement slider
-            GManager.instance.ResetAchievementSlider();
-            
+            PlayerPrefs.SetInt("IsMapBeachUnlocked", 1); // Lưu trạng thái mở khóa
+            PlayerPrefs.Save();
             Settings.instance.NotificationNewMapText.text = "You have unlocked the Beach Map!";
             Settings.instance.NotificationNewMap();
         }
@@ -130,10 +126,8 @@ public class Plane : MonoBehaviour
         if (other.CompareTag("MapStartDesert"))
         {
             MapSpawner.instance.isMapDesertUnlocked = true;
-            
-            // THÊM: Reset achievement slider
-            GManager.instance.ResetAchievementSlider();
-            
+            PlayerPrefs.SetInt("IsMapDesertUnlocked", 1); // Lưu trạng thái mở khóa
+            PlayerPrefs.Save();
             Settings.instance.NotificationNewMapText.text = "You have unlocked the Desert Map!";
             Settings.instance.NotificationNewMap();
         }
@@ -141,10 +135,8 @@ public class Plane : MonoBehaviour
         if (other.CompareTag("MapStartField"))
         {
             MapSpawner.instance.isMapFieldUnlocked = true;
-            
-            // THÊM: Reset achievement slider
-            GManager.instance.ResetAchievementSlider();
-            
+            PlayerPrefs.SetInt("IsMapFieldUnlocked", 1); // Lưu trạng thái mở khóa
+            PlayerPrefs.Save();
             Settings.instance.NotificationNewMapText.text = "You have unlocked the Field Map!";
             Settings.instance.NotificationNewMap();
         }
@@ -152,10 +144,8 @@ public class Plane : MonoBehaviour
         if (other.CompareTag("MapStartIce"))
         {
             MapSpawner.instance.isMapIceUnlocked = true;
-            
-            // THÊM: Reset achievement slider
-            GManager.instance.ResetAchievementSlider();
-            
+            PlayerPrefs.SetInt("IsMapIceUnlocked", 1); // Lưu trạng thái mở khóa
+            PlayerPrefs.Save();
             Settings.instance.NotificationNewMapText.text = "You have unlocked the Ice Map!";
             Settings.instance.NotificationNewMap();
         }
@@ -163,10 +153,8 @@ public class Plane : MonoBehaviour
         if (other.CompareTag("MapStartLava"))
         {
             MapSpawner.instance.isMapLavaUnlocked = true;
-            
-            // THÊM: Reset achievement slider
-            GManager.instance.ResetAchievementSlider();
-            
+            PlayerPrefs.SetInt("IsMapLavaUnlocked", 1); // Lưu trạng thái mở khóa
+            PlayerPrefs.Save();
             Settings.instance.NotificationNewMapText.text = "You have unlocked the Lava Map!";
             Settings.instance.NotificationNewMap();
         }

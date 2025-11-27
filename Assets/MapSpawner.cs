@@ -72,7 +72,7 @@ public class MapSpawner : MonoBehaviour
 
     [Header("Spawn Settings")]
     private float startDelay = 0f;
-    private float spawnInterval = 0.5f;
+    private float spawnInterval = 0.12f;
     public int count = 0;
 
     [Header("Kiem tra Map da Unlock")]
@@ -100,6 +100,13 @@ public class MapSpawner : MonoBehaviour
     {
         instance = this;
         
+        isMapCityUnlocked = PlayerPrefs.GetInt("IsMapCityUnlocked", 1) == 1;
+        isMapBeachUnlocked = PlayerPrefs.GetInt("IsMapBeachUnlocked", 0) == 1;
+        isMapDesertUnlocked = PlayerPrefs.GetInt("IsMapDesertUnlocked", 0) == 1;
+        isMapFieldUnlocked = PlayerPrefs.GetInt("IsMapFieldUnlocked", 0) == 1;
+        isMapIceUnlocked = PlayerPrefs.GetInt("IsMapIceUnlocked", 0) == 1;
+        isMapLavaUnlocked = PlayerPrefs.GetInt("IsMapLavaUnlocked", 0) == 1;
+
         if (isMapCityUnlocked && !isMapBeachUnlocked)
         {
             mapPrefabs = mapCityPrefabs;
@@ -310,7 +317,7 @@ public class MapSpawner : MonoBehaviour
         while (true)
         {
             count = GameObject.FindGameObjectsWithTag("Map").Length;
-            if (count < 100)
+            if (count < 30)
             {
                 
                 CheckMap();
@@ -372,7 +379,9 @@ public class MapSpawner : MonoBehaviour
         else if (isLavaMap && !checkMapStartLavaSpawned)
         {
             // Lava không có transition tiếp theo, chỉ đánh dấu
+            CheckMap45();
             checkMapStartLavaSpawned = true;
+            needSpawnTransition = true;
             Debug.Log("Lava map - no next transition");
         }
         
@@ -805,7 +814,7 @@ public class MapSpawner : MonoBehaviour
         }
         if(tempSpawnList[0] == 4)
         {
-            if(tempSpawnList[1] == 1)
+            if(tempSpawnList[1] == 0)
             {
                 Instantiate(mapIceChangeAllPrefab[0], new Vector3(spawnRangeX, -32.1f, 0f), mapIceChangeAllPrefab[0].transform.rotation);
                 spawnRangeX += 30f;
@@ -813,7 +822,7 @@ public class MapSpawner : MonoBehaviour
                 spawnRangeX += 30f;
                 Debug.Log("Spawned Ice->City transition and start");
             }
-            if(tempSpawnList[1] == 2)
+            if(tempSpawnList[1] == 1)
             {
                 Instantiate(mapIceChangeAllPrefab[1], new Vector3(spawnRangeX, -32.1f, 0f), mapIceChangeAllPrefab[1].transform.rotation);
                 spawnRangeX += 30f;
@@ -821,7 +830,7 @@ public class MapSpawner : MonoBehaviour
                 spawnRangeX += 30f;
                 Debug.Log("Spawned Ice->Beach transition and start");
             }
-            if(tempSpawnList[1] == 3)
+            if(tempSpawnList[1] == 2)
             {
                 Instantiate(mapIceChangeAllPrefab[2], new Vector3(spawnRangeX, -32.1f, 0f), mapIceChangeAllPrefab[2].transform.rotation);
                 spawnRangeX += 30f;
@@ -829,7 +838,7 @@ public class MapSpawner : MonoBehaviour
                 spawnRangeX += 30f;
                 Debug.Log("Spawned Ice->Desert transition and start");
             }
-            if(tempSpawnList[1] == 4)
+            if(tempSpawnList[1] == 3)
             {
                 Instantiate(mapIceChangeAllPrefab[3], new Vector3(spawnRangeX, -32.1f, 0f), mapIceChangeAllPrefab[3].transform.rotation);
                 spawnRangeX += 30f;
@@ -837,7 +846,7 @@ public class MapSpawner : MonoBehaviour
                 spawnRangeX += 30f;
                 Debug.Log("Spawned Ice->Field transition and start");
             }
-            if(tempSpawnList[1] == 6)
+            if(tempSpawnList[1] == 5)
             {
                 Instantiate(mapIceChangeAllPrefab[4], new Vector3(spawnRangeX, -32.1f, 0f), mapIceChangeAllPrefab[4].transform.rotation);
                 spawnRangeX += 30f;
@@ -1070,7 +1079,7 @@ public class MapSpawner : MonoBehaviour
         }
         if(tempSpawnList[1] == 4)
         {
-            if(tempSpawnList[2] == 1)
+            if(tempSpawnList[2] == 0)
             {
                 Instantiate(mapIceChangeAllPrefab[0], new Vector3(spawnRangeX, -32.1f, 0f), mapIceChangeAllPrefab[0].transform.rotation);
                 spawnRangeX += 30f;
@@ -1078,7 +1087,7 @@ public class MapSpawner : MonoBehaviour
                 spawnRangeX += 30f;
                 Debug.Log("Spawned Ice->City transition and start");
             }
-            if(tempSpawnList[2] == 2)
+            if(tempSpawnList[2] == 1)
             {
                 Instantiate(mapIceChangeAllPrefab[1], new Vector3(spawnRangeX, -32.1f, 0f), mapIceChangeAllPrefab[1].transform.rotation);
                 spawnRangeX += 30f;
@@ -1086,7 +1095,7 @@ public class MapSpawner : MonoBehaviour
                 spawnRangeX += 30f;
                 Debug.Log("Spawned Ice->Beach transition and start");
             }
-            if(tempSpawnList[2] == 3)
+            if(tempSpawnList[2] == 2)
             {
                 Instantiate(mapIceChangeAllPrefab[2], new Vector3(spawnRangeX, -32.1f, 0f), mapIceChangeAllPrefab[2].transform.rotation);
                 spawnRangeX += 30f;
@@ -1094,7 +1103,7 @@ public class MapSpawner : MonoBehaviour
                 spawnRangeX += 30f;
                 Debug.Log("Spawned Ice->Desert transition and start");
             }
-            if(tempSpawnList[2] == 4)
+            if(tempSpawnList[2] == 3)
             {
                 Instantiate(mapIceChangeAllPrefab[3], new Vector3(spawnRangeX, -32.1f, 0f), mapIceChangeAllPrefab[3].transform.rotation);
                 spawnRangeX += 30f;
@@ -1102,7 +1111,7 @@ public class MapSpawner : MonoBehaviour
                 spawnRangeX += 30f;
                 Debug.Log("Spawned Ice->Field transition and start");
             }
-            if(tempSpawnList[2] == 6)
+            if(tempSpawnList[2] == 5)
             {
                 Instantiate(mapIceChangeAllPrefab[4], new Vector3(spawnRangeX, -32.1f, 0f), mapIceChangeAllPrefab[4].transform.rotation);
                 spawnRangeX += 30f;
@@ -1335,7 +1344,7 @@ public class MapSpawner : MonoBehaviour
         }
         if(tempSpawnList[2] == 4)
         {
-            if(tempSpawnList[3] == 1)
+            if(tempSpawnList[3] == 0)
             {
                 Instantiate(mapIceChangeAllPrefab[0], new Vector3(spawnRangeX, -32.1f, 0f), mapIceChangeAllPrefab[0].transform.rotation);
                 spawnRangeX += 30f;
@@ -1343,7 +1352,7 @@ public class MapSpawner : MonoBehaviour
                 spawnRangeX += 30f;
                 Debug.Log("Spawned Ice->City transition and start");
             }
-            if(tempSpawnList[3] == 2)
+            if(tempSpawnList[3] == 1)
             {
                 Instantiate(mapIceChangeAllPrefab[1], new Vector3(spawnRangeX, -32.1f, 0f), mapIceChangeAllPrefab[1].transform.rotation);
                 spawnRangeX += 30f;
@@ -1351,7 +1360,7 @@ public class MapSpawner : MonoBehaviour
                 spawnRangeX += 30f;
                 Debug.Log("Spawned Ice->Beach transition and start");
             }
-            if(tempSpawnList[3] == 3)
+            if(tempSpawnList[3] == 2)
             {
                 Instantiate(mapIceChangeAllPrefab[2], new Vector3(spawnRangeX, -32.1f, 0f), mapIceChangeAllPrefab[2].transform.rotation);
                 spawnRangeX += 30f;
@@ -1359,7 +1368,7 @@ public class MapSpawner : MonoBehaviour
                 spawnRangeX += 30f;
                 Debug.Log("Spawned Ice->Desert transition and start");
             }
-            if(tempSpawnList[3] == 4)
+            if(tempSpawnList[3] == 3)
             {
                 Instantiate(mapIceChangeAllPrefab[3], new Vector3(spawnRangeX, -32.1f, 0f), mapIceChangeAllPrefab[3].transform.rotation);
                 spawnRangeX += 30f;
@@ -1367,7 +1376,7 @@ public class MapSpawner : MonoBehaviour
                 spawnRangeX += 30f;
                 Debug.Log("Spawned Ice->Field transition and start");
             }
-            if(tempSpawnList[3] == 6)
+            if(tempSpawnList[3] == 5)
             {
                 Instantiate(mapIceChangeAllPrefab[4], new Vector3(spawnRangeX, -32.1f, 0f), mapIceChangeAllPrefab[4].transform.rotation);
                 spawnRangeX += 30f;
@@ -1600,7 +1609,7 @@ public class MapSpawner : MonoBehaviour
         }
         if(tempSpawnList[3] == 4)
         {
-            if(tempSpawnList[4] == 1)
+            if(tempSpawnList[4] == 0)
             {
                 Instantiate(mapIceChangeAllPrefab[0], new Vector3(spawnRangeX, -32.1f, 0f), mapIceChangeAllPrefab[0].transform.rotation);
                 spawnRangeX += 30f;
@@ -1608,7 +1617,7 @@ public class MapSpawner : MonoBehaviour
                 spawnRangeX += 30f;
                 Debug.Log("Spawned Ice->City transition and start");
             }
-            if(tempSpawnList[4] == 2)
+            if(tempSpawnList[4] == 1)
             {
                 Instantiate(mapIceChangeAllPrefab[1], new Vector3(spawnRangeX, -32.1f, 0f), mapIceChangeAllPrefab[1].transform.rotation);
                 spawnRangeX += 30f;
@@ -1616,7 +1625,7 @@ public class MapSpawner : MonoBehaviour
                 spawnRangeX += 30f;
                 Debug.Log("Spawned Ice->Beach transition and start");
             }
-            if(tempSpawnList[4] == 3)
+            if(tempSpawnList[4] == 2)
             {
                 Instantiate(mapIceChangeAllPrefab[2], new Vector3(spawnRangeX, -32.1f, 0f), mapIceChangeAllPrefab[2].transform.rotation);
                 spawnRangeX += 30f;
@@ -1624,7 +1633,7 @@ public class MapSpawner : MonoBehaviour
                 spawnRangeX += 30f;
                 Debug.Log("Spawned Ice->Desert transition and start");
             }
-            if(tempSpawnList[4] == 4)
+            if(tempSpawnList[4] == 3)
             {
                 Instantiate(mapIceChangeAllPrefab[3], new Vector3(spawnRangeX, -32.1f, 0f), mapIceChangeAllPrefab[3].transform.rotation);
                 spawnRangeX += 30f;
@@ -1632,7 +1641,7 @@ public class MapSpawner : MonoBehaviour
                 spawnRangeX += 30f;
                 Debug.Log("Spawned Ice->Field transition and start");
             }
-            if(tempSpawnList[4] == 6)
+            if(tempSpawnList[4] == 5)
             {
                 Instantiate(mapIceChangeAllPrefab[4], new Vector3(spawnRangeX, -32.1f, 0f), mapIceChangeAllPrefab[4].transform.rotation);
                 spawnRangeX += 30f;
@@ -1690,9 +1699,10 @@ public class MapSpawner : MonoBehaviour
 
     
     public void CheckMap45(){
-        
+        Debug.Log("Checking Beach to ..." + tempSpawnList[4] + " at index 5 and value " + tempSpawnList[5]);
         if(tempSpawnList[4] == 1) // map beach toi moi map
         {
+            Debug.Log("Checking Beach to ...");
             if(tempSpawnList[5] == 0)
             {
                 Instantiate(mapBeachChangeAllPrefab[0], new Vector3(spawnRangeX, -32.1f, 0f), mapBeachChangeAllPrefab[0].transform.rotation);
@@ -1736,6 +1746,7 @@ public class MapSpawner : MonoBehaviour
         }
         if(tempSpawnList[4] == 0) // ban dau la city toi moi map
         {
+            Debug.Log("Checking City to ...");
             if(tempSpawnList[5] == 1)
             {
                 Instantiate(mapCityChangeAllPrefab[0], new Vector3(spawnRangeX, -32.1f, 0f), mapCityChangeAllPrefab[0].transform.rotation);
@@ -1779,6 +1790,7 @@ public class MapSpawner : MonoBehaviour
         }
         if(tempSpawnList[4] == 2) // ban dau la desert toi moi map
         {
+            Debug.Log("Checking Desert to ...");
             if(tempSpawnList[5] == 0)
             {
                 Instantiate(mapDesertChangeAllPrefab[0], new Vector3(spawnRangeX, -32.1f, 0f), mapDesertChangeAllPrefab[0].transform.rotation);
@@ -1823,6 +1835,7 @@ public class MapSpawner : MonoBehaviour
         }
         if(tempSpawnList[4] == 3)
         {
+            Debug.Log("Checking Field to ...");
             if(tempSpawnList[5] == 0)
             {
                 Instantiate(mapFieldChangeAllPrefab[0], new Vector3(spawnRangeX, -32.1f, 0f), mapFieldChangeAllPrefab[0].transform.rotation);
@@ -1866,7 +1879,8 @@ public class MapSpawner : MonoBehaviour
         }
         if(tempSpawnList[4] == 4)
         {
-            if(tempSpawnList[5] == 1)
+            Debug.Log("Checking Ice to ...");
+            if(tempSpawnList[5] == 0)
             {
                 Instantiate(mapIceChangeAllPrefab[0], new Vector3(spawnRangeX, -32.1f, 0f), mapIceChangeAllPrefab[0].transform.rotation);
                 spawnRangeX += 30f;
@@ -1874,7 +1888,7 @@ public class MapSpawner : MonoBehaviour
                 spawnRangeX += 30f;
                 Debug.Log("Spawned Ice->City transition and start");
             }
-            if(tempSpawnList[5] == 2)
+            if(tempSpawnList[5] == 1)
             {
                 Instantiate(mapIceChangeAllPrefab[1], new Vector3(spawnRangeX, -32.1f, 0f), mapIceChangeAllPrefab[1].transform.rotation);
                 spawnRangeX += 30f;
@@ -1882,7 +1896,7 @@ public class MapSpawner : MonoBehaviour
                 spawnRangeX += 30f;
                 Debug.Log("Spawned Ice->Beach transition and start");
             }
-            if(tempSpawnList[5] == 3)
+            if(tempSpawnList[5] == 2)
             {
                 Instantiate(mapIceChangeAllPrefab[2], new Vector3(spawnRangeX, -32.1f, 0f), mapIceChangeAllPrefab[2].transform.rotation);
                 spawnRangeX += 30f;
@@ -1890,7 +1904,7 @@ public class MapSpawner : MonoBehaviour
                 spawnRangeX += 30f;
                 Debug.Log("Spawned Ice->Desert transition and start");
             }
-            if(tempSpawnList[5] == 4)
+            if(tempSpawnList[5] == 3)
             {
                 Instantiate(mapIceChangeAllPrefab[3], new Vector3(spawnRangeX, -32.1f, 0f), mapIceChangeAllPrefab[3].transform.rotation);
                 spawnRangeX += 30f;
@@ -1898,7 +1912,7 @@ public class MapSpawner : MonoBehaviour
                 spawnRangeX += 30f;
                 Debug.Log("Spawned Ice->Field transition and start");
             }
-            if(tempSpawnList[5] == 6)
+            if(tempSpawnList[5] == 5)
             {
                 Instantiate(mapIceChangeAllPrefab[4], new Vector3(spawnRangeX, -32.1f, 0f), mapIceChangeAllPrefab[4].transform.rotation);
                 spawnRangeX += 30f;
@@ -1910,6 +1924,7 @@ public class MapSpawner : MonoBehaviour
         }
         if(tempSpawnList[4] == 5)
         {
+            Debug.Log("Checking Lava to ...");
             if(tempSpawnList[5] == 0)
             {
                 Instantiate(mapLavaChangeAllPrefab[0], new Vector3(spawnRangeX, -32.1f, 0f), mapLavaChangeAllPrefab[0].transform.rotation);

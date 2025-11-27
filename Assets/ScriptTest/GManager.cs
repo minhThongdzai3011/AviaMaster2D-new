@@ -381,8 +381,8 @@ public class GManager : MonoBehaviour
         airplaneRigidbody2D.velocity = new Vector2(airplaneRigidbody2D.velocity.x, 0f);
 
         isControllable = true;
-        // RocketSpawner.instance.StartSpawning();
-        // BonusSpawner.instance.StartSpawning();
+        RocketSpawner.instance.StartSpawning();
+        BonusSpawner.instance.StartSpawning();
         Debug.Log($"Máy bay bắt đầu điều khiển với durationFuel = {durationFuel}s (rateFuel = {rateFuel}%)");
         StartCoroutine(DecreaseSliderFuel(durationFuel));
 
@@ -1618,8 +1618,8 @@ if (Mathf.FloorToInt(timer) != Mathf.FloorToInt(timer - Time.deltaTime))
 
     [Header("Achievement Milestone System")]
     public float achievementStartDistance = 0f; // Khoảng cách bắt đầu milestone
-    public float milestoneDistance = 600f; // Khoảng cách mỗi milestone
-
+    public float milestoneDistance = 380f; // Khoảng cách mỗi milestone
+    public float milestoneDistance2 = 360f;
     void UpdateSliderAchievement()
     {
         if (sliderAchievement != null)
@@ -1633,6 +1633,10 @@ if (Mathf.FloorToInt(timer) != Mathf.FloorToInt(timer - Time.deltaTime))
             // Cập nhật slider với hiệu ứng mượt mà
             float smoothSpeed = 2f;
             sliderAchievement.value = Mathf.Lerp(sliderAchievement.value, targetValue, smoothSpeed * Time.deltaTime);
+            if(sliderAchievement.value >= 0.75f)
+            {
+                sliderAchievement.value = 0.75f;
+            }
         }
 
         // Debug info

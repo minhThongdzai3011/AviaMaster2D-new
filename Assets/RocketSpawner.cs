@@ -36,7 +36,7 @@ public class RocketSpawner : MonoBehaviour
     void Update()
     {
         someVector = mainCamera.transform.position;
-        spawnRangeX = Mathf.Max(spawnRangeX, someVector.x + 70f);
+        spawnRangeX = Mathf.Max(spawnRangeX, someVector.x + 50f);
     }
 
     public void StartSpawning()
@@ -72,7 +72,7 @@ public class RocketSpawner : MonoBehaviour
             int prefabIndex = Random.Range(0, rocketPrefabs.Length);
             Vector3 spawnPosition = new Vector3(
                 someVector.x + spawnRangeX,
-                Random.Range(someVector.y - 5, someVector.y + 5),
+                Random.Range(someVector.y - 2, someVector.y + 2),
                 someVector.z
             );
 
