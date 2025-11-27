@@ -72,7 +72,7 @@ public class MapSpawner : MonoBehaviour
 
     [Header("Spawn Settings")]
     private float startDelay = 0f;
-    private float spawnInterval = 0.05f;
+    private float spawnInterval = 0.5f;
     public int count = 0;
 
     [Header("Kiem tra Map da Unlock")]
@@ -310,7 +310,7 @@ public class MapSpawner : MonoBehaviour
         while (true)
         {
             count = GameObject.FindGameObjectsWithTag("Map").Length;
-            if (count < 4)
+            if (count < 100)
             {
                 
                 CheckMap();
@@ -467,169 +467,16 @@ public class MapSpawner : MonoBehaviour
 
     public void CheckMap()
     {
-        mapIndex++;
-        if (mapIndex == mapSpawnIndex[1])
-        {
-            ResetAllMapFlags(); // Reset trước khi chuyển map mới
-            switch (tempSpawnList[0])
-            {
-                case 0:
-                    mapPrefabs = mapCityPrefabs;
-                    isCityMap = true;               
-                    break;
-                case 1:
-                    mapPrefabs = mapBeachPrefabs;
-                    isBeachMap = true;
-                    break;
-                case 2:
-                    mapPrefabs = mapDesertPrefabs;
-                    isDesertMap = true;
-                    break;
-                case 3:
-                    mapPrefabs = mapFieldPrefabs;
-                    isFieldMap = true;
-                    break;
-                case 4:
-                    mapPrefabs = mapIcePrefabs;
-                    isIceMap = true;
-                    break;
-                case 5:
-                    mapPrefabs = mapLavaPrefabs;
-                    isLavaMap = true;
-                    break;  
-            }
-            Debug.Log($"Map Index {mapIndex}: Switched to map type {tempSpawnList[0]}");
-        }
-        else if (mapIndex == mapSpawnIndex[2])
-        {
-            ResetAllMapFlags();
-            switch (tempSpawnList[1])
-            {
-                case 0:
-                    mapPrefabs = mapCityPrefabs;
-                    isCityMap = true;               
-                    break;
-                case 1:
-                    mapPrefabs = mapBeachPrefabs;
-                    isBeachMap = true;
-                    break;
-                case 2:
-                    mapPrefabs = mapDesertPrefabs;
-                    isDesertMap = true;
-                    break;
-                case 3:
-                    mapPrefabs = mapFieldPrefabs;
-                    isFieldMap = true;
-                    break;
-                case 4:
-                    mapPrefabs = mapIcePrefabs;
-                    isIceMap = true;
-                    break;
-                case 5:
-                    mapPrefabs = mapLavaPrefabs;
-                    isLavaMap = true;
-                    break;  
-            }
-            Debug.Log($"Map Index {mapIndex}: Switched to map type {tempSpawnList[1]}");
-        }
-        else if (mapIndex == mapSpawnIndex[3])
-        {
-            ResetAllMapFlags();
-            switch (tempSpawnList[2])
-            {
-                case 0:
-                    mapPrefabs = mapCityPrefabs;
-                    isCityMap = true;               
-                    break;
-                case 1:
-                    mapPrefabs = mapBeachPrefabs;
-                    isBeachMap = true;
-                    break;
-                case 2:
-                    mapPrefabs = mapDesertPrefabs;
-                    isDesertMap = true;
-                    break;
-                case 3:
-                    mapPrefabs = mapFieldPrefabs;
-                    isFieldMap = true;
-                    break;
-                case 4:
-                    mapPrefabs = mapIcePrefabs;
-                    isIceMap = true;
-                    break;
-                case 5:
-                    mapPrefabs = mapLavaPrefabs;
-                    isLavaMap = true;
-                    break;  
-            }
-            Debug.Log($"Map Index {mapIndex}: Switched to map type {tempSpawnList[2]}");
-        }
-        else if (mapIndex == mapSpawnIndex[4])
-        {
-            ResetAllMapFlags();
-            switch (tempSpawnList[3])
-            {
-                case 0:
-                    mapPrefabs = mapCityPrefabs;
-                    isCityMap = true;               
-                    break;
-                case 1:
-                    mapPrefabs = mapBeachPrefabs;
-                    isBeachMap = true;
-                    break;
-                case 2:
-                    mapPrefabs = mapDesertPrefabs;
-                    isDesertMap = true;
-                    break;
-                case 3:
-                    mapPrefabs = mapFieldPrefabs;
-                    isFieldMap = true;
-                    break;
-                case 4:
-                    mapPrefabs = mapIcePrefabs;
-                    isIceMap = true;
-                    break;
-                case 5:
-                    mapPrefabs = mapLavaPrefabs;
-                    isLavaMap = true;
-                    break;  
-            }
-            Debug.Log($"Map Index {mapIndex}: Switched to map type {tempSpawnList[3]}");
-        }
-        else if (mapIndex == mapSpawnIndex[5])
-        {
-            ResetAllMapFlags();
-            switch (tempSpawnList[4])
-            {
-                case 0:
-                    mapPrefabs = mapCityPrefabs;
-                    isCityMap = true;               
-                    break;
-                case 1:
-                    mapPrefabs = mapBeachPrefabs;
-                    isBeachMap = true;
-                    break;
-                case 2:
-                    mapPrefabs = mapDesertPrefabs;
-                    isDesertMap = true;
-                    break;
-                case 3:
-                    mapPrefabs = mapFieldPrefabs;
-                    isFieldMap = true;
-                    break;
-                case 4:
-                    mapPrefabs = mapIcePrefabs;
-                    isIceMap = true;
-                    break;
-                case 5:
-                    mapPrefabs = mapLavaPrefabs;
-                    isLavaMap = true;
-                    break;  
-            }
-            Debug.Log($"Map Index {mapIndex}: Switched to map type {tempSpawnList[4]}");
-        }
-        
+        int countSpawned = GameObject.FindGameObjectsWithTag("Map").Length;
+
+        int index = countSpawned / 10;   // Mỗi 10 map → đổi map
+        if (index >= tempSpawnList.Count)
+            return;
+
+        int nextMap = tempSpawnList[index];
+        SwitchToNextMap(nextMap);
     }
+
 
     // THÊM: Method để reset tất cả map flags
     void ResetAllMapFlags()
@@ -762,6 +609,23 @@ public class MapSpawner : MonoBehaviour
             return;
         }
 
+    }
+
+        void SwitchToNextMap(int mapType)
+    {
+        ResetAllMapFlags();
+
+        switch (mapType)
+        {
+            case 0: mapPrefabs = mapCityPrefabs; isCityMap = true; break;
+            case 1: mapPrefabs = mapBeachPrefabs; isBeachMap = true; break;
+            case 2: mapPrefabs = mapDesertPrefabs; isDesertMap = true; break;
+            case 3: mapPrefabs = mapFieldPrefabs; isFieldMap = true; break;
+            case 4: mapPrefabs = mapIcePrefabs; isIceMap = true; break;
+            case 5: mapPrefabs = mapLavaPrefabs; isLavaMap = true; break;
+        }
+
+        Debug.Log("Đã chuyển sang map: " + mapType);
     }
 
     public void CheckMap01(){
@@ -2089,5 +1953,7 @@ public class MapSpawner : MonoBehaviour
         }
     
     }
+
+
 
 }
