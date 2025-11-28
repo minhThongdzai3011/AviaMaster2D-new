@@ -63,6 +63,9 @@ public class Shop : MonoBehaviour
         
         // *** SỬA: Update UI dựa vào trạng thái bought và selected ***
         UpdateAllButtonsDisplay();
+        planePriceText[13].gameObject.SetActive(false); 
+        planeBuyText[13].gameObject.SetActive(true);
+
     }
     void Update()
     {
@@ -80,7 +83,7 @@ public class Shop : MonoBehaviour
     // THÊM: Hàm load trạng thái mua từ PlayerPrefs
     void LoadBoughtStatus()
     {
-        isBuyPlane1Done = PlayerPrefs.GetInt("isBuyPlane1Done", 1) == 1;
+        isBuyPlane1Done = PlayerPrefs.GetInt("isBuyPlane1Done", 0) == 1;
         isBuyPlane2Done = PlayerPrefs.GetInt("isBuyPlane2Done", 0) == 1;
         isBuyPlane3Done = PlayerPrefs.GetInt("isBuyPlane3Done", 0) == 1;
         isBuyPlane4Done = PlayerPrefs.GetInt("isBuyPlane4Done", 0) == 1;
@@ -515,11 +518,38 @@ public class Shop : MonoBehaviour
     {
         Debug.Log("Đóng cửa hàng!");
         
-        // LƯU trạng thái trước khi đóng shop
-        // saveTextPlaySelect(isCheckedPlaneIndex);
-        
         // Dừng tất cả animation
         DOTween.Kill(this);
+        
+        // ✅ THÊM: Gắn lại máy bay vào camera trước khi đóng shop
+        if (CameraManager.instance != null && defaultPlane != null)
+        {
+            // Tìm Rigidbody2D của máy bay hiện tại
+            Rigidbody2D currentPlaneRb = defaultPlane.GetComponent<Rigidbody2D>();
+            
+            if (currentPlaneRb != null)
+            {
+                // Cập nhật GManager
+                GManager.instance.airplaneRigidbody2D = currentPlaneRb;
+                
+                // Cập nhật Camera
+                CameraManager.instance.UpdateAircraftTarget(currentPlaneRb.transform);
+                CameraManager.instance.UpdateCinemachineFollow(currentPlaneRb.transform);
+                
+                // Reset camera về trạng thái ban đầu
+                CameraManager.instance.ResetCamera();
+                
+                Debug.Log($"Camera đã được gắn lại với máy bay: {defaultPlane.name}");
+            }
+            else
+            {
+                Debug.LogError("Không tìm thấy Rigidbody2D trên máy bay!");
+            }
+        }
+        else
+        {
+            Debug.LogError("CameraManager hoặc defaultPlane bị null!");
+        }
         
         // Animation đóng shop
         imageShop.transform.DOScale(Vector3.zero, 0.3f).SetEase(Ease.InBack)
@@ -527,9 +557,20 @@ public class Shop : MonoBehaviour
             {
                 imageShop.gameObject.SetActive(false);
                 Settings.instance.lastDistanceText.gameObject.SetActive(true);
-                GManager.instance.AgainGame();
+                
+                // ✅ THÊM: Đảm bảo camera follow đúng sau khi đóng shop
+                if (CameraManager.instance != null && GManager.instance != null && GManager.instance.airplaneRigidbody2D != null)
+                {
+                    CameraManager.instance.virtualCamera.Follow = GManager.instance.airplaneRigidbody2D.transform;
+                    CameraManager.instance.virtualCamera.LookAt = GManager.instance.airplaneRigidbody2D.transform;
+                    Debug.Log("✅ Camera Follow/LookAt đã được set lại trong OnComplete");
+                }
             });
-        Plane.instance.smokeEffect.Stop();
+            
+        if (Plane.instance != null && Plane.instance.smokeEffect != null)
+        {
+            Plane.instance.smokeEffect.Stop();
+        }
     }
 
 
@@ -592,6 +633,7 @@ public class Shop : MonoBehaviour
                     gameObjectsPlanes[i].SetActive(false);
                 }
             }
+            EnsureCameraSetup();
         }
         PlayerPrefs.SetInt("isCheckedPlaneIndex", isCheckedPlaneIndex);
         PlayerPrefs.Save();
@@ -636,12 +678,13 @@ public class Shop : MonoBehaviour
                     gameObjectsPlanes[i].SetActive(false);
                 }
             }
+            EnsureCameraSetup();
         }
         PlayerPrefs.SetInt("isCheckedPlaneIndex", isCheckedPlaneIndex);
         PlayerPrefs.Save();
     }
     public void buyPlane3(){
-        StartCoroutine(PlayButtonEffect(2));
+        StartCoroutine(PlayButtonEffect(1));
         if(!isBuyPlane3Done){
             planeBuyText[1].gameObject.SetActive(true);
             planeBuyText[1].text = "Play";
@@ -680,6 +723,7 @@ public class Shop : MonoBehaviour
                     gameObjectsPlanes[i].SetActive(false);
                 }
             }
+            EnsureCameraSetup();
         }
         PlayerPrefs.SetInt("isCheckedPlaneIndex", isCheckedPlaneIndex);
         PlayerPrefs.Save();
@@ -724,6 +768,7 @@ public class Shop : MonoBehaviour
                     gameObjectsPlanes[i].SetActive(false);
                 }
             }
+            EnsureCameraSetup();
         }
         PlayerPrefs.SetInt("isCheckedPlaneIndex", isCheckedPlaneIndex);
         PlayerPrefs.Save();
@@ -768,6 +813,7 @@ public class Shop : MonoBehaviour
                     gameObjectsPlanes[i].SetActive(false);
                 }
             }
+            EnsureCameraSetup();
         }
         PlayerPrefs.SetInt("isCheckedPlaneIndex", isCheckedPlaneIndex);
         PlayerPrefs.Save();
@@ -812,6 +858,7 @@ public class Shop : MonoBehaviour
                     gameObjectsPlanes[i].SetActive(false);
                 }
             }
+            EnsureCameraSetup();
         }
         PlayerPrefs.SetInt("isCheckedPlaneIndex", isCheckedPlaneIndex);
         PlayerPrefs.Save();
@@ -856,6 +903,7 @@ public class Shop : MonoBehaviour
                     gameObjectsPlanes[i].SetActive(false);
                 }
             }
+            EnsureCameraSetup();
         }
         PlayerPrefs.SetInt("isCheckedPlaneIndex", isCheckedPlaneIndex);
         PlayerPrefs.Save();
@@ -900,6 +948,7 @@ public class Shop : MonoBehaviour
                     gameObjectsPlanes[i].SetActive(false);
                 }
             }
+            EnsureCameraSetup();
         }
         PlayerPrefs.SetInt("isCheckedPlaneIndex", isCheckedPlaneIndex);
         PlayerPrefs.Save();
@@ -944,6 +993,7 @@ public class Shop : MonoBehaviour
                     gameObjectsPlanes[i].SetActive(false);
                 }
             }
+            EnsureCameraSetup();
         }
         PlayerPrefs.SetInt("isCheckedPlaneIndex", isCheckedPlaneIndex);
         PlayerPrefs.Save();
@@ -988,6 +1038,7 @@ public class Shop : MonoBehaviour
                     gameObjectsPlanes[i].SetActive(false);
                 }
             }
+            EnsureCameraSetup();
         }
         PlayerPrefs.SetInt("isCheckedPlaneIndex", isCheckedPlaneIndex);
         PlayerPrefs.Save();
@@ -1032,6 +1083,7 @@ public class Shop : MonoBehaviour
                     gameObjectsPlanes[i].SetActive(false);
                 }
             }
+            EnsureCameraSetup();
         }
         PlayerPrefs.SetInt("isCheckedPlaneIndex", isCheckedPlaneIndex);
         PlayerPrefs.Save();
@@ -1076,6 +1128,7 @@ public class Shop : MonoBehaviour
                     gameObjectsPlanes[i].SetActive(false);
                 }
             }
+            EnsureCameraSetup();
         }
         PlayerPrefs.SetInt("isCheckedPlaneIndex", isCheckedPlaneIndex);
         PlayerPrefs.Save();
@@ -1120,6 +1173,7 @@ public class Shop : MonoBehaviour
                     gameObjectsPlanes[i].SetActive(false);
                 }
             }
+            EnsureCameraSetup();
         }
         PlayerPrefs.SetInt("isCheckedPlaneIndex", isCheckedPlaneIndex);
         PlayerPrefs.Save();
@@ -1164,10 +1218,12 @@ public class Shop : MonoBehaviour
                     gameObjectsPlanes[i].SetActive(false);
                 }
             }
+            EnsureCameraSetup();
         }
         PlayerPrefs.SetInt("isCheckedPlaneIndex", isCheckedPlaneIndex);
         PlayerPrefs.Save();
     }
+
     public void buyPlane15(){
         StartCoroutine(PlayButtonEffect(13));
             if(planeBuyText[13].text == "Play") return;
@@ -1194,6 +1250,7 @@ public class Shop : MonoBehaviour
                     gameObjectsPlanes[i].SetActive(false);
                 }
             }
+            EnsureCameraSetup();
         }
         PlayerPrefs.SetInt("isCheckedPlaneIndex", isCheckedPlaneIndex);
         PlayerPrefs.Save();
@@ -1384,4 +1441,39 @@ public class Shop : MonoBehaviour
        PlayerPrefs.SetInt("isCheckedPlaneIndex", isCheckedPlaneIndex);
        PlayerPrefs.Save();
    }
+
+   // THÊM: Method để đảm bảo camera luôn được gắn đúng
+    public void EnsureCameraSetup()
+    {
+        if (defaultPlane == null)
+        {
+            Debug.LogError("❌ defaultPlane is null!");
+            return;
+        }
+        
+        // Tìm Rigidbody2D
+        Rigidbody2D rb = defaultPlane.GetComponent<Rigidbody2D>();
+        if (rb == null)
+        {
+            Debug.LogError($"❌ Không tìm thấy Rigidbody2D trên {defaultPlane.name}!");
+            return;
+        }
+        
+        // Cập nhật GManager
+        if (GManager.instance != null)
+        {
+            GManager.instance.airplaneRigidbody2D = rb;
+            Debug.Log($"✅ GManager.airplaneRigidbody2D = {rb.name}");
+        }
+        
+        // Cập nhật Camera
+        if (CameraManager.instance != null)
+        {
+            CameraManager.instance.UpdateAircraftTarget(rb.transform);
+            CameraManager.instance.UpdateCinemachineFollow(rb.transform);
+            CameraManager.instance.virtualCamera.Follow = rb.transform;
+            CameraManager.instance.virtualCamera.LookAt = rb.transform;
+            Debug.Log($"✅ Camera setup hoàn tất cho {rb.name}");
+        }
+    }
 }

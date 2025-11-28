@@ -16,16 +16,23 @@ public class Plane : MonoBehaviour
     public int moneyCollect = 0;
     public int moneyTotal = 0;
     // Start is called before the first frame update
+
+    void Awake()
+    {
+        instance = this;
+    }
     void Start()
     {
         smokeEffect.Stop();
-        instance = this;
     }
+    public bool isStopSmokeEffect = true;
 
     // Update is called once per frame
     void Update()
     {
-        
+        if(isStopSmokeEffect){
+            smokeEffect.Stop();
+        }
 
     }
 
@@ -65,7 +72,7 @@ public class Plane : MonoBehaviour
             if (anim != null)
             {
                 // tăng tiền ngay (hoặc bạn có thể tăng tiền khi animation hoàn tất trong AnimCoin)
-                moneyCollect += 1;
+                moneyCollect += 2;
 
                 anim.collected = true;
                 anim.Collect();
@@ -242,7 +249,7 @@ public class Plane : MonoBehaviour
             
             GManager.instance.coinEffect.Stop();
             isAddMoneyDone = true;
-            moneyDistance = (int)(GManager.instance.distanceTraveled / 1.34f);
+            moneyDistance = (int)(GManager.instance.distanceTraveled / 6.34f);
             moneyTotal = moneyDistance + moneyCollect;
             Debug.Log("Money from Distance: " + moneyDistance + " | Current Money: " + moneyCollect + " | Total Money: " + moneyTotal);
             GManager.instance.totalMoney += moneyTotal;

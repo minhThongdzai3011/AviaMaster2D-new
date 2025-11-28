@@ -38,6 +38,7 @@ public class Settings : MonoBehaviour
     public Image altitudeImage;
     public Image iamgeBlackScreen;
     public RectTransform NotificationNewMapImage;
+    public Image settingImage;
     
     [Header("Bool Settings")]
     public bool isMusicOn = true;
@@ -780,6 +781,8 @@ public class Settings : MonoBehaviour
             Debug.Log("Thông báo bản đồ mới đã ẩn.");
         });
     }
+
+
 
 
     

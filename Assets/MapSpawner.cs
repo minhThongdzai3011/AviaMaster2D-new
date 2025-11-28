@@ -95,8 +95,8 @@ public class MapSpawner : MonoBehaviour
     public bool checkMapStartFieldSpawned = false;
     public bool checkMapStartIceSpawned = false;
     public bool checkMapStartLavaSpawned = false;
-    
-    void Start()
+
+    void Awake()
     {
         instance = this;
         
@@ -106,6 +106,11 @@ public class MapSpawner : MonoBehaviour
         isMapFieldUnlocked = PlayerPrefs.GetInt("IsMapFieldUnlocked", 0) == 1;
         isMapIceUnlocked = PlayerPrefs.GetInt("IsMapIceUnlocked", 0) == 1;
         isMapLavaUnlocked = PlayerPrefs.GetInt("IsMapLavaUnlocked", 0) == 1;
+    }
+
+    void Start()
+    {
+        
 
         if (isMapCityUnlocked && !isMapBeachUnlocked)
         {
@@ -317,7 +322,7 @@ public class MapSpawner : MonoBehaviour
         while (true)
         {
             count = GameObject.FindGameObjectsWithTag("Map").Length;
-            if (count < 30)
+            if (count < 60)
             {
                 
                 CheckMap();

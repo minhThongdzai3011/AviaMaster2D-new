@@ -177,6 +177,7 @@ public class GManager : MonoBehaviour
         
         SaveTotalMoney();
         SaveTotalDiamond();
+        GetRandomWelcomeMessage();
     }
 
     public void LaunchAirplane()
@@ -190,7 +191,7 @@ public class GManager : MonoBehaviour
             }
             // homeImage.gameObject.SetActive(false);
             playImage.gameObject.SetActive(true);
-
+            Plane.instance.isStopSmokeEffect = false;
             StartCoroutine(LaunchSequence());
             isPlaying = false;
             isPlay = true;
@@ -372,7 +373,10 @@ public class GManager : MonoBehaviour
 
         // Bước 4: Giữ độ cao và cho phép điều khiển
         
-        StartCoroutine(FadeOutTrail(Plane.instance.trailEffect, 2.0f));
+        if (Plane.instance != null)
+        {
+           StartCoroutine(FadeOutTrail(Plane.instance.trailEffect, 2.0f));
+        }
         // Sửa lại: Trả lại drag tự nhiên của Rigidbody2D
         airplaneRigidbody2D.drag = 0f; // Drag ban đầu
         airplaneRigidbody2D.angularDrag = 0.05f; // Angular drag ban đầu
@@ -432,7 +436,10 @@ if (Mathf.FloorToInt(timer) != Mathf.FloorToInt(timer - Time.deltaTime))
         }
 
         // Bước 5: Kết thúc fuel và tính toán vật lý rơi chân thực
-        Plane.instance.trailEffect.enabled = false; // Dừng vệt lửa
+        if (Plane.instance != null)
+        {
+            Plane.instance.trailEffect.enabled = false; 
+        }
         isControllable = false; // Tắt controllable bình thường
         isFallingInSequence = true; // THÊM: Báo hiệu đang trong giai đoạn rơi
         airplaneRigidbody2D.gravityScale = gravityScale;
@@ -712,12 +719,18 @@ if (Mathf.FloorToInt(timer) != Mathf.FloorToInt(timer - Time.deltaTime))
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 StartBoostDecrease();
-                Plane.instance.trailEffect.enabled = true; 
+                if (Plane.instance != null)
+                {
+                    Plane.instance.trailEffect.enabled = true;
+                }
             }
             if (Input.GetKeyUp(KeyCode.Space))
             {
                 StopBoostDecrease();
-                Plane.instance.trailEffect.enabled = false;
+                if (Plane.instance != null)
+                {
+                    Plane.instance.trailEffect.enabled = false;
+                }
             }
             
             // Xử lý boost và màu button
@@ -768,6 +781,23 @@ if (Mathf.FloorToInt(timer) != Mathf.FloorToInt(timer - Time.deltaTime))
             PlayerPrefs.Save();
             SaveTotalMoney();
 
+        }
+        if (Input.GetKeyDown(KeyCode.Keypad3))
+        {
+            MapSpawner.instance.isMapCityUnlocked = true;
+            PlayerPrefs.SetInt("IsMapCityUnlocked", 1);
+            MapSpawner.instance.isMapDesertUnlocked = true;
+            PlayerPrefs.SetInt("IsMapDesertUnlocked", 1);
+            MapSpawner.instance.isMapBeachUnlocked = true;
+            PlayerPrefs.SetInt("IsMapBeachUnlocked", 1);
+            MapSpawner.instance.isMapFieldUnlocked = true;
+            PlayerPrefs.SetInt("IsMapFieldUnlocked", 1);
+            MapSpawner.instance.isMapIceUnlocked = true;
+            PlayerPrefs.SetInt("IsMapIceUnlocked", 1);
+            MapSpawner.instance.isMapLavaUnlocked = true;
+            PlayerPrefs.SetInt("IsMapLavaUnlocked", 1);
+            PlayerPrefs.Save();
+            AgainGame();
         }
 
         if (distanceText != null) distanceText.text = distanceTraveled.ToString("F0") + " ft";
@@ -1907,5 +1937,23 @@ if (Mathf.FloorToInt(timer) != Mathf.FloorToInt(timer - Time.deltaTime))
 
         trail.enabled = false; // tắt hẳn sau khi fade xong
     }
+
+    string[] shortMessages = {
+            "Ready to fly!",
+            "Clear skies!",
+            "Take off!",
+            "Sky high!",
+            "Pilot mode!",
+            "Wings up!",
+            "Adventure awaits!"
+        };
+
+
+    public void GetRandomWelcomeMessage()
+    {
+        string randomMessage = shortMessages[UnityEngine.Random.Range(0, shortMessages.Length)];
+        newMapText.text = randomMessage;
+    }
+
     
 }
