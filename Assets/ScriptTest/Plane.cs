@@ -1,11 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 
 public class Plane : MonoBehaviour
 {
     public static Plane instance;
+
+    public Material blackMaterial;
+    public ParticleSystem explosionEffect;
+
+
     public ParticleSystem smokeEffect;
     public TrailRenderer trailEffect;
     public TrailRenderer trailRenderer;
@@ -24,6 +30,7 @@ public class Plane : MonoBehaviour
     void Start()
     {
         smokeEffect.Stop();
+        explosionEffect.Stop();
     }
     public bool isStopSmokeEffect = true;
 
@@ -186,50 +193,104 @@ public class Plane : MonoBehaviour
         // Lấy góc ban đầu khi máy bay chạm đất
         float initialAngleZ = GetCurrentRotationZ(airplaneRb);
         float initialAngleX = airplaneRb.transform.eulerAngles.x;
-        if (initialAngleX > 180f) initialAngleX -= 360f; // Chuẩn hóa về [-180, 180]
-        
-        // Lấy velocity ban đầu
-        Vector2 initialVelocity = airplaneRb.velocity;
-        
-        // Thời gian để giảm góc và velocity về 0 (có thể điều chỉnh)
-        float duration = 3f;
-        float elapsedTime = 0f;
-        
-        while (elapsedTime < duration)
-        {
-            elapsedTime += Time.deltaTime;
-            
-            // Tính tỷ lệ giảm dần (từ 1 về 0)
-            float t = elapsedTime / duration;
-            float smoothT = 1f - t; // Giảm từ 1 về 0
-            
-            // Giảm từ từ rotation về 0
-            float targetAngleZ = initialAngleZ * smoothT;
-            float targetAngleX = initialAngleX * smoothT;
-            Vector3 currentRotation = airplaneRb.transform.eulerAngles;
-            currentRotation.z = targetAngleZ;
-            currentRotation.x = targetAngleX;
-            airplaneRb.transform.eulerAngles = currentRotation;
-            
-            // Giảm từ từ velocity về 0
-            Vector2 targetVelocity = initialVelocity * smoothT;
-            airplaneRb.velocity = targetVelocity;
-            
-            yield return null;
+        if (initialAngleZ < -15f || initialAngleZ > 15f){
+            MakePlaneBlackAndExplode();
+            Debug.Log("Airplane crashed due to excessive tilt angle: " + initialAngleZ);
         }
-        
-        // Đảm bảo rotation và velocity về 0 hoàn toàn
-        Vector3 finalRotation = airplaneRb.transform.eulerAngles;
-        finalRotation.z = 0f;
-        finalRotation.x = 0f;
-        airplaneRb.transform.eulerAngles = finalRotation;
-        airplaneRb.velocity = Vector2.zero;
-        
-        // Có thể thêm logic khi máy bay đã dừng hoàn toàn
-        Debug.Log("Airplane stopped sliding");
-        StartCoroutine(OpenImageWIn());
-    }
+        else{
+            if (initialAngleX > 180f) initialAngleX -= 360f; // Chuẩn hóa về [-180, 180]
+            
+            // Lấy velocity ban đầu
+            Vector2 initialVelocity = airplaneRb.velocity;
+            
+            // Thời gian để giảm góc và velocity về 0 (có thể điều chỉnh)
+            float duration = 3f;
+            float elapsedTime = 0f;
+            
+            while (elapsedTime < duration)
+            {
+                elapsedTime += Time.deltaTime;
+                
+                // Tính tỷ lệ giảm dần (từ 1 về 0)
+                float t = elapsedTime / duration;
+                float smoothT = 1f - t; // Giảm từ 1 về 0
+                
+                // Giảm từ từ rotation về 0
+                float targetAngleZ = initialAngleZ * smoothT;
+                float targetAngleX = initialAngleX * smoothT;
+                Vector3 currentRotation = airplaneRb.transform.eulerAngles;
+                currentRotation.z = targetAngleZ;
+                currentRotation.x = targetAngleX;
+                airplaneRb.transform.eulerAngles = currentRotation;
+                
+                // Giảm từ từ velocity về 0
+                Vector2 targetVelocity = initialVelocity * smoothT;
+                airplaneRb.velocity = targetVelocity;
+                
+                yield return null;
+            }
+            
+            // Đảm bảo rotation và velocity về 0 hoàn toàn
+            Vector3 finalRotation = airplaneRb.transform.eulerAngles;
+            finalRotation.z = 0f;
+            finalRotation.x = 0f;
+            airplaneRb.transform.eulerAngles = finalRotation;
+            airplaneRb.velocity = Vector2.zero;
+            
+            // Có thể thêm logic khi máy bay đã dừng hoàn toàn
+            Debug.Log("Airplane stopped sliding");
+            StartCoroutine(OpenImageWIn());
+            }
+        }
 
+    public bool resetRotationOnExplode = true;
+    public float explodeRotationResetTime = 0.4f;
+    private bool hasExploded = false;
+
+    public void MakePlaneBlackAndExplode()
+    {
+        if (hasExploded) return;
+        hasExploded = true;
+
+        Debug.Log("Making plane black and explode");
+
+        // Đổi vật liệu nếu có
+        var planeRenderer = GetComponent<Renderer>();
+        if (planeRenderer != null && blackMaterial != null)
+            planeRenderer.material = blackMaterial;
+
+        // RESET / TWEEN ROTATION
+        if (resetRotationOnExplode && GManager.instance != null && GManager.instance.airplaneRigidbody2D != null)
+        {
+            var rb = GManager.instance.airplaneRigidbody2D;
+            rb.angularVelocity = 0f;
+
+            // Tween về góc thẳng (Z = 0)
+            Vector3 targetEuler = rb.transform.eulerAngles;
+            targetEuler.z = 0f;
+
+            // Nếu có DOTween: tween mượt
+            rb.transform.DORotate(targetEuler, explodeRotationResetTime)
+                .SetEase(Ease.OutQuad)
+                .OnComplete(() =>
+                {
+                    // Khóa luôn rotation tránh lệch lại
+                    rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+                });
+        }
+
+        // Nếu không dùng DOTween thì có thể làm tức thì:
+        // var e = transform.eulerAngles; e.z = 0; transform.eulerAngles = e;
+
+        EffectRotaryFront.ExplodeAll();
+        if (DestroyWheels.instance != null) DestroyWheels.instance.Explode();
+        if (ExplosionScale.instance != null) ExplosionScale.instance.Explosion();
+        if (EffectAirplane.instance != null) EffectAirplane.instance.MakePlaneBlack();
+
+        if (explosionEffect != null) explosionEffect.Play();
+
+        StartCoroutine(DelayTwoSeconds(2f));
+    }
 
     // Hàm helper lấy rotation Z chuẩn hóa về [-180, 180]
     float GetCurrentRotationZ(Rigidbody2D rb)
@@ -366,4 +427,10 @@ public class Plane : MonoBehaviour
         }
     }
 
+    IEnumerator DelayTwoSeconds(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        
+        StartCoroutine(DelaytoEndGame());
+    }
 }

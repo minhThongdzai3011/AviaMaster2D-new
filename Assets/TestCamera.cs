@@ -1,41 +1,44 @@
 using UnityEngine;
-using Cinemachine;
+
 
 public class TestCamera : MonoBehaviour
 {
-    public CinemachineVirtualCamera virtualCamera;
+    public static TestCamera instance;
+    public ParticleSystem explosionEffect; // Gán hiệu ứng nổ trong Inspector
+    public GameObject plane;      // Gán máy bay trong Inspector
+    public Material black;   // Gán Material của máy bay trong Inspector
+    private Material originalColor;
+    public bool isDestroyed = false;
 
     void Start()
     {
-        if (virtualCamera == null)
+        instance = this;
+        if (plane == null)
         {
-            Debug.LogError("VirtualCamera chưa được gán trong Inspector!");
-            return;
+            Debug.LogError("Chưa gán Plane trong Inspector!");
         }
-
-        // Lấy FramingTransposer trong phần Body thay vì Composer trong Aim
-        var transposer = virtualCamera.GetCinemachineComponent<CinemachineFramingTransposer>();
-        if (transposer == null)
-        {
-            Debug.LogError("VirtualCamera chưa có FramingTransposer. Hãy đặt Body = Framing Transposer.");
-            return;
-        }
-
-        // Giá trị ban đầu
-        transposer.m_ScreenX = 0.5f;
-        transposer.m_ScreenY = 0.5f;
-
-        // Sau 2 giây thì đổi sang 0.7, 0.7
-        Invoke(nameof(ChangeScreenXY), 2f);
+        originalColor = plane.GetComponent<Renderer>().material;
+        
     }
 
-    void ChangeScreenXY()
+    // Hàm làm đen máy bay
+    public void MakePlaneBlack()
     {
-        var transposer = virtualCamera.GetCinemachineComponent<CinemachineFramingTransposer>();
-        if (transposer != null)
+        Debug.Log("Making plane black");
+        if (plane != null)
         {
-            transposer.m_ScreenX = 0.7f;
-            transposer.m_ScreenY = 0.7f;
+            plane.GetComponent<Renderer>().material = black;
+            isDestroyed = true;
+            EffectRotaryFront.ExplodeAll();
+            DestroyWheels.instance.Explode();
+            ExplosionScale.instance.Explosion();
+            explosionEffect.Play();
         }
+    }
+
+    // Hàm khôi phục màu gốc
+    public void RestorePlaneColor()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
     }
 }
