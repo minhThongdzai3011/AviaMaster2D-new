@@ -375,7 +375,19 @@ public class GManager : MonoBehaviour
         
         if (Plane.instance != null)
         {
-           StartCoroutine(FadeOutTrail(Plane.instance.trailEffect, 2.0f));
+            if(TrailRendererLeft.instance != null && TrailRendererRight.instance != null)
+            {
+                TrailRendererLeft.instance.TrailEffect();
+                TrailRendererRight.instance.TrailEffect();
+            }
+            else if(TrailRendererLeft.instance != null)
+            {
+                TrailRendererLeft.instance.TrailEffect();
+            }
+            else if(TrailRendererRight.instance != null)
+            {
+                TrailRendererRight.instance.TrailEffect();
+            }
         }
         // Sửa lại: Trả lại drag tự nhiên của Rigidbody2D
         airplaneRigidbody2D.drag = 0f; // Drag ban đầu
@@ -395,7 +407,7 @@ public class GManager : MonoBehaviour
         while (timer < durationFuel)
         {
             timer += Time.deltaTime;
-if (Mathf.FloorToInt(timer) != Mathf.FloorToInt(timer - Time.deltaTime))
+            if (Mathf.FloorToInt(timer) != Mathf.FloorToInt(timer - Time.deltaTime))
             {
                 Debug.Log($"Thời gian điều khiển: {Mathf.FloorToInt(timer)}s / {durationFuel}s");
             }
@@ -721,7 +733,23 @@ if (Mathf.FloorToInt(timer) != Mathf.FloorToInt(timer - Time.deltaTime))
                 StartBoostDecrease();
                 if (Plane.instance != null)
                 {
-                    Plane.instance.trailEffect.enabled = true;
+                    if(TrailRendererLeft.instance != null && TrailRendererRight.instance != null)
+                    {
+                        TrailRendererLeft.instance.isBoosterActive = true;
+                        TrailRendererLeft.instance.PlayTrail();
+                        TrailRendererRight.instance.isBoosterActive = true;
+                        TrailRendererRight.instance.PlayTrail();
+                    }
+                    else if(TrailRendererLeft.instance != null)
+                    {
+                        TrailRendererLeft.instance.isBoosterActive = true;
+                        TrailRendererLeft.instance.PlayTrail();
+                    }
+                    else if(TrailRendererRight.instance != null)
+                    {
+                        TrailRendererRight.instance.isBoosterActive = true;
+                        TrailRendererRight.instance.PlayTrail();
+                    }
                 }
             }
             if (Input.GetKeyUp(KeyCode.Space))
@@ -729,7 +757,23 @@ if (Mathf.FloorToInt(timer) != Mathf.FloorToInt(timer - Time.deltaTime))
                 StopBoostDecrease();
                 if (Plane.instance != null)
                 {
-                    Plane.instance.trailEffect.enabled = false;
+                    if(TrailRendererLeft.instance != null && TrailRendererRight.instance != null)
+                    {
+                        TrailRendererLeft.instance.isBoosterActive = false;
+                        TrailRendererLeft.instance.TrailEffect();
+                        TrailRendererRight.instance.isBoosterActive = false;
+                        TrailRendererRight.instance.TrailEffect();
+                    }
+                    else if(TrailRendererLeft.instance != null)
+                    {
+                        TrailRendererLeft.instance.isBoosterActive = false;
+                        TrailRendererLeft.instance.TrailEffect();
+                    }
+                    else if(TrailRendererRight.instance != null)
+                    {
+                        TrailRendererRight.instance.isBoosterActive = false;
+                        TrailRendererRight.instance.TrailEffect();
+                    }
                 }
             }
             
@@ -1923,20 +1967,7 @@ if (Mathf.FloorToInt(timer) != Mathf.FloorToInt(timer - Time.deltaTime))
         SaveTotalDiamond();
     }
 
-    IEnumerator FadeOutTrail(TrailRenderer trail, float duration)
-    {
-        float startTime = trail.time;
-        float elapsed = 0f;
-
-        while (elapsed < duration)
-        {
-            elapsed += Time.deltaTime;
-            trail.time = Mathf.Lerp(startTime, 0f, elapsed / duration);
-            yield return null;
-        }
-
-        trail.enabled = false; // tắt hẳn sau khi fade xong
-    }
+    
 
     string[] shortMessages = {
             "Ready to fly!",

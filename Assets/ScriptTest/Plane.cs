@@ -311,9 +311,8 @@ public class Plane : MonoBehaviour
             GManager.instance.coinEffect.Stop();
             isAddMoneyDone = true;
             moneyDistance = (int)(GManager.instance.distanceTraveled / 6.34f);
-            moneyTotal = moneyDistance + moneyCollect;
             Debug.Log("Money from Distance: " + moneyDistance + " | Current Money: " + moneyCollect + " | Total Money: " + moneyTotal);
-            GManager.instance.totalMoney += moneyTotal;
+            
             Debug.Log("Updated Total Money: " + GManager.instance.totalMoney);
             // Settings.instance.totalMoneyPlayText.text = "" + moneyTotal;
 
@@ -323,8 +322,7 @@ public class Plane : MonoBehaviour
 
 
             // Lưu TotalMoney và đảm bảo lưu ngay
-            PlayerPrefs.SetFloat("TotalMoney", GManager.instance.totalMoney);
-            PlayerPrefs.Save();
+            
             Settings.instance.OpenWinImage();
         }
     }

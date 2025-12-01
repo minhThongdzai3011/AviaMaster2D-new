@@ -638,8 +638,6 @@ public class MapSpawner : MonoBehaviour
             case 4: mapPrefabs = mapIcePrefabs; isIceMap = true; break;
             case 5: mapPrefabs = mapLavaPrefabs; isLavaMap = true; break;
         }
-
-        Debug.Log("Đã chuyển sang map: " + mapType);
     }
 
     public void CheckMap01(){

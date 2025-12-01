@@ -536,9 +536,6 @@ public class Shop : MonoBehaviour
                 CameraManager.instance.UpdateAircraftTarget(currentPlaneRb.transform);
                 CameraManager.instance.UpdateCinemachineFollow(currentPlaneRb.transform);
                 
-                // Reset camera về trạng thái ban đầu
-                CameraManager.instance.ResetCamera();
-                
                 Debug.Log($"Camera đã được gắn lại với máy bay: {defaultPlane.name}");
             }
             else
@@ -1235,6 +1232,7 @@ public class Shop : MonoBehaviour
                         planeBuyText[i].text = "Select";
                     }
                 }
+                
             SaveTextPlane();
         }
         
@@ -1251,6 +1249,11 @@ public class Shop : MonoBehaviour
                 }
             }
             EnsureCameraSetup();
+            Rigidbody2D rb = GManager.instance.airplaneRigidbody2D;;
+            if (rb != null){
+                rb.constraints = RigidbodyConstraints2D.None; 
+                rb.velocity = Vector2.zero;
+            }
         }
         PlayerPrefs.SetInt("isCheckedPlaneIndex", isCheckedPlaneIndex);
         PlayerPrefs.Save();

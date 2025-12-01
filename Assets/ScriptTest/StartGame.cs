@@ -3,12 +3,19 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
 using System.Collections;
+using TMPro;
 
 public class StartGame : MonoBehaviour
 {
-    public Image blackPanel; // Panel trong scene StartGame - KHÔNG CẦN NỮA
+    public Image blackPanel; 
     private Canvas fadeCanvas;
     private Image fadePanel;
+
+    [Header("Text Settings")]
+    public TextMeshProUGUI loadingText1;
+    public TextMeshProUGUI loadingText2;
+    public TextMeshProUGUI loadingText3;
+    public TextMeshProUGUI nameGameText;
 
     void Start()
     {
@@ -25,7 +32,9 @@ public class StartGame : MonoBehaviour
         SceneManager.sceneLoaded += OnSceneLoaded;
         
         // Sau 1.5s thì chuyển sang scene tesfly
-        Invoke(nameof(LoadNextScene), 1.5f);
+        Invoke(nameof(LoadNextScene), 2.5f);
+        // Bắt đầu hiệu ứng chấm loading
+        StartCoroutine(PlayLoadingDots(0.3f));
     }
     
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -35,6 +44,8 @@ public class StartGame : MonoBehaviour
             Debug.Log("Scene tesfly đã load xong!");
             // Bắt đầu fade sau khi scene load
             StartCoroutine(FadeInAfterSceneLoad());
+            isLoading = false;
+            
             
             // Unsubscribe để tránh gọi nhiều lần
             SceneManager.sceneLoaded -= OnSceneLoaded;
@@ -47,7 +58,6 @@ public class StartGame : MonoBehaviour
         GameObject canvasObj = new GameObject("FadeCanvas");
         fadeCanvas = canvasObj.AddComponent<Canvas>();
         fadeCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
-        fadeCanvas.sortingOrder = 9999; // Đảm bảo nằm trên cùng
         
         CanvasScaler scaler = canvasObj.AddComponent<CanvasScaler>();
         scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
@@ -89,7 +99,7 @@ public class StartGame : MonoBehaviour
         // Fade alpha từ 1 -> 0 trong 2s (tăng thời gian để rõ hơn)
         fadePanel.DOFade(0f, 2f).SetEase(Ease.InOutQuad).OnComplete(() =>
         {
-            Debug.Log("✅ Fade in hoàn tất!");
+            Debug.Log("Fade in hoàn tất!");
             
             // Xóa canvas sau khi fade xong
             if (fadeCanvas != null)
@@ -101,4 +111,31 @@ public class StartGame : MonoBehaviour
             Destroy(gameObject, 0.5f);
         });
     }
+
+    private int state = 0;
+    public bool isLoading = true;
+
+    public void UpdateDots()
+    {
+        loadingText1.gameObject.SetActive(false);
+        loadingText2.gameObject.SetActive(false);
+        loadingText3.gameObject.SetActive(false);
+
+        // Bật theo state
+        if (state >= 1) loadingText1.gameObject.SetActive(true);
+        if (state >= 2) loadingText2.gameObject.SetActive(true);
+        if (state >= 3) loadingText3.gameObject.SetActive(true);
+
+        state = (state + 1) % 4; 
+    }
+
+    IEnumerator PlayLoadingDots(float interval)
+    {
+        while (isLoading)
+        {
+            UpdateDots();
+            yield return new WaitForSeconds(interval);
+        }
+    }
+
 }

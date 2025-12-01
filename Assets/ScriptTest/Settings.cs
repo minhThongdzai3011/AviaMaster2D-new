@@ -22,6 +22,7 @@ public class Settings : MonoBehaviour
     public TextMeshProUGUI prizeText;
     public TextMeshProUGUI altitudeText;
     public TextMeshProUGUI NotificationNewMapText;
+    public TextMeshProUGUI x2CoinText;
 
     [Header("Image Settings")]
     public Image musicImageOn;
@@ -39,6 +40,9 @@ public class Settings : MonoBehaviour
     public Image iamgeBlackScreen;
     public RectTransform NotificationNewMapImage;
     public Image settingImage;
+
+    [Header("Button Settings")]
+    public Button AdsButton;
     
     [Header("Bool Settings")]
     public bool isMusicOn = true;
@@ -204,10 +208,12 @@ public class Settings : MonoBehaviour
             .SetEase(closeEase)
             .OnComplete(() =>
             {
+                
                 lastDistanceText.gameObject.SetActive(true);
                 settingsImage.gameObject.SetActive(false);
                 isAnimating = false;
                 Debug.Log("Settings animation đóng hoàn thành!");
+
             });
     }
 
@@ -346,9 +352,9 @@ public class Settings : MonoBehaviour
                 Debug.Log("Win Image animation mở hoàn thành!");
                 
             });
-            
     }
-
+    
+    public bool isCloseWinImage = false;
     public void CloseWinImage()
     {
         if (isAnimating) return;
@@ -365,10 +371,16 @@ public class Settings : MonoBehaviour
         isAnimating = true;
 
         // Animation đóng win image
-        winImage.transform.DOScale(Vector3.zero, closeDuration)
+        if (isCloseWinImage)
+        {
+            winImage.transform.DOScale(Vector3.zero, closeDuration)
             .SetEase(closeEase)
             .OnComplete(() =>
             {
+                GManager.instance.totalMoney += (int)totalValue;
+                Debug.Log("Total value after doubling close shop: " + totalValue);
+                PlayerPrefs.SetFloat("TotalMoney", GManager.instance.totalMoney);
+                PlayerPrefs.Save();
                 lastDistanceText.gameObject.SetActive(true);
                 winImage.gameObject.SetActive(false);
                 GManager.instance.AgainGame();
@@ -379,6 +391,7 @@ public class Settings : MonoBehaviour
                 Plane.instance.moneyDistance = 0;
                 Plane.instance.moneyTotal = 0;
             });
+        }
     }
 
 
@@ -568,6 +581,8 @@ public class Settings : MonoBehaviour
     //     }
     // }
 
+    public float totalValue = 0f;
+
 
     public void StartCountingCoin()
     {
@@ -579,7 +594,6 @@ public class Settings : MonoBehaviour
 
         float distanceValue = Plane.instance.moneyDistance;
         float collectValue  = Plane.instance.moneyCollect;
-        float totalValue    = Plane.instance.moneyTotal;
 
         Debug.Log("Tiền khoảng cách: " + distanceValue + " | Tiền thu thập: " + collectValue + " | Tổng tiền: " + totalValue + "isBonus: " + GManager.instance.isBonus);
 
@@ -599,6 +613,7 @@ public class Settings : MonoBehaviour
         }).SetEase(Ease.OutCubic));
         float duration = 2f;
         // 3) Xử lý bonus trước khi đếm total, sau đó đếm total
+        totalValue = distanceValue + collectValue;
         seq.AppendCallback(() =>
         {
             if (GManager.instance != null && GManager.instance.isBonus)
@@ -619,7 +634,7 @@ public class Settings : MonoBehaviour
             }
 
             // Cập nhật Plane.instance.moneyTotal nếu bạn muốn ghi lại giá trị mới
-            if (Plane.instance != null) Plane.instance.moneyTotal = (int)totalValue;
+            
             Debug.Log("Final Total Value to count: " + totalValue);
 
             // 4) Đếm total
@@ -630,8 +645,9 @@ public class Settings : MonoBehaviour
             }).SetEase(Ease.OutCubic)).OnComplete(() =>
             {
                 GManager.instance.coinEffect.Play();
-                
+                AdsButton.gameObject.SetActive(true);
                 isPrizeCoin = true;
+                isCloseWinImage = true;
             });
         });
 
@@ -782,6 +798,22 @@ public class Settings : MonoBehaviour
         });
     }
 
+
+    public void Adsx2Coin()
+    {
+        x2CoinText.gameObject.SetActive(true);
+        Sequence seq = DOTween.Sequence();
+        int temp = (int)totalValue;
+        totalValue = temp * 2;
+        Debug.Log("Total value after doubling: " + totalValue);
+        seq.Append(DOVirtual.Float(temp, totalValue, 2, value =>
+            {
+                if (totalMoneyPlayText != null) totalMoneyPlayText.text = Mathf.FloorToInt(value).ToString();
+            }).SetEase(Ease.OutCubic)).OnComplete(() =>
+            {
+                
+            });
+    }
 
 
 
