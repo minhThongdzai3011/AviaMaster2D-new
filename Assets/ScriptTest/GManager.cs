@@ -111,7 +111,6 @@ public class GManager : MonoBehaviour
 
     [Header("Người chơi")]
     public bool isControllable = false;
-    public bool isStaying = true;
     public float controlForce = 8f; // Lực điều khiển A/D
     public float maxVerticalSpeed = 15f; // Giới hạn tốc độ dọc
 
@@ -180,7 +179,6 @@ public class GManager : MonoBehaviour
 
     public void LaunchAirplane()
     {
-        isStaying = false;
         if (isPlaying)
         {
             if (airplaneRigidbody2D == null)
@@ -379,14 +377,16 @@ public class GManager : MonoBehaviour
                 TrailRendererLeft.instance.TrailEffect();
                 TrailRendererRight.instance.TrailEffect();
             }
-            else if(TrailRendererLeft.instance != null)
+            if (TrailRendererLeft.instance != null && TrailRendererLeft.instance.gameObject.activeInHierarchy)
             {
                 TrailRendererLeft.instance.TrailEffect();
             }
-            else if(TrailRendererRight.instance != null)
+
+            if (TrailRendererRight.instance != null && TrailRendererRight.instance.gameObject.activeInHierarchy)
             {
                 TrailRendererRight.instance.TrailEffect();
             }
+
         }
         // Sửa lại: Trả lại drag tự nhiên của Rigidbody2D
         airplaneRigidbody2D.drag = 0f; // Drag ban đầu
@@ -739,12 +739,12 @@ public class GManager : MonoBehaviour
                         TrailRendererRight.instance.isBoosterActive = true;
                         TrailRendererRight.instance.PlayTrail();
                     }
-                    else if(TrailRendererLeft.instance != null)
+                    else if(TrailRendererLeft.instance != null && TrailRendererLeft.instance.gameObject.activeInHierarchy)
                     {
                         TrailRendererLeft.instance.isBoosterActive = true;
                         TrailRendererLeft.instance.PlayTrail();
                     }
-                    else if(TrailRendererRight.instance != null)
+                    else if(TrailRendererRight.instance != null && TrailRendererRight.instance.gameObject.activeInHierarchy)
                     {
                         TrailRendererRight.instance.isBoosterActive = true;
                         TrailRendererRight.instance.PlayTrail();
@@ -763,12 +763,12 @@ public class GManager : MonoBehaviour
                         TrailRendererRight.instance.isBoosterActive = false;
                         TrailRendererRight.instance.TrailEffect();
                     }
-                    else if(TrailRendererLeft.instance != null)
+                    else if(TrailRendererLeft.instance != null && TrailRendererLeft.instance.gameObject.activeInHierarchy)
                     {
                         TrailRendererLeft.instance.isBoosterActive = false;
                         TrailRendererLeft.instance.TrailEffect();
                     }
-                    else if(TrailRendererRight.instance != null)
+                    else if(TrailRendererRight.instance != null && TrailRendererRight.instance.gameObject.activeInHierarchy)
                     {
                         TrailRendererRight.instance.isBoosterActive = false;
                         TrailRendererRight.instance.TrailEffect();
@@ -792,14 +792,6 @@ public class GManager : MonoBehaviour
                 }
                 buttonBoosterPlaneImage.color = Color.white;
             }
-        }
-        if (isStaying)
-        {
-            airplaneRigidbody2D.velocity = Vector2.zero;
-            airplaneRigidbody2D.angularVelocity = 0f;
-            airplaneRigidbody2D.rotation = 0f;
-            airplaneRigidbody2D.inertia = 0f;
-            
         }
 
         if (Input.GetKeyDown(KeyCode.Keypad1))

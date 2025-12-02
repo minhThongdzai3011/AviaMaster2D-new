@@ -1176,7 +1176,6 @@ public class Shop : MonoBehaviour
     }
     public void buyPlane14(){
         StartCoroutine(PlayButtonEffect(13));
-        // mark as bought and hide price
         isBuyPlane14Done = true;
         if (planePriceText != null && planePriceText.Length > 13)
             planePriceText[13].gameObject.SetActive(false);
@@ -1192,7 +1191,7 @@ public class Shop : MonoBehaviour
 
         if(gameObjectsPlanes != null && gameObjectsPlanes.Length > 13){
             defaultPlane = gameObjectsPlanes[13];
-            GManager.instance.airplaneRigidbody2D.velocity = Vector2.zero;
+            // GManager.instance.airplaneRigidbody2D.velocity = Vector2.zero;
             GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[13];
             CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[13].transform;
             CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[13].transform;
@@ -1203,12 +1202,14 @@ public class Shop : MonoBehaviour
                 }
             }
             EnsureCameraSetup();
-            var rb = GManager.instance.airplaneRigidbody2D;
-            if (rb != null){
-                rb.constraints = RigidbodyConstraints2D.None;
-                rb.velocity = Vector2.zero;
-            }
+            // var rb = GManager.instance.airplaneRigidbody2D;
+            // if (rb != null){
+            //     rb.constraints = RigidbodyConstraints2D.None;
+            //     rb.velocity = Vector2.zero;
+            //     Debug.Log("Reset Rigidbody2D constraints and velocity for the new plane."); 
+            // }
         }
+        
         PlayerPrefs.SetInt("isCheckedPlaneIndex", isCheckedPlaneIndex);
         PlayerPrefs.Save();
     }

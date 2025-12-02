@@ -38,11 +38,22 @@ public class TrailRendererRight : MonoBehaviour
 
     public void TrailEffect()
     {
+        if (!gameObject.activeInHierarchy || !enabled)
+            return;
+
+        // Đảm bảo TrailRenderer bật để thấy fade
+        if (!trailRenderer.enabled)
+            trailRenderer.enabled = true;
+
         StartCoroutine(FadeOutTrail(trailRenderer, 2.0f));
     }
 
+
+
     IEnumerator FadeOutTrail(TrailRenderer trail, float duration)
     {
+        Debug.Log($"{name} bắt đầu fade, time start = {trail.time}");
+
         float startTime = trail.time;
         float elapsed = 0f;
 
@@ -50,10 +61,16 @@ public class TrailRendererRight : MonoBehaviour
         {
             elapsed += Time.deltaTime;
             trail.time = Mathf.Lerp(startTime, 0f, elapsed / duration);
+
+            Debug.Log($"{name} fading... time = {trail.time}");
+
             yield return null;
         }
 
-        trail.enabled = false; // tắt hẳn sau khi fade xong
-        trailRenderer.time = startTime;
+        trail.enabled = false;
+        trail.time = startTime;
+
+        Debug.Log($"{name} fade DONE");
     }
+
 }
