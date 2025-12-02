@@ -43,6 +43,7 @@ public class Settings : MonoBehaviour
 
     [Header("Button Settings")]
     public Button AdsButton;
+    public Button AdsLuckyWheelButton;
     
     [Header("Bool Settings")]
     public bool isMusicOn = true;
@@ -70,6 +71,12 @@ public class Settings : MonoBehaviour
     void Start()
     {
         instance = this;
+        isColdDownTimeLuckyWheel = PlayerPrefs.GetInt("LuckyWheelColdDownAds", 0) == 1;
+        if (isColdDownTimeLuckyWheel)
+        {
+            AdsLuckyWheelButton.gameObject.SetActive(false);
+        }
+        
         currentTime = PlayerPrefs.GetInt("SaveTime", 900);
         if (currentTime < 900)
         {
@@ -78,6 +85,10 @@ public class Settings : MonoBehaviour
             resultText.text = "Waiting...";
             isSpinning = false;
 
+        }
+        if (currentTime == 0)
+        {
+            AdsLuckyWheelButton.gameObject.SetActive(false);
         }
 
         // Load settings từ PlayerPrefs
@@ -779,6 +790,7 @@ public class Settings : MonoBehaviour
         int temp = (int)totalValue;
         totalValue = temp * 2;
         Debug.Log("Total value after doubling: " + totalValue);
+        AdsButton.gameObject.SetActive(false);
         seq.Append(DOVirtual.Float(temp, totalValue, 2, value =>
             {
                 if (totalMoneyPlayText != null) totalMoneyPlayText.text = Mathf.FloorToInt(value).ToString();
@@ -787,6 +799,29 @@ public class Settings : MonoBehaviour
                 
             });
     }
+
+    public bool isColdDownTimeLuckyWheel = false;
+
+    public void AdsLuckyWheelColdDownCoin()
+    {
+        currentTime -= 600;
+        PlayerPrefs.SetInt("SaveTime", currentTime);
+        PlayerPrefs.Save();
+        if (!isCountingDown)
+        {
+            StartCoroutine(CountdownCoroutine());
+        }
+        if (currentTime < 0)
+        {
+            currentTime = 0;
+        }
+        AdsLuckyWheelButton.gameObject.SetActive(false);
+        isColdDownTimeLuckyWheel = true;
+        PlayerPrefs.SetInt("LuckyWheelColdDownAds", 1);
+        PlayerPrefs.Save();
+    }
+
+    
 
 
 

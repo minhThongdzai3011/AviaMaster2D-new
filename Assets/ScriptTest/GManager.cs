@@ -111,6 +111,7 @@ public class GManager : MonoBehaviour
 
     [Header("Người chơi")]
     public bool isControllable = false;
+    public bool isStaying = true;
     public float controlForce = 8f; // Lực điều khiển A/D
     public float maxVerticalSpeed = 15f; // Giới hạn tốc độ dọc
 
@@ -164,9 +165,6 @@ public class GManager : MonoBehaviour
 
             airplaneRigidbody2D.freezeRotation = true;
 
-        
-        
-            // THÊM: Tăng drag tự nhiên của Rigidbody2D thay vì dùng LimitAirspeed()
             airplaneRigidbody2D.drag = 0.2f; // Drag tự nhiên
             airplaneRigidbody2D.angularDrag = 0.1f; // Angular drag
     
@@ -182,6 +180,7 @@ public class GManager : MonoBehaviour
 
     public void LaunchAirplane()
     {
+        isStaying = false;
         if (isPlaying)
         {
             if (airplaneRigidbody2D == null)
@@ -622,7 +621,7 @@ public class GManager : MonoBehaviour
     {
         
         if (airplaneRigidbody2D == null) return;
-        
+
         // Cập nhật thông tin cơ bản
         Vector2 currentPos = airplaneRigidbody2D.transform.position;
         distanceTraveled = Vector2.Distance(startPosition, currentPos);
@@ -794,21 +793,14 @@ public class GManager : MonoBehaviour
                 buttonBoosterPlaneImage.color = Color.white;
             }
         }
-
-
-        
-
-        // if (!isHorizontalFlying && isPlay)
-        // {
-        //     if (Input.GetKey(KeyCode.A))
-        //     {
-        //         PlainUp();
-        //     }
-        //     if (Input.GetKey(KeyCode.D) && !isControllable && !isBoosterActive)
-        //     {
-        //         PlainDown();
-        //     }
-        // }
+        if (isStaying)
+        {
+            airplaneRigidbody2D.velocity = Vector2.zero;
+            airplaneRigidbody2D.angularVelocity = 0f;
+            airplaneRigidbody2D.rotation = 0f;
+            airplaneRigidbody2D.inertia = 0f;
+            
+        }
 
         if (Input.GetKeyDown(KeyCode.Keypad1))
         {
@@ -843,6 +835,15 @@ public class GManager : MonoBehaviour
             PlayerPrefs.Save();
             AgainGame();
         }
+        if (Input.GetKeyDown(KeyCode.Keypad4)) 
+        {
+            totalDiamond += 1000;
+            totalDiamondText.text = totalDiamond.ToString();
+            PlayerPrefs.SetInt("TotalDiamond", totalDiamond);
+            PlayerPrefs.Save();
+            SaveTotalDiamond();
+        }
+
 
         if (distanceText != null) distanceText.text = distanceTraveled.ToString("F0") + " ft";
         if (altitudeText != null)
@@ -867,7 +868,7 @@ public class GManager : MonoBehaviour
 
 
         moneyText.text = Plane.instance.moneyCollect.ToString() + " $";
-
+        totalDiamondText.text = totalDiamond.ToString("F0");
     }
 
     void HandleAircraftControl()

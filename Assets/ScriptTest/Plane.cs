@@ -33,12 +33,16 @@ public class Plane : MonoBehaviour
         explosionEffect.Stop();
     }
     public bool isStopSmokeEffect = true;
+    public bool isStopExplosionEffect = true;
 
     // Update is called once per frame
     void Update()
     {
         if(isStopSmokeEffect){
             smokeEffect.Stop();
+        }
+        if(isStopExplosionEffect){
+            explosionEffect.Stop();
         }
 
     }
@@ -47,6 +51,7 @@ public class Plane : MonoBehaviour
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Ground") && !isGrounded)
         {
+            isStopExplosionEffect = false;
             isGrounded = true;
 
             Debug.Log("*** MÁY BAY CHẠM ĐẤT - BẮT ĐẦU HỆ THỐNG DỪNG ***");

@@ -6,8 +6,7 @@ public class Setting : MonoBehaviour
 {
     public Image[] planeImages; 
     private Vector2[] positions; 
-    private int[] currentIndexOfImage; // currentIndexOfImage[i] = vị trí hiện tại của planeImages[i]
-    public float moveDuration = 0.5f;
+    private int[] currentIndexOfImage;    public float moveDuration = 0.5f;
 
     void Start()
     {

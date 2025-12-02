@@ -17,6 +17,20 @@ public class StartGame : MonoBehaviour
     public TextMeshProUGUI loadingText3;
     public TextMeshProUGUI nameGameText;
 
+    [Header("Image Settings")]
+    public Image imageLeft;
+    public Image imageLeft1;
+    public Image imageLeft2;
+    public Image imageRight;
+    public Image imageRight1;
+    public Image imageRight2;
+    public Image imageUp;
+    public Image imageUp1;
+    public Image imageUp2;
+    public Image imageRotationZ;
+    public float distance = 100f;
+    public float duration = 1f;
+
     void Start()
     {
         // TẠO blackPanel RIÊNG để DontDestroyOnLoad
@@ -137,5 +151,66 @@ public class StartGame : MonoBehaviour
             yield return new WaitForSeconds(interval);
         }
     }
+
+
+    void Update()
+    {
+        if (isLoading)
+        {
+            MoveLeftToRight();
+            MoveRightToLeft();
+            MoveUptoDown();
+            RotateZ();
+        }
+    }
+    public void MoveLeftToRight()
+    {
+        RectTransform rt = imageLeft.GetComponent<RectTransform>();
+        Vector3 targetPos = rt.anchoredPosition + new Vector2(90, 0);
+        rt.DOAnchorPos(targetPos, duration).SetEase(Ease.OutQuad);
+        RectTransform rt1 = imageLeft1.GetComponent<RectTransform>();
+        Vector3 targetPos1 = rt1.anchoredPosition + new Vector2(distance, 0);
+        rt1.DOAnchorPos(targetPos1, duration).SetEase(Ease.OutQuad);
+        RectTransform rt2 = imageLeft2.GetComponent<RectTransform>();
+        Vector3 targetPos2 = rt2.anchoredPosition + new Vector2(120, 0);
+        rt2.DOAnchorPos(targetPos2, duration).SetEase(Ease.OutQuad);
+    }
+
+    public void MoveRightToLeft()
+    {
+        RectTransform rt = imageRight.GetComponent<RectTransform>();
+        Vector3 targetPos = rt.anchoredPosition - new Vector2(80, 0);
+        rt.DOAnchorPos(targetPos, duration).SetEase(Ease.OutQuad);
+        RectTransform rt1 = imageRight1.GetComponent<RectTransform>();
+        Vector3 targetPos1 = rt1.anchoredPosition - new Vector2(70, 0);
+        rt1.DOAnchorPos(targetPos1, duration).SetEase(Ease.OutQuad);
+        RectTransform rt2 = imageRight2.GetComponent<RectTransform>();
+        Vector3 targetPos2 = rt2.anchoredPosition - new Vector2(150, 0);
+        rt2.DOAnchorPos(targetPos2, duration).SetEase(Ease.OutQuad);
+    }
+
+    public void MoveUptoDown()
+    {
+        RectTransform rt = imageUp.GetComponent<RectTransform>();
+        Vector2 targetPos = rt.anchoredPosition + new Vector2(0, 10);
+        rt.DOAnchorPos(targetPos, duration).SetEase(Ease.OutQuad);
+        RectTransform rt1 = imageUp1.GetComponent<RectTransform>();
+        Vector2 targetPos1 = rt1.anchoredPosition - new Vector2(0, 10);
+        rt1.DOAnchorPos(targetPos1, duration).SetEase(Ease.OutQuad);
+        RectTransform rt2 = imageUp2.GetComponent<RectTransform>();
+        Vector2 targetPos2 = rt2.anchoredPosition + new Vector2(0, 10);
+        rt2.DOAnchorPos(targetPos2, duration).SetEase(Ease.OutQuad);
+    }
+
+    public void RotateZ()
+    {
+        RectTransform rt = imageRotationZ.GetComponent<RectTransform>();
+        rt.DORotate(new Vector3(0, 0, 360), 1f, RotateMode.FastBeyond360)
+        .SetEase(Ease.Linear)
+        .SetLoops(-1, LoopType.Restart);
+    }
+
+
+
 
 }
