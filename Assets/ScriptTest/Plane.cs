@@ -203,6 +203,7 @@ public class Plane : MonoBehaviour
             Debug.Log("Airplane crashed due to excessive tilt angle: " + initialAngleZ);
         }
         else{
+            Settings.instance.ImageErrorAngleZ.gameObject.SetActive(false);
             if (initialAngleX > 180f) initialAngleX -= 360f; // Chuẩn hóa về [-180, 180]
             
             // Lấy velocity ban đầu

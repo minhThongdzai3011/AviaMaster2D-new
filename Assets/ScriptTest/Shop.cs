@@ -591,7 +591,11 @@ public class Shop : MonoBehaviour
     public bool isRotaryFrontZDone = false;
     public void buyPlane1(){
         StartCoroutine(PlayButtonEffect(0));
-        if(!isBuyPlane1Done){
+        if(!isBuyPlane1Done && GManager.instance.totalDiamond >= 2500){
+            GManager.instance.totalDiamond -= 2500;
+            PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
+            PlayerPrefs.Save();
+            GManager.instance.SaveTotalDiamond();
             planeBuyText[0].gameObject.SetActive(true);
             planeBuyText[0].text = "Play";
             isCheckedPlaneIndex = 0;
@@ -636,7 +640,13 @@ public class Shop : MonoBehaviour
     }
     public void buyPlane2(){
         StartCoroutine(PlayButtonEffect(1));
-        if(!isBuyPlane2Done){
+        if (GManager.instance.totalDiamond < 2500) return;
+        if(!isBuyPlane2Done && GManager.instance.totalDiamond >= 2500){
+
+            GManager.instance.totalDiamond -= 2500;
+            PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
+            PlayerPrefs.Save();
+            GManager.instance.SaveTotalDiamond();
             planeBuyText[1].gameObject.SetActive(true);
             planeBuyText[1].text = "Play";
             isCheckedPlaneIndex = 1;
@@ -681,7 +691,12 @@ public class Shop : MonoBehaviour
     }
     public void buyPlane3(){
         StartCoroutine(PlayButtonEffect(2));
-        if(!isBuyPlane3Done){
+        if (GManager.instance.totalDiamond < 2500) return;
+        if(!isBuyPlane3Done && GManager.instance.totalDiamond >= 2500){
+            GManager.instance.totalDiamond -= 2500;
+            PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
+            PlayerPrefs.Save();
+            GManager.instance.SaveTotalDiamond();
             planeBuyText[2].gameObject.SetActive(true);
             planeBuyText[2].text = "Play";
             isCheckedPlaneIndex = 2;
@@ -726,7 +741,12 @@ public class Shop : MonoBehaviour
     }
     public void buyPlane4(){
         StartCoroutine(PlayButtonEffect(3));
-        if(!isBuyPlane4Done){
+        if (GManager.instance.totalDiamond < 2500) return;
+        if(!isBuyPlane4Done && GManager.instance.totalDiamond >= 2500){
+            GManager.instance.totalDiamond -= 2500;
+            PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
+            PlayerPrefs.Save();
+            GManager.instance.SaveTotalDiamond();
             planeBuyText[3].gameObject.SetActive(true);
             planeBuyText[3].text = "Play";
             isCheckedPlaneIndex = 3;
@@ -771,7 +791,12 @@ public class Shop : MonoBehaviour
     }
     public void buyPlane5(){
         StartCoroutine(PlayButtonEffect(4));
-        if(!isBuyPlane5Done){
+        if (GManager.instance.totalDiamond < 2500) return;
+        if(!isBuyPlane5Done && GManager.instance.totalDiamond >= 2500){
+            GManager.instance.totalDiamond -= 2500;
+            PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
+            PlayerPrefs.Save();
+            GManager.instance.SaveTotalDiamond();
             planeBuyText[4].gameObject.SetActive(true);
             planeBuyText[4].text = "Play";
             isCheckedPlaneIndex = 4;
@@ -816,7 +841,12 @@ public class Shop : MonoBehaviour
     }
     public void buyPlane6(){
         StartCoroutine(PlayButtonEffect(5));
-        if(!isBuyPlane6Done){
+        if (GManager.instance.totalDiamond < 2500) return;
+        if(!isBuyPlane6Done && GManager.instance.totalDiamond >= 2500){
+            GManager.instance.totalDiamond -= 2500;
+            PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
+            PlayerPrefs.Save();
+            GManager.instance.SaveTotalDiamond();
             planeBuyText[5].gameObject.SetActive(true);
             planeBuyText[5].text = "Play";
             isCheckedPlaneIndex = 5;
@@ -861,7 +891,12 @@ public class Shop : MonoBehaviour
     }
     public void buyPlane7(){
         StartCoroutine(PlayButtonEffect(6));
-        if(!isBuyPlane7Done){
+        if (GManager.instance.totalDiamond < 2500) return;
+        if(!isBuyPlane7Done && GManager.instance.totalDiamond >= 2500){
+            GManager.instance.totalDiamond -= 2500;
+            PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
+            PlayerPrefs.Save();
+            GManager.instance.SaveTotalDiamond();
             planeBuyText[6].gameObject.SetActive(true);
             planeBuyText[6].text = "Play";
             isCheckedPlaneIndex = 6;
@@ -906,7 +941,12 @@ public class Shop : MonoBehaviour
     }
     public void buyPlane8(){
         StartCoroutine(PlayButtonEffect(7));
-        if(!isBuyPlane8Done){
+        if (GManager.instance.totalDiamond < 2500) return;
+        if(!isBuyPlane8Done && GManager.instance.totalDiamond >= 2500){
+            GManager.instance.totalDiamond -= 2500;
+            PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
+            PlayerPrefs.Save();
+            GManager.instance.SaveTotalDiamond();
             planeBuyText[7].gameObject.SetActive(true);
             planeBuyText[7].text = "Play";
             isCheckedPlaneIndex = 7;
@@ -951,7 +991,12 @@ public class Shop : MonoBehaviour
     }
     public void buyPlane9(){
         StartCoroutine(PlayButtonEffect(8));
-        if(!isBuyPlane9Done){
+        if (GManager.instance.totalDiamond < 2500) return;
+        if(!isBuyPlane9Done && GManager.instance.totalDiamond >= 2500){
+            GManager.instance.totalDiamond -= 2500;
+            PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
+            PlayerPrefs.Save();
+            GManager.instance.SaveTotalDiamond();
             planeBuyText[8].gameObject.SetActive(true);
             planeBuyText[8].text = "Play";
             isCheckedPlaneIndex = 8;
@@ -996,7 +1041,12 @@ public class Shop : MonoBehaviour
     }
     public void buyPlane10(){
         StartCoroutine(PlayButtonEffect(9));
-        if(!isBuyPlane10Done){
+        if (GManager.instance.totalDiamond < 2500) return;
+        if(!isBuyPlane10Done && GManager.instance.totalDiamond >= 2500){
+            GManager.instance.totalDiamond -= 2500;
+            PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
+            PlayerPrefs.Save();
+            GManager.instance.SaveTotalDiamond();
             planeBuyText[9].gameObject.SetActive(true);
             planeBuyText[9].text = "Play";
             isCheckedPlaneIndex = 9;
@@ -1041,7 +1091,12 @@ public class Shop : MonoBehaviour
     }
     public void buyPlane11(){
         StartCoroutine(PlayButtonEffect(10));
-        if(!isBuyPlane11Done){
+        if (GManager.instance.totalDiamond < 2500) return;
+        if(!isBuyPlane11Done && GManager.instance.totalDiamond >= 2500){
+            GManager.instance.totalDiamond -= 2500;
+            PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
+            PlayerPrefs.Save();
+            GManager.instance.SaveTotalDiamond();
             planeBuyText[10].gameObject.SetActive(true);
             planeBuyText[10].text = "Play";
             isCheckedPlaneIndex = 10;
@@ -1086,7 +1141,12 @@ public class Shop : MonoBehaviour
     }
     public void buyPlane12(){
         StartCoroutine(PlayButtonEffect(11));
-        if(!isBuyPlane12Done){
+        if (GManager.instance.totalDiamond < 2500) return;
+        if(!isBuyPlane12Done && GManager.instance.totalDiamond >= 2500){
+            GManager.instance.totalDiamond -= 2500;
+            PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
+            PlayerPrefs.Save();
+            GManager.instance.SaveTotalDiamond();
             planeBuyText[11].gameObject.SetActive(true);
             planeBuyText[11].text = "Play";
             isCheckedPlaneIndex = 11;
@@ -1131,7 +1191,12 @@ public class Shop : MonoBehaviour
     }
     public void buyPlane13(){
         StartCoroutine(PlayButtonEffect(12));
-        if(!isBuyPlane13Done){
+        if (GManager.instance.totalDiamond < 2500) return;
+        if(!isBuyPlane13Done && GManager.instance.totalDiamond >= 2500){
+            GManager.instance.totalDiamond -= 2500;
+            PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
+            PlayerPrefs.Save();
+            GManager.instance.SaveTotalDiamond();
             planeBuyText[12].gameObject.SetActive(true);
             planeBuyText[12].text = "Play";
             isCheckedPlaneIndex = 12;

@@ -40,6 +40,7 @@ public class Settings : MonoBehaviour
     public Image iamgeBlackScreen;
     public RectTransform NotificationNewMapImage;
     public Image settingImage;
+    public Image ImageErrorAngleZ;
 
     [Header("Button Settings")]
     public Button AdsButton;
@@ -408,7 +409,7 @@ public class Settings : MonoBehaviour
         if (isAnimating) return;
 
         Debug.Log("Mở Win Image!");
-
+        CheckPlane.instance.SetActiveLuckyWheel();
         // Dừng tất cả animation đang chạy
         DOTween.Kill(luckyWheelImage.transform);
         isAnimating = true;
@@ -438,7 +439,7 @@ public class Settings : MonoBehaviour
             Debug.LogError("Settings.instance is null!");
             return;
         }
-
+        
         Debug.Log("Đóng Lucky Wheel Image!");
 
         // Dừng tất cả animation đang chạy
@@ -453,6 +454,7 @@ public class Settings : MonoBehaviour
                 lastDistanceText.gameObject.SetActive(true);
                 luckyWheelImage.gameObject.SetActive(false);
                 isAnimating = false;
+                CheckPlane.instance.ResetActiveLuckyWheel();
                 Debug.Log("Lucky Wheel Image animation đóng hoàn thành!");
             });
     }
@@ -463,7 +465,7 @@ public class Settings : MonoBehaviour
         if (isAnimating) return;
 
         Debug.Log("Mở Win Image!");
-
+        CheckPlane.instance.SetActiveLeaderBoard();
         // Dừng tất cả animation đang chạy
         DOTween.Kill(GManager.instance.leaderBoardImage.transform);
         isAnimating = true;
@@ -508,6 +510,7 @@ public class Settings : MonoBehaviour
                 lastDistanceText.gameObject.SetActive(true);
                 GManager.instance.leaderBoardImage.gameObject.SetActive(false);
                 isAnimating = false;
+                CheckPlane.instance.ResetActiveLeaderBoard();
                 Debug.Log("Lucky Wheel Image animation đóng hoàn thành!");
             });
     }
@@ -820,6 +823,20 @@ public class Settings : MonoBehaviour
         PlayerPrefs.SetInt("LuckyWheelColdDownAds", 1);
         PlayerPrefs.Save();
     }
+
+    private float timer = 0f;          
+    private bool isActiveAngleZ = false;     
+    public void NotifyAngleZ()
+    {
+        timer += Time.deltaTime;
+        if (timer >= 0.5f)
+        {
+            isActiveAngleZ = !isActiveAngleZ;             
+            ImageErrorAngleZ.gameObject.SetActive(isActiveAngleZ);        
+            timer = 0f;                        
+        }
+    }
+
 
     
 

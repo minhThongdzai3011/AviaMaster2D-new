@@ -89,6 +89,7 @@ public class GManager : MonoBehaviour
     [Header("Ground Collision Detection")]
     public bool isPlaneOnGround = false; // Flag để theo dõi máy bay chạm đất
     public bool isGroundCollisionDetected = false; // Flag collision từ Plane.cs
+    public bool isCheckErrorAngleZ = false; //
 
     [Header("UI Texts")]
     public TextMeshProUGUI distanceText;
@@ -369,7 +370,7 @@ public class GManager : MonoBehaviour
         currentAirplaneRotationX = 0f;
 
         // Bước 4: Giữ độ cao và cho phép điều khiển
-        
+        isCheckErrorAngleZ = true;  
         if (Plane.instance != null)
         {
             if(TrailRendererLeft.instance != null && TrailRendererRight.instance != null)
@@ -857,7 +858,10 @@ public class GManager : MonoBehaviour
             }
         }
         if (rotationZText != null) rotationZText.text = rotationZ.ToString("F2") + " °";
-
+        if (rotationZ < 15 && isCheckErrorAngleZ)
+        {
+            Settings.instance.NotifyAngleZ();
+        }
 
         moneyText.text = Plane.instance.moneyCollect.ToString() + " $";
         totalDiamondText.text = totalDiamond.ToString("F0");

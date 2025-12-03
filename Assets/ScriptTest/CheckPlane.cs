@@ -2,12 +2,26 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using DG.Tweening;
 using System;
+using UnityEngine.UI;
+
 
 public class CheckPlane : MonoBehaviour
 {
+    public static CheckPlane instance;
     [Header("Buttons (RectTransforms)")]
     public RectTransform[] buttonRects = new RectTransform[3]; // kéo 3 nút, thứ tự từ trên xuống
+    public Button shopPlaneButton;
+    public Button luckyWheelButton;
+    public Button leaderBoardButton;
+    public Button moreGameButton;
 
+    public Image shopPlaneImage;
+    public Image planeImage;
+    public Image luckyWheelImage;
+    public Image leaderBoardImage;
+    public Image moreGameImage;
+
+    private Vector3 originalScale;
     [Header("Entrance")]
     public float entranceDelayBetween = 0.08f;
     public float entranceDuration = 0.35f;
@@ -60,12 +74,13 @@ public class CheckPlane : MonoBehaviour
 
     void Awake()
     {
+        instance = this;
         if (buttonRects == null) return;
         int n = buttonRects.Length;
         hoverTweens = new Tween[n];
         idleTweens = new Tween[n];
         lastInteractionTime = new float[n];
-
+        originalScale = shopPlaneButton.transform.localScale;
         for (int i = 0; i < n; i++)
         {
             var rt = buttonRects[i];
@@ -283,4 +298,92 @@ public class CheckPlane : MonoBehaviour
         seq.Play();
         return seq;
     }
+
+
+    public void OnPointerEnterShopPlane()
+    {
+        shopPlaneButton.transform.DOScale(originalScale * 0.9f, 0.2f).SetEase(Ease.OutQuad);
+    }
+
+    public void OnPointerExitShopPlane()
+    {
+        shopPlaneButton.transform.DOScale(originalScale, 0.2f).SetEase(Ease.OutQuad);
+    }
+
+    public void OnPointerEnterLuckyWheel()
+    {
+        luckyWheelButton.transform.DOScale(originalScale * 1.1f, 0.2f).SetEase(Ease.OutQuad);
+    }
+
+    public void OnPointerExitLuckyWheel()
+    {
+        luckyWheelButton.transform.DOScale(originalScale, 0.2f).SetEase(Ease.OutQuad);
+    }
+
+    public void OnPointerEnterLeaderBoard()
+    {
+        leaderBoardButton.transform.DOScale(originalScale * 1.1f, 0.2f).SetEase(Ease.OutQuad);
+    }
+
+    public void OnPointerExitLeaderBoard()
+    {
+        leaderBoardButton.transform.DOScale(originalScale, 0.2f).SetEase(Ease.OutQuad);
+    }
+
+    public void OnPointerEnterMoreGame()
+    {
+        moreGameButton.transform.DOScale(originalScale * 1.1f, 0.2f).SetEase(Ease.OutQuad);
+    }
+
+    public void OnPointerExitMoreGame()
+    {
+        moreGameButton.transform.DOScale(originalScale, 0.2f).SetEase(Ease.OutQuad);
+    }
+
+
+    public void SetActiveShopPlane()
+    {
+        shopPlaneButton.image.color = Color.gray;
+        shopPlaneImage.color = Color.gray;
+        planeImage.color = Color.gray;
+    }
+
+    public void SetActiveLuckyWheel()
+    {
+        luckyWheelButton.image.color = Color.gray;
+        luckyWheelImage.color = Color.gray;
+    }
+    public void SetActiveLeaderBoard()
+    {
+        leaderBoardButton.image.color = Color.gray;
+        leaderBoardImage.color = Color.gray;
+    }
+    public void SetActiveMoreGame()
+    {
+        moreGameButton.image.color = Color.gray;
+        moreGameImage.color = Color.gray;
+    }
+
+    public void ResetActiveShopPlane()
+    {
+        shopPlaneButton.image.color = Color.white;
+        shopPlaneImage.color = Color.white;
+        planeImage.color = Color.white;
+    }
+    public void ResetActiveLuckyWheel()
+    {
+        luckyWheelButton.image.color = Color.white;
+        luckyWheelImage.color = Color.white;
+    }
+    public void ResetActiveLeaderBoard()
+    {
+        leaderBoardButton.image.color = Color.white;
+        leaderBoardImage.color = Color.white;
+    }
+    public void ResetActiveMoreGame()
+    {
+        moreGameButton.image.color = Color.white;
+        moreGameImage.color = Color.white;
+    }
+
 }
