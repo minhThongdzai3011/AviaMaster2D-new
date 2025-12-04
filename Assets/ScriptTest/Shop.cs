@@ -8,9 +8,13 @@ public class Shop : MonoBehaviour
 {
     public static Shop instance;
     public Image imageShop;
+    [Header("Image UI")]
+    public Image[] imagePlayPlanes;
     [Header("Text UI")]
     public TextMeshProUGUI[] planePriceText;
     public TextMeshProUGUI[] planeBuyText;
+    public TextMeshProUGUI pageText;
+    private int page = 1;
 
     [Header("Enhanced Carousel System")]
     public Image[] planeImages; 
@@ -229,12 +233,16 @@ public class Shop : MonoBehaviour
 
     public void OnClickRightArrow()
     {
-        if (!isAnimating) StartCoroutine(SlideToDirection(-1));
+        if (!isAnimating) StartCoroutine(SlideToDirection(-3));
+        page++;
+        pageText.text = page > 5 ? "1" : "" + page;
     }
 
     public void OnClickLeftArrow()
     {
-        if (!isAnimating) StartCoroutine(SlideToDirection(1));
+        if (!isAnimating) StartCoroutine(SlideToDirection(3));
+        page--;
+        pageText.text = page < 1 ? "5" : "" + page;
     }
     
     IEnumerator SlideToDirection(int direction)
@@ -264,7 +272,7 @@ public class Shop : MonoBehaviour
         {
             Image plane = planeImages[i];
             Vector3 targetPos = plane.rectTransform.anchoredPosition + 
-                               new Vector2(direction * 200f, 0f);
+                               new Vector2(direction * 50f, 0f);
             
             slideOut.Join(plane.rectTransform.DOAnchorPos(targetPos, moveDuration)
                 .SetEase(Ease.OutQuart));
@@ -279,7 +287,7 @@ public class Shop : MonoBehaviour
         for (int i = 0; i < planeImages.Length; i++)
         {
             Vector3 startPos = originalPositions[currentOrder[i]] + 
-                              new Vector2(direction * 300f, 0f);
+                              new Vector2(direction * 100f, 0f);
             planeImages[i].rectTransform.anchoredPosition = startPos;
         }
         
@@ -505,16 +513,17 @@ public class Shop : MonoBehaviour
     public void OpenShop()
     {
         Debug.Log("Mở cửa hàng!");
-        
+        Settings.instance.pannelGray.gameObject.SetActive(true);
         // Dừng tất cả animation đang chạy
         DOTween.Kill(this);
 
         Settings.instance.lastDistanceText.gameObject.SetActive(false);
-        imageShop.gameObject.SetActive(true);
+        imageShop.gameObject.SetActive(true); 
         
         // Animation mở shop
         imageShop.transform.localScale = Vector3.zero;
         imageShop.transform.DOScale(Vector3.one, 0.5f).SetEase(Ease.OutBack);
+        CheckPlane.instance.SetActiveShopPlane();
     }
 
     public void CloseShop()
@@ -557,7 +566,8 @@ public class Shop : MonoBehaviour
             {
                 imageShop.gameObject.SetActive(false);
                 Settings.instance.lastDistanceText.gameObject.SetActive(true);
-                
+                CheckPlane.instance.ResetActiveShopPlane();
+                Settings.instance.pannelGray.gameObject.SetActive(false);
                 // ✅ THÊM: Đảm bảo camera follow đúng sau khi đóng shop
                 if (CameraManager.instance != null && GManager.instance != null && GManager.instance.airplaneRigidbody2D != null)
                 {

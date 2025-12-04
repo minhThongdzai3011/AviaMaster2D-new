@@ -175,7 +175,6 @@ public class GManager : MonoBehaviour
         
         SaveTotalMoney();
         SaveTotalDiamond();
-        GetRandomWelcomeMessage();
     }
 
     public void LaunchAirplane()
@@ -1480,9 +1479,9 @@ public class GManager : MonoBehaviour
     public int ratePower = 0;
     public int rateFuel = 0;
     public int rateBoost = 0;
-    private float moneyPower = 30f;
-    private float moneyFuel = 30f;
-    private float moneyBoost = 30f;
+    public float moneyPower = 30f;
+    public float moneyFuel = 30f;
+    public float moneyBoost = 30f;
     public bool isFuelMax = false;
     public bool isPowerMax = false;
     public bool isBoostMax = false;
@@ -1525,6 +1524,7 @@ public class GManager : MonoBehaviour
             // THÊM: Lưu ngay sau khi nâng cấp
             SaveUpgradeData();
             SaveTotalMoney();
+            CheckPlane.instance.CheckMoneyForUpgradeButtonNext();
             levelFuelText.text = "Fuel capacity increased by " + rateFuel + "%";
             Debug.Log($"UpgradeFuel: Level {levelFuel}, Rate {rateFuel}%, Duration {durationFuel}s");
         }
@@ -1585,6 +1585,7 @@ public class GManager : MonoBehaviour
             // THÊM: Lưu ngay sau khi nâng cấp
             SaveUpgradeData();
             SaveTotalMoney();
+            CheckPlane.instance.CheckMoneyForUpgradeButtonNext();
             levelBoostText.text = "Flight stability increased " + rateBoost + "%";
             Debug.Log($"UpgradeBoost: Level {levelBoost}, Rate {rateBoost}%, TotalBoost {totalBoost}");
         }
@@ -1629,6 +1630,7 @@ public class GManager : MonoBehaviour
             // THÊM: Lưu ngay sau khi nâng cấp
             SaveUpgradeData();
             SaveTotalMoney();
+            CheckPlane.instance.CheckMoneyForUpgradeButtonNext();
 
             levelPowerText.text = "Initial thrust increased by " + ratePower + "%";
             Debug.Log($"UpgradePower: Level {levelPower}, Rate {ratePower}%, Force {launchForce}");
@@ -1904,6 +1906,7 @@ public class GManager : MonoBehaviour
                     isHomeUp = false;
                     isFuelDown = true;
                     fuelPlayDown();
+                    leftHomeImage.gameObject.SetActive(false);
                 });
         }
     }
@@ -1918,6 +1921,7 @@ public class GManager : MonoBehaviour
                     isHomeDown = false;
                     isAircraftUp = true;
                     StartCoroutine(AircraftPlayUp());
+                    rightHomeImage.gameObject.SetActive(false);
                 });
         }
     }
@@ -1966,22 +1970,7 @@ public class GManager : MonoBehaviour
 
     
 
-    string[] shortMessages = {
-            "Ready to fly!",
-            "Clear skies!",
-            "Take off!",
-            "Sky high!",
-            "Pilot mode!",
-            "Wings up!",
-            "Adventure awaits!"
-        };
 
-
-    public void GetRandomWelcomeMessage()
-    {
-        string randomMessage = shortMessages[UnityEngine.Random.Range(0, shortMessages.Length)];
-        newMapText.text = randomMessage;
-    }
 
     
 }

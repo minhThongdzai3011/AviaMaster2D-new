@@ -21,6 +21,14 @@ public class CheckPlane : MonoBehaviour
     public Image leaderBoardImage;
     public Image moreGameImage;
 
+    [Header("Upgrade Button Animations")]
+    public Image upgradePowerImage;
+    public Image upgradeGravionImage;
+    public Image upgradeFuelImage;
+    public Image iconPowerImage;
+    public Image iconGravionImage;
+    public Image iconFuelImage;
+
     private Vector3 originalScale;
     [Header("Entrance")]
     public float entranceDelayBetween = 0.08f;
@@ -91,6 +99,7 @@ public class CheckPlane : MonoBehaviour
                 lastInteractionTime[i] = Time.unscaledTime; // bắt đầu đếm từ lúc awake
             }
         }
+        CheckMoneyForUpgradeButtonNext();
     }
 
     void OnEnable()
@@ -104,6 +113,7 @@ public class CheckPlane : MonoBehaviour
 
     void Update()
     {
+        CheckMoneyForUpgradeButtonNext();
         // dùng unscaledTime để idle vẫn chạy khi Time.timeScale = 0? nếu muốn bỏ, dùng Time.time
         if (buttonRects == null) return;
         float now = Time.unscaledTime;
@@ -385,5 +395,91 @@ public class CheckPlane : MonoBehaviour
         moreGameButton.image.color = Color.white;
         moreGameImage.color = Color.white;
     }
+
+    public void CheckMoneyForUpgradeButtonNext()
+    {
+        //checkFuel
+        if(GManager.instance.totalMoney >= GManager.instance.moneyBoost)
+        {
+            upgradeFuelImage.gameObject.SetActive(false);
+            // ChangeColorLoop();
+        }
+        else
+        {
+            upgradeFuelImage.gameObject.SetActive(true);
+            // StopChangeColorLoop();
+        }
+        //checkPower
+        if(GManager.instance.totalMoney >= GManager.instance.moneyPower)
+        {
+            upgradePowerImage.gameObject.SetActive(false);
+            RotateZLoop();
+        }
+        else
+        {
+            upgradePowerImage.gameObject.SetActive(true);
+            StopRotateZLoop();
+        }
+        //checkGravion
+        if(GManager.instance.totalMoney >= GManager.instance.moneyFuel)  
+        {
+            upgradeGravionImage.gameObject.SetActive(false);
+            // PositionYLoop();
+        }
+        else
+        {
+            upgradeGravionImage.gameObject.SetActive(true);
+            // StopPositionYLoop();
+        }
+    }
+
+    public void RotateZLoop()
+    {
+        RectTransform rt = iconPowerImage.GetComponent<RectTransform>();
+        rt.DORotate(new Vector3(0, 0, 360), 2f, RotateMode.FastBeyond360)
+          .SetEase(Ease.Linear)
+          .SetLoops(-1, LoopType.Restart); // lặp vô hạn
+    }
+
+    public void StopRotateZLoop()
+    {
+        RectTransform rt = iconPowerImage.GetComponent<RectTransform>();
+        rt.DOKill(); // dừng mọi tween trên RectTransform
+        rt.rotation = Quaternion.identity; // reset rotation về 0
+    }
+
+    public void PositionYLoop()
+    {
+        RectTransform rt = iconGravionImage.GetComponent<RectTransform>();
+
+        // Tween xoay từ góc hiện tại sang 10 độ Z
+        rt.DORotate(new Vector3(0, 0, 10), 0.5f)
+          .SetEase(Ease.InOutQuad)
+          .SetLoops(-1, LoopType.Yoyo); // lặp vô hạn qua lại
+
+    }
+
+    public void StopPositionYLoop()
+    {
+        RectTransform rt = iconGravionImage.GetComponent<RectTransform>();
+        rt.DOKill(); // dừng mọi tween trên RectTransform
+        rt.rotation = Quaternion.identity; // reset rotation về 0
+    }
+    public void ChangeColorLoop()
+    {
+        iconFuelImage.DOColor(new Color(0f, 1f, 0f), 0.2f)
+        .SetEase(Ease.InOutQuad)
+        .SetLoops(-1, LoopType.Yoyo);
+    }
+
+    public void StopChangeColorLoop()
+    {
+        iconFuelImage.DOKill(); // dừng mọi tween trên Image
+        iconFuelImage.color = Color.white; // reset màu về trắng
+    }
+
+
+
+
 
 }

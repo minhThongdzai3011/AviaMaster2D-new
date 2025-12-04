@@ -41,6 +41,7 @@ public class Settings : MonoBehaviour
     public RectTransform NotificationNewMapImage;
     public Image settingImage;
     public Image ImageErrorAngleZ;
+    public Image pannelGray;
 
     [Header("Button Settings")]
     public Button AdsButton;
@@ -173,7 +174,7 @@ public class Settings : MonoBehaviour
     public void OpenSettings()
     {
         if (isAnimating) return;
-        
+        pannelGray.gameObject.SetActive(true);
         Debug.Log("Mở Settings!");
         
         // Dừng tất cả animation đang chạy
@@ -224,6 +225,7 @@ public class Settings : MonoBehaviour
                 lastDistanceText.gameObject.SetActive(true);
                 settingsImage.gameObject.SetActive(false);
                 isAnimating = false;
+                pannelGray.gameObject.SetActive(false);
                 Debug.Log("Settings animation đóng hoàn thành!");
 
             });
@@ -407,7 +409,7 @@ public class Settings : MonoBehaviour
     public void openWheel()
     {
         if (isAnimating) return;
-
+        pannelGray.gameObject.SetActive(true);
         Debug.Log("Mở Win Image!");
         CheckPlane.instance.SetActiveLuckyWheel();
         // Dừng tất cả animation đang chạy
@@ -454,6 +456,7 @@ public class Settings : MonoBehaviour
                 lastDistanceText.gameObject.SetActive(true);
                 luckyWheelImage.gameObject.SetActive(false);
                 isAnimating = false;
+                pannelGray.gameObject.SetActive(false);
                 CheckPlane.instance.ResetActiveLuckyWheel();
                 Debug.Log("Lucky Wheel Image animation đóng hoàn thành!");
             });
@@ -463,8 +466,9 @@ public class Settings : MonoBehaviour
     {
         
         if (isAnimating) return;
-
+        pannelGray.gameObject.SetActive(true);
         Debug.Log("Mở Win Image!");
+
         CheckPlane.instance.SetActiveLeaderBoard();
         // Dừng tất cả animation đang chạy
         DOTween.Kill(GManager.instance.leaderBoardImage.transform);
@@ -511,6 +515,7 @@ public class Settings : MonoBehaviour
                 GManager.instance.leaderBoardImage.gameObject.SetActive(false);
                 isAnimating = false;
                 CheckPlane.instance.ResetActiveLeaderBoard();
+                pannelGray.gameObject.SetActive(false);
                 Debug.Log("Lucky Wheel Image animation đóng hoàn thành!");
             });
     }

@@ -201,8 +201,10 @@ public class Plane : MonoBehaviour
         if (initialAngleZ < -15f || initialAngleZ > 15f){
             MakePlaneBlackAndExplode();
             Debug.Log("Airplane crashed due to excessive tilt angle: " + initialAngleZ);
+            TextIntro.instance.GetRandomTextWinMessage(0); // bad
         }
         else{
+            TextIntro.instance.GetRandomTextWinMessage(1); // good
             Settings.instance.ImageErrorAngleZ.gameObject.SetActive(false);
             if (initialAngleX > 180f) initialAngleX -= 360f; // Chuẩn hóa về [-180, 180]
             
