@@ -304,9 +304,7 @@ public class GameManager : MonoBehaviour
 
     void AudioBackgroundPlay()
     {
-        AudioManager.instance.audioMusic.clip = AudioManager.instance.backgroundMusicClip;
-        AudioManager.instance.audioMusic.loop = true;
-        AudioManager.instance.audioMusic.Play();
+
     }
 
     public bool isMaxFlightAngle = false;

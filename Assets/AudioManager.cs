@@ -8,8 +8,8 @@ public class AudioManager : MonoBehaviour
 {
     public static AudioManager instance;
     [SerializeField] private AudioMixer audioMixer;
-    [SerializeField] private Slider musicSlider;
-    [SerializeField] private Slider soundSlider;
+    [SerializeField] private Button musicButton;
+    [SerializeField] private Button soundButton;
 
     [Header("Âm thanh")]
     public AudioSource audioMusic;
@@ -17,6 +17,8 @@ public class AudioManager : MonoBehaviour
     public AudioClip backgroundMusicClip;
     public AudioClip upgradeSoundClip;
     public AudioClip roketSoundClip;
+    public bool isMusicOn = true;
+    public bool isSoundOn = true;
 
     void Awake()
     {
@@ -29,6 +31,7 @@ public class AudioManager : MonoBehaviour
     void Start()
     {
         SetMusicVolume();
+        SetSoundVolume();
     }
 
     // Update is called once per frame
@@ -39,21 +42,35 @@ public class AudioManager : MonoBehaviour
 
     public void SetMusicVolume()
     {
-        float volume = musicSlider.value;
-        audioMixer.SetFloat("music", Mathf.Log10(volume) * 20);
-        PlayerPrefs.SetFloat("MusicVolume", volume);
+        if (isMusicOn)
+        {
+            audioMusic.clip = backgroundMusicClip;
+            audioMusic.loop = true;
+            audioMusic.Play();
+        }
+        else
+        {
+            audioMusic.Stop();
+        }
+        
     }
     public void SetSoundVolume()
     {
-        float volume = soundSlider.value;
-        audioMixer.SetFloat("SFX", Mathf.Log10(volume) * 20);
-        PlayerPrefs.SetFloat("SoundVolume", volume);
+        if (isSoundOn)
+        {
+            audioSound.volume = 1f;
+        }
+        else
+        {
+            audioSound.volume = 0f;
+        }
     }
 
     public void LoadVolume()
     {
-        musicSlider.value = PlayerPrefs.GetFloat("MusicVolume", 0.75f);
-        soundSlider.value = PlayerPrefs.GetFloat("SoundVolume", 0.75f);
+        isSoundOn = PlayerPrefs.GetInt("SoundVolume", 1) == 1;
+        isMusicOn = PlayerPrefs.GetInt("MusicVolume", 1) == 1;
+        SetSoundVolume();
         SetMusicVolume();
     }
     

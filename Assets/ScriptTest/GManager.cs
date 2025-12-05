@@ -179,7 +179,13 @@ public class GManager : MonoBehaviour
 
     public void LaunchAirplane()
     {
-        if (isPlaying)
+        if (BirdGuide.instance != null && BirdGuide.instance.isShowGuide)
+        {
+            BirdGuide.instance.pannelGuide.gameObject.SetActive(true);
+            BirdGuide.instance.StartCoroutine(BirdGuide.instance.DelaytoGuide());
+            newMapText.text = "How to Play";
+        }
+        if (isPlaying && !BirdGuide.instance.isShowGuide)
         {
             if (airplaneRigidbody2D == null)
             {
@@ -369,6 +375,7 @@ public class GManager : MonoBehaviour
         currentAirplaneRotationX = 0f;
 
         // Bước 4: Giữ độ cao và cho phép điều khiển
+
         isCheckErrorAngleZ = true;  
         if (Plane.instance != null)
         {

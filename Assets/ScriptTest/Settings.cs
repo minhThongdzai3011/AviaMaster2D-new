@@ -46,6 +46,7 @@ public class Settings : MonoBehaviour
     [Header("Button Settings")]
     public Button AdsButton;
     public Button AdsLuckyWheelButton;
+    public Button butttonExitImageWin;
     
     [Header("Bool Settings")]
     public bool isMusicOn = true;
@@ -244,8 +245,7 @@ public class Settings : MonoBehaviour
         // Animation cho button music
         StartCoroutine(AnimateToggle(isMusicOn, musicImageOn, musicImageOff, musicText, "Music"));
         
-        // TODO: Bật/tắt nhạc nền thực tế ở đây
-        // AudioManager.instance.ToggleMusic(isMusicOn);
+        AudioManager.instance.SetMusicVolume();
     }
 
     public void ToggleSound()
@@ -260,8 +260,7 @@ public class Settings : MonoBehaviour
         // Animation cho button sound
         StartCoroutine(AnimateToggle(isSoundOn, soundImageOn, soundImageOff, soundText, "Sound"));
         
-        // TODO: Bật/tắt âm thanh thực tế ở đây
-        // AudioManager.instance.ToggleSound(isSoundOn);
+        AudioManager.instance.SetSoundVolume();
     }
     
     IEnumerator AnimateToggle(bool isOn, Image imageOn, Image imageOff, TextMeshProUGUI text, string settingName)
@@ -625,7 +624,7 @@ public class Settings : MonoBehaviour
         }));
 
         // 2. count collect
-        seq.Append(DOVirtual.Float(0, collectValue, 2f, v =>
+        seq.Join(DOVirtual.Float(0, collectValue, 2f, v =>
         {
             collectMoneyText.text = ((int)v).ToString();
         }));
@@ -640,6 +639,7 @@ public class Settings : MonoBehaviour
         seq.OnComplete(() =>
         {
             isCloseWinImage = true;
+            butttonExitImageWin.gameObject.SetActive(true);
             AdsButton.gameObject.SetActive(true);
             isPrizeCoin = true;
 

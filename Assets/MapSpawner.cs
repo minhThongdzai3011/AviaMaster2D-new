@@ -293,23 +293,23 @@ public class MapSpawner : MonoBehaviour
     void Update()
     {
         countMapSpawned = GameObject.FindGameObjectsWithTag("Map").Length;
-        if (countMapSpawned <= 10)
+        if (countMapSpawned <= 20)
         {
             stopCheckSpawnRate01 = false;
         }
-        else if (countMapSpawned > 10 && countMapSpawned <= 20)
+        else if (countMapSpawned > 20 && countMapSpawned <= 40)
         {
             stopCheckSpawnRate12 = false;
         }
-        else if (countMapSpawned > 20 && countMapSpawned <= 30)
+        else if (countMapSpawned > 40 && countMapSpawned <= 60)
         {
             stopCheckSpawnRate23 = false;
         }
-        else if (countMapSpawned > 30 && countMapSpawned <= 40)
+        else if (countMapSpawned > 60 && countMapSpawned <= 80)
         {
             stopCheckSpawnRate34 = false;
         }
-        else if (countMapSpawned > 40 && countMapSpawned <= 50)
+        else if (countMapSpawned > 80 && countMapSpawned <= 100)
         {
             stopCheckSpawnRate45 = false;
         }
@@ -322,7 +322,7 @@ public class MapSpawner : MonoBehaviour
         while (true)
         {
             count = GameObject.FindGameObjectsWithTag("Map").Length;
-            if (count < 60)
+            if (count < 121)
             {
                 
                 CheckMap();
@@ -483,7 +483,7 @@ public class MapSpawner : MonoBehaviour
     {
         int countSpawned = GameObject.FindGameObjectsWithTag("Map").Length;
 
-        int index = countSpawned / 10;   // Mỗi 10 map → đổi map
+        int index = countSpawned / 20;   // Mỗi 20 map → đổi map
         if (index >= tempSpawnList.Count)
             return;
 

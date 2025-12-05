@@ -601,30 +601,41 @@ public class Shop : MonoBehaviour
     public bool isRotaryFrontZDone = false;
     public void buyPlane1(){
         StartCoroutine(PlayButtonEffect(0));
-        if(!isBuyPlane1Done && GManager.instance.totalDiamond >= 2500){
-            GManager.instance.totalDiamond -= 2500;
-            PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
-            PlayerPrefs.Save();
-            GManager.instance.SaveTotalDiamond();
-            planeBuyText[0].gameObject.SetActive(true);
-            planeBuyText[0].text = "Play";
-            isCheckedPlaneIndex = 0;
-            for(int i=0; i<planeBuyText.Length; i++){
-                if(i != 0){
-                    planeBuyText[i].text = "Select";
+        if(!isBuyPlane1Done){
+            if(GManager.instance.totalDiamond >= 2500)
+            {
+                GManager.instance.totalDiamond -= 2500;
+                PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
+                PlayerPrefs.Save();
+                GManager.instance.SaveTotalDiamond();
+                planeBuyText[0].gameObject.SetActive(true);
+                planeBuyText[0].text = "Play";
+                imagePlayPlanes[0].gameObject.SetActive(true);
+                isCheckedPlaneIndex = 0;
+                for(int i=0; i<planeBuyText.Length; i++){
+                    if(i != 0){
+                        planeBuyText[i].text = "Select";
+                        imagePlayPlanes[i].gameObject.SetActive(false);
+                    }
                 }
+                planePriceText[0].gameObject.SetActive(false);
+                isBuyPlane1Done = true;
             }
-            planePriceText[0].gameObject.SetActive(false);
-            isBuyPlane1Done = true;
+            else {
+                return;
+            }
+            
         }
         else {
             if(planeBuyText[0].text == "Play") return;
             else{
                 planeBuyText[0].text = "Play";
                 isCheckedPlaneIndex = 0;
+                imagePlayPlanes[0].gameObject.SetActive(true);
                 for(int i=0; i<planeBuyText.Length; i++){
                     if(i != 0){
                         planeBuyText[i].text = "Select";
+                        imagePlayPlanes[i].gameObject.SetActive(false);
                     }
                 }
             }
@@ -650,32 +661,41 @@ public class Shop : MonoBehaviour
     }
     public void buyPlane2(){
         StartCoroutine(PlayButtonEffect(1));
-        if (GManager.instance.totalDiamond < 2500) return;
-        if(!isBuyPlane2Done && GManager.instance.totalDiamond >= 2500){
-
-            GManager.instance.totalDiamond -= 2500;
-            PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
-            PlayerPrefs.Save();
-            GManager.instance.SaveTotalDiamond();
-            planeBuyText[1].gameObject.SetActive(true);
-            planeBuyText[1].text = "Play";
-            isCheckedPlaneIndex = 1;
-            for(int i=0; i<planeBuyText.Length; i++){
-                if(i != 1){
-                    planeBuyText[i].text = "Select";
+        if(!isBuyPlane2Done){
+            if(GManager.instance.totalDiamond >= 2500)
+            {
+                GManager.instance.totalDiamond -= 2500;
+                PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
+                PlayerPrefs.Save();
+                GManager.instance.SaveTotalDiamond();
+                planeBuyText[1].gameObject.SetActive(true);
+                planeBuyText[1].text = "Play";
+                imagePlayPlanes[1].gameObject.SetActive(true);
+                isCheckedPlaneIndex = 1;
+                for(int i=0; i<planeBuyText.Length; i++){
+                    if(i != 1){
+                        planeBuyText[i].text = "Select";
+                        imagePlayPlanes[i].gameObject.SetActive(false);
+                    }
                 }
+                planePriceText[1].gameObject.SetActive(false);
+                isBuyPlane2Done = true;
             }
-            planePriceText[1].gameObject.SetActive(false);
-            isBuyPlane2Done = true;
+            else {
+                return;
+            }
+
         }
         else {
             if(planeBuyText[1].text == "Play") return;
             else{
                 planeBuyText[1].text = "Play";
                 isCheckedPlaneIndex = 1;
+                imagePlayPlanes[1].gameObject.SetActive(true);
                 for(int i=0; i<planeBuyText.Length; i++){
                     if(i != 1){
                         planeBuyText[i].text = "Select";
+                        imagePlayPlanes[i].gameObject.SetActive(false);
                     }
                 }
             }
@@ -701,31 +721,41 @@ public class Shop : MonoBehaviour
     }
     public void buyPlane3(){
         StartCoroutine(PlayButtonEffect(2));
-        if (GManager.instance.totalDiamond < 2500) return;
-        if(!isBuyPlane3Done && GManager.instance.totalDiamond >= 2500){
-            GManager.instance.totalDiamond -= 2500;
-            PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
-            PlayerPrefs.Save();
-            GManager.instance.SaveTotalDiamond();
-            planeBuyText[2].gameObject.SetActive(true);
-            planeBuyText[2].text = "Play";
-            isCheckedPlaneIndex = 2;
-            for(int i=0; i<planeBuyText.Length; i++){
-                if(i != 2){
-                    planeBuyText[i].text = "Select";
+        if(!isBuyPlane3Done){
+            if(GManager.instance.totalDiamond >= 2500)
+            {
+                GManager.instance.totalDiamond -= 2500;
+                PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
+                PlayerPrefs.Save();
+                GManager.instance.SaveTotalDiamond();
+                planeBuyText[2].gameObject.SetActive(true);
+                planeBuyText[2].text = "Play";
+                imagePlayPlanes[2].gameObject.SetActive(true);
+                isCheckedPlaneIndex = 2;
+                for(int i=0; i<planeBuyText.Length; i++){
+                    if(i != 2){
+                        planeBuyText[i].text = "Select";
+                        imagePlayPlanes[i].gameObject.SetActive(false);
+                    }
                 }
+                planePriceText[2].gameObject.SetActive(false);
+                isBuyPlane3Done = true;
             }
-            planePriceText[2].gameObject.SetActive(false);
-            isBuyPlane3Done = true;
+            else {
+                return;
+            }
+
         }
         else {
             if(planeBuyText[2].text == "Play") return;
             else{
                 planeBuyText[2].text = "Play";
                 isCheckedPlaneIndex = 2;
+                imagePlayPlanes[2].gameObject.SetActive(true);
                 for(int i=0; i<planeBuyText.Length; i++){
                     if(i != 2){
                         planeBuyText[i].text = "Select";
+                        imagePlayPlanes[i].gameObject.SetActive(false);
                     }
                 }
             }
@@ -751,31 +781,40 @@ public class Shop : MonoBehaviour
     }
     public void buyPlane4(){
         StartCoroutine(PlayButtonEffect(3));
-        if (GManager.instance.totalDiamond < 2500) return;
-        if(!isBuyPlane4Done && GManager.instance.totalDiamond >= 2500){
-            GManager.instance.totalDiamond -= 2500;
-            PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
-            PlayerPrefs.Save();
-            GManager.instance.SaveTotalDiamond();
-            planeBuyText[3].gameObject.SetActive(true);
-            planeBuyText[3].text = "Play";
-            isCheckedPlaneIndex = 3;
-            for(int i=0; i<planeBuyText.Length; i++){
-                if(i != 3){
-                    planeBuyText[i].text = "Select";
+        if(!isBuyPlane4Done){
+            if(GManager.instance.totalDiamond >= 2500)
+            {
+                GManager.instance.totalDiamond -= 2500;
+                PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
+                PlayerPrefs.Save();
+                GManager.instance.SaveTotalDiamond();
+                planeBuyText[3].gameObject.SetActive(true);
+                planeBuyText[3].text = "Play";
+                isCheckedPlaneIndex = 3;
+                imagePlayPlanes[3].gameObject.SetActive(true);
+                for(int i=0; i<planeBuyText.Length; i++){
+                    if(i != 3){
+                        planeBuyText[i].text = "Select";
+                        imagePlayPlanes[i].gameObject.SetActive(false);
+                    }
                 }
+                planePriceText[3].gameObject.SetActive(false);
+                isBuyPlane4Done = true;
             }
-            planePriceText[3].gameObject.SetActive(false);
-            isBuyPlane4Done = true;
+            else {
+                return;
+            }
         }
         else {
             if(planeBuyText[3].text == "Play") return;
             else{
                 planeBuyText[3].text = "Play";
                 isCheckedPlaneIndex = 3;
+                imagePlayPlanes[3].gameObject.SetActive(true);
                 for(int i=0; i<planeBuyText.Length; i++){
                     if(i != 3){
                         planeBuyText[i].text = "Select";
+                        imagePlayPlanes[i].gameObject.SetActive(false);
                     }
                 }
             }
@@ -801,31 +840,40 @@ public class Shop : MonoBehaviour
     }
     public void buyPlane5(){
         StartCoroutine(PlayButtonEffect(4));
-        if (GManager.instance.totalDiamond < 2500) return;
-        if(!isBuyPlane5Done && GManager.instance.totalDiamond >= 2500){
-            GManager.instance.totalDiamond -= 2500;
-            PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
-            PlayerPrefs.Save();
-            GManager.instance.SaveTotalDiamond();
-            planeBuyText[4].gameObject.SetActive(true);
-            planeBuyText[4].text = "Play";
-            isCheckedPlaneIndex = 4;
-            for(int i=0; i<planeBuyText.Length; i++){
-                if(i != 4){
-                    planeBuyText[i].text = "Select";
+        if(!isBuyPlane5Done){
+            if(GManager.instance.totalDiamond >= 2500)
+            {
+                GManager.instance.totalDiamond -= 2500;
+                PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
+                PlayerPrefs.Save();
+                GManager.instance.SaveTotalDiamond();
+                planeBuyText[4].gameObject.SetActive(true);
+                planeBuyText[4].text = "Play";
+                imagePlayPlanes[4].gameObject.SetActive(true);
+                isCheckedPlaneIndex = 4;
+                for(int i=0; i<planeBuyText.Length; i++){
+                    if(i != 4){
+                        planeBuyText[i].text = "Select";
+                        imagePlayPlanes[i].gameObject.SetActive(false);
+                    }
                 }
+                planePriceText[4].gameObject.SetActive(false);
+                isBuyPlane5Done = true;
             }
-            planePriceText[4].gameObject.SetActive(false);
-            isBuyPlane5Done = true;
+            else {
+                return;
+            }
         }
         else {
             if(planeBuyText[4].text == "Play") return;
             else{
                 planeBuyText[4].text = "Play";
                 isCheckedPlaneIndex = 4;
+                imagePlayPlanes[4].gameObject.SetActive(true);
                 for(int i=0; i<planeBuyText.Length; i++){
                     if(i != 4){
                         planeBuyText[i].text = "Select";
+                        imagePlayPlanes[i].gameObject.SetActive(false);
                     }
                 }
             }
@@ -851,31 +899,40 @@ public class Shop : MonoBehaviour
     }
     public void buyPlane6(){
         StartCoroutine(PlayButtonEffect(5));
-        if (GManager.instance.totalDiamond < 2500) return;
-        if(!isBuyPlane6Done && GManager.instance.totalDiamond >= 2500){
-            GManager.instance.totalDiamond -= 2500;
-            PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
-            PlayerPrefs.Save();
-            GManager.instance.SaveTotalDiamond();
-            planeBuyText[5].gameObject.SetActive(true);
-            planeBuyText[5].text = "Play";
-            isCheckedPlaneIndex = 5;
-            for(int i=0; i<planeBuyText.Length; i++){
-                if(i != 5){
-                    planeBuyText[i].text = "Select";
+        if(!isBuyPlane6Done){
+            if(GManager.instance.totalDiamond >= 2500)
+            {
+                GManager.instance.totalDiamond -= 2500;
+                PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
+                PlayerPrefs.Save();
+                GManager.instance.SaveTotalDiamond();
+                planeBuyText[5].gameObject.SetActive(true);
+                planeBuyText[5].text = "Play";
+                imagePlayPlanes[5].gameObject.SetActive(true);
+                isCheckedPlaneIndex = 5;
+                for(int i=0; i<planeBuyText.Length; i++){
+                    if(i != 5){
+                        planeBuyText[i].text = "Select";
+                        imagePlayPlanes[i].gameObject.SetActive(false);
+                    }
                 }
+                planePriceText[5].gameObject.SetActive(false);
+                isBuyPlane6Done = true;
             }
-            planePriceText[5].gameObject.SetActive(false);
-            isBuyPlane6Done = true;
+            else {
+                return;
+            }
         }
         else {
             if(planeBuyText[5].text == "Play") return;
             else{
                 planeBuyText[5].text = "Play";
                 isCheckedPlaneIndex = 5;
+                imagePlayPlanes[5].gameObject.SetActive(true);
                 for(int i=0; i<planeBuyText.Length; i++){
                     if(i != 5){
                         planeBuyText[i].text = "Select";
+                        imagePlayPlanes[i].gameObject.SetActive(false);
                     }
                 }
             }
@@ -901,35 +958,45 @@ public class Shop : MonoBehaviour
     }
     public void buyPlane7(){
         StartCoroutine(PlayButtonEffect(6));
-        if (GManager.instance.totalDiamond < 2500) return;
-        if(!isBuyPlane7Done && GManager.instance.totalDiamond >= 2500){
-            GManager.instance.totalDiamond -= 2500;
-            PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
-            PlayerPrefs.Save();
-            GManager.instance.SaveTotalDiamond();
-            planeBuyText[6].gameObject.SetActive(true);
-            planeBuyText[6].text = "Play";
-            isCheckedPlaneIndex = 6;
-            for(int i=0; i<planeBuyText.Length; i++){
-                if(i != 6){
-                    planeBuyText[i].text = "Select";
+        if(!isBuyPlane7Done){
+            if(GManager.instance.totalDiamond >= 2500)
+            {
+                GManager.instance.totalDiamond -= 2500;
+                PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
+                PlayerPrefs.Save();
+                GManager.instance.SaveTotalDiamond();
+                planeBuyText[6].gameObject.SetActive(true);
+                planeBuyText[6].text = "Play";
+                imagePlayPlanes[6].gameObject.SetActive(true);
+                isCheckedPlaneIndex = 6;
+                for(int i=0; i<planeBuyText.Length; i++){
+                    if(i != 6){
+                        planeBuyText[i].text = "Select";
+                        imagePlayPlanes[i].gameObject.SetActive(false);
+                    }
                 }
+                planePriceText[6].gameObject.SetActive(false);
+                isBuyPlane7Done = true;
             }
-            planePriceText[6].gameObject.SetActive(false);
-            isBuyPlane7Done = true;
+            else {
+                return;
+            }
         }
         else {
             if(planeBuyText[6].text == "Play") return;
             else{
                 planeBuyText[6].text = "Play";
                 isCheckedPlaneIndex = 6;
+                imagePlayPlanes[6].gameObject.SetActive(true);
                 for(int i=0; i<planeBuyText.Length; i++){
                     if(i != 6){
                         planeBuyText[i].text = "Select";
+                        imagePlayPlanes[i].gameObject.SetActive(false);
                     }
                 }
             }
         }
+        
         SaveTextPlane();
         // Thay đổi defaultPlane
         if(gameObjectsPlanes != null && gameObjectsPlanes.Length > 6){
@@ -951,31 +1018,40 @@ public class Shop : MonoBehaviour
     }
     public void buyPlane8(){
         StartCoroutine(PlayButtonEffect(7));
-        if (GManager.instance.totalDiamond < 2500) return;
-        if(!isBuyPlane8Done && GManager.instance.totalDiamond >= 2500){
-            GManager.instance.totalDiamond -= 2500;
-            PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
-            PlayerPrefs.Save();
-            GManager.instance.SaveTotalDiamond();
-            planeBuyText[7].gameObject.SetActive(true);
-            planeBuyText[7].text = "Play";
-            isCheckedPlaneIndex = 7;
-            for(int i=0; i<planeBuyText.Length; i++){
-                if(i != 7){
-                    planeBuyText[i].text = "Select";
+        if(!isBuyPlane8Done){
+            if(GManager.instance.totalDiamond >= 2500)
+            {
+                GManager.instance.totalDiamond -= 2500;
+                PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
+                PlayerPrefs.Save();
+                GManager.instance.SaveTotalDiamond();
+                planeBuyText[7].gameObject.SetActive(true);
+                planeBuyText[7].text = "Play";
+                imagePlayPlanes[7].gameObject.SetActive(true);
+                isCheckedPlaneIndex = 7;
+                for(int i=0; i<planeBuyText.Length; i++){
+                    if(i != 7){
+                        planeBuyText[i].text = "Select";
+                        imagePlayPlanes[i].gameObject.SetActive(false);
+                    }
                 }
+                planePriceText[7].gameObject.SetActive(false);
+                isBuyPlane8Done = true;
             }
-            planePriceText[7].gameObject.SetActive(false);
-            isBuyPlane8Done = true;
+            else {
+                return;
+            }
         }
         else {
             if(planeBuyText[7].text == "Play") return;
             else{
                 planeBuyText[7].text = "Play";
                 isCheckedPlaneIndex = 7;
+                imagePlayPlanes[7].gameObject.SetActive(true);
                 for(int i=0; i<planeBuyText.Length; i++){
                     if(i != 7){
                         planeBuyText[i].text = "Select";
+                        imagePlayPlanes[i].gameObject.SetActive(false);
                     }
                 }
             }
@@ -1001,31 +1077,40 @@ public class Shop : MonoBehaviour
     }
     public void buyPlane9(){
         StartCoroutine(PlayButtonEffect(8));
-        if (GManager.instance.totalDiamond < 2500) return;
-        if(!isBuyPlane9Done && GManager.instance.totalDiamond >= 2500){
-            GManager.instance.totalDiamond -= 2500;
-            PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
-            PlayerPrefs.Save();
-            GManager.instance.SaveTotalDiamond();
-            planeBuyText[8].gameObject.SetActive(true);
-            planeBuyText[8].text = "Play";
-            isCheckedPlaneIndex = 8;
-            for(int i=0; i<planeBuyText.Length; i++){
-                if(i != 8){
-                    planeBuyText[i].text = "Select";
+        if(!isBuyPlane9Done){
+            if(GManager.instance.totalDiamond >= 2500)
+            {
+                GManager.instance.totalDiamond -= 2500;
+                PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
+                PlayerPrefs.Save();
+                GManager.instance.SaveTotalDiamond();
+                planeBuyText[8].gameObject.SetActive(true);
+                planeBuyText[8].text = "Play";
+                imagePlayPlanes[8].gameObject.SetActive(true);
+                isCheckedPlaneIndex = 8;
+                for(int i=0; i<planeBuyText.Length; i++){
+                    if(i != 8){
+                        planeBuyText[i].text = "Select";
+                        imagePlayPlanes[i].gameObject.SetActive(false);
+                    }
                 }
+                planePriceText[8].gameObject.SetActive(false);
+                isBuyPlane9Done = true;
             }
-            planePriceText[8].gameObject.SetActive(false);
-            isBuyPlane9Done = true;
+            else {
+                return;
+            }
         }
         else {
             if(planeBuyText[8].text == "Play") return;
             else{
                 planeBuyText[8].text = "Play";
                 isCheckedPlaneIndex = 8;
+                imagePlayPlanes[8].gameObject.SetActive(true);
                 for(int i=0; i<planeBuyText.Length; i++){
                     if(i != 8){
                         planeBuyText[i].text = "Select";
+                        imagePlayPlanes[i].gameObject.SetActive(false);
                     }
                 }
             }
@@ -1051,31 +1136,40 @@ public class Shop : MonoBehaviour
     }
     public void buyPlane10(){
         StartCoroutine(PlayButtonEffect(9));
-        if (GManager.instance.totalDiamond < 2500) return;
-        if(!isBuyPlane10Done && GManager.instance.totalDiamond >= 2500){
-            GManager.instance.totalDiamond -= 2500;
-            PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
-            PlayerPrefs.Save();
-            GManager.instance.SaveTotalDiamond();
-            planeBuyText[9].gameObject.SetActive(true);
-            planeBuyText[9].text = "Play";
-            isCheckedPlaneIndex = 9;
-            for(int i=0; i<planeBuyText.Length; i++){
-                if(i != 9){
-                    planeBuyText[i].text = "Select";
+        if(!isBuyPlane10Done){
+            if(GManager.instance.totalDiamond >= 2500)
+            {
+                GManager.instance.totalDiamond -= 2500;
+                PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
+                PlayerPrefs.Save();
+                GManager.instance.SaveTotalDiamond();
+                planeBuyText[9].gameObject.SetActive(true);
+                planeBuyText[9].text = "Play";
+                imagePlayPlanes[9].gameObject.SetActive(true);
+                isCheckedPlaneIndex = 9;
+                for(int i=0; i<planeBuyText.Length; i++){
+                    if(i != 9){
+                        planeBuyText[i].text = "Select";
+                        imagePlayPlanes[i].gameObject.SetActive(false);
+                    }
                 }
+                planePriceText[9].gameObject.SetActive(false);
+                isBuyPlane10Done = true;
             }
-            planePriceText[9].gameObject.SetActive(false);
-            isBuyPlane10Done = true;
+            else {
+                return;
+            }
         }
         else {
             if(planeBuyText[9].text == "Play") return;
             else{
                 planeBuyText[9].text = "Play";
                 isCheckedPlaneIndex = 9;
+                imagePlayPlanes[9].gameObject.SetActive(true);
                 for(int i=0; i<planeBuyText.Length; i++){
                     if(i != 9){
                         planeBuyText[i].text = "Select";
+                        imagePlayPlanes[i].gameObject.SetActive(false);
                     }
                 }
             }
@@ -1101,35 +1195,45 @@ public class Shop : MonoBehaviour
     }
     public void buyPlane11(){
         StartCoroutine(PlayButtonEffect(10));
-        if (GManager.instance.totalDiamond < 2500) return;
-        if(!isBuyPlane11Done && GManager.instance.totalDiamond >= 2500){
-            GManager.instance.totalDiamond -= 2500;
-            PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
-            PlayerPrefs.Save();
-            GManager.instance.SaveTotalDiamond();
-            planeBuyText[10].gameObject.SetActive(true);
-            planeBuyText[10].text = "Play";
-            isCheckedPlaneIndex = 10;
-            for(int i=0; i<planeBuyText.Length; i++){
-                if(i != 10){
-                    planeBuyText[i].text = "Select";
+        if(!isBuyPlane11Done){
+            if(GManager.instance.totalDiamond >= 2500)
+            {
+                GManager.instance.totalDiamond -= 2500;
+                PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
+                PlayerPrefs.Save();
+                GManager.instance.SaveTotalDiamond();
+                planeBuyText[10].gameObject.SetActive(true);
+                planeBuyText[10].text = "Play";
+                imagePlayPlanes[10].gameObject.SetActive(true);
+                isCheckedPlaneIndex = 10;
+                for(int i=0; i<planeBuyText.Length; i++){
+                    if(i != 10){
+                        planeBuyText[i].text = "Select";
+                        imagePlayPlanes[i].gameObject.SetActive(false);
+                    }
                 }
+                planePriceText[10].gameObject.SetActive(false);
+                isBuyPlane11Done = true;
             }
-            planePriceText[10].gameObject.SetActive(false);
-            isBuyPlane11Done = true;
+            else {
+                return;
+            }
         }
         else {
             if(planeBuyText[10].text == "Play") return;
             else{
                 planeBuyText[10].text = "Play";
                 isCheckedPlaneIndex = 10;
+                imagePlayPlanes[10].gameObject.SetActive(true);
                 for(int i=0; i<planeBuyText.Length; i++){
                     if(i != 10){
                         planeBuyText[i].text = "Select";
+                        imagePlayPlanes[i].gameObject.SetActive(false);
                     }
                 }
             }
         }
+        
         SaveTextPlane();
         
         // Thay đổi defaultPlane
@@ -1151,31 +1255,40 @@ public class Shop : MonoBehaviour
     }
     public void buyPlane12(){
         StartCoroutine(PlayButtonEffect(11));
-        if (GManager.instance.totalDiamond < 2500) return;
-        if(!isBuyPlane12Done && GManager.instance.totalDiamond >= 2500){
-            GManager.instance.totalDiamond -= 2500;
-            PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
-            PlayerPrefs.Save();
-            GManager.instance.SaveTotalDiamond();
-            planeBuyText[11].gameObject.SetActive(true);
-            planeBuyText[11].text = "Play";
-            isCheckedPlaneIndex = 11;
-            for(int i=0; i<planeBuyText.Length; i++){
-                if(i != 11){
-                    planeBuyText[i].text = "Select";
+        if(!isBuyPlane12Done){
+            if(GManager.instance.totalDiamond >= 2500)
+            {
+                GManager.instance.totalDiamond -= 2500;
+                PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
+                PlayerPrefs.Save();
+                GManager.instance.SaveTotalDiamond();
+                planeBuyText[11].gameObject.SetActive(true);
+                planeBuyText[11].text = "Play";
+                imagePlayPlanes[11].gameObject.SetActive(true);
+                isCheckedPlaneIndex = 11;
+                for(int i=0; i<planeBuyText.Length; i++){
+                    if(i != 11){
+                        planeBuyText[i].text = "Select";
+                        imagePlayPlanes[i].gameObject.SetActive(false);
+                    }
                 }
+                planePriceText[11].gameObject.SetActive(false);
+                isBuyPlane12Done = true;
             }
-            planePriceText[11].gameObject.SetActive(false);
-            isBuyPlane12Done = true;
+            else {
+                return;
+            }
         }
         else {
             if(planeBuyText[11].text == "Play") return;
             else{
                 planeBuyText[11].text = "Play";
                 isCheckedPlaneIndex = 11;
+                imagePlayPlanes[11].gameObject.SetActive(true);
                 for(int i=0; i<planeBuyText.Length; i++){
                     if(i != 11){
                         planeBuyText[i].text = "Select";
+                        imagePlayPlanes[i].gameObject.SetActive(false);
                     }
                 }
             }
@@ -1201,31 +1314,40 @@ public class Shop : MonoBehaviour
     }
     public void buyPlane13(){
         StartCoroutine(PlayButtonEffect(12));
-        if (GManager.instance.totalDiamond < 2500) return;
-        if(!isBuyPlane13Done && GManager.instance.totalDiamond >= 2500){
-            GManager.instance.totalDiamond -= 2500;
-            PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
-            PlayerPrefs.Save();
-            GManager.instance.SaveTotalDiamond();
-            planeBuyText[12].gameObject.SetActive(true);
-            planeBuyText[12].text = "Play";
-            isCheckedPlaneIndex = 12;
-            for(int i=0; i<planeBuyText.Length; i++){
-                if(i != 12){
-                    planeBuyText[i].text = "Select";
+        if(!isBuyPlane13Done){
+            if(GManager.instance.totalDiamond >= 2500)
+            {
+                GManager.instance.totalDiamond -= 2500;
+                PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
+                PlayerPrefs.Save();
+                GManager.instance.SaveTotalDiamond();
+                planeBuyText[12].gameObject.SetActive(true);
+                planeBuyText[12].text = "Play";
+                imagePlayPlanes[12].gameObject.SetActive(true);
+                isCheckedPlaneIndex = 12;
+                for(int i=0; i<planeBuyText.Length; i++){
+                    if(i != 12){
+                        planeBuyText[i].text = "Select";
+                        imagePlayPlanes[i].gameObject.SetActive(false);
+                    }
                 }
+                planePriceText[12].gameObject.SetActive(false);
+                isBuyPlane13Done = true;
             }
-            planePriceText[12].gameObject.SetActive(false);
-            isBuyPlane13Done = true;
+            else {
+                return;
+            }
         }
         else {
             if(planeBuyText[12].text == "Play") return;
             else{
                 planeBuyText[12].text = "Play";
                 isCheckedPlaneIndex = 12;
+                imagePlayPlanes[12].gameObject.SetActive(true);
                 for(int i=0; i<planeBuyText.Length; i++){
                     if(i != 12){
                         planeBuyText[i].text = "Select";
+                        imagePlayPlanes[i].gameObject.SetActive(false);
                     }
                 }
             }
@@ -1256,10 +1378,12 @@ public class Shop : MonoBehaviour
             planePriceText[13].gameObject.SetActive(false);
 
         planeBuyText[13].text = "Play";
+        imagePlayPlanes[13].gameObject.SetActive(true);
         isCheckedPlaneIndex = 13;
         for(int i=0; i<planeBuyText.Length; i++){
             if(i != 13){
                 planeBuyText[i].text = "Select";
+                imagePlayPlanes[i].gameObject.SetActive(false);
             }
         }
         SaveTextPlane();
