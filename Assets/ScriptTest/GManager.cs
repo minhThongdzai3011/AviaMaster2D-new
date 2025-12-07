@@ -24,7 +24,7 @@ public class GManager : MonoBehaviour
     public float altitudeDragMultiplier = 2f; // Hệ số lực kéo xuống theo độ cao
     public float altitudeDragStart = 600f; // Độ cao bắt đầu có lực kéo mạnh
     public float velocityDampingFactor = 0.98f; // Hệ số giảm vận tốc theo độ cao
-
+    public bool isBoosted = false;
 
     [Header("Button UI")]
     public Button playButton;
@@ -195,6 +195,8 @@ public class GManager : MonoBehaviour
             // homeImage.gameObject.SetActive(false);
             playImage.gameObject.SetActive(true);
             Plane.instance.isStopSmokeEffect = false;
+            // Âm thanh play
+            AudioManager.instance.PlayPlayerSound(AudioManager.instance.gameplaySoundClip);
             StartCoroutine(LaunchSequence());
             isPlaying = false;
             isPlay = true;
@@ -377,6 +379,7 @@ public class GManager : MonoBehaviour
         // Bước 4: Giữ độ cao và cho phép điều khiển
 
         isCheckErrorAngleZ = true;  
+        isBoosted = true;
         if (Plane.instance != null)
         {
             if(TrailRendererLeft.instance != null && TrailRendererRight.instance != null)
@@ -729,7 +732,7 @@ public class GManager : MonoBehaviour
             }
         }
 
-        if (isPlay)
+        if (isPlay && isBoosted)
         {
             bool isBoostPressed = Input.GetKey(KeyCode.Space) || isUseClickerBooster;
             
@@ -1497,6 +1500,7 @@ public class GManager : MonoBehaviour
     {
         if (!isFuelMax && totalMoney >= moneyFuel)
         {
+            AudioManager.instance.PlaySound(AudioManager.instance.upgradeSoundClip);
             levelFuel += 1;
             rateFuel += 5;
             totalMoney -= moneyFuel;
@@ -1559,6 +1563,7 @@ public class GManager : MonoBehaviour
     {
         if (!isBoostMax && totalMoney >= moneyBoost)
         {
+            AudioManager.instance.PlaySound(AudioManager.instance.upgradeSoundClip);
             levelBoost += 1;
             rateBoost += 5;
             totalMoney -= moneyBoost;
@@ -1604,6 +1609,7 @@ public class GManager : MonoBehaviour
     {
         if (!isPowerMax && totalMoney >= moneyPower)
         {
+            AudioManager.instance.PlaySound(AudioManager.instance.upgradeSoundClip);
             levelPower += 1;
             ratePower += 5;
             totalMoney -= moneyPower;

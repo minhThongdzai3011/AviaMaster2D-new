@@ -513,6 +513,7 @@ public class Shop : MonoBehaviour
     public void OpenShop()
     {
         Debug.Log("Mở cửa hàng!");
+        AudioManager.instance.PlaySound(AudioManager.instance.buttonSoundClip);
         Settings.instance.pannelGray.gameObject.SetActive(true);
         // Dừng tất cả animation đang chạy
         DOTween.Kill(this);
@@ -528,6 +529,7 @@ public class Shop : MonoBehaviour
 
     public void CloseShop()
     {
+        AudioManager.instance.PlaySound(AudioManager.instance.buttonSoundClip);
         Debug.Log("Đóng cửa hàng!");
         
         // Dừng tất cả animation
@@ -605,6 +607,7 @@ public class Shop : MonoBehaviour
             if(GManager.instance.totalDiamond >= 2500)
             {
                 GManager.instance.totalDiamond -= 2500;
+                AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
                 PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
                 PlayerPrefs.Save();
                 GManager.instance.SaveTotalDiamond();
@@ -627,10 +630,14 @@ public class Shop : MonoBehaviour
             
         }
         else {
-            if(planeBuyText[0].text == "Play") return;
+            if(planeBuyText[0].text == "Play"){
+                AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
+                return;
+            } 
             else{
                 planeBuyText[0].text = "Play";
                 isCheckedPlaneIndex = 0;
+                AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
                 imagePlayPlanes[0].gameObject.SetActive(true);
                 for(int i=0; i<planeBuyText.Length; i++){
                     if(i != 0){
@@ -665,6 +672,7 @@ public class Shop : MonoBehaviour
             if(GManager.instance.totalDiamond >= 2500)
             {
                 GManager.instance.totalDiamond -= 2500;
+                AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
                 PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
                 PlayerPrefs.Save();
                 GManager.instance.SaveTotalDiamond();
@@ -687,10 +695,14 @@ public class Shop : MonoBehaviour
 
         }
         else {
-            if(planeBuyText[1].text == "Play") return;
+            if(planeBuyText[1].text == "Play"){
+                AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
+                return;
+            }
             else{
                 planeBuyText[1].text = "Play";
                 isCheckedPlaneIndex = 1;
+                AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
                 imagePlayPlanes[1].gameObject.SetActive(true);
                 for(int i=0; i<planeBuyText.Length; i++){
                     if(i != 1){
@@ -725,6 +737,7 @@ public class Shop : MonoBehaviour
             if(GManager.instance.totalDiamond >= 2500)
             {
                 GManager.instance.totalDiamond -= 2500;
+                AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
                 PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
                 PlayerPrefs.Save();
                 GManager.instance.SaveTotalDiamond();
@@ -747,10 +760,14 @@ public class Shop : MonoBehaviour
 
         }
         else {
-            if(planeBuyText[2].text == "Play") return;
+            if(planeBuyText[2].text == "Play"){
+                AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
+                return;
+            }
             else{
                 planeBuyText[2].text = "Play";
                 isCheckedPlaneIndex = 2;
+                AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
                 imagePlayPlanes[2].gameObject.SetActive(true);
                 for(int i=0; i<planeBuyText.Length; i++){
                     if(i != 2){
@@ -785,6 +802,7 @@ public class Shop : MonoBehaviour
             if(GManager.instance.totalDiamond >= 2500)
             {
                 GManager.instance.totalDiamond -= 2500;
+                AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
                 PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
                 PlayerPrefs.Save();
                 GManager.instance.SaveTotalDiamond();
@@ -806,10 +824,14 @@ public class Shop : MonoBehaviour
             }
         }
         else {
-            if(planeBuyText[3].text == "Play") return;
+            if(planeBuyText[3].text == "Play"){
+                AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
+                return;
+            }
             else{
                 planeBuyText[3].text = "Play";
                 isCheckedPlaneIndex = 3;
+                AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
                 imagePlayPlanes[3].gameObject.SetActive(true);
                 for(int i=0; i<planeBuyText.Length; i++){
                     if(i != 3){
@@ -844,6 +866,7 @@ public class Shop : MonoBehaviour
             if(GManager.instance.totalDiamond >= 2500)
             {
                 GManager.instance.totalDiamond -= 2500;
+                AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
                 PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
                 PlayerPrefs.Save();
                 GManager.instance.SaveTotalDiamond();
@@ -865,10 +888,14 @@ public class Shop : MonoBehaviour
             }
         }
         else {
-            if(planeBuyText[4].text == "Play") return;
+            if(planeBuyText[4].text == "Play"){
+                AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
+                return;
+            }
             else{
                 planeBuyText[4].text = "Play";
                 isCheckedPlaneIndex = 4;
+                AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
                 imagePlayPlanes[4].gameObject.SetActive(true);
                 for(int i=0; i<planeBuyText.Length; i++){
                     if(i != 4){
@@ -903,6 +930,7 @@ public class Shop : MonoBehaviour
             if(GManager.instance.totalDiamond >= 2500)
             {
                 GManager.instance.totalDiamond -= 2500;
+                AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
                 PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
                 PlayerPrefs.Save();
                 GManager.instance.SaveTotalDiamond();
@@ -924,10 +952,14 @@ public class Shop : MonoBehaviour
             }
         }
         else {
-            if(planeBuyText[5].text == "Play") return;
+            if(planeBuyText[5].text == "Play")  {
+                AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
+                return;
+            }
             else{
                 planeBuyText[5].text = "Play";
                 isCheckedPlaneIndex = 5;
+                AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
                 imagePlayPlanes[5].gameObject.SetActive(true);
                 for(int i=0; i<planeBuyText.Length; i++){
                     if(i != 5){
@@ -962,6 +994,7 @@ public class Shop : MonoBehaviour
             if(GManager.instance.totalDiamond >= 2500)
             {
                 GManager.instance.totalDiamond -= 2500;
+                AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
                 PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
                 PlayerPrefs.Save();
                 GManager.instance.SaveTotalDiamond();
@@ -983,10 +1016,14 @@ public class Shop : MonoBehaviour
             }
         }
         else {
-            if(planeBuyText[6].text == "Play") return;
+            if(planeBuyText[6].text == "Play"){
+                AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
+                return;
+            }
             else{
                 planeBuyText[6].text = "Play";
                 isCheckedPlaneIndex = 6;
+                AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
                 imagePlayPlanes[6].gameObject.SetActive(true);
                 for(int i=0; i<planeBuyText.Length; i++){
                     if(i != 6){
@@ -1022,6 +1059,7 @@ public class Shop : MonoBehaviour
             if(GManager.instance.totalDiamond >= 2500)
             {
                 GManager.instance.totalDiamond -= 2500;
+                AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
                 PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
                 PlayerPrefs.Save();
                 GManager.instance.SaveTotalDiamond();
@@ -1043,10 +1081,14 @@ public class Shop : MonoBehaviour
             }
         }
         else {
-            if(planeBuyText[7].text == "Play") return;
+            if(planeBuyText[7].text == "Play"){
+                AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
+                return;
+            }
             else{
                 planeBuyText[7].text = "Play";
                 isCheckedPlaneIndex = 7;
+                AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
                 imagePlayPlanes[7].gameObject.SetActive(true);
                 for(int i=0; i<planeBuyText.Length; i++){
                     if(i != 7){
@@ -1081,6 +1123,7 @@ public class Shop : MonoBehaviour
             if(GManager.instance.totalDiamond >= 2500)
             {
                 GManager.instance.totalDiamond -= 2500;
+                AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
                 PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
                 PlayerPrefs.Save();
                 GManager.instance.SaveTotalDiamond();
@@ -1102,10 +1145,14 @@ public class Shop : MonoBehaviour
             }
         }
         else {
-            if(planeBuyText[8].text == "Play") return;
+            if(planeBuyText[8].text == "Play"){
+                AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
+                return;
+            }
             else{
                 planeBuyText[8].text = "Play";
                 isCheckedPlaneIndex = 8;
+                AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
                 imagePlayPlanes[8].gameObject.SetActive(true);
                 for(int i=0; i<planeBuyText.Length; i++){
                     if(i != 8){
@@ -1140,6 +1187,7 @@ public class Shop : MonoBehaviour
             if(GManager.instance.totalDiamond >= 2500)
             {
                 GManager.instance.totalDiamond -= 2500;
+                AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
                 PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
                 PlayerPrefs.Save();
                 GManager.instance.SaveTotalDiamond();
@@ -1161,10 +1209,14 @@ public class Shop : MonoBehaviour
             }
         }
         else {
-            if(planeBuyText[9].text == "Play") return;
+            if(planeBuyText[9].text == "Play"){
+                AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
+                return;
+            }
             else{
                 planeBuyText[9].text = "Play";
                 isCheckedPlaneIndex = 9;
+                AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
                 imagePlayPlanes[9].gameObject.SetActive(true);
                 for(int i=0; i<planeBuyText.Length; i++){
                     if(i != 9){
@@ -1199,6 +1251,7 @@ public class Shop : MonoBehaviour
             if(GManager.instance.totalDiamond >= 2500)
             {
                 GManager.instance.totalDiamond -= 2500;
+                AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
                 PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
                 PlayerPrefs.Save();
                 GManager.instance.SaveTotalDiamond();
@@ -1220,10 +1273,14 @@ public class Shop : MonoBehaviour
             }
         }
         else {
-            if(planeBuyText[10].text == "Play") return;
+            if(planeBuyText[10].text == "Play"){
+                AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
+                return;
+            }
             else{
                 planeBuyText[10].text = "Play";
                 isCheckedPlaneIndex = 10;
+                AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
                 imagePlayPlanes[10].gameObject.SetActive(true);
                 for(int i=0; i<planeBuyText.Length; i++){
                     if(i != 10){
@@ -1259,6 +1316,7 @@ public class Shop : MonoBehaviour
             if(GManager.instance.totalDiamond >= 2500)
             {
                 GManager.instance.totalDiamond -= 2500;
+                AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
                 PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
                 PlayerPrefs.Save();
                 GManager.instance.SaveTotalDiamond();
@@ -1280,10 +1338,14 @@ public class Shop : MonoBehaviour
             }
         }
         else {
-            if(planeBuyText[11].text == "Play") return;
+            if(planeBuyText[11].text == "Play"){
+                AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
+                return;
+            }
             else{
                 planeBuyText[11].text = "Play";
                 isCheckedPlaneIndex = 11;
+                AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
                 imagePlayPlanes[11].gameObject.SetActive(true);
                 for(int i=0; i<planeBuyText.Length; i++){
                     if(i != 11){
@@ -1318,6 +1380,7 @@ public class Shop : MonoBehaviour
             if(GManager.instance.totalDiamond >= 2500)
             {
                 GManager.instance.totalDiamond -= 2500;
+                AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
                 PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
                 PlayerPrefs.Save();
                 GManager.instance.SaveTotalDiamond();
@@ -1339,10 +1402,14 @@ public class Shop : MonoBehaviour
             }
         }
         else {
-            if(planeBuyText[12].text == "Play") return;
+            if(planeBuyText[12].text == "Play"){
+                AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
+                return;
+            }
             else{
                 planeBuyText[12].text = "Play";
                 isCheckedPlaneIndex = 12;
+                AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
                 imagePlayPlanes[12].gameObject.SetActive(true);
                 for(int i=0; i<planeBuyText.Length; i++){
                     if(i != 12){

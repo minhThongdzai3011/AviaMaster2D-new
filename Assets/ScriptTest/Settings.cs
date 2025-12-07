@@ -175,6 +175,7 @@ public class Settings : MonoBehaviour
     public void OpenSettings()
     {
         if (isAnimating) return;
+        AudioManager.instance.PlaySound(AudioManager.instance.buttonSoundClip);
         pannelGray.gameObject.SetActive(true);
         Debug.Log("Mở Settings!");
         
@@ -207,6 +208,8 @@ public class Settings : MonoBehaviour
             Debug.LogError("Settings.instance is null!");
             return;
         }
+
+        AudioManager.instance.PlaySound(AudioManager.instance.buttonSoundClip);
 
         Debug.Log("Đóng Settings!");
 
@@ -409,6 +412,7 @@ public class Settings : MonoBehaviour
     {
         if (isAnimating) return;
         pannelGray.gameObject.SetActive(true);
+        AudioManager.instance.PlaySound(AudioManager.instance.buttonSoundClip);
         Debug.Log("Mở Win Image!");
         CheckPlane.instance.SetActiveLuckyWheel();
         // Dừng tất cả animation đang chạy
@@ -435,6 +439,7 @@ public class Settings : MonoBehaviour
     public void closeWheel()
     {
         if (isAnimating) return;
+        AudioManager.instance.PlaySound(AudioManager.instance.buttonSoundClip);
         if (Settings.instance == null)
         {
             Debug.LogError("Settings.instance is null!");
@@ -466,6 +471,7 @@ public class Settings : MonoBehaviour
         
         if (isAnimating) return;
         pannelGray.gameObject.SetActive(true);
+        AudioManager.instance.PlaySound(AudioManager.instance.buttonSoundClip);
         Debug.Log("Mở Win Image!");
 
         CheckPlane.instance.SetActiveLeaderBoard();
@@ -493,6 +499,7 @@ public class Settings : MonoBehaviour
     public void exitLeaderBoard()
     {
         if (isAnimating) return;
+        AudioManager.instance.PlaySound(AudioManager.instance.buttonSoundClip);
         if (Settings.instance == null)
         {
             Debug.LogError("Settings.instance is null!");
@@ -528,7 +535,7 @@ public class Settings : MonoBehaviour
         if (prizeSlider != null)
         {
             // Tính toán giá trị mục tiêu dựa trên khoảng cách bay được
-            float maxDistanceCoin = 1000f; // Khoảng cách tối đa để đạt 100%
+            float maxDistanceCoin = 500f; // Khoảng cách tối đa để đạt 100%
 
             if (Plane.instance == null)
             {
@@ -539,7 +546,7 @@ public class Settings : MonoBehaviour
 
             if (isCheckAddTargetValue)
             {
-                targetValue = temp + Mathf.Clamp01(Plane.instance.moneyTotal / maxDistanceCoin);
+                targetValue = temp + Mathf.Clamp01(totalValue / maxDistanceCoin);
                 isCheckAddTargetValue = false;
             }
 
@@ -547,6 +554,7 @@ public class Settings : MonoBehaviour
             PlayerPrefs.Save();
             // Cập nhật slider với hiệu ứng mượt mà
             float smoothSpeed = 2f; // Tốc độ cập nhật (càng cao càng nhanh)
+            Debug.Log("Prize Slider Value: " + prizeSlider.value + " | Target Value: " + targetValue + " | Plane Money Total: " + Plane.instance.moneyTotal);
             prizeSlider.value = Mathf.Lerp(prizeSlider.value, targetValue, smoothSpeed * Time.deltaTime);
             if (prizeSlider. value >= 1f)
             {
@@ -634,6 +642,8 @@ public class Settings : MonoBehaviour
         {
             totalMoneyPlayText.text = ((int)v).ToString();
         }));
+        Debug.Log("Total Value: " + totalValue);
+        isPrizeCoin = true;
 
         // 4. finish → set allow close
         seq.OnComplete(() =>
@@ -641,7 +651,7 @@ public class Settings : MonoBehaviour
             isCloseWinImage = true;
             butttonExitImageWin.gameObject.SetActive(true);
             AdsButton.gameObject.SetActive(true);
-            isPrizeCoin = true;
+            
 
             Debug.Log("Cho phép đóng WinImage!");
         });
@@ -694,6 +704,7 @@ public class Settings : MonoBehaviour
             if (isAnimating) return;
 
             Debug.Log("Mở Win Image!");
+            AudioManager.instance.PlaySound(AudioManager.instance.buttonSoundClip);
 
             // Dừng tất cả animation đang chạy
             DOTween.Kill(prizeChestImage.transform);
@@ -713,7 +724,7 @@ public class Settings : MonoBehaviour
                 {
                     isAnimating = false;
                     Debug.Log("Lucky Wheel Image animation mở hoàn thành!");
-                    prizeSlider.value = 0f;
+                    // prizeSlider.value = 0f;
                 });
             isButtonChestClickeds = false;
         }
@@ -727,6 +738,7 @@ public class Settings : MonoBehaviour
             Debug.LogError("Settings.instance is null!");
             return;
         }
+        AudioManager.instance.PlaySound(AudioManager.instance.buttonSoundClip);
         GManager.instance.totalMoney += 1000;
         PlayerPrefs.SetFloat("TotalMoney", GManager.instance.totalMoney);
         PlayerPrefs.Save();

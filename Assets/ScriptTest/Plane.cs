@@ -97,17 +97,20 @@ public class Plane : MonoBehaviour
         }
         if (other.CompareTag("bird"))
         {
+            AudioManager.instance.PlaySound(AudioManager.instance.bonusCollisionSoundClip);
            RandomPrizeBird();
            Destroy(other.gameObject);
         }
         if (other.CompareTag("Bonus4"))
         {
+            AudioManager.instance.PlaySound(AudioManager.instance.bonusCollisionSoundClip);
             Destroy(other.gameObject);
             StartCoroutine(FadeBlackScreen());
             
         }
         if (other.CompareTag("Bonus2"))
         {
+            AudioManager.instance.PlaySound(AudioManager.instance.bonusCollisionSoundClip);
             Destroy(other.gameObject);
             GManager.instance.durationFuel = 0f;
             StartCoroutine(DelaytoEndGame());
@@ -118,7 +121,8 @@ public class Plane : MonoBehaviour
         }
         if (other.CompareTag("Bonus3"))
         {
-             Destroy(other.gameObject);
+            AudioManager.instance.PlaySound(AudioManager.instance.bonusCollisionSoundClip);
+            Destroy(other.gameObject);
             GManager.instance.durationFuel += 5f;
             Debug.Log("Rocket collected - +5s fuel" + GManager.instance.durationFuel);
             GManager.instance.newMapText.text = "Bonus - +5s fuel";
@@ -126,8 +130,10 @@ public class Plane : MonoBehaviour
         }
         if (other.CompareTag("MapStartCity"))
         {
+            AudioManager.instance.PlaySound(AudioManager.instance.unlockMapSoundClip);
             MapSpawner.instance.isMapCityUnlocked = true;
             PlayerPrefs.SetInt("IsMapCityUnlocked", 1); // Lưu trạng thái mở khóa
+            BonusSpawner.instance.rocketPrefabs = ChangeBonusMap.instance.bonusMapCity;
             PlayerPrefs.Save();
             Settings.instance.NotificationNewMapText.text = "You have unlocked the City Map!";
             Settings.instance.NotificationNewMap();
@@ -135,8 +141,10 @@ public class Plane : MonoBehaviour
         
         if (other.CompareTag("MapStartBeach"))
         {
+            AudioManager.instance.PlaySound(AudioManager.instance.unlockMapSoundClip);
             MapSpawner.instance.isMapBeachUnlocked = true;
             PlayerPrefs.SetInt("IsMapBeachUnlocked", 1); // Lưu trạng thái mở khóa
+            BonusSpawner.instance.rocketPrefabs = ChangeBonusMap.instance.bonusMapBeach;
             PlayerPrefs.Save();
             Settings.instance.NotificationNewMapText.text = "You have unlocked the Beach Map!";
             Settings.instance.NotificationNewMap();
@@ -144,8 +152,10 @@ public class Plane : MonoBehaviour
         
         if (other.CompareTag("MapStartDesert"))
         {
+            AudioManager.instance.PlaySound(AudioManager.instance.unlockMapSoundClip);
             MapSpawner.instance.isMapDesertUnlocked = true;
             PlayerPrefs.SetInt("IsMapDesertUnlocked", 1); // Lưu trạng thái mở khóa
+            BonusSpawner.instance.rocketPrefabs = ChangeBonusMap.instance.bonusMapDesert;
             PlayerPrefs.Save();
             Settings.instance.NotificationNewMapText.text = "You have unlocked the Desert Map!";
             Settings.instance.NotificationNewMap();
@@ -153,8 +163,10 @@ public class Plane : MonoBehaviour
         
         if (other.CompareTag("MapStartField"))
         {
+            AudioManager.instance.PlaySound(AudioManager.instance.unlockMapSoundClip);
             MapSpawner.instance.isMapFieldUnlocked = true;
             PlayerPrefs.SetInt("IsMapFieldUnlocked", 1); // Lưu trạng thái mở khóa
+            BonusSpawner.instance.rocketPrefabs = ChangeBonusMap.instance.bonusMapField;
             PlayerPrefs.Save();
             Settings.instance.NotificationNewMapText.text = "You have unlocked the Field Map!";
             Settings.instance.NotificationNewMap();
@@ -162,8 +174,10 @@ public class Plane : MonoBehaviour
         
         if (other.CompareTag("MapStartIce"))
         {
+            AudioManager.instance.PlaySound(AudioManager.instance.unlockMapSoundClip);
             MapSpawner.instance.isMapIceUnlocked = true;
             PlayerPrefs.SetInt("IsMapIceUnlocked", 1); // Lưu trạng thái mở khóa
+            BonusSpawner.instance.rocketPrefabs = ChangeBonusMap.instance.bonusMapIce;
             PlayerPrefs.Save();
             Settings.instance.NotificationNewMapText.text = "You have unlocked the Ice Map!";
             Settings.instance.NotificationNewMap();
@@ -171,8 +185,10 @@ public class Plane : MonoBehaviour
         
         if (other.CompareTag("MapStartLava"))
         {
+            AudioManager.instance.PlaySound(AudioManager.instance.unlockMapSoundClip);
             MapSpawner.instance.isMapLavaUnlocked = true;
             PlayerPrefs.SetInt("IsMapLavaUnlocked", 1); // Lưu trạng thái mở khóa
+            BonusSpawner.instance.rocketPrefabs = ChangeBonusMap.instance.bonusMapLava;
             PlayerPrefs.Save();
             Settings.instance.NotificationNewMapText.text = "You have unlocked the Lava Map!";
             Settings.instance.NotificationNewMap();
@@ -199,11 +215,15 @@ public class Plane : MonoBehaviour
         float initialAngleZ = GetCurrentRotationZ(airplaneRb);
         float initialAngleX = airplaneRb.transform.eulerAngles.x;
         if (initialAngleZ < -15f || initialAngleZ > 15f){
+            AudioManager.instance.PlaySound(AudioManager.instance.explosionSoundClip);
+            AudioManager.instance.StopPlayerSound();
             MakePlaneBlackAndExplode();
             Debug.Log("Airplane crashed due to excessive tilt angle: " + initialAngleZ);
             TextIntro.instance.GetRandomTextWinMessage(0); // bad
         }
         else{
+            AudioManager.instance.PlaySound(AudioManager.instance.perfectLandingSoundClip);
+            AudioManager.instance.StopPlayerSound();
             TextIntro.instance.GetRandomTextWinMessage(1); // good
             Settings.instance.ImageErrorAngleZ.gameObject.SetActive(false);
             if (initialAngleX > 180f) initialAngleX -= 360f; // Chuẩn hóa về [-180, 180]
@@ -315,7 +335,7 @@ public class Plane : MonoBehaviour
         {
             // THÊM: Lưu GameObject máy bay hiện tại trước khi kết thúc game
             SaveCurrentAirplane();
-            
+            AudioManager.instance.PlaySound(AudioManager.instance.victorySoundClip);
             GManager.instance.coinEffect.Stop();
             isAddMoneyDone = true;
             moneyDistance = (int)(GManager.instance.distanceTraveled / 6.34f);

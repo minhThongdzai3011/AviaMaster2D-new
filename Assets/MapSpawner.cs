@@ -579,6 +579,8 @@ public class MapSpawner : MonoBehaviour
         Debug.Log("Kết quả: " + randomValue + " / " + string.Join(",", resultMap));
         tempSpawnList  = resultMap;
         tempSpawnList.Insert(0, randomValue);
+        ChangeBonusMap.instance.mapList = tempSpawnList;
+        ChangeBonusMap.instance.isChangeBonusMap = true;
         Debug.Log("Kết quả cuối cùng: " + string.Join(",", tempSpawnList));
 
     }
