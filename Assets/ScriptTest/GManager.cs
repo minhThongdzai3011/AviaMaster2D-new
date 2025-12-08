@@ -234,6 +234,7 @@ public class GManager : MonoBehaviour
     }
 
     public bool controlPlane = false;
+
     IEnumerator LaunchSequence()
     {
         yield return new WaitForSeconds(0.5f);
@@ -283,13 +284,48 @@ public class GManager : MonoBehaviour
 
         Debug.Log($"Bắt đầu bay ngang - Target: {targetX}, Current: {airplaneRigidbody2D.position.x}");
 
+        float riseHeight = 1.0f;
+        float maxTiltAngle = 10f;
+        float horizontalDistance = r;
+
+        float startX = airplaneRigidbody2D.position.x;
+        float startY = airplaneRigidbody2D.position.y;
+
+        float tiltVel = 0f;   // dùng cho SmoothDamp
+        float heightVel = 0f;
+
         while (airplaneRigidbody2D.position.x < targetX)
         {
-            // THÊM: Đảm bảo máy bay bay ngang
+            float traveled = airplaneRigidbody2D.position.x - startX;
+            float progress = Mathf.Clamp01(traveled / horizontalDistance);
+
+            // --- 1. Xoay đầu bằng SmoothDamp ---
+            float targetTilt = Mathf.Lerp(0f, maxTiltAngle, progress);
+            float currentTilt = airplaneRigidbody2D.transform.eulerAngles.z;
+
+            float smoothTilt = Mathf.SmoothDampAngle(currentTilt, targetTilt, ref tiltVel, 0.2f);
+            airplaneRigidbody2D.transform.rotation = Quaternion.Euler(0f, 0f, smoothTilt);
+
+            // --- 2. Nâng nhẹ độ cao bằng SmoothDamp ---
+            float targetHeight = Mathf.Lerp(0f, riseHeight, progress);
+            float smoothHeight = Mathf.SmoothDamp(
+                airplaneRigidbody2D.position.y - startY,
+                targetHeight,
+                ref heightVel,
+                0.25f
+            );
+
+            airplaneRigidbody2D.position = new Vector2(
+                airplaneRigidbody2D.position.x,
+                startY + smoothHeight
+            );
+
+            // --- 3. Giữ vận tốc ngang ---
             airplaneRigidbody2D.velocity = new Vector2(horizontalSpeed, 0f);
-            airplaneRigidbody2D.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+
             yield return null;
         }
+
         
         Debug.Log($"Hoàn thành bay ngang - Distance: {airplaneRigidbody2D.position.x - (targetX - r):F1}f");
         
@@ -622,6 +658,7 @@ public class GManager : MonoBehaviour
 
         Debug.Log("Máy bay đã hoàn thành chuỗi bay: ngang → bay lên (xoay dần) → giữ (có điều khiển) → rơi");
     }
+
 
     public bool isVelocity = true;
     public bool isHorizontalFlying = false;

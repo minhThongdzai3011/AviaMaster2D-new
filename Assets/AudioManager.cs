@@ -94,7 +94,18 @@ public class AudioManager : MonoBehaviour
     {
         audioSound.volume = isSoundOn ? 1f : 0f;
         audioSoundPlayer.volume = isSoundOn ? 1f : 0f;
+
+        if (isSoundOn)
+        {
+            if (audioSoundPlayer.clip != null && !audioSoundPlayer.isPlaying)
+                audioSoundPlayer.Play();
+        }
+        else
+        {
+            audioSoundPlayer.Stop();
+        }
     }
+
 
     public void LoadVolume()
     {
@@ -133,7 +144,7 @@ public class AudioManager : MonoBehaviour
     public void PlayPlayerSound(AudioClip clip)
     {
         if (isSoundOn && clip != null)
-            audioSoundPlayer.clip = gameplaySoundClip;
+            audioSoundPlayer.clip = clip;
             audioSoundPlayer.loop = true;
             audioSoundPlayer.Play();
     }

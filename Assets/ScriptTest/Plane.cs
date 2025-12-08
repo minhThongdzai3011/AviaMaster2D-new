@@ -105,7 +105,7 @@ public class Plane : MonoBehaviour
         {
             AudioManager.instance.PlaySound(AudioManager.instance.bonusCollisionSoundClip);
             Destroy(other.gameObject);
-            StartCoroutine(FadeBlackScreen());
+            StartCoroutine(FadeFogImage());
             
         }
         if (other.CompareTag("Bonus2"))
@@ -398,11 +398,17 @@ public class Plane : MonoBehaviour
         }
     }
 
-    IEnumerator FadeBlackScreen()
+    IEnumerator FadeFogImage()
     {
-        // Fade in
+        // Fade in (alpha từ 0 -> 1)
         float elapsed = 0f;
         Settings.instance.iamgeBlackScreen.gameObject.SetActive(true);
+
+        // Đặt alpha ban đầu = 0
+        Color startColor = Settings.instance.iamgeBlackScreen.color;
+        startColor.a = 0f;
+        Settings.instance.iamgeBlackScreen.color = startColor;
+
         while (elapsed < 1f)
         {
             elapsed += Time.deltaTime;
@@ -411,12 +417,11 @@ public class Plane : MonoBehaviour
             Settings.instance.iamgeBlackScreen.color = c;
             yield return null;
         }
-        GManager.instance.newMapText.text = "Grounded by an umbrella—enjoy the darkness!";
-        StartCoroutine(FadeInText(1f));
-        // Giữ nguyên đen trong 3 giây
-        yield return new WaitForSeconds(4f);
 
-        // Fade out
+        // Giữ nguyên sương mù trong 3 giây
+        yield return new WaitForSeconds(3f);
+
+        // Fade out (alpha từ 1 -> 0)
         elapsed = 0f;
         while (elapsed < 1f)
         {
@@ -426,8 +431,10 @@ public class Plane : MonoBehaviour
             Settings.instance.iamgeBlackScreen.color = c;
             yield return null;
         }
+
         Settings.instance.iamgeBlackScreen.gameObject.SetActive(false);
     }
+
 
     public void RandomPrizeBird(){
         int[] coinPrize = {1000, 2000, 5000};
