@@ -430,7 +430,7 @@ public class Plane : MonoBehaviour
     }
 
     public void RandomPrizeBird(){
-        int[] coinPrize = {10000, 20000, 50000};
+        int[] coinPrize = {1000, 2000, 5000};
         int[] diamondPrize = {100, 300, 1000};
         int count = Random.Range(0, 3); //random 0,1,2
         if(count == 0){

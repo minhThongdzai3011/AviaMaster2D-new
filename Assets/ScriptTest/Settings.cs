@@ -739,7 +739,13 @@ public class Settings : MonoBehaviour
             return;
         }
         AudioManager.instance.PlaySound(AudioManager.instance.buttonSoundClip);
-        GManager.instance.totalMoney += 1000;
+        
+        Sequence seq = DOTween.Sequence();
+        seq.Append(DOVirtual.Float(totalValue, totalValue+2000, 2f, v =>
+        {
+            totalMoneyPlayText.text = ((int)v).ToString();
+        }));
+        totalValue += 2000;
         PlayerPrefs.SetFloat("TotalMoney", GManager.instance.totalMoney);
         PlayerPrefs.Save();
         Debug.Log("Đóng Prize Chest Image!");

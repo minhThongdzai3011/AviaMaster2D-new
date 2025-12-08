@@ -192,6 +192,7 @@ public class GManager : MonoBehaviour
                 Debug.LogError("Rigidbody2D chưa được gán!");
                 return;
             }
+            PositionX.instance.checkPlay();
             // homeImage.gameObject.SetActive(false);
             playImage.gameObject.SetActive(true);
             Plane.instance.isStopSmokeEffect = false;

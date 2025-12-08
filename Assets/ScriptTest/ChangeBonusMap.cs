@@ -41,6 +41,12 @@ public class ChangeBonusMap : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
         if (isChangeBonusMap)
         {
             Debug.Log("Chuyển đổi Bonus Map: " + string.Join(",", mapList));
@@ -49,34 +55,34 @@ public class ChangeBonusMap : MonoBehaviour
                 case 0:
                     BonusSpawner.instance.rocketPrefabs = bonusMapCity;
                     isBonusMapCity = true;
+                    isChangeBonusMap = false;
                     break;
                 case 1:
                     BonusSpawner.instance.rocketPrefabs = bonusMapBeach;
                     isBonusMapBeach = true;
+                    isChangeBonusMap = false;
                     break;
                 case 2:
                     BonusSpawner.instance.rocketPrefabs = bonusMapDesert;
                     isBonusMapDesert = true;
+                    isChangeBonusMap = false;
                     break;
                 case 3:
                     BonusSpawner.instance.rocketPrefabs = bonusMapField;
                     isBonusMapField = true;
+                    isChangeBonusMap = false;
                     break;
                 case 4:
                     BonusSpawner.instance.rocketPrefabs = bonusMapIce;
                     isBonusMapIce = true;
+                    isChangeBonusMap = false;
                     break;
                 case 5:
                     BonusSpawner.instance.rocketPrefabs = bonusMapLava;
                     isBonusMapLava = true;
+                    isChangeBonusMap = false;
                     break;
             }
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
