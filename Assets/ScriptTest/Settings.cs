@@ -554,7 +554,6 @@ public class Settings : MonoBehaviour
             PlayerPrefs.Save();
             // Cập nhật slider với hiệu ứng mượt mà
             float smoothSpeed = 2f; // Tốc độ cập nhật (càng cao càng nhanh)
-            Debug.Log("Prize Slider Value: " + prizeSlider.value + " | Target Value: " + targetValue + " | Plane Money Total: " + Plane.instance.moneyTotal);
             prizeSlider.value = Mathf.Lerp(prizeSlider.value, targetValue, smoothSpeed * Time.deltaTime);
             if (prizeSlider. value >= 1f)
             {

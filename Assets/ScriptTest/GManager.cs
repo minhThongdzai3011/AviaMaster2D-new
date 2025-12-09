@@ -179,13 +179,23 @@ public class GManager : MonoBehaviour
 
     public void LaunchAirplane()
     {
+        
         if (BirdGuide.instance != null && BirdGuide.instance.isShowGuide)
         {
             BirdGuide.instance.pannelGuide.gameObject.SetActive(true);
             BirdGuide.instance.StartCoroutine(BirdGuide.instance.DelaytoGuide());
             newMapText.text = "How to Play";
         }
-        if (isPlaying && !BirdGuide.instance.isShowGuide)
+        // if (BirdMaxPower.instance != null && BirdMaxPower.instance.isMaxPower)
+        // {
+        //     BirdMaxPower.instance.pannelGuide.gameObject.SetActive(true);
+        //     BirdMaxPower.instance.StartCoroutine(BirdMaxPower.instance.DelaytoMaxPower());
+        //     newMapText.text = "MAX POWER";
+        //     BirdMaxPower.instance.imageGuide1.gameObject.SetActive(true);
+        //     BirdMaxPower.instance.imageGuide2.gameObject.SetActive(true);
+        
+        // }
+        if (isPlaying && !BirdGuide.instance.isShowGuide && !BirdMaxPower.instance.isMaxPower)
         {
             if (airplaneRigidbody2D == null)
             {
@@ -193,6 +203,11 @@ public class GManager : MonoBehaviour
                 return;
             }
             PositionX.instance.checkPlay();
+            if (BirdMaxPower.instance.isMaxPower){
+                BirdMaxPower.instance.imageGuide1.gameObject.SetActive(true);
+                BirdMaxPower.instance.imageGuide2.gameObject.SetActive(true);
+            }
+            
             // homeImage.gameObject.SetActive(false);
             playImage.gameObject.SetActive(true);
             Plane.instance.isStopSmokeEffect = false;
@@ -1470,6 +1485,7 @@ public class GManager : MonoBehaviour
         {
             // Giảm boost theo thời gian thực
             float decreaseAmount = boostDecreaseRate * Time.deltaTime;
+            float totalBoostMaxPower = totalBoost * (2);
             totalBoost -= decreaseAmount;
 
             // Đảm bảo không giảm xuống dưới 0

@@ -62,7 +62,6 @@ public class TrailRendererRight : MonoBehaviour
             elapsed += Time.deltaTime;
             trail.time = Mathf.Lerp(startTime, 0f, elapsed / duration);
 
-            Debug.Log($"{name} fading... time = {trail.time}");
 
             yield return null;
         }
