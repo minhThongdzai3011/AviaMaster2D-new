@@ -177,35 +177,32 @@ public class GManager : MonoBehaviour
         SaveTotalDiamond();
     }
 
+    
     public void LaunchAirplane()
     {
-        
+        if (PositionX.instance != null)
+        {
+            PositionX.instance.checkPlay();
+            Settings.instance.imageFuelPlay.color = Color.yellow;
+            Settings.instance.imageFill.color = Color.yellow;
+        }
         if (BirdGuide.instance != null && BirdGuide.instance.isShowGuide)
         {
             BirdGuide.instance.pannelGuide.gameObject.SetActive(true);
             BirdGuide.instance.StartCoroutine(BirdGuide.instance.DelaytoGuide());
             newMapText.text = "How to Play";
         }
-        // if (BirdMaxPower.instance != null && BirdMaxPower.instance.isMaxPower)
-        // {
-        //     BirdMaxPower.instance.pannelGuide.gameObject.SetActive(true);
-        //     BirdMaxPower.instance.StartCoroutine(BirdMaxPower.instance.DelaytoMaxPower());
-        //     newMapText.text = "MAX POWER";
-        //     BirdMaxPower.instance.imageGuide1.gameObject.SetActive(true);
-        //     BirdMaxPower.instance.imageGuide2.gameObject.SetActive(true);
-        
-        // }
-        if (isPlaying && !BirdGuide.instance.isShowGuide && !BirdMaxPower.instance.isMaxPower)
+        if (isPlaying && !BirdGuide.instance.isShowGuide)
         {
             if (airplaneRigidbody2D == null)
             {
                 Debug.LogError("Rigidbody2D chưa được gán!");
                 return;
             }
-            PositionX.instance.checkPlay();
-            if (BirdMaxPower.instance.isMaxPower){
-                BirdMaxPower.instance.imageGuide1.gameObject.SetActive(true);
-                BirdMaxPower.instance.imageGuide2.gameObject.SetActive(true);
+            
+            if (PositionX.instance.isMaxPower){
+                Settings.instance.imagex2Fuel.gameObject.SetActive(true);
+                // Settings.instance.imagex2Power.gameObject.SetActive(true);
             }
             
             // homeImage.gameObject.SetActive(false);
@@ -461,6 +458,11 @@ public class GManager : MonoBehaviour
         RocketSpawner.instance.StartSpawning();
         BonusSpawner.instance.StartSpawning();
         Debug.Log($"Máy bay bắt đầu điều khiển với durationFuel = {durationFuel}s (rateFuel = {rateFuel}%)");
+        if (PositionX.instance.isMaxPower)
+        {
+            durationFuel *= 2f;
+            Debug.Log($"Max Power active! durationFuel doubled to {durationFuel}s");
+        }
         StartCoroutine(DecreaseSliderFuel(durationFuel));
 
         // Trong giai đoạn này, rotation được điều khiển bởi HandleAircraftControl()
@@ -593,7 +595,14 @@ public class GManager : MonoBehaviour
             
             // THÊM: Duy trì velocity.x tối thiểu 15 m/s để không bị lực cản kéo xuống quá thấp
             Vector2 currentVel = airplaneRigidbody2D.velocity;
-            float minVelocityX = launchForce / 1.34f;
+            float minVelocityX;
+            if (PositionX.instance != null && PositionX.instance.isMaxPower)
+            {
+                minVelocityX = launchForce / 2.67f;
+            }
+            else{
+                minVelocityX = launchForce / 1.34f;
+            }
             if (minVelocityX < 15f && !Plane.instance.isGrounded) minVelocityX = 15f; // Đảm bảo tối thiểu 15 m/s
             if (currentVel.x < minVelocityX && !Plane.instance.isGrounded)
             {
@@ -1257,6 +1266,8 @@ public class GManager : MonoBehaviour
             // Nếu hết boost thì tắt booster
             isBoosterActive = false;
             StopBoostDecrease();
+            buttonBoosterPlaneImage.color = Color.gray;
+
         }
     }
 
@@ -1543,9 +1554,9 @@ public class GManager : MonoBehaviour
     public int ratePower = 0;
     public int rateFuel = 0;
     public int rateBoost = 0;
-    public float moneyPower = 30f;
-    public float moneyFuel = 30f;
-    public float moneyBoost = 30f;
+    public float moneyPower = 20f;
+    public float moneyFuel = 20f;
+    public float moneyBoost = 20f;
     public bool isFuelMax = false;
     public bool isPowerMax = false;
     public bool isBoostMax = false;
@@ -1835,14 +1846,14 @@ public class GManager : MonoBehaviour
                 float angle = angleNew > 180f ? angleNew - 360f : angleNew;
                 if (angle < -3f && angle > -8f)
                 {
-                    newMapText.text = "MAX POWER!";
-                    isBonus = true;
+                    // s
+                    // isBonus = true;
                     Debug.Log("isBonus: " + isBonus);
                     isCheckBonus = false;
                 }
                 else{
-                    newMapText.text = "MIN POWER!";
-                    isBonus = false;
+                    // newMapText.text = "MIN POWER!";
+                    // isBonus = false;
                     Debug.Log("isBonus: " + isBonus);
                     isCheckBonus = false;
                 }
@@ -1861,9 +1872,9 @@ public class GManager : MonoBehaviour
         rateFuel = PlayerPrefs.GetInt("RateFuel", 0);
         rateBoost = PlayerPrefs.GetInt("RateBoost", 0);
 
-        moneyPower = PlayerPrefs.GetFloat("MoneyPower", 30f);
-        moneyFuel = PlayerPrefs.GetFloat("MoneyFuel", 30f);
-        moneyBoost = PlayerPrefs.GetFloat("MoneyBoost", 30f);
+        moneyPower = PlayerPrefs.GetFloat("MoneyPower", 20f);
+        moneyFuel = PlayerPrefs.GetFloat("MoneyFuel", 20f);
+        moneyBoost = PlayerPrefs.GetFloat("MoneyBoost", 20f);
 
         isPowerMax = PlayerPrefs.GetInt("IsPowerMax", 0) == 1;
         isFuelMax = PlayerPrefs.GetInt("IsFuelMax", 0) == 1;

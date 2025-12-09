@@ -66,4 +66,22 @@ public class EffectRotaryFront : MonoBehaviour
             inst.Explode();
         }
     }
+
+    public void Golden()
+    {
+        if (rb != null )
+        {
+            gameObject.GetComponent<Renderer>().material = Plane.instance.blackMaterial;
+        }
+    }
+
+    public void GoldenAll()
+    {
+        foreach (var inst in instances)
+        {
+            inst.Golden();
+        }
+    }
+
+
 }

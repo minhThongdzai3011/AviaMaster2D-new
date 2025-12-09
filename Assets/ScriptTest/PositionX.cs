@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using Microsoft.Unity.VisualStudio.Editor;
 
 public class PositionX : MonoBehaviour
 {
     public static PositionX instance;
     public Vector2 positionX;
     public Vector2 newPositionX;
+
     private void Awake()
     {
         instance = this;
@@ -16,6 +18,9 @@ public class PositionX : MonoBehaviour
     void Start()
     
     {
+
+
+
         positionX = transform.position;
         
         // Di chuyển position.x thêm 100 đơn vị trong 1 giây
@@ -30,6 +35,7 @@ public class PositionX : MonoBehaviour
     {
         
     }
+    public bool isMaxPower = false;
 
     public void checkPlay()
     {
@@ -43,15 +49,46 @@ public class PositionX : MonoBehaviour
         Debug.Log($"Temp Value: {temp}%");
         
         // ✅ Set isMaxPower NGAY LẬP TỨC
-        if (temp >= 50)
+        if (temp >= 80)
         {
-            BirdMaxPower.instance.isMaxPower = true;
-            Debug.Log("✅ Kích hoạt Max Power!");
+            isMaxPower = true;
+            GManager.instance.isBonus = true;    
+            Debug.Log(" Kích hoạt Max Power!");
+            GManager.instance.newMapText.text = "Max Power Activated!";
+            ExplosionScale.instance.Explosion();
+            EffectAirplane.instance.MakePlaneGold();
+            DestroyWheels.instance.Golden();
+            foreach (var propeller in EffectRotaryFront.instances)
+            {
+                propeller.gameObject.GetComponent<Renderer>().material = Plane.instance.GoldMaterial;
+            }
+            if (Plane.instance.explosionEffect != null) Plane.instance.explosionEffect.Play();
+
+            StartCoroutine(DelayTwoSeconds(1f));
         }
         else
         {
-            BirdMaxPower.instance.isMaxPower = false;
-            Debug.Log("❌ Không kích hoạt Max Power.");
+            isMaxPower = false;
+            Debug.Log(" Không kích hoạt Max Power.");
+            GManager.instance.isBonus = false;
+            RandomTextMaxPower();
         }
     }
+    public void RandomTextMaxPower(){
+        string[] texts = {
+        "Over 95% = MAX POWER",
+        "Hit 95%+ for MAX POWER",
+        "Cross 95% → MAX POWER",
+        "95% unlocks MAX POWER",
+        "Reach 95%+ to power up"
+        };
+        int randomIndex = Random.Range(0, texts.Length);
+        GManager.instance.newMapText.text = texts[randomIndex];
+    }
+
+        IEnumerator DelayTwoSeconds(float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            
+        }
 }

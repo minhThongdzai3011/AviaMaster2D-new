@@ -7,15 +7,19 @@ using DG.Tweening;
 public class BirdGuide : MonoBehaviour
 {
     public static BirdGuide instance;
-    public Vector2 startPos = new Vector2(1000, 700);
-    public Vector2 midPos   = new Vector2(150, 200);
-    public Vector2 endPos   = new Vector2(-1000, 800);
 
-    public float flyDuration1 = 5f;   // thời gian bay từ start -> mid
-    public float flyDuration2 = 6f;   // thời gian bay từ mid -> end
-    public float pauseTime    = 3f;   // thời gian dừng lại
-    public float amplitude    = 10f;  // biên độ dao động lên xuống
-    public float frequency    = 2f;   // tần số dao động
+    public Image imageStart;
+    public Image imageMid;
+    public Image imageEnd;
+    public Vector2 startPos;
+    public Vector2 midPos ;
+    public Vector2 endPos ;
+
+    public float flyDuration1 = 5f;   
+    public float flyDuration2 = 6f;   
+    public float pauseTime    = 3f;   
+    public float amplitude    = 10f;  
+    public float frequency    = 2f;   
 
     public Image imageGuide;
     public Image pannelGuide;
@@ -26,6 +30,9 @@ public class BirdGuide : MonoBehaviour
 
     void Start()
     {
+        startPos = imageStart.rectTransform.anchoredPosition;
+        midPos = imageMid.rectTransform.anchoredPosition;
+        endPos = imageEnd.rectTransform.anchoredPosition;
         isShowGuide = PlayerPrefs.GetInt("HasSeenBirdGuide", 0) == 0;
         instance = this;
         if (isShowGuide)

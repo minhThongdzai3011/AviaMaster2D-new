@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using Leaderboard;
 
 
 public class Plane : MonoBehaviour
@@ -9,6 +10,7 @@ public class Plane : MonoBehaviour
     public static Plane instance;
 
     public Material blackMaterial;
+    public Material GoldMaterial;
     public ParticleSystem explosionEffect;
 
 
@@ -128,6 +130,13 @@ public class Plane : MonoBehaviour
             GManager.instance.newMapText.text = "Bonus - +5s fuel";
             StartCoroutine(FadeInText(1f));
         }
+        if (other.CompareTag("MaxPower"))
+        {
+            AudioManager.instance.PlaySound(AudioManager.instance.bonusCollisionSoundClip);
+            Destroy(other.gameObject);
+            
+        }
+
         if (other.CompareTag("MapStartCity"))
         {
             AudioManager.instance.PlaySound(AudioManager.instance.unlockMapSoundClip);
@@ -135,7 +144,12 @@ public class Plane : MonoBehaviour
             PlayerPrefs.SetInt("IsMapCityUnlocked", 1); // Lưu trạng thái mở khóa
             BonusSpawner.instance.rocketPrefabs = ChangeBonusMap.instance.bonusMapCity;
             PlayerPrefs.Save();
-            Settings.instance.NotificationNewMapText.text = "You have unlocked the City Map!";
+            if(MapSpawner.instance.isMapCityUnlocked){
+                Settings.instance.NotificationNewMapText.text = "Welcome to City Map!";
+            }
+            else{
+                Settings.instance.NotificationNewMapText.text = "You have unlocked the City Map!";
+            }
             Settings.instance.NotificationNewMap();
         }
         
@@ -146,7 +160,12 @@ public class Plane : MonoBehaviour
             PlayerPrefs.SetInt("IsMapBeachUnlocked", 1); // Lưu trạng thái mở khóa
             BonusSpawner.instance.rocketPrefabs = ChangeBonusMap.instance.bonusMapBeach;
             PlayerPrefs.Save();
-            Settings.instance.NotificationNewMapText.text = "You have unlocked the Beach Map!";
+            if(MapSpawner.instance.isMapBeachUnlocked){
+                Settings.instance.NotificationNewMapText.text = "Welcome to Beach Map!";
+            }
+            else{
+                Settings.instance.NotificationNewMapText.text = "You have unlocked the Beach Map!";
+            }
             Settings.instance.NotificationNewMap();
         }
         
@@ -157,7 +176,12 @@ public class Plane : MonoBehaviour
             PlayerPrefs.SetInt("IsMapDesertUnlocked", 1); // Lưu trạng thái mở khóa
             BonusSpawner.instance.rocketPrefabs = ChangeBonusMap.instance.bonusMapDesert;
             PlayerPrefs.Save();
-            Settings.instance.NotificationNewMapText.text = "You have unlocked the Desert Map!";
+            if(MapSpawner.instance.isMapDesertUnlocked){
+                Settings.instance.NotificationNewMapText.text = "Welcome to Desert Map!";
+            }
+            else{
+                Settings.instance.NotificationNewMapText.text = "You have unlocked the Desert Map!";
+            }
             Settings.instance.NotificationNewMap();
         }
         
@@ -168,7 +192,12 @@ public class Plane : MonoBehaviour
             PlayerPrefs.SetInt("IsMapFieldUnlocked", 1); // Lưu trạng thái mở khóa
             BonusSpawner.instance.rocketPrefabs = ChangeBonusMap.instance.bonusMapField;
             PlayerPrefs.Save();
-            Settings.instance.NotificationNewMapText.text = "You have unlocked the Field Map!";
+            if(MapSpawner.instance.isMapFieldUnlocked){
+                Settings.instance.NotificationNewMapText.text = "Welcome to Field Map!";
+            }
+            else{
+                Settings.instance.NotificationNewMapText.text = "You have unlocked the Field Map!";
+            }
             Settings.instance.NotificationNewMap();
         }
         
@@ -179,7 +208,12 @@ public class Plane : MonoBehaviour
             PlayerPrefs.SetInt("IsMapIceUnlocked", 1); // Lưu trạng thái mở khóa
             BonusSpawner.instance.rocketPrefabs = ChangeBonusMap.instance.bonusMapIce;
             PlayerPrefs.Save();
-            Settings.instance.NotificationNewMapText.text = "You have unlocked the Ice Map!";
+            if(MapSpawner.instance.isMapIceUnlocked){
+                Settings.instance.NotificationNewMapText.text = "Welcome to Ice Map!";
+            }
+            else{
+                Settings.instance.NotificationNewMapText.text = "You have unlocked the Ice Map!";
+            }
             Settings.instance.NotificationNewMap();
         }
         
@@ -190,7 +224,12 @@ public class Plane : MonoBehaviour
             PlayerPrefs.SetInt("IsMapLavaUnlocked", 1); // Lưu trạng thái mở khóa
             BonusSpawner.instance.rocketPrefabs = ChangeBonusMap.instance.bonusMapLava;
             PlayerPrefs.Save();
-            Settings.instance.NotificationNewMapText.text = "You have unlocked the Lava Map!";
+            if(MapSpawner.instance.isMapLavaUnlocked){
+                Settings.instance.NotificationNewMapText.text = "Welcome to Lava Map!";
+            }
+            else{
+                Settings.instance.NotificationNewMapText.text = "You have unlocked the Lava Map!";
+            }
             Settings.instance.NotificationNewMap();
         }
         
@@ -330,6 +369,8 @@ public class Plane : MonoBehaviour
     private bool isAddMoneyDone = false;
     IEnumerator OpenImageWIn()
     {
+        // Đang lỗi ở đây: Chưa post điểm lên leaderboard được
+        // LeaderboardManager.Instance.PostScore((int)GManager.instance.distanceTraveled);
         yield return new WaitForSeconds(2f);
         if (!isAddMoneyDone)
         {
@@ -439,24 +480,29 @@ public class Plane : MonoBehaviour
     public void RandomPrizeBird(){
         int[] coinPrize = {1000, 2000, 5000};
         int[] diamondPrize = {100, 300, 1000};
-        int count = Random.Range(0, 3); //random 0,1,2
+        int count = Random.Range(0, 3); 
         if(count == 0){
             int randomIndex = Random.Range(0, coinPrize.Length);
             int prize = coinPrize[randomIndex];
             GManager.instance.totalMoney += prize;
             GManager.instance.newMapText.text = $"You grabbed {prize} shiny coins!";
             StartCoroutine(FadeInText(1f));
+            PlayerPrefs.SetFloat("TotalMoney", GManager.instance.totalMoney);
+            PlayerPrefs.Save();
         }
         else if(count == 1){
             int randomIndex = Random.Range(0, diamondPrize.Length);
             int prize = diamondPrize[randomIndex];
-            GManager.instance.totalDiamond += prize;
+            GManager.instance.totalDiamond += prize; 
             GManager.instance.newMapText.text = $"You grabbed {prize} shiny diamonds!";
             StartCoroutine(FadeInText(1f));
+            PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
+            PlayerPrefs.Save();
         }
         else{
             GManager.instance.newMapText.text = "Congrats… you just unlocked absolutely nothing!";
             StartCoroutine(FadeInText(1f));
+
         }
     }
 

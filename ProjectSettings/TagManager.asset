@@ -35,6 +35,7 @@ TagManager:
   - MapStartField
   - MapStartIce
   - MapStartLava
+  - MaxPower
   layers:
   - Default
   - TransparentFX

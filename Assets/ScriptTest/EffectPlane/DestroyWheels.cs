@@ -54,4 +54,13 @@ public class DestroyWheels : MonoBehaviour
             exploded = true;
         }
     }
+
+    public void Golden()
+    {
+        if (rb != null )
+        {
+            Debug.Log("Golden propeller");
+            gameObject.GetComponent<Renderer>().material = Plane.instance.GoldMaterial;
+        }
+    }
 }

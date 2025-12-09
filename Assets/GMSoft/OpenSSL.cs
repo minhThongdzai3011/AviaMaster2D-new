@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Text.RegularExpressions;
 
 namespace Assets.GMDev.Utilities
 {
@@ -120,7 +119,7 @@ namespace Assets.GMDev.Utilities
             return res.ToString();
         }
 
-        public static string EncodeWithPass(string input)
+        public static string EncodeWithPass(string input) 
         {
             int passLength = UnityEngine.Random.Range(10, 24);
             int l1 = UnityEngine.Random.Range(3, passLength / 2);
@@ -135,48 +134,6 @@ namespace Assets.GMDev.Utilities
             bytes.AddRange(System.Text.Encoding.UTF8.GetBytes(pass)); // add password
             bytes.AddRange(System.Text.Encoding.UTF8.GetBytes(encodeText)); // add endcode data
             return System.Convert.ToBase64String(bytes.ToArray()); // endcoded text
-        }
-
-        public static string DecodeWithPass(string input)
-        {
-            if (IsValidBase64(input))
-            {
-                var data = System.Convert.FromBase64String(input);
-                int passLength = data[1] - System.Convert.ToByte('G') + data[3] - System.Convert.ToByte('m');
-                string pass = System.Text.Encoding.UTF8.GetString(SubArr(data, 4, passLength));
-                string encodeText = System.Text.Encoding.UTF8.GetString(SubArr(data, 4 + passLength));
-                return OpenSSLDecrypt(encodeText, pass);
-            }
-            return null;
-        }
-
-        public static bool IsValidBase64(string base64)
-        {
-            if (string.IsNullOrEmpty(base64))
-            {
-                return false;
-            }
-
-            if (base64.Length % 4 != 0)
-            {
-                return false;
-            }
-            string pattern = @"^[a-zA-Z0-9\+/]*={0,2}$";
-            return Regex.IsMatch(base64, pattern);
-        }
-
-        private static byte[] SubArr(byte[] arr, int index, int length = -1)
-        {
-            if (length == -1)
-            {
-                length = arr.Length - index;
-            }
-            byte[] res = new byte[length];
-            for (int i = 0; i < length; i++)
-            {
-                res[i] = arr[index + i];
-            }
-            return res;
         }
 
         /// <summary>

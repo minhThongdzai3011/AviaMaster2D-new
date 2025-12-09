@@ -42,6 +42,10 @@ public class Settings : MonoBehaviour
     public Image settingImage;
     public Image ImageErrorAngleZ;
     public Image pannelGray;
+    public Image imagex2Fuel;
+    public Image imagex2Power;
+    public Image imageFuelPlay;
+    public Image imageFill;
 
     [Header("Button Settings")]
     public Button AdsButton;
@@ -63,7 +67,7 @@ public class Settings : MonoBehaviour
     public bool isButtonChestClickeds = false;
     
     [Header("Slider Settings")]
-    public Slider prizeSlider;
+    public Image prizeSlider;
 
     [Header("Input Settings")]
     public TMP_InputField inputField;
@@ -103,7 +107,7 @@ public class Settings : MonoBehaviour
         Debug.Log("Settings initialized. Music: " + isMusicOn + ", Sound: " + isSoundOn);
         targetValue = PlayerPrefs.GetFloat("PrizeSliderValue", 0f);
         inputField.text = PlayerPrefs.GetString("PlayerName", "");
-        prizeSlider.value = targetValue;
+        prizeSlider.fillAmount = targetValue;
         StartCountdown();
         GManager.instance.coinEffect.Stop();
     }
@@ -554,8 +558,8 @@ public class Settings : MonoBehaviour
             PlayerPrefs.Save();
             // Cập nhật slider với hiệu ứng mượt mà
             float smoothSpeed = 2f; // Tốc độ cập nhật (càng cao càng nhanh)
-            prizeSlider.value = Mathf.Lerp(prizeSlider.value, targetValue, smoothSpeed * Time.deltaTime);
-            if (prizeSlider. value >= 1f)
+            prizeSlider.fillAmount = Mathf.Lerp(prizeSlider.fillAmount, targetValue, smoothSpeed * Time.deltaTime);
+            if (prizeSlider. fillAmount >= 1f)
             {
                 isShakeZ = true;
                 ShakeZ();

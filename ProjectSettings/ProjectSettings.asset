@@ -681,7 +681,7 @@ PlayerSettings:
     PS5: DOTWEEN
     Stadia: DOTWEEN
     Standalone: DOTWEEN
-    WebGL: DOTWEEN
+    WebGL: DOTWEEN;ODIN_INSPECTOR;ODIN_INSPECTOR_3;ODIN_INSPECTOR_3_1
     Windows Store Apps: DOTWEEN
     XboxOne: DOTWEEN
     iPhone: DOTWEEN
@@ -772,7 +772,12 @@ PlayerSettings:
   XboxOneOverrideIdentityName: 
   XboxOneOverrideIdentityPublisher: 
   vrEditorSettings: {}
-  cloudServicesEnabled: {}
+  cloudServicesEnabled:
+    Build: 0
+    Game Performance: 0
+    Purchasing: 0
+    UDP: 0
+    Unity Ads: 0
   luminIcon:
     m_Name: 
     m_ModelFolderPath: 
@@ -787,10 +792,10 @@ PlayerSettings:
   apiCompatibilityLevel: 6
   activeInputHandler: 0
   windowsGamepadBackendHint: 0
-  cloudProjectId: efd47bff-c7db-4e78-9b19-0cf28546db10
+  cloudProjectId: eebd3c09-1f8a-4905-b80b-8007c72f40c2
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: AviaMaster2D
+  projectName: AviaMaster2D (1)
   organizationId: nmthong111
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0

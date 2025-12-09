@@ -20,4 +20,12 @@ public class EffectAirplane : MonoBehaviour
             rend.material = Plane.instance.blackMaterial;
         }
     }
+        public void MakePlaneGold()
+    {
+        Renderer rend = GetComponentInChildren<Renderer>();
+        if (rend != null)
+        {
+            rend.material = Plane.instance.GoldMaterial;
+        }
+    }
 }

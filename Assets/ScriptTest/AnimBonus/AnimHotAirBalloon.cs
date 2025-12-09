@@ -2,21 +2,19 @@ using UnityEngine;
 
 public class AnimHotAirBalloon : MonoBehaviour
 {
-    public float speedY = 1f;   // tốc độ bay lên (1 đơn vị/giây)
+    public float speedY = 1f; 
+    public float distanceY = 10f;
     private Vector3 startPos;
 
     void Start()
     {
-        // Lưu vị trí ban đầu
         startPos = transform.localPosition;
     }
 
     void Update()
     {
-        // Tăng dần vị trí Y theo thời gian
-        float newY = startPos.y + Time.time * speedY;
+        float offsetY = Mathf.PingPong(Time.time * speedY, distanceY);
 
-        // Gán vị trí mới
-        transform.localPosition = new Vector3(startPos.x, newY, startPos.z);
+        transform.localPosition = new Vector3(startPos.x, startPos.y + offsetY, startPos.z);
     }
 }
