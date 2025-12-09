@@ -55,9 +55,9 @@ public class PositionX : MonoBehaviour
             GManager.instance.isBonus = true;    
             Debug.Log(" Kích hoạt Max Power!");
             GManager.instance.newMapText.text = "Max Power Activated!";
-            ExplosionScale.instance.Explosion();
-            EffectAirplane.instance.MakePlaneGold();
-            DestroyWheels.instance.Golden();
+            if(ExplosionScale.instance != null) ExplosionScale.instance.Explosion();
+            if (EffectAirplane.instance != null) EffectAirplane.instance.MakePlaneGold();
+            if (DestroyWheels.instance != null) DestroyWheels.instance.Golden();
             foreach (var propeller in EffectRotaryFront.instances)
             {
                 propeller.gameObject.GetComponent<Renderer>().material = Plane.instance.GoldMaterial;

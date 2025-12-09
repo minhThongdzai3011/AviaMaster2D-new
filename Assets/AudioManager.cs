@@ -49,7 +49,10 @@ public class AudioManager : MonoBehaviour
     public AudioClip unlockMapSoundClip;
     [Header("Âm thanh mở khóa máy bay mới")]
     public AudioClip unlockPlaneSoundClip;
-
+    [Header("Âm thanh bắt đầu cất cánh")]
+    public AudioClip takeOffSoundClip;
+    [Header("Âm thanh máy bay đang rơi")]
+    public AudioClip fallingSoundClip;
     public bool isMusicOn = true;
     public bool isSoundOn = true;
 

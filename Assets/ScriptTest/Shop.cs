@@ -1441,6 +1441,7 @@ public class Shop : MonoBehaviour
     public void buyPlane14(){
         StartCoroutine(PlayButtonEffect(13));
         isBuyPlane14Done = true;
+        isRotaryFrontZDone = false;
         if (planePriceText != null && planePriceText.Length > 13)
             planePriceText[13].gameObject.SetActive(false);
 

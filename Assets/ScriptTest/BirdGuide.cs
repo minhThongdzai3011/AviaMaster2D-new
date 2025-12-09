@@ -8,9 +8,7 @@ public class BirdGuide : MonoBehaviour
 {
     public static BirdGuide instance;
 
-    public Image imageStart;
-    public Image imageMid;
-    public Image imageEnd;
+    public Image Pannel;
     public Vector2 startPos;
     public Vector2 midPos ;
     public Vector2 endPos ;
@@ -30,20 +28,53 @@ public class BirdGuide : MonoBehaviour
 
     void Start()
     {
-        startPos = imageStart.rectTransform.anchoredPosition;
-        midPos = imageMid.rectTransform.anchoredPosition;
-        endPos = imageEnd.rectTransform.anchoredPosition;
-        isShowGuide = PlayerPrefs.GetInt("HasSeenBirdGuide", 0) == 0;
         instance = this;
+
+        // 1. Lấy vị trí bắt đầu (start) từ rectTransform của chính Bird
+        startPos = GetComponent<RectTransform>().anchoredPosition;
+
+        // 2. Tính vị trí giữa Bird và panel (mid)
+        midPos = (startPos + pannelGuide.rectTransform.anchoredPosition) * 0.5f;
+
+        // 3. Tính endPos theo yêu cầu của bạn
+        endPos = new Vector2(midPos.x - 2000f, midPos.y + 1000f);
+
+        isShowGuide = PlayerPrefs.GetInt("HasSeenBirdGuide", 0) == 0;
+
         if (isShowGuide)
         {
-            transform.position = startPos;
-            
+            transform.GetComponent<RectTransform>().anchoredPosition = startPos;
+        }
+    }
+
+
+    IEnumerator FlyToPoint(Vector2 from, Vector2 to, float duration, float amplitude = 20f, float frequency = 2f)
+    {
+        float elapsed = 0f;
+        RectTransform rectTransform = GetComponent<RectTransform>(); // ✅ Lấy RectTransform một lần
+        
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / duration);
+
+            // Vị trí tuyến tính từ A -> B
+            Vector2 linearPos = Vector2.Lerp(from, to, t);
+
+            // Dao động lên xuống bằng sin
+            float offsetY = Mathf.Sin(elapsed * frequency) * amplitude;
+
+            // ✅ SỬ DỤNG anchoredPosition thay vì position
+            rectTransform.anchoredPosition = new Vector2(linearPos.x, linearPos.y + offsetY);
+
+            yield return null;
         }
     }
 
     IEnumerator FlySequence()
     {
+        RectTransform rectTransform = GetComponent<RectTransform>(); // ✅ Thêm reference
+        
         // Bay từ start -> mid
         yield return StartCoroutine(FlyToPoint(startPos, midPos, flyDuration1));
 
@@ -53,12 +84,16 @@ public class BirdGuide : MonoBehaviour
         textGuide.DOFade(1f, 2f);
         textGuide1.DOFade(1f, 2f);
         textGuide2.DOFade(1f, 2f);
+        
         Vector2 basePos = midPos;
         while (elapsed < pauseTime)
         {
             elapsed += Time.deltaTime;
             float offsetY = Mathf.Sin(elapsed * Mathf.PI * frequency) * amplitude;
-            transform.position = new Vector2(basePos.x, basePos.y + offsetY);
+            
+            // ✅ SỬ DỤNG anchoredPosition
+            rectTransform.anchoredPosition = new Vector2(basePos.x, basePos.y + offsetY);
+            
             yield return null;
         }
         yield return StartCoroutine(FadeOutText());
@@ -71,29 +106,9 @@ public class BirdGuide : MonoBehaviour
         PlayerPrefs.SetInt("HasSeenBirdGuide", 1);
         gameObject.SetActive(false);
         PlayerPrefs.Save(); 
-        
     }
 
-    IEnumerator FlyToPoint(Vector2 from, Vector2 to, float duration, float amplitude = 20f, float frequency = 2f)
-    {
-        float elapsed = 0f;
-        while (elapsed < duration)
-        {
-            elapsed += Time.deltaTime;
-            float t = Mathf.Clamp01(elapsed / duration);
 
-            // Vị trí tuyến tính từ A -> B
-            Vector2 linearPos = Vector2.Lerp(from, to, t);
-
-            // Dao động lên xuống bằng sin
-            float offsetY = Mathf.Sin(elapsed * frequency) * amplitude;
-
-            // Cộng thêm dao động vào trục Y
-            transform.position = new Vector2(linearPos.x, linearPos.y + offsetY);
-
-            yield return null;
-        }
-    }
     IEnumerator FadeOutText()
     {
         imageGuide.DOFade(0f, 0.5f);

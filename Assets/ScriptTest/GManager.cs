@@ -209,7 +209,7 @@ public class GManager : MonoBehaviour
             playImage.gameObject.SetActive(true);
             Plane.instance.isStopSmokeEffect = false;
             // Âm thanh play
-            AudioManager.instance.PlayPlayerSound(AudioManager.instance.gameplaySoundClip);
+            AudioManager.instance.PlayPlayerSound(AudioManager.instance.takeOffSoundClip);
             StartCoroutine(LaunchSequence());
             isPlaying = false;
             isPlay = true;
@@ -265,24 +265,37 @@ public class GManager : MonoBehaviour
         // Thay thế đoạn code trong LaunchSequence():
         if(airplaneRigidbody2D.name == "Forest" || airplaneRigidbody2D.name == "Avocado" || airplaneRigidbody2D.name == "BeeGee" || airplaneRigidbody2D.name == "Pancake" || airplaneRigidbody2D.name == "Scruffy") 
         {
-            Debug.Log("Start Rotation Front");
+            Debug.Log("Start Rotation Front" + airplaneRigidbody2D.name +" isRotary " + Shop.instance.isRotaryFrontZDone);
 
             // THAY ĐỔI: Tìm RotaryFront trên máy bay hiện tại thay vì dùng singleton
             if (Shop.instance.isRotaryFrontZDone)
             {
+
                 RotaryFrontZ currentRotaryFront = airplaneRigidbody2D.GetComponentInChildren<RotaryFrontZ>();
+                Debug.Log($"[DEBUG] Component: {currentRotaryFront}, " +
+                            $"IsNull: {currentRotaryFront == null}, " +
+                            $"IsActive: {(currentRotaryFront != null ? currentRotaryFront.gameObject.activeInHierarchy : false)}");
                 if (currentRotaryFront != null && currentRotaryFront.gameObject.activeInHierarchy)
                 {
                     currentRotaryFront.StartRotation();
                     Debug.Log($"Started rotation on Z {airplaneRigidbody2D.name}");
+                    Debug.Log("RotaryFrontZ StartRotation called from GManager" + currentRotaryFront);
+                }
+                else{
+                    Debug.LogWarning($"RotaryFrontZ component not found on {airplaneRigidbody2D.name}");
                 }
             }
             else{
+                
                 RotaryFront currentRotaryFront = airplaneRigidbody2D.GetComponentInChildren<RotaryFront>();
+                Debug.Log($"[DEBUG] 1 Component: {currentRotaryFront}, " +
+                            $"IsNull: {currentRotaryFront == null}, " +
+                            $"IsActive: {(currentRotaryFront != null ? currentRotaryFront.gameObject.activeInHierarchy : false)}");
                 if (currentRotaryFront != null && currentRotaryFront.gameObject.activeInHierarchy)
                 {
                     currentRotaryFront.StartRotation();
                     Debug.Log($"Started rotation on {airplaneRigidbody2D.name}");
+                    Debug.Log("RotaryFront StartRotation called from GManager" + currentRotaryFront);
                 }
             }
         }
@@ -345,6 +358,7 @@ public class GManager : MonoBehaviour
         isHorizontalFlying = false;
 
         // Bước 2: Bay lên với rotation dần dần
+        AudioManager.instance.PlayPlayerSound(AudioManager.instance.gameplaySoundClip);
         float climbForce = launchForce;
         float angleRad = Mathf.Deg2Rad * climbAngle;
         Vector2 launchDirection = new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad)).normalized;
@@ -515,6 +529,7 @@ public class GManager : MonoBehaviour
         {
             Plane.instance.trailEffect.enabled = false; 
         }
+        AudioManager.instance.PlayPlayerSound(AudioManager.instance.fallingSoundClip);
         isControllable = false; // Tắt controllable bình thường
         isFallingInSequence = true; // THÊM: Báo hiệu đang trong giai đoạn rơi
         airplaneRigidbody2D.gravityScale = gravityScale;
