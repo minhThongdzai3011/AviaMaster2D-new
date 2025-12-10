@@ -35,6 +35,7 @@ namespace Leaderboard
         protected override void Start()
         {
             base.Start();
+            Debug.Log("Leaderboard Demo UI Started " + LeaderboardManager.Instance );
             LeaderboardManager.Instance.OnLeaderboardResponse += LeaderboardResponse;
             tabGroup.OnNewTabSelected += SelectNewTab;
             nextPage.onClick.AddListener(OnNextPage);

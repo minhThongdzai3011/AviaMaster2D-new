@@ -144,7 +144,10 @@ public class GManager : MonoBehaviour
     {
         Debug.Log("Airplane GManager Start called " + airplaneRigidbody2D.name);
         
-        
+        buttonDownImage.color = Color.gray;
+        buttonUpImage.color = Color.gray;
+        buttonBoosterPlaneImage.color = Color.gray;
+
         sliderAchievement.value = 0f;
         startZ = airplaneRigidbody2D.transform.rotation.eulerAngles.z;
 
@@ -183,8 +186,11 @@ public class GManager : MonoBehaviour
         if (PositionX.instance != null)
         {
             PositionX.instance.checkPlay();
-            Settings.instance.imageFuelPlay.color = Color.yellow;
-            Settings.instance.imageFill.color = Color.yellow;
+            if(PositionX.instance.isMaxPower)
+            {
+                Settings.instance.imageFuelPlay.color = Color.yellow;
+                Settings.instance.imageFill.color = Color.yellow;
+            }
         }
         if (BirdGuide.instance != null && BirdGuide.instance.isShowGuide)
         {
@@ -478,11 +484,14 @@ public class GManager : MonoBehaviour
             Debug.Log($"Max Power active! durationFuel doubled to {durationFuel}s");
         }
         StartCoroutine(DecreaseSliderFuel(durationFuel));
-
+        buttonDownImage.color = Color.white;
+        buttonUpImage.color = Color.white;
         // Trong giai đoạn này, rotation được điều khiển bởi HandleAircraftControl()
         float timer = 0f;
         while (timer < durationFuel)
         {
+            buttonDownImage.color = Color.white;
+            buttonUpImage.color = Color.white;
             timer += Time.deltaTime;
             if (Mathf.FloorToInt(timer) != Mathf.FloorToInt(timer - Time.deltaTime))
             {
@@ -614,9 +623,11 @@ public class GManager : MonoBehaviour
             if (PositionX.instance != null && PositionX.instance.isMaxPower)
             {
                 minVelocityX = launchForce / 2.67f;
+                Debug.Log($"Max Power active! minVelocityX set to {minVelocityX} m/s");
             }
             else{
                 minVelocityX = launchForce / 1.34f;
+                Debug.Log($"Normal Power! minVelocityX set to {minVelocityX} m/s");
             }
             if (minVelocityX < 15f && !Plane.instance.isGrounded) minVelocityX = 15f; // Đảm bảo tối thiểu 15 m/s
             if (currentVel.x < minVelocityX && !Plane.instance.isGrounded)

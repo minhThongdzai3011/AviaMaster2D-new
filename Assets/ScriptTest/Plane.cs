@@ -115,10 +115,14 @@ public class Plane : MonoBehaviour
             AudioManager.instance.PlaySound(AudioManager.instance.bonusCollisionSoundClip);
             Destroy(other.gameObject);
             GManager.instance.durationFuel = 0f;
-            StartCoroutine(DelaytoEndGame());
-            Debug.Log("Bonus2 collected - Ending game soon");
-            GManager.instance.newMapText.text = "Fastest balloon pop ever… and you lost!";
-            StartCoroutine(FadeInText(1f));
+            if (!PositionX.instance.isMaxPower)
+            {
+                StartCoroutine(DelaytoEndGame());
+                Debug.Log("Bonus2 collected - Ending game soon");
+                GManager.instance.newMapText.text = "Fastest balloon pop ever… and you lost!";
+                StartCoroutine(FadeInText(1f));
+            }
+            
             
         }
         if (other.CompareTag("Bonus3"))
@@ -367,10 +371,11 @@ public class Plane : MonoBehaviour
         return z;
     }
     private bool isAddMoneyDone = false;
+    public int hightScore;
     IEnumerator OpenImageWIn()
     {
         // Đang lỗi ở đây: Chưa post điểm lên leaderboard được
-        // LeaderboardManager.Instance.PostScore((int)GManager.instance.distanceTraveled);
+        LeaderboardManager.Instance.PostScore((int)GManager.instance.distanceTraveled);
         yield return new WaitForSeconds(2f);
         if (!isAddMoneyDone)
         {
@@ -379,7 +384,14 @@ public class Plane : MonoBehaviour
             AudioManager.instance.PlaySound(AudioManager.instance.victorySoundClip);
             GManager.instance.coinEffect.Stop();
             isAddMoneyDone = true;
+            hightScore = PlayerPrefs.GetInt("HighScore", 0);
+            if (GManager.instance.distanceTraveled > hightScore)
+            {
+                PlayerPrefs.SetInt("HighScore", (int)GManager.instance.distanceTraveled);
+                PlayerPrefs.Save();
+            }
             moneyDistance = (int)(GManager.instance.distanceTraveled / 6.34f);
+
             Debug.Log("Money from Distance: " + moneyDistance + " | Current Money: " + moneyCollect + " | Total Money: " + moneyTotal);
             
             Debug.Log("Updated Total Money: " + GManager.instance.totalMoney);

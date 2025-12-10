@@ -23,7 +23,7 @@ public class Settings : MonoBehaviour
     public TextMeshProUGUI altitudeText;
     public TextMeshProUGUI NotificationNewMapText;
     public TextMeshProUGUI x2CoinText;
-
+    public TextMeshProUGUI highScoreText;
     [Header("Image Settings")]
     public Image musicImageOn;
     public Image musicImageOff;
@@ -78,6 +78,8 @@ public class Settings : MonoBehaviour
     void Start()
     {
         instance = this;
+        playerName = PlayerPrefs.GetString("player-name", "");
+        inputField.text = playerName;
         isColdDownTimeLuckyWheel = PlayerPrefs.GetInt("LuckyWheelColdDownAds", 0) == 1;
         if (isColdDownTimeLuckyWheel)
         {
@@ -106,7 +108,6 @@ public class Settings : MonoBehaviour
 
         Debug.Log("Settings initialized. Music: " + isMusicOn + ", Sound: " + isSoundOn);
         targetValue = PlayerPrefs.GetFloat("PrizeSliderValue", 0f);
-        inputField.text = PlayerPrefs.GetString("PlayerName", "");
         prizeSlider.fillAmount = targetValue;
         StartCountdown();
         GManager.instance.coinEffect.Stop();
@@ -768,11 +769,11 @@ public class Settings : MonoBehaviour
                 
             });
     }
-
+    public string playerName = "";
     public void saveNameInputField()
     {
-        string playerName = inputField.text;
-        PlayerPrefs.SetString("PlayerName", playerName);
+        playerName = inputField.text;
+        PlayerPrefs.SetString("player-name", playerName);
         PlayerPrefs.Save();
     }
 

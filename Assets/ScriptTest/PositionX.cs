@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
-using Microsoft.Unity.VisualStudio.Editor;
 
 public class PositionX : MonoBehaviour
 {
@@ -39,48 +38,51 @@ public class PositionX : MonoBehaviour
 
     public void checkPlay()
     {
-        transform.DOPause();
-        newPositionX = transform.position;
-        float deltaX = newPositionX.x - positionX.x;
-        Debug.Log($"Delta X: {deltaX:F2}");
-        
-        int temp = Mathf.RoundToInt((deltaX / 3.2f) * 100);
-        temp = Mathf.Clamp(temp, 0, 100);
-        Debug.Log($"Temp Value: {temp}%");
-        
-        // ✅ Set isMaxPower NGAY LẬP TỨC
-        if (temp >= 80)
+        if (BirdGuide.instance.isShowGuide == false)
         {
-            isMaxPower = true;
-            GManager.instance.isBonus = true;    
-            Debug.Log(" Kích hoạt Max Power!");
-            GManager.instance.newMapText.text = "Max Power Activated!";
-            if(ExplosionScale.instance != null) ExplosionScale.instance.Explosion();
-            if (EffectAirplane.instance != null) EffectAirplane.instance.MakePlaneGold();
-            if (DestroyWheels.instance != null) DestroyWheels.instance.Golden();
-            foreach (var propeller in EffectRotaryFront.instances)
+            transform.DOPause();
+            newPositionX = transform.position;
+            float deltaX = newPositionX.x - positionX.x;
+            Debug.Log($"Delta X: {deltaX:F2}");
+            
+            int temp = Mathf.RoundToInt((deltaX / 3.2f) * 100);
+            temp = Mathf.Clamp(temp, 0, 100);
+            Debug.Log($"Temp Value: {temp}%");
+            
+            // ✅ Set isMaxPower NGAY LẬP TỨC
+            if (temp >= 80)
             {
-                propeller.gameObject.GetComponent<Renderer>().material = Plane.instance.GoldMaterial;
-            }
-            if (Plane.instance.explosionEffect != null) Plane.instance.explosionEffect.Play();
+                isMaxPower = true;
+                GManager.instance.isBonus = true;    
+                Debug.Log(" Kích hoạt Max Power!");
+                GManager.instance.newMapText.text = "Max Power Activated!";
+                if(ExplosionScale.instance != null) ExplosionScale.instance.Explosion();
+                if (EffectAirplane.instance != null) EffectAirplane.instance.MakePlaneGold();
+                if (DestroyWheels.instance != null) DestroyWheels.instance.Golden();
+                foreach (var propeller in EffectRotaryFront.instances)
+                {
+                    propeller.gameObject.GetComponent<Renderer>().material = Plane.instance.GoldMaterial;
+                }
+                if (Plane.instance.explosionEffect != null) Plane.instance.explosionEffect.Play();
 
-            StartCoroutine(DelayTwoSeconds(1f));
+                StartCoroutine(DelayTwoSeconds(1f));
+            }
+            else
+            {
+                isMaxPower = false;
+                Debug.Log(" Không kích hoạt Max Power.");
+                GManager.instance.isBonus = false;
+                RandomTextMaxPower();
+            }
+            }
         }
-        else
-        {
-            isMaxPower = false;
-            Debug.Log(" Không kích hoạt Max Power.");
-            GManager.instance.isBonus = false;
-            RandomTextMaxPower();
-        }
-    }
     public void RandomTextMaxPower(){
         string[] texts = {
-        "Over 95% = MAX POWER",
-        "Hit 95%+ for MAX POWER",
-        "Cross 95% → MAX POWER",
-        "95% unlocks MAX POWER",
-        "Reach 95%+ to power up"
+            "Exceed the limit = MAX POWER",
+            "Push beyond to unlock MAX POWER",
+            "Cross the threshold → MAX POWER",
+            "High performance unlocks MAX POWER",
+            "Go further to power up"
         };
         int randomIndex = Random.Range(0, texts.Length);
         GManager.instance.newMapText.text = texts[randomIndex];
