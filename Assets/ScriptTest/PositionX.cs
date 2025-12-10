@@ -56,6 +56,7 @@ public class PositionX : MonoBehaviour
                 GManager.instance.isBonus = true;    
                 Debug.Log(" Kích hoạt Max Power!");
                 GManager.instance.newMapText.text = "Max Power Activated!";
+                StartCoroutine(FadeOutText(2f));
                 if(ExplosionScale.instance != null) ExplosionScale.instance.Explosion();
                 if (EffectAirplane.instance != null) EffectAirplane.instance.MakePlaneGold();
                 if (DestroyWheels.instance != null) DestroyWheels.instance.Golden();
@@ -86,11 +87,26 @@ public class PositionX : MonoBehaviour
         };
         int randomIndex = Random.Range(0, texts.Length);
         GManager.instance.newMapText.text = texts[randomIndex];
+        StartCoroutine(FadeOutText(2f));
     }
 
-        IEnumerator DelayTwoSeconds(float delay)
+    IEnumerator DelayTwoSeconds(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        
+    }
+
+    IEnumerator FadeOutText(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+        Debug.Log("Bắt đầu Fade Out Text");
+        
+        // ✅ SỬ DỤNG DOTween để fade alpha từ 1 → 0
+        GManager.instance.newMapText.DOFade(0f, 1f).OnComplete(() =>
         {
-            yield return new WaitForSeconds(delay);
-            
-        }
+            Debug.Log("Text đã biến mất hoàn toàn!");
+            // Optional: Ẩn text sau khi fade
+            // GManager.instance.newMapText.gameObject.SetActive(false);
+        });
+    }
 }

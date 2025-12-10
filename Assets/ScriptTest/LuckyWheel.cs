@@ -60,7 +60,7 @@ public class LuckyWheel : MonoBehaviour
                 inRotate = 1;
             }
         }
-        Settings.instance.AdsLuckyWheelButton.gameObject.SetActive(true);
+        // Settings.instance.AdsLuckyWheelButton.gameObject.SetActive(true);
     }
     public float rot;
 

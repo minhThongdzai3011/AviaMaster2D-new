@@ -131,7 +131,7 @@ public class Plane : MonoBehaviour
             Destroy(other.gameObject);
             GManager.instance.durationFuel += 5f;
             Debug.Log("Rocket collected - +5s fuel" + GManager.instance.durationFuel);
-            GManager.instance.newMapText.text = "Bonus - +5s fuel";
+            GManager.instance.newMapText.text = "Bonus +5s fuel";
             StartCoroutine(FadeInText(1f));
         }
         if (other.CompareTag("MaxPower"))
@@ -269,6 +269,8 @@ public class Plane : MonoBehaviour
             AudioManager.instance.StopPlayerSound();
             TextIntro.instance.GetRandomTextWinMessage(1); // good
             Settings.instance.ImageErrorAngleZ.gameObject.SetActive(false);
+
+
             if (initialAngleX > 180f) initialAngleX -= 360f; // Chuẩn hóa về [-180, 180]
             
             // Lấy velocity ban đầu
@@ -374,8 +376,14 @@ public class Plane : MonoBehaviour
     public int hightScore;
     IEnumerator OpenImageWIn()
     {
+        
+        float  finalDistance = GManager.instance.distanceTraveled;
+        Debug.Log("Opening Win Image... 1" + finalDistance);
         // Đang lỗi ở đây: Chưa post điểm lên leaderboard được
-        LeaderboardManager.Instance.PostScore((int)GManager.instance.distanceTraveled);
+        if (LeaderboardManager.Instance != null)
+        {
+            LeaderboardManager.Instance.PostScore((int)finalDistance);
+        }
         yield return new WaitForSeconds(2f);
         if (!isAddMoneyDone)
         {
@@ -384,12 +392,7 @@ public class Plane : MonoBehaviour
             AudioManager.instance.PlaySound(AudioManager.instance.victorySoundClip);
             GManager.instance.coinEffect.Stop();
             isAddMoneyDone = true;
-            hightScore = PlayerPrefs.GetInt("HighScore", 0);
-            if (GManager.instance.distanceTraveled > hightScore)
-            {
-                PlayerPrefs.SetInt("HighScore", (int)GManager.instance.distanceTraveled);
-                PlayerPrefs.Save();
-            }
+            
             moneyDistance = (int)(GManager.instance.distanceTraveled / 6.34f);
 
             Debug.Log("Money from Distance: " + moneyDistance + " | Current Money: " + moneyCollect + " | Total Money: " + moneyTotal);
@@ -400,6 +403,15 @@ public class Plane : MonoBehaviour
             // Cập nhật UI
             GManager.instance.totalMoneyText.text = "" + GManager.instance.totalMoney;
             GManager.instance.moneyText.text = "" + moneyCollect;
+
+            hightScore = PlayerPrefs.GetInt("HighScore", 0);
+            Debug.Log("Opening Win Image... 2 " + hightScore);
+            if (finalDistance > hightScore)
+            {
+                PlayerPrefs.SetInt("HighScore", (int)finalDistance);
+                Debug.Log("Opening Win Image... 3" + (int)finalDistance);
+                PlayerPrefs.Save();
+            }
 
 
             // Lưu TotalMoney và đảm bảo lưu ngay
@@ -434,7 +446,7 @@ public class Plane : MonoBehaviour
         smokeEffect.Stop();
         StartCoroutine(OpenImageWIn());
     }
-
+    public bool isFadeDone = false;
     IEnumerator FadeInText(float duration)
     {
         Color c = GManager.instance.newMapText.color;
@@ -449,7 +461,30 @@ public class Plane : MonoBehaviour
             GManager.instance.newMapText.color = c;
             yield return null;
         }
+        isFadeDone = true;
+        StartCoroutine(FadeOutText(2f));
+        
     }
+
+    IEnumerator FadeOutText(float duration)
+    {
+        if (!isFadeDone) yield break;
+        Color c = GManager.instance.newMapText.color;
+
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            c.a = 1f - Mathf.Clamp01(elapsed / duration);
+            GManager.instance.newMapText.color = c;
+            yield return null;
+        }
+
+        // đảm bảo alpha = 0
+        c.a = 0;
+        GManager.instance.newMapText.color = c;
+    }
+
 
     IEnumerator FadeFogImage()
     {
@@ -472,7 +507,7 @@ public class Plane : MonoBehaviour
         }
 
         // Giữ nguyên sương mù trong 3 giây
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(6f);
 
         // Fade out (alpha từ 1 -> 0)
         elapsed = 0f;

@@ -79,6 +79,7 @@ public class Settings : MonoBehaviour
     {
         instance = this;
         playerName = PlayerPrefs.GetString("player-name", "");
+        highScoreText.text = " " + (int)PlayerPrefs.GetFloat("HighScore", 0f);
         inputField.text = playerName;
         isColdDownTimeLuckyWheel = PlayerPrefs.GetInt("LuckyWheelColdDownAds", 0) == 1;
         if (isColdDownTimeLuckyWheel)
