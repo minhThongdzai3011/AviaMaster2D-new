@@ -23,7 +23,7 @@ public class PositionX : MonoBehaviour
         positionX = transform.position;
         
         // Di chuyển position.x thêm 100 đơn vị trong 1 giây
-        transform.DOMoveX(transform.position.x + 3.2f, 1f)
+        transform.DOMoveX(transform.position.x + 3.2f, 0.8f)
             .SetLoops(-1, LoopType.Yoyo) 
             .SetEase(Ease.Linear);      
     
@@ -50,7 +50,7 @@ public class PositionX : MonoBehaviour
             Debug.Log($"Temp Value: {temp}%");
             
             // ✅ Set isMaxPower NGAY LẬP TỨC
-            if (temp >= 80)
+            if (temp >= 87.5f)
             {
                 isMaxPower = true;
                 GManager.instance.isBonus = true;    

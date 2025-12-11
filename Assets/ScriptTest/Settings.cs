@@ -46,6 +46,7 @@ public class Settings : MonoBehaviour
     public Image imagex2Power;
     public Image imageFuelPlay;
     public Image imageFill;
+    public Image imageDiamondCoinText;
 
     [Header("Button Settings")]
     public Button AdsButton;
@@ -74,12 +75,18 @@ public class Settings : MonoBehaviour
 
     [Header ("Countdown Settings")]
     public int currentTime = 0;
+    [Header("Sprite Settings")]
+    public Sprite spriteCoin;
+    public Sprite spriteDiamond;
+    public Sprite spriteUIMask;
 
     void Start()
     {
         instance = this;
         playerName = PlayerPrefs.GetString("player-name", "");
-        highScoreText.text = " " + (int)PlayerPrefs.GetFloat("HighScore", 0f);
+        Debug.Log("Loaded HighScore: " + (int)PlayerPrefs.GetInt("HighScore", 0));
+        highScoreText.text = " " + (int)PlayerPrefs.GetInt("HighScore", 0);
+        
         inputField.text = playerName;
         isColdDownTimeLuckyWheel = PlayerPrefs.GetInt("LuckyWheelColdDownAds", 0) == 1;
         if (isColdDownTimeLuckyWheel)

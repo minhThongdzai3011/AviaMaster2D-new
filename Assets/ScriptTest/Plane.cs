@@ -23,6 +23,7 @@ public class Plane : MonoBehaviour
     public int moneyDistance = 0;
     public int moneyCollect = 0;
     public int moneyTotal = 0;
+    public bool isUseCoinDiamond = false;
     // Start is called before the first frame update
 
     void Awake()
@@ -113,26 +114,18 @@ public class Plane : MonoBehaviour
         if (other.CompareTag("Bonus2"))
         {
             AudioManager.instance.PlaySound(AudioManager.instance.bonusCollisionSoundClip);
+            // EffectExplosionBonus.ExplodeAll();
             Destroy(other.gameObject);
-            GManager.instance.durationFuel = 0f;
+            
+            Debug.Log("Bonus2 collected - Fuel to 0" + PositionX.instance.isMaxPower);
             if (!PositionX.instance.isMaxPower)
             {
+                GManager.instance.durationFuel = 0f;
                 StartCoroutine(DelaytoEndGame());
                 Debug.Log("Bonus2 collected - Ending game soon");
                 GManager.instance.newMapText.text = "Fastest balloon pop ever… and you lost!";
                 StartCoroutine(FadeInText(1f));
             }
-            
-            
-        }
-        if (other.CompareTag("Bonus3"))
-        {
-            AudioManager.instance.PlaySound(AudioManager.instance.bonusCollisionSoundClip);
-            Destroy(other.gameObject);
-            GManager.instance.durationFuel += 5f;
-            Debug.Log("Rocket collected - +5s fuel" + GManager.instance.durationFuel);
-            GManager.instance.newMapText.text = "Bonus +5s fuel";
-            StartCoroutine(FadeInText(1f));
         }
         if (other.CompareTag("MaxPower"))
         {
@@ -140,7 +133,17 @@ public class Plane : MonoBehaviour
             Destroy(other.gameObject);
             
         }
-
+        if (other.CompareTag("bule1"))
+        {
+            Destroy(other.gameObject);
+            GManager.instance.totalDiamond += 200;
+            GManager.instance.newMapText.text = "You grabbed a 200";
+            isUseCoinDiamond = true;
+            Settings.instance.imageDiamondCoinText.sprite = Settings.instance.spriteDiamond;
+            StartCoroutine(FadeInText(1f));
+            PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
+            PlayerPrefs.Save();
+        }
         if (other.CompareTag("MapStartCity"))
         {
             AudioManager.instance.PlaySound(AudioManager.instance.unlockMapSoundClip);
@@ -477,12 +480,17 @@ public class Plane : MonoBehaviour
             elapsed += Time.deltaTime;
             c.a = 1f - Mathf.Clamp01(elapsed / duration);
             GManager.instance.newMapText.color = c;
+            Settings.instance.imageDiamondCoinText.sprite = Settings.instance.spriteUIMask;
             yield return null;
         }
 
         // đảm bảo alpha = 0
         c.a = 0;
         GManager.instance.newMapText.color = c;
+        if (isUseCoinDiamond){
+            Settings.instance.imageDiamondCoinText.color = c;
+            isUseCoinDiamond = false;
+        }
     }
 
 
@@ -523,28 +531,28 @@ public class Plane : MonoBehaviour
         Settings.instance.iamgeBlackScreen.gameObject.SetActive(false);
     }
 
-
+    public bool isAddFuel = false;
     public void RandomPrizeBird(){
         int[] coinPrize = {1000, 2000, 5000};
-        int[] diamondPrize = {100, 300, 1000};
         int count = Random.Range(0, 3); 
         if(count == 0){
             int randomIndex = Random.Range(0, coinPrize.Length);
             int prize = coinPrize[randomIndex];
             GManager.instance.totalMoney += prize;
-            GManager.instance.newMapText.text = $"You grabbed {prize} shiny coins!";
+            GManager.instance.newMapText.text = $"You grabbed a {prize}";
+            isUseCoinDiamond = true;
+            Settings.instance.imageDiamondCoinText.sprite = Settings.instance.spriteCoin;
             StartCoroutine(FadeInText(1f));
             PlayerPrefs.SetFloat("TotalMoney", GManager.instance.totalMoney);
             PlayerPrefs.Save();
         }
         else if(count == 1){
-            int randomIndex = Random.Range(0, diamondPrize.Length);
-            int prize = diamondPrize[randomIndex];
-            GManager.instance.totalDiamond += prize; 
-            GManager.instance.newMapText.text = $"You grabbed {prize} shiny diamonds!";
+            GManager.instance.durationFuel += 5f;
+            
+            Debug.Log("Rocket collected - +5s fuel" + GManager.instance.durationFuel);
+            isAddFuel = true;
+            GManager.instance.newMapText.text = "Bonus +5s fuel";
             StartCoroutine(FadeInText(1f));
-            PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
-            PlayerPrefs.Save();
         }
         else{
             GManager.instance.newMapText.text = "Congrats… you just unlocked absolutely nothing!";

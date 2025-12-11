@@ -1493,11 +1493,15 @@ public class GManager : MonoBehaviour
     // }
 
     // Giảm fuel theo thời gian
-    private IEnumerator DecreaseSliderFuel(float durationFuel)
+    public IEnumerator DecreaseSliderFuel(float durationFuel)
     {
         float timer = 0f;
         float startValue = sliderFuel.value;
         float endValue = 0f;
+        if (Plane.instance.isAddFuel){
+            durationFuel += 5f;
+        }
+        Plane.instance.isAddFuel = false;
 
         while (timer < durationFuel)
         {
@@ -2034,7 +2038,7 @@ public class GManager : MonoBehaviour
     {
         if (isFuelDown)
         {
-            downFuelImage.DOAnchorPosY(downFuelImage.anchoredPosition.y - 280f, duration)
+            downFuelImage.DOAnchorPosY(downFuelImage.anchoredPosition.y - 390f, duration)
                 .SetEase(Ease.OutCubic).OnComplete(() =>
                 {
                     isFuelDown = false;
