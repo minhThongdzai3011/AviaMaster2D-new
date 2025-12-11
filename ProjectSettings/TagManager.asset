@@ -36,6 +36,12 @@ TagManager:
   - MapStartIce
   - MapStartLava
   - MaxPower
+  - NofitiCity
+  - NofitiBeach
+  - NofitiField
+  - NofitiDesert
+  - NofitiIce
+  - NofitiLava
   layers:
   - Default
   - TransparentFX

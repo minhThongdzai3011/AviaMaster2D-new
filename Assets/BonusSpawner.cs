@@ -66,7 +66,7 @@ public class BonusSpawner : MonoBehaviour
         if (rocketPrefabs.Length == 0) return;
         if (GManager.instance.isControllable)
         {
-            int prefabIndex = Random.Range(0, rocketPrefabs.Length);
+            int prefabIndex = GetControlledRandomIndex();
             Vector3 spawnPosition = new Vector3(
                 someVector.x + spawnRangeX,
                 Random.Range(someVector.y - 5, someVector.y + 5),
@@ -86,4 +86,22 @@ public class BonusSpawner : MonoBehaviour
 
         spawnRangeX = startRangeX;
     }
+    int GetControlledRandomIndex()
+    {
+        // Tỉ lệ % 
+        float bonusRate = 0.6f;   // 60%
+        float fogRate = 0.25f;    // 25%
+        float bombRate = 0.15f;   // 15%
+
+        float r = Random.value;   // từ 0 → 1
+
+        if (r < bonusRate)
+            return 0;            // Bonus
+
+        if (r < bonusRate + fogRate)
+            return 1;            // Sương mù
+
+        return 2;                // Bom
+    }
+
 }

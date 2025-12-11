@@ -114,9 +114,10 @@ public class Plane : MonoBehaviour
         if (other.CompareTag("Bonus2"))
         {
             AudioManager.instance.PlaySound(AudioManager.instance.bonusCollisionSoundClip);
-            // EffectExplosionBonus.ExplodeAll();
-            Destroy(other.gameObject);
-            
+            EffectExplosionBonus.instance.ExplosionEffect();
+            EffectExplosionBonus.instance.ExplosionEffect1();
+            // Destroy(other.gameObject);
+            // other.gameObject.GetComponent<SpriteRenderer>().color = new Color(0,0,0,0);
             Debug.Log("Bonus2 collected - Fuel to 0" + PositionX.instance.isMaxPower);
             if (!PositionX.instance.isMaxPower)
             {
@@ -137,6 +138,8 @@ public class Plane : MonoBehaviour
         {
             Destroy(other.gameObject);
             GManager.instance.totalDiamond += 200;
+            GManager.instance.totalDiamondText.text = GManager.instance.totalDiamond.ToString("F0");
+            GManager.instance.SaveTotalDiamond();
             GManager.instance.newMapText.text = "You grabbed a 200";
             isUseCoinDiamond = true;
             Settings.instance.imageDiamondCoinText.sprite = Settings.instance.spriteDiamond;
@@ -237,6 +240,60 @@ public class Plane : MonoBehaviour
             else{
                 Settings.instance.NotificationNewMapText.text = "You have unlocked the Lava Map!";
             }
+            Settings.instance.NotificationNewMap();
+        }
+        if (other.CompareTag("NofitiCity"))
+        {
+            AudioManager.instance.PlaySound(AudioManager.instance.unlockMapSoundClip);
+            BonusSpawner.instance.rocketPrefabs = ChangeBonusMap.instance.bonusMapCity;
+            
+            Settings.instance.NotificationNewMapText.text = "It’s so noisy, is this Map City?";
+            
+            Settings.instance.NotificationNewMap();
+        }
+        if (other.CompareTag("NofitiBeach"))
+        {
+            AudioManager.instance.PlaySound(AudioManager.instance.unlockMapSoundClip);
+            BonusSpawner.instance.rocketPrefabs = ChangeBonusMap.instance.bonusMapBeach;
+            
+            Settings.instance.NotificationNewMapText.text = "Wow, what a beautiful beach!";
+            
+            Settings.instance.NotificationNewMap();
+        }
+        if (other.CompareTag("NofitiDesert"))
+        {
+            AudioManager.instance.PlaySound(AudioManager.instance.unlockMapSoundClip);
+            BonusSpawner.instance.rocketPrefabs = ChangeBonusMap.instance.bonusMapDesert;
+            
+            Settings.instance.NotificationNewMapText.text = "I want to become a cowboy when I come to this Desert map!";
+            
+            Settings.instance.NotificationNewMap();
+        }
+        if (other.CompareTag("NofitiField"))
+        {
+            AudioManager.instance.PlaySound(AudioManager.instance.unlockMapSoundClip);
+            BonusSpawner.instance.rocketPrefabs = ChangeBonusMap.instance.bonusMapField;
+            
+            Settings.instance.NotificationNewMapText.text = "This Field map is beautiful, the air is fresh!";
+            
+            Settings.instance.NotificationNewMap();
+        }
+        if (other.CompareTag("NofitiIce"))
+        {
+            AudioManager.instance.PlaySound(AudioManager.instance.unlockMapSoundClip);
+            BonusSpawner.instance.rocketPrefabs = ChangeBonusMap.instance.bonusMapIce;
+            
+            Settings.instance.NotificationNewMapText.text = "Oh, so cold! Did we just reach the Ice Map?";
+            
+            Settings.instance.NotificationNewMap();
+        }
+        if (other.CompareTag("NofitiLava"))
+        {
+            AudioManager.instance.PlaySound(AudioManager.instance.unlockMapSoundClip);
+            BonusSpawner.instance.rocketPrefabs = ChangeBonusMap.instance.bonusMapLava;
+            
+            Settings.instance.NotificationNewMapText.text = "Hey, lava ahead!";
+            
             Settings.instance.NotificationNewMap();
         }
         
@@ -539,6 +596,8 @@ public class Plane : MonoBehaviour
             int randomIndex = Random.Range(0, coinPrize.Length);
             int prize = coinPrize[randomIndex];
             GManager.instance.totalMoney += prize;
+            GManager.instance.totalMoneyText.text = GManager.instance.totalMoney.ToString("F0");
+            GManager.instance.SaveTotalMoney();
             GManager.instance.newMapText.text = $"You grabbed a {prize}";
             isUseCoinDiamond = true;
             Settings.instance.imageDiamondCoinText.sprite = Settings.instance.spriteCoin;
