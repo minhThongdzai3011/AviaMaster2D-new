@@ -50,15 +50,19 @@ public class LuckyWheel : MonoBehaviour
 
     public void Rotate()
     {
+        AudioManager.instance.PlaySound(AudioManager.instance.luckyWheelSoundClip);
         if (Settings.instance.isSpinning)
         {
+
             RotatePower = Random.Range(minRotatePower, maxRotatePower);
             StopPower = Random.Range(minStopPower, maxStopPower);
             if (inRotate == 0)
             {
                 rbody.AddTorque(RotatePower);
                 inRotate = 1;
+                
             }
+
         }
         // Settings.instance.AdsLuckyWheelButton.gameObject.SetActive(true);
     }
@@ -152,6 +156,7 @@ public class LuckyWheel : MonoBehaviour
     IEnumerator WaitAndPrint(float waitTime, float rot , int a , string b)
     {
         yield return new WaitForSeconds(waitTime);
+        AudioManager.instance.PlaySound(AudioManager.instance.rewardLuckyWheelSoundClip);
         Settings.instance.pannel.gameObject.SetActive(true);
         if (b == "Coin")
         {

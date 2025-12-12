@@ -55,6 +55,8 @@ public class PositionX : MonoBehaviour
                 isMaxPower = true;
                 GManager.instance.isBonus = true;    
                 Debug.Log(" Kích hoạt Max Power!");
+                AudioManager.instance.PlaySound(AudioManager.instance.perfectAngleSoundClip);
+                Settings.instance.imageDiamondCoinText.gameObject.SetActive(false);
                 GManager.instance.newMapText.text = "Max Power Activated!";
                 StartCoroutine(FadeOutText(2f));
                 if(ExplosionScale.instance != null) ExplosionScale.instance.Explosion();
@@ -72,8 +74,9 @@ public class PositionX : MonoBehaviour
             {
                 isMaxPower = false;
                 Debug.Log(" Không kích hoạt Max Power.");
+                AudioManager.instance.PlaySound(AudioManager.instance.notPerfectAngleSoundClip);
                 GManager.instance.isBonus = false;
-                RandomTextMaxPower();
+                Settings.instance.imageDiamondCoinText.gameObject.SetActive(false);
             }
             }
         }

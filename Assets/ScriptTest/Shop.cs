@@ -236,6 +236,7 @@ public class Shop : MonoBehaviour
         if (!isAnimating) StartCoroutine(SlideToDirection(-3));
         page++;
         pageText.text = page > 5 ? "1" : "" + page;
+        AudioManager.instance.PlaySound(AudioManager.instance.leftRightShopSoundClip);
     }
 
     public void OnClickLeftArrow()
@@ -243,6 +244,7 @@ public class Shop : MonoBehaviour
         if (!isAnimating) StartCoroutine(SlideToDirection(3));
         page--;
         pageText.text = page < 1 ? "5" : "" + page;
+        AudioManager.instance.PlaySound(AudioManager.instance.leftRightShopSoundClip);
     }
     
     IEnumerator SlideToDirection(int direction)
@@ -529,7 +531,7 @@ public class Shop : MonoBehaviour
 
     public void CloseShop()
     {
-        AudioManager.instance.PlaySound(AudioManager.instance.buttonSoundClip);
+        AudioManager.instance.PlaySound(AudioManager.instance.exitSoundClip);
         Debug.Log("Đóng cửa hàng!");
         
         // Dừng tất cả animation

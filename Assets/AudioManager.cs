@@ -35,8 +35,8 @@ public class AudioManager : MonoBehaviour
     public AudioClip collectDiamondSoundClip;
     [Header("Âm thanh khi sử dụng booster")]
     public AudioClip boosterSoundClip;
-    [Header("Âm thanh khi va chạm Bonus")]
-    public AudioClip bonusCollisionSoundClip;
+    [Header("Âm thanh khi va chạm chướng ngai vật")]
+    public AudioClip obstacleCollisionSoundClip;
     [Header("Âm thanh khi va chạm Rocket")]
     public AudioClip rocketCollisionSoundClip;
     [Header("Âm thanh khi hạ cánh")]
@@ -53,6 +53,20 @@ public class AudioManager : MonoBehaviour
     public AudioClip takeOffSoundClip;
     [Header("Âm thanh máy bay đang rơi")]
     public AudioClip fallingSoundClip;
+    [Header("Âm thanh đếm tiền")]
+    public AudioClip countMoneySoundClip;
+    [Header("Âm thanh LuckyWheel")]
+    public AudioClip luckyWheelSoundClip;
+    [Header("Âm thanh khi đạt Perfect Angle")]
+    public AudioClip perfectAngleSoundClip;
+    [Header("Âm thanh khi không đạt Perfect Angle")]
+    public AudioClip notPerfectAngleSoundClip;
+    [Header("Âm thanh khi đạt nhận thưởng LuckyWheel")]
+    public AudioClip rewardLuckyWheelSoundClip;
+    [Header("Âm thanh khi left right trong Shop")]
+    public AudioClip leftRightShopSoundClip;
+    [Header("Âm thanh khi đâm vào Bonus")]
+    public AudioClip crashBonusSoundClip;
     public bool isMusicOn = true;
     public bool isSoundOn = true;
 
@@ -156,5 +170,10 @@ public class AudioManager : MonoBehaviour
     {
         if (audioSoundPlayer.isPlaying)
             audioSoundPlayer.Stop();
+    }
+    public  void StopSoundBackground()
+    {
+        if (audioMusic.isPlaying)
+            audioMusic.Stop();
     }
 }

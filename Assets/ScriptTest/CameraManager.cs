@@ -15,7 +15,7 @@ public class CameraManager : MonoBehaviour
     // Các thiết lập cho hiệu ứng zoom
     public float zoomSpeed = 2f;
     public float minOrthoSize = 3f;
-    public float maxOrthoSize = 20f;
+    public float maxOrthoSize = 30f;
     public float smoothSpeed = 5f;
 
     [Header("Camera tự động theo máy bay")]
@@ -279,16 +279,19 @@ public class CameraManager : MonoBehaviour
         
         if (altitude <= 0f)
         {
+            // Ở đất: orthoSize nhỏ nhất
             calculatedOrthoSize = 7f;
         }
-        else if (altitude <= 10f)
+        else if (altitude <= 15f)
         {
-            calculatedOrthoSize = Mathf.Lerp(7f, 14f, altitude / 10f);
+            // Dưới 20m: Thu nhỏ theo độ cao từ 7 lên 20
+            calculatedOrthoSize = Mathf.Lerp(7f, 20f, altitude / 20f);
         }
         else
         {
-            float extraAltitude = altitude - 10f;
-            calculatedOrthoSize = 14f + (extraAltitude / 5f);
+            // Trên 20m: Tăng dần lên 30
+            float extraAltitude = altitude - 20f;
+            calculatedOrthoSize = 20f + Mathf.Min(extraAltitude / 3f, 15f); // Tăng dần, max đến 30
         }
         
         calculatedOrthoSize = Mathf.Clamp(calculatedOrthoSize, minOrthoSize, maxOrthoSize);

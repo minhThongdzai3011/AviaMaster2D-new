@@ -91,7 +91,7 @@ public class BonusSpawner : MonoBehaviour
         // Tỉ lệ % 
         float bonusRate = 0.6f;   // 60%
         float fogRate = 0.25f;    // 25%
-        float bombRate = 0.15f;   // 15%
+        //float bombRate = 0.15f;   // 15%
 
         float r = Random.value;   // từ 0 → 1
 

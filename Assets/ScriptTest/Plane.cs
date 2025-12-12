@@ -81,9 +81,10 @@ public class Plane : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Coin"))
+        if (other.CompareTag("Coin") || other.CompareTag("Respawn"))
         {
             AnimCoin anim = other.GetComponent<AnimCoin>();
+            AudioManager.instance.PlaySound(AudioManager.instance.collectMoneySoundClip);
             if (anim != null)
             {
                 // tăng tiền ngay (hoặc bạn có thể tăng tiền khi animation hoàn tất trong AnimCoin)
@@ -100,24 +101,28 @@ public class Plane : MonoBehaviour
         }
         if (other.CompareTag("bird"))
         {
-            AudioManager.instance.PlaySound(AudioManager.instance.bonusCollisionSoundClip);
+            AudioManager.instance.PlaySound(AudioManager.instance.crashBonusSoundClip);
            RandomPrizeBird();
            Destroy(other.gameObject);
         }
         if (other.CompareTag("Bonus4"))
         {
-            AudioManager.instance.PlaySound(AudioManager.instance.bonusCollisionSoundClip);
+            AudioManager.instance.PlaySound(AudioManager.instance.obstacleCollisionSoundClip);
             Destroy(other.gameObject);
             StartCoroutine(FadeFogImage());
             
         }
         if (other.CompareTag("Bonus2"))
         {
-            AudioManager.instance.PlaySound(AudioManager.instance.bonusCollisionSoundClip);
-            EffectExplosionBonus.instance.ExplosionEffect();
-            EffectExplosionBonus.instance.ExplosionEffect1();
+            AudioManager.instance.PlaySound(AudioManager.instance.obstacleCollisionSoundClip);
+            EffectExplosionBonus ef = other.GetComponent<EffectExplosionBonus>();
+            ef.ExplosionEffect();
+            ef.ExplosionEffect1();
+
+            //EffectExplosionBonus.instance.ExplosionEffect();
+           // EffectExplosionBonus.instance.ExplosionEffect1();
             // Destroy(other.gameObject);
-            // other.gameObject.GetComponent<SpriteRenderer>().color = new Color(0,0,0,0);
+            other.gameObject.GetComponent<SpriteRenderer>().enabled = false;
             Debug.Log("Bonus2 collected - Fuel to 0" + PositionX.instance.isMaxPower);
             if (!PositionX.instance.isMaxPower)
             {
@@ -130,18 +135,20 @@ public class Plane : MonoBehaviour
         }
         if (other.CompareTag("MaxPower"))
         {
-            AudioManager.instance.PlaySound(AudioManager.instance.bonusCollisionSoundClip);
+            AudioManager.instance.PlaySound(AudioManager.instance.obstacleCollisionSoundClip);
             Destroy(other.gameObject);
             
         }
         if (other.CompareTag("bule1"))
         {
             Destroy(other.gameObject);
+            AudioManager.instance.PlaySound(AudioManager.instance.crashBonusSoundClip);
             GManager.instance.totalDiamond += 200;
             GManager.instance.totalDiamondText.text = GManager.instance.totalDiamond.ToString("F0");
             GManager.instance.SaveTotalDiamond();
             GManager.instance.newMapText.text = "You grabbed a 200";
             isUseCoinDiamond = true;
+            Settings.instance.imageDiamondCoinText.gameObject.SetActive(true);
             Settings.instance.imageDiamondCoinText.sprite = Settings.instance.spriteDiamond;
             StartCoroutine(FadeInText(1f));
             PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
@@ -540,24 +547,20 @@ public class Plane : MonoBehaviour
             Settings.instance.imageDiamondCoinText.sprite = Settings.instance.spriteUIMask;
             yield return null;
         }
-
-        // đảm bảo alpha = 0
         c.a = 0;
         GManager.instance.newMapText.color = c;
         if (isUseCoinDiamond){
             Settings.instance.imageDiamondCoinText.color = c;
             isUseCoinDiamond = false;
         }
+        Settings.instance.imageDiamondCoinText.gameObject.SetActive(false);
     }
 
 
     IEnumerator FadeFogImage()
     {
-        // Fade in (alpha từ 0 -> 1)
         float elapsed = 0f;
         Settings.instance.iamgeBlackScreen.gameObject.SetActive(true);
-
-        // Đặt alpha ban đầu = 0
         Color startColor = Settings.instance.iamgeBlackScreen.color;
         startColor.a = 0f;
         Settings.instance.iamgeBlackScreen.color = startColor;
@@ -566,21 +569,19 @@ public class Plane : MonoBehaviour
         {
             elapsed += Time.deltaTime;
             Color c = Settings.instance.iamgeBlackScreen.color;
-            c.a = Mathf.Clamp01(elapsed / 1f); // 1 giây fade in
+            c.a = Mathf.Clamp01(elapsed / 1f);
             Settings.instance.iamgeBlackScreen.color = c;
             yield return null;
         }
 
-        // Giữ nguyên sương mù trong 3 giây
         yield return new WaitForSeconds(6f);
 
-        // Fade out (alpha từ 1 -> 0)
         elapsed = 0f;
         while (elapsed < 1f)
         {
             elapsed += Time.deltaTime;
             Color c = Settings.instance.iamgeBlackScreen.color;
-            c.a = 1f - Mathf.Clamp01(elapsed / 1f); // 1 giây fade out
+            c.a = 1f - Mathf.Clamp01(elapsed / 1f); 
             Settings.instance.iamgeBlackScreen.color = c;
             yield return null;
         }
@@ -601,6 +602,7 @@ public class Plane : MonoBehaviour
             GManager.instance.newMapText.text = $"You grabbed a {prize}";
             isUseCoinDiamond = true;
             Settings.instance.imageDiamondCoinText.sprite = Settings.instance.spriteCoin;
+            Settings.instance.imageDiamondCoinText.gameObject.SetActive(true);
             StartCoroutine(FadeInText(1f));
             PlayerPrefs.SetFloat("TotalMoney", GManager.instance.totalMoney);
             PlayerPrefs.Save();

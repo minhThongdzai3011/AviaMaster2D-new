@@ -222,7 +222,7 @@ public class Settings : MonoBehaviour
             return;
         }
 
-        AudioManager.instance.PlaySound(AudioManager.instance.buttonSoundClip);
+        AudioManager.instance.PlaySound(AudioManager.instance.exitSoundClip);
 
         Debug.Log("Đóng Settings!");
 
@@ -394,6 +394,7 @@ public class Settings : MonoBehaviour
             Debug.Log("Không được đóng WinImage vì chưa tính tiền xong!");
             return;
         }
+        AudioManager.instance.PlaySound(AudioManager.instance.exitSoundClip);
 
         isAnimating = true;
 
@@ -512,7 +513,7 @@ public class Settings : MonoBehaviour
     public void exitLeaderBoard()
     {
         if (isAnimating) return;
-        AudioManager.instance.PlaySound(AudioManager.instance.buttonSoundClip);
+        AudioManager.instance.PlaySound(AudioManager.instance.exitSoundClip);
         if (Settings.instance == null)
         {
             Debug.LogError("Settings.instance is null!");
@@ -629,14 +630,13 @@ public class Settings : MonoBehaviour
         if (GManager.instance.isBonus)
         {
             totalValue *= 2;
-            bonusDuration = 4f;
             bonusText.text = "Bonus : x2";
             GManager.instance.isBonus = false;
         }
         else bonusText.text = "No Bonus";
 
         Sequence seq = DOTween.Sequence();
-
+        AudioManager.instance.PlaySound(AudioManager.instance.countMoneySoundClip);
         // 1. count distance
         seq.Append(DOVirtual.Float(0, distanceValue, 2f, v =>
         {
@@ -648,7 +648,8 @@ public class Settings : MonoBehaviour
         {
             collectMoneyText.text = ((int)v).ToString();
         }));
-
+        AudioManager.instance.StopPlayerSound();
+        AudioManager.instance.PlaySound(AudioManager.instance.countMoneySoundClip);
         // 3. count total
         seq.Append(DOVirtual.Float(0, totalValue, bonusDuration, v =>
         {
@@ -662,7 +663,7 @@ public class Settings : MonoBehaviour
         {
             isCloseWinImage = true;
             butttonExitImageWin.gameObject.SetActive(true);
-            AdsButton.gameObject.SetActive(true);
+            // AdsButton.gameObject.SetActive(true);
             
 
             Debug.Log("Cho phép đóng WinImage!");
@@ -706,6 +707,7 @@ public class Settings : MonoBehaviour
 
     public void Exitpannel()
     {
+        AudioManager.instance.PlaySound(AudioManager.instance.exitSoundClip);
         pannel.gameObject.SetActive(false);
     }
 
@@ -858,19 +860,8 @@ public class Settings : MonoBehaviour
         PlayerPrefs.SetInt("LuckyWheelColdDownAds", 1);
         PlayerPrefs.Save();
     }
+     
 
-    private float timer = 0f;          
-    private bool isActiveAngleZ = false;     
-    public void NotifyAngleZ()
-    {
-        timer += Time.deltaTime;
-        if (timer >= 0.5f)
-        {
-            isActiveAngleZ = !isActiveAngleZ;             
-            ImageErrorAngleZ.gameObject.SetActive(isActiveAngleZ);        
-            timer = 0f;                        
-        }
-    }
 
 
     

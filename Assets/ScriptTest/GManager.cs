@@ -205,6 +205,7 @@ public class GManager : MonoBehaviour
                 Debug.LogError("Rigidbody2D chưa được gán!");
                 return;
             }
+            AudioManager.instance.StopSoundBackground();
             
             if (PositionX.instance.isMaxPower){
                 Settings.instance.imagex2Fuel.gameObject.SetActive(true);
@@ -477,6 +478,7 @@ public class GManager : MonoBehaviour
         isControllable = true;
         RocketSpawner.instance.StartSpawning();
         BonusSpawner.instance.StartSpawning();
+        BonusHigherSpawn.instance.StartSpawning();
         Debug.Log($"Máy bay bắt đầu điều khiển với durationFuel = {durationFuel}s (rateFuel = {rateFuel}%)");
         if (PositionX.instance.isMaxPower)
         {
@@ -955,10 +957,6 @@ public class GManager : MonoBehaviour
             }
         }
         if (rotationZText != null) rotationZText.text = rotationZ.ToString("F2") + " °";
-        if (rotationZ < 15 && isCheckErrorAngleZ)
-        {
-            Settings.instance.NotifyAngleZ();
-        }
 
         moneyText.text = Plane.instance.moneyCollect.ToString() + " $";
         totalDiamondText.text = totalDiamond.ToString("F0");
