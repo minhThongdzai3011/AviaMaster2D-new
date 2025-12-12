@@ -13985,7 +13985,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4643953059655291, guid: c5cf72fe4ca945d4b8ecef97c8a53670, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -42.95
+      value: -44.1
       objectReference: {fileID: 0}
     - target: {fileID: 4643953059655291, guid: c5cf72fe4ca945d4b8ecef97c8a53670, type: 3}
       propertyPath: m_LocalPosition.y
@@ -19159,7 +19159,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -42.202595, y: 4.4981756, z: -20}
+  m_LocalPosition: {x: -43.32424, y: 4.4981756, z: -20}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -33813,7 +33813,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 970319734}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -42.202595, y: 4.4981756, z: -20}
+  m_LocalPosition: {x: -43.32424, y: 4.4981756, z: -20}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -34296,6 +34296,141 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!96 &986802743
+TrailRenderer:
+  serializedVersion: 2
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 986802736}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 0
+  m_LightProbeUsage: 0
+  m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 8c9b4eb0369da594c91870839747b2ba, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Time: 1
+  m_Parameters:
+    serializedVersion: 3
+    widthMultiplier: 1
+    widthCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0.25785828
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.20587993
+        value: 0.2191023
+        inSlope: -0.5715854
+        outSlope: -0.5715854
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.53490055
+        value: 0
+        inSlope: 0.39517865
+        outSlope: 0.39517865
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.74022037
+        value: 0
+        inSlope: 0.08829889
+        outSlope: 0.08829889
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.6845105
+        outWeight: 0
+      - serializedVersion: 3
+        time: 0.8854827
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    colorGradient:
+      serializedVersion: 2
+      key0: {r: 0.9622642, g: 0, b: 0, a: 0.84313726}
+      key1: {r: 0.745283, g: 0.46052867, b: 0.49822772, a: 0.53333336}
+      key2: {r: 0, g: 0, b: 0, a: 0}
+      key3: {r: 0, g: 0, b: 0, a: 0}
+      key4: {r: 0, g: 0, b: 0, a: 0}
+      key5: {r: 0, g: 0, b: 0, a: 0}
+      key6: {r: 0, g: 0, b: 0, a: 0}
+      key7: {r: 0, g: 0, b: 0, a: 0}
+      ctime0: 0
+      ctime1: 32768
+      ctime2: 0
+      ctime3: 0
+      ctime4: 0
+      ctime5: 0
+      ctime6: 0
+      ctime7: 0
+      atime0: 14264
+      atime1: 49344
+      atime2: 0
+      atime3: 0
+      atime4: 0
+      atime5: 0
+      atime6: 0
+      atime7: 0
+      m_Mode: 0
+      m_NumColorKeys: 2
+      m_NumAlphaKeys: 2
+    numCornerVertices: 0
+    numCapVertices: 0
+    alignment: 0
+    textureMode: 0
+    shadowBias: 0.5
+    generateLightingData: 0
+  m_MinVertexDistance: 0.1
+  m_Autodestruct: 0
+  m_Emitting: 1
 --- !u!1 &994388704
 GameObject:
   m_ObjectHideFlags: 0
@@ -59155,7 +59290,7 @@ MonoBehaviour:
   collectMoneySoundClip: {fileID: 0}
   collectDiamondSoundClip: {fileID: 0}
   boosterSoundClip: {fileID: 0}
-  bonusCollisionSoundClip: {fileID: 0}
+  obstacleCollisionSoundClip: {fileID: 0}
   rocketCollisionSoundClip: {fileID: 0}
   landingSoundClip: {fileID: 0}
   perfectLandingSoundClip: {fileID: 0}
@@ -59164,6 +59299,13 @@ MonoBehaviour:
   unlockPlaneSoundClip: {fileID: 0}
   takeOffSoundClip: {fileID: 0}
   fallingSoundClip: {fileID: 0}
+  countMoneySoundClip: {fileID: 0}
+  luckyWheelSoundClip: {fileID: 0}
+  perfectAngleSoundClip: {fileID: 0}
+  notPerfectAngleSoundClip: {fileID: 0}
+  rewardLuckyWheelSoundClip: {fileID: 0}
+  leftRightShopSoundClip: {fileID: 0}
+  crashBonusSoundClip: {fileID: 0}
   isMusicOn: 1
   isSoundOn: 1
 --- !u!4 &1544838337

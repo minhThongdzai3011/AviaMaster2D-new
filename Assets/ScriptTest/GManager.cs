@@ -1282,6 +1282,11 @@ public class GManager : MonoBehaviour
                 float altitudeEfficiency = CalculateAltitudeEfficiency();
 
                 float boostForce = 15f * actualPowerMultiplier * altitudeEfficiency;
+                if (boostForce > 15f)
+                {
+                    boostForce = 15f; // Giới hạn lực boost tối đa
+                }   
+                Debug.Log($"BoosterUp - AngleZ: {currentAngleZ:F2}°, PowerMult: {actualPowerMultiplier:F2}, AltEff: {altitudeEfficiency:F2}, BoostForce: {boostForce:F2}");
                 airplaneRigidbody2D.AddForce(boostDirection * boostForce, ForceMode2D.Force);
             }
         }
@@ -1428,6 +1433,7 @@ public class GManager : MonoBehaviour
         isUseClicker = false;
     }
 
+    public float maxBoostSpeed = 50f; // Tốc độ tối đa khi boost
     public void PlainUp()
     {
         float currentZ = airplaneRigidbody2D.transform.eulerAngles.z;
@@ -1440,13 +1446,21 @@ public class GManager : MonoBehaviour
 
         // ĐIỀU CHỈNH VELOCITY thay vì cộng dồn lực
         Vector2 currentVelocity = airplaneRigidbody2D.velocity;
+        float currentSpeed = currentVelocity.magnitude;
         float targetVerticalSpeed = Mathf.Sin(newTargetRotation * Mathf.Deg2Rad) * maxVerticalSpeed;
 
         // Lerp velocity để có chuyển động mượt mà
         currentVelocity.y = Mathf.Lerp(currentVelocity.y, targetVerticalSpeed, Time.deltaTime * 3f);
 
-        // Giới hạn tốc độ tổng thể
-        if (currentVelocity.magnitude > maxVerticalSpeed * 2f)
+        // ✅ GIẢM DẦN TỐC ĐỘ NẾU VƯỢT QUÁ maxBoostSpeed
+        if (currentSpeed > maxBoostSpeed)
+        {
+            // Giảm dần về maxBoostSpeed thay vì giật về luôn
+            float targetSpeed = Mathf.Lerp(currentSpeed, maxBoostSpeed, Time.deltaTime * 2f);
+            currentVelocity = currentVelocity.normalized * targetSpeed;
+        }
+        // Giới hạn tốc độ tổng thể (backup)
+        else if (currentVelocity.magnitude > maxVerticalSpeed * 2f)
         {
             currentVelocity = currentVelocity.normalized * maxVerticalSpeed * 2f;
         }
@@ -1466,13 +1480,21 @@ public class GManager : MonoBehaviour
 
         // ĐIỀU CHỈNH VELOCITY thay vì cộng dồn lực
         Vector2 currentVelocity = airplaneRigidbody2D.velocity;
+        float currentSpeed = currentVelocity.magnitude;
         float targetVerticalSpeed = Mathf.Sin(newTargetRotation * Mathf.Deg2Rad) * maxVerticalSpeed;
 
         // Lerp velocity để có chuyển động mượt mà
         currentVelocity.y = Mathf.Lerp(currentVelocity.y, targetVerticalSpeed, Time.deltaTime * 3f);
 
-        // Giới hạn tốc độ tổng thể
-        if (currentVelocity.magnitude > maxVerticalSpeed * 2f)
+        // ✅ GIẢM DẦN TỐC ĐỘ NẾU VƯỢT QUÁ maxBoostSpeed
+        if (currentSpeed > maxBoostSpeed)
+        {
+            // Giảm dần về maxBoostSpeed thay vì giật về luôn
+            float targetSpeed = Mathf.Lerp(currentSpeed, maxBoostSpeed, Time.deltaTime * 2f);
+            currentVelocity = currentVelocity.normalized * targetSpeed;
+        }
+        // Giới hạn tốc độ tổng thể (backup)
+        else if (currentVelocity.magnitude > maxVerticalSpeed * 2f)
         {
             currentVelocity = currentVelocity.normalized * maxVerticalSpeed * 2f;
         }
