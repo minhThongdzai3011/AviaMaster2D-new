@@ -22,7 +22,7 @@ public class Plane : MonoBehaviour
 
     public int moneyDistance = 0;
     public int moneyCollect = 0;
-    public int moneyTotal = 0;
+    public int moneyTotal1 = 0;
     public bool isUseCoinDiamond = false;
     // Start is called before the first frame update
 
@@ -145,14 +145,15 @@ public class Plane : MonoBehaviour
             AudioManager.instance.PlaySound(AudioManager.instance.crashBonusSoundClip);
             GManager.instance.totalDiamond += 200;
             GManager.instance.totalDiamondText.text = GManager.instance.totalDiamond.ToString("F0");
+            Debug.Log("Diamond collected +200" + GManager.instance.totalDiamond);
+            PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
+            PlayerPrefs.Save();
             GManager.instance.SaveTotalDiamond();
             GManager.instance.newMapText.text = "You grabbed a 200";
             isUseCoinDiamond = true;
             Settings.instance.imageDiamondCoinText.gameObject.SetActive(true);
             Settings.instance.imageDiamondCoinText.sprite = Settings.instance.spriteDiamond;
             StartCoroutine(FadeInText(1f));
-            PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
-            PlayerPrefs.Save();
         }
         if (other.CompareTag("MapStartCity"))
         {
@@ -462,7 +463,7 @@ public class Plane : MonoBehaviour
             
             moneyDistance = (int)(GManager.instance.distanceTraveled / 6.34f);
 
-            Debug.Log("Money from Distance: " + moneyDistance + " | Current Money: " + moneyCollect + " | Total Money: " + moneyTotal);
+            Debug.Log("Money from Distance: " + moneyDistance + " | Current Money: " + moneyCollect + " | Total Money: " + moneyTotal1);
             
             Debug.Log("Updated Total Money: " + GManager.instance.totalMoney);
             // Settings.instance.totalMoneyPlayText.text = "" + moneyTotal;
@@ -596,16 +597,20 @@ public class Plane : MonoBehaviour
         if(count == 0){
             int randomIndex = Random.Range(0, coinPrize.Length);
             int prize = coinPrize[randomIndex];
+            Debug.Log("Money collected +" + prize + " | Total Money: " + GManager.instance.totalMoney);
             GManager.instance.totalMoney += prize;
+            Debug.Log("Money collected +" + prize + " | Total Money: " + GManager.instance.totalMoney);
             GManager.instance.totalMoneyText.text = GManager.instance.totalMoney.ToString("F0");
+            Debug.Log("Money collected +" + prize + " | Total Money: " + GManager.instance.totalMoney);
+            PlayerPrefs.SetFloat("TotalMoney", GManager.instance.totalMoney);
+            PlayerPrefs.Save();
             GManager.instance.SaveTotalMoney();
             GManager.instance.newMapText.text = $"You grabbed a {prize}";
             isUseCoinDiamond = true;
             Settings.instance.imageDiamondCoinText.sprite = Settings.instance.spriteCoin;
             Settings.instance.imageDiamondCoinText.gameObject.SetActive(true);
             StartCoroutine(FadeInText(1f));
-            PlayerPrefs.SetFloat("TotalMoney", GManager.instance.totalMoney);
-            PlayerPrefs.Save();
+            
         }
         else if(count == 1){
             GManager.instance.durationFuel += 5f;

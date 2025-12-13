@@ -272,26 +272,22 @@ public class CameraManager : MonoBehaviour
         }
     }
 
-    // Helper function để tính orthoSize từ altitude
     float CalculateOrthoSizeFromAltitude(float altitude)
     {
         float calculatedOrthoSize;
         
         if (altitude <= 0f)
         {
-            // Ở đất: orthoSize nhỏ nhất
             calculatedOrthoSize = 7f;
         }
         else if (altitude <= 15f)
         {
-            // Dưới 20m: Thu nhỏ theo độ cao từ 7 lên 20
             calculatedOrthoSize = Mathf.Lerp(7f, 20f, altitude / 20f);
         }
         else
         {
-            // Trên 20m: Tăng dần lên 30
             float extraAltitude = altitude - 20f;
-            calculatedOrthoSize = 20f + Mathf.Min(extraAltitude / 3f, 15f); // Tăng dần, max đến 30
+            calculatedOrthoSize = 20f + Mathf.Min(extraAltitude / 3f, 15f); 
         }
         
         calculatedOrthoSize = Mathf.Clamp(calculatedOrthoSize, minOrthoSize, maxOrthoSize);

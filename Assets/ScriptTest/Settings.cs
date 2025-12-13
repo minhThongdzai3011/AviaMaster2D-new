@@ -47,6 +47,7 @@ public class Settings : MonoBehaviour
     public Image imageFuelPlay;
     public Image imageFill;
     public Image imageDiamondCoinText;
+    public Image imageHighScore;
 
     [Header("Button Settings")]
     public Button AdsButton;
@@ -414,7 +415,7 @@ public class Settings : MonoBehaviour
                 targetValue = 0;
                 Plane.instance.moneyCollect = 0;
                 Plane.instance.moneyDistance = 0;
-                Plane.instance.moneyTotal = 0;
+                Plane.instance.moneyTotal1 = 0;
                 GManager.instance.AgainGame();
 
                 Debug.Log("WinImage đã đóng!");
@@ -623,7 +624,7 @@ public class Settings : MonoBehaviour
         float distanceValue = Plane.instance.moneyDistance;
         float collectValue  = Plane.instance.moneyCollect;
 
-        float bonusDuration = 2f;
+        float bonusDuration = 1f;
 
         totalValue = distanceValue + collectValue;
 
@@ -651,7 +652,7 @@ public class Settings : MonoBehaviour
         AudioManager.instance.StopPlayerSound();
         AudioManager.instance.PlaySound(AudioManager.instance.countMoneySoundClip);
         // 3. count total
-        seq.Append(DOVirtual.Float(0, totalValue, bonusDuration, v =>
+        seq.Join(DOVirtual.Float(0, totalValue, bonusDuration, v =>
         {
             totalMoneyPlayText.text = ((int)v).ToString();
         }));

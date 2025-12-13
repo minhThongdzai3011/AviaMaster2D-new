@@ -103,7 +103,196 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: obstacle-74_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 290.6667
+        width: 213
+        height: 145.33333
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5cc8605c92defba44bc8d31a5209a330
+      internalID: 1878226217
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: obstacle-74_1
+      rect:
+        serializedVersion: 2
+        x: 213
+        y: 290.6667
+        width: 213
+        height: 145.33333
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f7812b5f9d905b046ba25de57a0c6f01
+      internalID: 1131666723
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: obstacle-74_2
+      rect:
+        serializedVersion: 2
+        x: 426
+        y: 290.6667
+        width: 213
+        height: 145.33333
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4825c757992438841904b6d3315716c2
+      internalID: 2103797867
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: obstacle-74_3
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 145.66667
+        width: 213
+        height: 145.33333
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ffd1c7a1a8e37004789322bf0cf50510
+      internalID: -93930502
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: obstacle-74_4
+      rect:
+        serializedVersion: 2
+        x: 213
+        y: 145.66667
+        width: 213
+        height: 145.33333
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 67c0d55f13ff1d64a8a3d84675aad4e1
+      internalID: -1620218334
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: obstacle-74_5
+      rect:
+        serializedVersion: 2
+        x: 426
+        y: 145.66667
+        width: 213
+        height: 145.33333
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 294bc62bb8c4ac446ba582f8dcf549fa
+      internalID: 12607186
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: obstacle-74_6
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0.66667175
+        width: 213
+        height: 145.33333
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d3583df8307d28c42ae892deb4ed5daf
+      internalID: 290077691
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: obstacle-74_7
+      rect:
+        serializedVersion: 2
+        x: 213
+        y: 0.66667175
+        width: 213
+        height: 145.33333
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 69f205037f82d4c47a461914bcd38ed8
+      internalID: -2016959487
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: obstacle-74_8
+      rect:
+        serializedVersion: 2
+        x: 426
+        y: 0.66667175
+        width: 213
+        height: 145.33333
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d5ea3d7f13bce0b40b64c521dd7ad791
+      internalID: 612655653
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -114,7 +303,16 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      obstacle-74_0: 1878226217
+      obstacle-74_1: 1131666723
+      obstacle-74_2: 2103797867
+      obstacle-74_3: -93930502
+      obstacle-74_4: -1620218334
+      obstacle-74_5: 12607186
+      obstacle-74_6: 290077691
+      obstacle-74_7: -2016959487
+      obstacle-74_8: 612655653
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

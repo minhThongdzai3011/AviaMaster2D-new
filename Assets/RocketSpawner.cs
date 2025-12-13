@@ -13,19 +13,17 @@ public class RocketSpawner : MonoBehaviour
     [Header("Spawn Range 2D")]
     public float spawnRangeYmin = -2f;
     public float spawnRangeYmax = 2f;
-    public float spawnRangeX = -14f;
 
     [Header("Spawn Settings")]
     public float startDelay = 0f;
     public float spawnInterval = 0.2f;
-    public int count = 0;
+    public int count = 0;   
     public int maxRocketItems = 20;
-    public float rangeXmin = 5f;
-    public float rangeXmax = 10f;
-    public float startRangeX = -14f;
+    public float rangeXmin = 60f;
+    public float rangeXmax = 120f;
 
     private CinemachineVirtualCamera mainCamera;
-    public Vector3 someVector;
+    private Vector3 cameraPos;
 
     void Start()
     {
@@ -35,8 +33,7 @@ public class RocketSpawner : MonoBehaviour
 
     void Update()
     {
-        someVector = mainCamera.transform.position;
-        spawnRangeX = Mathf.Max(spawnRangeX, someVector.x + 50f);
+        cameraPos = mainCamera.transform.position;
     }
 
     public void StartSpawning()
@@ -67,18 +64,24 @@ public class RocketSpawner : MonoBehaviour
     void SpawnRocketItem()
     {
         if (rocketPrefabs.Length == 0) return;
-        if (GManager.instance.isControllable)
-        {
-            int prefabIndex = Random.Range(0, rocketPrefabs.Length);
-            Vector3 spawnPosition = new Vector3(
-                someVector.x + spawnRangeX,
-                Random.Range(someVector.y - 2, someVector.y + 2),
-                someVector.z
-            );
+        if (!GManager.instance.isControllable) return;
 
-            Instantiate(rocketPrefabs[prefabIndex], spawnPosition, rocketPrefabs[prefabIndex].transform.rotation);
-            spawnRangeX += Random.Range(rangeXmin, rangeXmax);
-        }
+        int prefabIndex = Random.Range(0, rocketPrefabs.Length);
+
+        float offsetX = Random.Range(rangeXmin, rangeXmax);
+        float offsetY = Random.Range(spawnRangeYmin, spawnRangeYmax);
+
+        Vector3 spawnPosition = new Vector3(
+            cameraPos.x + offsetX,
+            cameraPos.y + offsetY,
+            cameraPos.z
+        );
+
+        Instantiate(
+            rocketPrefabs[prefabIndex],
+            spawnPosition,
+            rocketPrefabs[prefabIndex].transform.rotation
+        );
     }
 
     public void DeleteSpawnedItems()
@@ -86,7 +89,5 @@ public class RocketSpawner : MonoBehaviour
         GameObject[] spawnedItems = GameObject.FindGameObjectsWithTag("Coin");
         foreach (GameObject item in spawnedItems)
             Destroy(item);
-
-        spawnRangeX = startRangeX;
     }
 }

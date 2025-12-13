@@ -22,6 +22,6 @@ public class EffectExplosionBonus : MonoBehaviour
     public void ExplosionEffect1()
     {
         Debug.Log("Explosion Effect1 Triggered");
-        Obj1.gameObject.SetActive(true);
+        Obj1.gameObject.SetActive(false);
     }
 }

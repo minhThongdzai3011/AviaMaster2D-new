@@ -18,6 +18,9 @@ public class BonusSpawner : MonoBehaviour
     public float startDelay = 0f;
     public float spawnInterval = 0.2f;
     public int count = 0;
+    public int count1 = 0;
+    public int count2 = 0;
+    public int count3 = 0;
     public int maxRocketItems = 20;
     public float rangeXmin = 5f;
     public float rangeXmax = 10f;
@@ -48,8 +51,10 @@ public class BonusSpawner : MonoBehaviour
         while (true)
         {
             count = GameObject.FindGameObjectsWithTag("bird").Length;
-
-            if (count < maxRocketItems)
+            count1 = GameObject.FindGameObjectsWithTag("Bonus2").Length;
+            count2 = GameObject.FindGameObjectsWithTag("Bonus4").Length;
+            count3 = count + count1 + count2;
+            if (count3 < maxRocketItems)
             {
                 SpawnRocketItem();
                 yield return new WaitForSeconds(spawnInterval);
@@ -67,14 +72,20 @@ public class BonusSpawner : MonoBehaviour
         if (GManager.instance.isControllable)
         {
             int prefabIndex = GetControlledRandomIndex();
+
+            float offsetX = Random.Range(rangeXmin, rangeXmax);
+
             Vector3 spawnPosition = new Vector3(
-                someVector.x + spawnRangeX,
+                someVector.x + offsetX, 
                 Random.Range(someVector.y - 5, someVector.y + 5),
                 someVector.z
             );
 
-            Instantiate(rocketPrefabs[prefabIndex], spawnPosition, rocketPrefabs[prefabIndex].transform.rotation);
-            spawnRangeX += Random.Range(rangeXmin, rangeXmax);
+            Instantiate(
+                rocketPrefabs[prefabIndex],
+                spawnPosition,
+                rocketPrefabs[prefabIndex].transform.rotation
+            );
         }
     }
 
@@ -89,7 +100,7 @@ public class BonusSpawner : MonoBehaviour
     int GetControlledRandomIndex()
     {
         // Tỉ lệ % 
-        float bonusRate = 0.6f;   // 60%
+        float bonusRate = 0.5f;   // 60%
         float fogRate = 0.25f;    // 25%
         //float bombRate = 0.15f;   // 15%
 

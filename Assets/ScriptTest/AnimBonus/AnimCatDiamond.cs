@@ -15,10 +15,13 @@ public class AnimCatDiamond : MonoBehaviour
 
     void Update()
     {
-        float offsetY = Mathf.PingPong(Time.time * speedY, distanceY);
+        if (GManager.instance != null && GManager.instance.isPlay)
+        {
+            float offsetY = Mathf.PingPong(Time.time * speedY, distanceY);
 
-        float offsetX = Time.time * speedX;
+            float offsetX = Time.time * speedX;
 
-        transform.localPosition = new Vector3(startPos1.x + offsetX, startPos1.y + offsetY, startPos1.z);
+            transform.localPosition = new Vector3(startPos1.x + offsetX, startPos1.y + offsetY, startPos1.z);
+        }
     }
 }

@@ -178,6 +178,7 @@ public class GManager : MonoBehaviour
         
         SaveTotalMoney();
         SaveTotalDiamond();
+        totalBoostMaxPower = totalBoost;
     }
 
     
@@ -206,7 +207,7 @@ public class GManager : MonoBehaviour
                 return;
             }
             AudioManager.instance.StopSoundBackground();
-            
+            Settings.instance.imageHighScore.enabled = false;
             if (PositionX.instance.isMaxPower){
                 Settings.instance.imagex2Fuel.gameObject.SetActive(true);
                 // Settings.instance.imagex2Power.gameObject.SetActive(true);
@@ -216,7 +217,7 @@ public class GManager : MonoBehaviour
             playImage.gameObject.SetActive(true);
             Plane.instance.isStopSmokeEffect = false;
             // Âm thanh play
-            AudioManager.instance.PlayPlayerSound(AudioManager.instance.takeOffSoundClip);
+            
             StartCoroutine(LaunchSequence());
             isPlaying = false;
             isPlay = true;
@@ -301,6 +302,7 @@ public class GManager : MonoBehaviour
                 if (currentRotaryFront != null && currentRotaryFront.gameObject.activeInHierarchy)
                 {
                     currentRotaryFront.StartRotation();
+                    AudioManager.instance.PlayPlayerSound(AudioManager.instance.takeOffSoundClip);
                     Debug.Log($"Started rotation on {airplaneRigidbody2D.name}");
                     Debug.Log("RotaryFront StartRotation called from GManager" + currentRotaryFront);
                 }
@@ -317,7 +319,7 @@ public class GManager : MonoBehaviour
         Debug.Log($"Bắt đầu bay ngang - Target: {targetX}, Current: {airplaneRigidbody2D.position.x}");
 
         float riseHeight = 1.0f;
-        float maxTiltAngle = 10f;
+        float maxTiltAngle = 20f;
         float horizontalDistance = r;
 
         float startX = airplaneRigidbody2D.position.x;
@@ -370,7 +372,8 @@ public class GManager : MonoBehaviour
         float angleRad = Mathf.Deg2Rad * climbAngle;
         Vector2 launchDirection = new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad)).normalized;
 
-        airplaneRigidbody2D.velocity = Vector2.zero;
+        // ✅ Không reset velocity để giữ momentum từ Bước 1 (bay ngang)
+        // airplaneRigidbody2D.velocity = Vector2.zero;
         airplaneRigidbody2D.AddForce(launchDirection * climbForce, ForceMode2D.Impulse);
 
         // KHÔNG xoay ngay lập tức - sẽ xoay dần dần trong bước 3
@@ -381,10 +384,14 @@ public class GManager : MonoBehaviour
         // Bước 3: Chờ đến khi đạt độ cao và xoay dần dần
         float targetAltitude = startPosition.y + boostedAltitude;
         float startAltitude = airplaneRigidbody2D.position.y;
-        float startRotation = 0f; // Bắt đầu từ góc 0
-        float targetRotation = climbAngle; // Mục tiêu là climbAngle
+        
+        // ✅ Lấy góc HIỆN TẠI từ Bước 1 (thay vì giả định 0°)
+        float currentZ = airplaneRigidbody2D.transform.eulerAngles.z;
+        if (currentZ > 180f) currentZ -= 360f; // Chuyển từ 0-360 về -180 đến 180
+        float startRotation = currentZ; // Góc hiện tại (~20° từ Bước 1)
+        float targetRotation = climbAngle; // Mục tiêu là climbAngle (30°)
 
-        Debug.Log($"Bắt đầu bay lên - Start: {startAltitude:F1}, Target: {targetAltitude:F1}, Rotation: {startRotation}° → {targetRotation}°");
+        Debug.Log($"Bắt đầu bay lên - Start: {startAltitude:F1}, Target: {targetAltitude:F1}, Rotation: {startRotation:F1}° → {targetRotation}°");
 
         while (airplaneRigidbody2D.position.y < targetAltitude)
         {
@@ -452,19 +459,22 @@ public class GManager : MonoBehaviour
         isBoosted = true;
         if (Plane.instance != null)
         {
-            if(TrailRendererLeft.instance != null && TrailRendererRight.instance != null)
+            if(TrailRendererLeft.instance != null && TrailRendererRight.instance != null && isBoost )
             {
                 TrailRendererLeft.instance.TrailEffect();
                 TrailRendererRight.instance.TrailEffect();
+                Debug.Log("Trail Effects Activated" );
             }
-            if (TrailRendererLeft.instance != null && TrailRendererLeft.instance.gameObject.activeInHierarchy)
+            if (TrailRendererLeft.instance != null && TrailRendererLeft.instance.gameObject.activeInHierarchy && isBoost)
             {
                 TrailRendererLeft.instance.TrailEffect();
+                Debug.Log("Left Trail Effect Activated" );
             }
 
-            if (TrailRendererRight.instance != null && TrailRendererRight.instance.gameObject.activeInHierarchy)
+            if (TrailRendererRight.instance != null && TrailRendererRight.instance.gameObject.activeInHierarchy && isBoost)
             {
                 TrailRendererRight.instance.TrailEffect();
+                Debug.Log("Right Trail Effect Activated" );
             }
 
         }
@@ -482,8 +492,8 @@ public class GManager : MonoBehaviour
         Debug.Log($"Máy bay bắt đầu điều khiển với durationFuel = {durationFuel}s (rateFuel = {rateFuel}%)");
         if (PositionX.instance.isMaxPower)
         {
-            durationFuel *= 2f;
-            Debug.Log($"Max Power active! durationFuel doubled to {durationFuel}s");
+            durationFuel += 5f;
+            Debug.Log($"Max Power active! durationFuel increased by 5s to {durationFuel}s");
         }
         StartCoroutine(DecreaseSliderFuel(durationFuel));
         buttonDownImage.color = Color.white;
@@ -540,7 +550,11 @@ public class GManager : MonoBehaviour
         {
             Plane.instance.trailEffect.enabled = false; 
         }
-        AudioManager.instance.PlayPlayerSound(AudioManager.instance.fallingSoundClip);
+        if (Plane.instance != null && !Plane.instance.isGrounded){
+            AudioManager.instance.StopPlayerSound();
+            AudioManager.instance.PlaySound(AudioManager.instance.fallingSoundClip);
+        }
+        
         isControllable = false; // Tắt controllable bình thường
         isFallingInSequence = true; // THÊM: Báo hiệu đang trong giai đoạn rơi
         airplaneRigidbody2D.gravityScale = gravityScale;
@@ -586,11 +600,11 @@ public class GManager : MonoBehaviour
             float dynamicPressure = 0.5f * airDensity * speed * speed;
             
             // Lấy góc máy bay hiện tại
-            float currentZ = airplaneRigidbody2D.transform.eulerAngles.z;
-            if (currentZ > 180f) currentZ -= 360f;
+            float currentZ0 = airplaneRigidbody2D.transform.eulerAngles.z;
+            if (currentZ0 > 180f) currentZ0 -= 360f;
             
             // Tính angle of attack (góc tấn công) - góc giữa máy bay và hướng bay
-            float angleOfAttack = currentZ - Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
+            float angleOfAttack = currentZ0 - Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
             angleOfAttack = Mathf.DeltaAngle(0f, angleOfAttack); // Normalize về [-180, 180]
             
             // Tính hệ số nâng và lực nâng
@@ -647,25 +661,25 @@ public class GManager : MonoBehaviour
             
             if (hasPlayerInput)
             {
-                float targetAngle = currentZ;
+                float targetAngle = currentZ0;
                 float controlSpeed = 80f; // Tốc độ điều khiển (độ/giây)
                 
                 if (Input.GetKey(KeyCode.A))
                 {
                     // A: Xoay lên (ít nghiêng xuống) - hướng về -10°
-                    targetAngle = Mathf.MoveTowards(currentZ, -10f, controlSpeed * Time.deltaTime);
+                    targetAngle = Mathf.MoveTowards(currentZ0, -10f, controlSpeed * Time.deltaTime);
                 }
                 else if (Input.GetKey(KeyCode.D))
                 {
                     // D: Xoay xuống (nghiêng xuống nhiều) - hướng về -35°
-                    targetAngle = Mathf.MoveTowards(currentZ, -35f, controlSpeed * Time.deltaTime);
+                    targetAngle = Mathf.MoveTowards(currentZ0, -35f, controlSpeed * Time.deltaTime);
                 }
                 
                 // Giới hạn góc trong khoảng cho phép
                 targetAngle = Mathf.Clamp(targetAngle, -35f, -10f);
                 
                 // Áp dụng góc với tính đến lực khí động
-                float smoothAngle = Mathf.LerpAngle(currentZ, targetAngle, Time.deltaTime * 6f);
+                float smoothAngle = Mathf.LerpAngle(currentZ0, targetAngle, Time.deltaTime * 6f);
                 
                 Vector3 existingRotation = airplaneRigidbody2D.transform.eulerAngles;
                 airplaneRigidbody2D.transform.rotation = Quaternion.Euler(existingRotation.x, existingRotation.y, smoothAngle);
@@ -687,7 +701,7 @@ public class GManager : MonoBehaviour
                     // Tính góc lượn tối ưu (best glide angle)
                     float optimalGlideAngle = -20f; // Góc lượn tối ưu cho hiệu suất tốt nhất
                     
-                    float targetAngle = Mathf.LerpAngle(currentZ, optimalGlideAngle, Time.deltaTime * 1.5f);
+                    float targetAngle = Mathf.LerpAngle(currentZ0, optimalGlideAngle, Time.deltaTime * 1.5f);
                     
                     Vector3 existingRotation = airplaneRigidbody2D.transform.eulerAngles;
                     airplaneRigidbody2D.transform.rotation = Quaternion.Euler(existingRotation.x, existingRotation.y, targetAngle);
@@ -790,12 +804,12 @@ public class GManager : MonoBehaviour
             {
                 // Khi đang trượt trên đất, từ từ xoay về góc 0 (nằm phẳng)
                 Vector3 currentRotation = airplaneRigidbody2D.transform.eulerAngles;
-                float currentZ = currentRotation.z;
-                if (currentZ > 180f) currentZ -= 360f;
+                float currentZ1 = currentRotation.z;
+                if (currentZ1 > 180f) currentZ1 -= 360f;
                 
-                if (Mathf.Abs(currentZ) > 0.1f)
+                if (Mathf.Abs(currentZ1) > 0.1f)
                 {
-                    float targetZ = Mathf.Lerp(currentZ, 0f, Time.deltaTime * 1.5f); // Chậm hơn để tự nhiên
+                    float targetZ = Mathf.Lerp(currentZ1, 0f, Time.deltaTime * 1.5f); // Chậm hơn để tự nhiên
                     airplaneRigidbody2D.transform.rotation = Quaternion.Euler(currentRotation.x, currentRotation.y, targetZ);
                 }
             }
@@ -803,10 +817,10 @@ public class GManager : MonoBehaviour
             {
                 // Hoàn toàn dừng - reset rotation về 0
                 Vector3 currentRotation = airplaneRigidbody2D.transform.eulerAngles;
-                float currentZ = currentRotation.z;
-                if (currentZ > 180f) currentZ -= 360f;
+                float currentZ1 = currentRotation.z;
+                if (currentZ1 > 180f) currentZ1 -= 360f;
                 
-                if (Mathf.Abs(currentZ) > 0.1f)
+                if (Mathf.Abs(currentZ1) > 0.1f)
                 {
                     airplaneRigidbody2D.transform.rotation = Quaternion.Euler(currentRotation.x, currentRotation.y, 0f);
                 }
@@ -825,29 +839,36 @@ public class GManager : MonoBehaviour
         if (isPlay && isBoosted)
         {
             bool isBoostPressed = Input.GetKey(KeyCode.Space) || isUseClickerBooster;
-            
+            Debug.Log("isBoostPressed: " + isBoostPressed);
             // Xử lý keyboard Space - chỉ cho start/stop decrease
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKey(KeyCode.Space))
             {
+                Debug.Log("Space Key Down Detected");
                 StartBoostDecrease();
                 if (Plane.instance != null)
                 {
-                    if(TrailRendererLeft.instance != null && TrailRendererRight.instance != null)
+                    Debug.Log("Trail Renderer Instances: " + 
+                              "Left - " + (TrailRendererLeft.instance != null ? "Exists" : "Null") + ", " +
+                              "Right - " + (TrailRendererRight.instance != null ? "Exists" : "Null"));
+                    if(TrailRendererLeft.instance != null && TrailRendererRight.instance != null )
                     {
                         TrailRendererLeft.instance.isBoosterActive = true;
                         TrailRendererLeft.instance.PlayTrail();
                         TrailRendererRight.instance.isBoosterActive = true;
                         TrailRendererRight.instance.PlayTrail();
+                        Debug.Log("Both Trail Effects Activated" );
                     }
-                    else if(TrailRendererLeft.instance != null && TrailRendererLeft.instance.gameObject.activeInHierarchy)
+                    else if(TrailRendererLeft.instance != null && TrailRendererLeft.instance.gameObject.activeInHierarchy )
                     {
                         TrailRendererLeft.instance.isBoosterActive = true;
                         TrailRendererLeft.instance.PlayTrail();
+                        Debug.Log("Left Trail Effect Activated" );
                     }
-                    else if(TrailRendererRight.instance != null && TrailRendererRight.instance.gameObject.activeInHierarchy)
+                    else if(TrailRendererRight.instance != null && TrailRendererRight.instance.gameObject.activeInHierarchy )
                     {
                         TrailRendererRight.instance.isBoosterActive = true;
                         TrailRendererRight.instance.PlayTrail();
+                        Debug.Log("Right Trail Effect Activated" );
                     }
                 }
             }
@@ -856,22 +877,25 @@ public class GManager : MonoBehaviour
                 StopBoostDecrease();
                 if (Plane.instance != null)
                 {
-                    if(TrailRendererLeft.instance != null && TrailRendererRight.instance != null)
+                    if(TrailRendererLeft.instance != null && TrailRendererRight.instance != null )
                     {
                         TrailRendererLeft.instance.isBoosterActive = false;
                         TrailRendererLeft.instance.TrailEffect();
                         TrailRendererRight.instance.isBoosterActive = false;
                         TrailRendererRight.instance.TrailEffect();
+                        Debug.Log("Both Trail Effects Deactivated" );
                     }
-                    else if(TrailRendererLeft.instance != null && TrailRendererLeft.instance.gameObject.activeInHierarchy)
+                    else if(TrailRendererLeft.instance != null && TrailRendererLeft.instance.gameObject.activeInHierarchy )
                     {
                         TrailRendererLeft.instance.isBoosterActive = false;
                         TrailRendererLeft.instance.TrailEffect();
+                        Debug.Log("Left Trail Effect Deactivated" );
                     }
-                    else if(TrailRendererRight.instance != null && TrailRendererRight.instance.gameObject.activeInHierarchy)
+                    else if(TrailRendererRight.instance != null && TrailRendererRight.instance.gameObject.activeInHierarchy )
                     {
                         TrailRendererRight.instance.isBoosterActive = false;
                         TrailRendererRight.instance.TrailEffect();
+                        Debug.Log("Right Trail Effect Deactivated" );
                     }
                 }
             }
@@ -894,47 +918,47 @@ public class GManager : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Keypad1))
-        {
-            PauseGame();
-        }
-        if (Input.GetKeyDown(KeyCode.Keypad0))
-        {
-            AgainGame();
-        }
-        if (Input.GetKey(KeyCode.Keypad2))
-        {
-            totalMoney += 1000;
-            PlayerPrefs.SetFloat("TotalMoney", totalMoney);
-            PlayerPrefs.Save();
-            SaveTotalMoney();
+        // if (Input.GetKeyDown(KeyCode.Keypad1))
+        // {
+        //     PauseGame();
+        // }
+        // if (Input.GetKeyDown(KeyCode.Keypad0))
+        // {
+        //     AgainGame();
+        // }
+        // if (Input.GetKey(KeyCode.Keypad2))
+        // {
+        //     totalMoney += 1000;
+        //     PlayerPrefs.SetFloat("TotalMoney", totalMoney);
+        //     PlayerPrefs.Save();
+        //     SaveTotalMoney();
 
-        }
-        if (Input.GetKeyDown(KeyCode.Keypad3))
-        {
-            MapSpawner.instance.isMapCityUnlocked = true;
-            PlayerPrefs.SetInt("IsMapCityUnlocked", 1);
-            MapSpawner.instance.isMapDesertUnlocked = true;
-            PlayerPrefs.SetInt("IsMapDesertUnlocked", 1);
-            MapSpawner.instance.isMapBeachUnlocked = true;
-            PlayerPrefs.SetInt("IsMapBeachUnlocked", 1);
-            MapSpawner.instance.isMapFieldUnlocked = true;
-            PlayerPrefs.SetInt("IsMapFieldUnlocked", 1);
-            MapSpawner.instance.isMapIceUnlocked = true;
-            PlayerPrefs.SetInt("IsMapIceUnlocked", 1);
-            MapSpawner.instance.isMapLavaUnlocked = true;
-            PlayerPrefs.SetInt("IsMapLavaUnlocked", 1);
-            PlayerPrefs.Save();
-            AgainGame();
-        }
-        if (Input.GetKeyDown(KeyCode.Keypad4)) 
-        {
-            totalDiamond += 1000;
-            totalDiamondText.text = totalDiamond.ToString();
-            PlayerPrefs.SetInt("TotalDiamond", totalDiamond);
-            PlayerPrefs.Save();
-            SaveTotalDiamond();
-        }
+        // }
+        // if (Input.GetKeyDown(KeyCode.Keypad3))
+        // {
+        //     MapSpawner.instance.isMapCityUnlocked = true;
+        //     PlayerPrefs.SetInt("IsMapCityUnlocked", 1);
+        //     MapSpawner.instance.isMapDesertUnlocked = true;
+        //     PlayerPrefs.SetInt("IsMapDesertUnlocked", 1);
+        //     MapSpawner.instance.isMapBeachUnlocked = true;
+        //     PlayerPrefs.SetInt("IsMapBeachUnlocked", 1);
+        //     MapSpawner.instance.isMapFieldUnlocked = true;
+        //     PlayerPrefs.SetInt("IsMapFieldUnlocked", 1);
+        //     MapSpawner.instance.isMapIceUnlocked = true;
+        //     PlayerPrefs.SetInt("IsMapIceUnlocked", 1);
+        //     MapSpawner.instance.isMapLavaUnlocked = true;
+        //     PlayerPrefs.SetInt("IsMapLavaUnlocked", 1);
+        //     PlayerPrefs.Save();
+        //     AgainGame();
+        // }
+        // if (Input.GetKeyDown(KeyCode.Keypad4)) 
+        // {
+        //     totalDiamond += 1000;
+        //     totalDiamondText.text = totalDiamond.ToString();
+        //     PlayerPrefs.SetInt("TotalDiamond", totalDiamond);
+        //     PlayerPrefs.Save();
+        //     SaveTotalDiamond();
+        // }
 
 
         if (distanceText != null) distanceText.text = distanceTraveled.ToString("F0") + " ft";
@@ -1250,7 +1274,7 @@ public class GManager : MonoBehaviour
         Debug.Log("GManager: Reset trạng thái chạm đất");
     }
 
-    
+    public bool isBoost = true;
     public void BoosterUp()
     {
         if (airplaneRigidbody2D != null && totalBoost > 0)
@@ -1290,13 +1314,38 @@ public class GManager : MonoBehaviour
                 airplaneRigidbody2D.AddForce(boostDirection * boostForce, ForceMode2D.Force);
             }
         }
+        // Dòng 946-955
         else
         {
             // Nếu hết boost thì tắt booster
             isBoosterActive = false;
             StopBoostDecrease();
             buttonBoosterPlaneImage.color = Color.gray;
-
+            isBoost = false;
+            
+            if (Plane.instance != null)
+            {
+                if(TrailRendererLeft.instance != null && TrailRendererRight.instance != null)
+                {
+                    TrailRendererLeft.instance.isBoosterActive = false;
+                    TrailRendererLeft.instance.TrailEffect();
+                    TrailRendererRight.instance.isBoosterActive = false;
+                    TrailRendererRight.instance.TrailEffect();
+                    Debug.Log("Both Trail Effects Deactivated (Out of Boost)");
+                }
+                else if(TrailRendererLeft.instance != null && TrailRendererLeft.instance.gameObject.activeInHierarchy)
+                {
+                    TrailRendererLeft.instance.isBoosterActive = false;
+                    TrailRendererLeft.instance.TrailEffect();
+                    Debug.Log("Left Trail Effect Deactivated (Out of Boost)");
+                }
+                else if(TrailRendererRight.instance != null && TrailRendererRight.instance.gameObject.activeInHierarchy)
+                {
+                    TrailRendererRight.instance.isBoosterActive = false;
+                    TrailRendererRight.instance.TrailEffect();
+                    Debug.Log("Right Trail Effect Deactivated (Out of Boost)");
+                }
+            }
         }
     }
 
@@ -1538,15 +1587,17 @@ public class GManager : MonoBehaviour
         sliderFuel.value = endValue;
     }
 
-
+    public float totalBoostMaxPower ;
     // Giảm boost theo thời gian
     private IEnumerator DecreaseSliderBoost()
     {
+        Debug.Log("Started DecreaseSliderBoost Coroutine");
         while (isBoostDecreasing && totalBoost > 0)
         {
+            Debug.Log("Decreasing Boost... Current Boost: " + totalBoost);
             // Giảm boost theo thời gian thực
             float decreaseAmount = boostDecreaseRate * Time.deltaTime;
-            float totalBoostMaxPower = totalBoost * (2);
+            
             totalBoost -= decreaseAmount;
 
             // Đảm bảo không giảm xuống dưới 0
@@ -1556,7 +1607,7 @@ public class GManager : MonoBehaviour
             }
 
             // Cập nhật slider (giả sử slider có maxValue = 100)
-            sliderBooster.value = totalBoost / 100f;
+            sliderBooster.value = totalBoost / totalBoostMaxPower;
 
             // Cập nhật UI text nếu có
             if (levelBoostText != null)
@@ -2019,6 +2070,8 @@ public class GManager : MonoBehaviour
     public RectTransform rightHomeImage;
     public RectTransform downFuelImage;
     public RectTransform upAircraftImage;
+    public RectTransform leftCoinImage;
+    public RectTransform leftDiamondImage;
     public bool isHomeUp = false;
     public bool isHomeDown = false;
     public bool isFuelDown = false;
@@ -2036,6 +2089,10 @@ public class GManager : MonoBehaviour
                     fuelPlayDown();
                     leftHomeImage.gameObject.SetActive(false);
                 });
+            leftCoinImage.DOAnchorPosX(leftCoinImage.anchoredPosition.x - 110f, duration)
+                .SetEase(Ease.OutCubic);
+            leftDiamondImage.DOAnchorPosX(leftDiamondImage.anchoredPosition.x - 110f, duration)
+                .SetEase(Ease.OutCubic);
         }
     }
 
