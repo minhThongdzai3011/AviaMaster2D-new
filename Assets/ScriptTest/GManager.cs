@@ -14,7 +14,7 @@ public class GManager : MonoBehaviour
     [Header("Cài đặt máy bay")]
     public float launchForce = 20f; // Lực đẩy ban đầu
     [Tooltip("Góc bay lên ban đầu khi nhấn Launch (độ). Có thể thay đổi trong Inspector.")]
-    public float climbAngle = 30f;  // Góc bay lên (độ) - có thể chỉnh trong Inspector
+    public float climbAngle = 30f;  // Góc bay lên ban đầu
     public float gravityScale = 1f; // Thang trọng lực chung
     public float boostedAltitude;
 
@@ -66,8 +66,8 @@ public class GManager : MonoBehaviour
     [Header("RotationZ settings")]
     public float maxUpAngle = 45f;    // giới hạn góc lên
     public float maxDownAngle = -45f; // giới hạn góc xuống
-    public float rotationSmooth = 8f; // độ mượt khi quay
-    public float minMoveThreshold = 0.5f; // ngưỡng vận tốc để bắt đầu quay theo velocity
+    public float rotationSmooth = 8f; 
+    public float minMoveThreshold = 0.5f; 
 
     public GameObject arrowAngleZ;
     public GameObject rotationXObject;
@@ -718,7 +718,6 @@ public class GManager : MonoBehaviour
             yield return null;
         }
 
-        // THÊM: Kết thúc giai đoạn rơi
         isFallingInSequence = false;
         Debug.Log("Kết thúc giai đoạn rơi - Tắt A/D điều khiển");
 
@@ -728,15 +727,14 @@ public class GManager : MonoBehaviour
 
     public bool isVelocity = true;
     public bool isHorizontalFlying = false;
-    public bool isSlidingOnGround = false; // THÊM: Kiểm tra trượt trên đất
+    public bool isSlidingOnGround = false;
     public bool checkControlPlane = false;
-    public bool isFallingInSequence = false; // THÊM: Flag để biết đang trong giai đoạn rơi của LaunchSequence
+    public bool isFallingInSequence = false; 
     void Update()
     {
         
         if (airplaneRigidbody2D == null) return;
 
-        // Cập nhật thông tin cơ bản
         Vector2 currentPos = airplaneRigidbody2D.transform.position;
         distanceTraveled = Vector2.Distance(startPosition, currentPos);
         currentAltitude = currentPos.y - startPosition.y;
@@ -747,16 +745,13 @@ public class GManager : MonoBehaviour
         rotationAngleZ();
         UpdateSliderAchievement();
         
-        // *** QUAN TRỌNG: Nếu máy bay đã chạm đất, KHÔNG can thiệp vào physics ***
         if (Plane.instance != null && Plane.instance.isGrounded)
         {
-            return; // Thoát sớm, không chạy logic physics
+            return; 
         }
 
-        // Áp dụng lực kéo xuống theo độ cao
         ApplyAltitudeDrag();
 
-        // THÊM: Cập nhật rotation X cho máy bay
         UpdateAirplaneRotationX();
 
 
@@ -773,7 +768,7 @@ public class GManager : MonoBehaviour
 
         if (isControllable)
         {
-            HandleAircraftControl(); // Đã bao gồm auto-rotation theo velocity
+            HandleAircraftControl();
             if (isHoldingButtonUp)
             {
                 
@@ -788,34 +783,30 @@ public class GManager : MonoBehaviour
         {
             checkControlPlane = true;
         }
-        else if (!isFallingInSequence) // CHỈ áp dụng logic Update() khi KHÔNG trong giai đoạn rơi của LaunchSequence
+        else if (!isFallingInSequence) 
         {
-            // Kiểm tra xem có đang bay không
             bool isAirborne = isPlay && (airplaneRigidbody2D.velocity.magnitude > 1f || currentAltitude > 5f);
             
-            // Kiểm tra xem có đang trượt trên đất không
             isSlidingOnGround = isPlay && !isAirborne && airplaneRigidbody2D.velocity.magnitude > 0.2f;
             
             if (isAirborne)
             {
-                ApplyAutoRotationFromVelocity(); // Tự động xoay khi bay nhưng không controllable
+                ApplyAutoRotationFromVelocity(); 
             }
             else if (isSlidingOnGround)
             {
-                // Khi đang trượt trên đất, từ từ xoay về góc 0 (nằm phẳng)
                 Vector3 currentRotation = airplaneRigidbody2D.transform.eulerAngles;
                 float currentZ1 = currentRotation.z;
                 if (currentZ1 > 180f) currentZ1 -= 360f;
                 
                 if (Mathf.Abs(currentZ1) > 0.1f)
                 {
-                    float targetZ = Mathf.Lerp(currentZ1, 0f, Time.deltaTime * 1.5f); // Chậm hơn để tự nhiên
+                    float targetZ = Mathf.Lerp(currentZ1, 0f, Time.deltaTime * 1.5f); 
                     airplaneRigidbody2D.transform.rotation = Quaternion.Euler(currentRotation.x, currentRotation.y, targetZ);
                 }
             }
             else
             {
-                // Hoàn toàn dừng - reset rotation về 0
                 Vector3 currentRotation = airplaneRigidbody2D.transform.eulerAngles;
                 float currentZ1 = currentRotation.z;
                 if (currentZ1 > 180f) currentZ1 -= 360f;
@@ -840,7 +831,6 @@ public class GManager : MonoBehaviour
         {
             bool isBoostPressed = Input.GetKey(KeyCode.Space) || isUseClickerBooster;
             Debug.Log("isBoostPressed: " + isBoostPressed);
-            // Xử lý keyboard Space - chỉ cho start/stop decrease
             if (Input.GetKey(KeyCode.Space))
             {
                 Debug.Log("Space Key Down Detected");
@@ -900,7 +890,6 @@ public class GManager : MonoBehaviour
                 }
             }
             
-            // Xử lý boost và màu button
             if (isBoostPressed)
             {
                 BoosterUp();
@@ -908,7 +897,6 @@ public class GManager : MonoBehaviour
             }
             else
             {
-                // Dừng boost khi thả button/key
                 isBoosterActive = false;
                 if (isBoostDecreasing && !Input.GetKey(KeyCode.Space) && !isUseClickerBooster)
                 {
@@ -1482,33 +1470,27 @@ public class GManager : MonoBehaviour
         isUseClicker = false;
     }
 
-    public float maxBoostSpeed = 50f; // Tốc độ tối đa khi boost
+    public float maxBoostSpeed = 50f; 
     public void PlainUp()
     {
         float currentZ = airplaneRigidbody2D.transform.eulerAngles.z;
         if (currentZ > 180f) currentZ -= 360f;
         float newTargetRotation = Mathf.Min(currentZ + Time.deltaTime * 1f, maxUpAngle);
         
-        // GIỮ NGUYÊN rotation.x hiện tại khi set rotation.z
         Vector3 existingRotation = airplaneRigidbody2D.transform.eulerAngles;
         airplaneRigidbody2D.transform.rotation = Quaternion.Euler(existingRotation.x, existingRotation.y, newTargetRotation);
 
-        // ĐIỀU CHỈNH VELOCITY thay vì cộng dồn lực
         Vector2 currentVelocity = airplaneRigidbody2D.velocity;
         float currentSpeed = currentVelocity.magnitude;
         float targetVerticalSpeed = Mathf.Sin(newTargetRotation * Mathf.Deg2Rad) * maxVerticalSpeed;
 
-        // Lerp velocity để có chuyển động mượt mà
         currentVelocity.y = Mathf.Lerp(currentVelocity.y, targetVerticalSpeed, Time.deltaTime * 3f);
 
-        // ✅ GIẢM DẦN TỐC ĐỘ NẾU VƯỢT QUÁ maxBoostSpeed
         if (currentSpeed > maxBoostSpeed)
         {
-            // Giảm dần về maxBoostSpeed thay vì giật về luôn
             float targetSpeed = Mathf.Lerp(currentSpeed, maxBoostSpeed, Time.deltaTime * 2f);
             currentVelocity = currentVelocity.normalized * targetSpeed;
         }
-        // Giới hạn tốc độ tổng thể (backup)
         else if (currentVelocity.magnitude > maxVerticalSpeed * 2f)
         {
             currentVelocity = currentVelocity.normalized * maxVerticalSpeed * 2f;
@@ -1523,26 +1505,20 @@ public class GManager : MonoBehaviour
         if (currentZ > 180f) currentZ -= 360f;
         float newTargetRotation = Mathf.Max(currentZ - Time.deltaTime * 1f, maxDownAngle);
         
-        // GIỮ NGUYÊN rotation.x hiện tại khi set rotation.z
         Vector3 existingRotation = airplaneRigidbody2D.transform.eulerAngles;
         airplaneRigidbody2D.transform.rotation = Quaternion.Euler(existingRotation.x, existingRotation.y, newTargetRotation);
 
-        // ĐIỀU CHỈNH VELOCITY thay vì cộng dồn lực
         Vector2 currentVelocity = airplaneRigidbody2D.velocity;
         float currentSpeed = currentVelocity.magnitude;
         float targetVerticalSpeed = Mathf.Sin(newTargetRotation * Mathf.Deg2Rad) * maxVerticalSpeed;
 
-        // Lerp velocity để có chuyển động mượt mà
         currentVelocity.y = Mathf.Lerp(currentVelocity.y, targetVerticalSpeed, Time.deltaTime * 3f);
 
-        // ✅ GIẢM DẦN TỐC ĐỘ NẾU VƯỢT QUÁ maxBoostSpeed
         if (currentSpeed > maxBoostSpeed)
         {
-            // Giảm dần về maxBoostSpeed thay vì giật về luôn
             float targetSpeed = Mathf.Lerp(currentSpeed, maxBoostSpeed, Time.deltaTime * 2f);
             currentVelocity = currentVelocity.normalized * targetSpeed;
         }
-        // Giới hạn tốc độ tổng thể (backup)
         else if (currentVelocity.magnitude > maxVerticalSpeed * 2f)
         {
             currentVelocity = currentVelocity.normalized * maxVerticalSpeed * 2f;
@@ -1556,12 +1532,6 @@ public class GManager : MonoBehaviour
         Debug.Log("Reset Game");
     }
 
-    // public void SettingGame()
-    // {
-    //     Settings.instance.settingsImage.gameObject.SetActive(true);
-    // }
-
-    // Giảm fuel theo thời gian
     public IEnumerator DecreaseSliderFuel(float durationFuel)
     {
         float timer = 0f;
@@ -1576,10 +1546,8 @@ public class GManager : MonoBehaviour
         {
             timer += Time.deltaTime;
 
-            // Tính toán giá trị mới cho slider một cách mượt mà
             sliderFuel.value = Mathf.Lerp(startValue, endValue, timer / durationFuel);
 
-            // Đợi đến khung hình tiếp theo
             yield return null;
         }
 
@@ -1595,27 +1563,23 @@ public class GManager : MonoBehaviour
         while (isBoostDecreasing && totalBoost > 0)
         {
             Debug.Log("Decreasing Boost... Current Boost: " + totalBoost);
-            // Giảm boost theo thời gian thực
+            
             float decreaseAmount = boostDecreaseRate * Time.deltaTime;
             
             totalBoost -= decreaseAmount;
 
-            // Đảm bảo không giảm xuống dưới 0
             if (totalBoost < 0)
             {
                 totalBoost = 0;
             }
 
-            // Cập nhật slider (giả sử slider có maxValue = 100)
             sliderBooster.value = totalBoost / totalBoostMaxPower;
 
-            // Cập nhật UI text nếu có
             if (levelBoostText != null)
             {
                 levelBoostText.text = "Lv" + levelBoost + " | " + totalBoost.ToString("F0");
             }
 
-            // Nếu boost = 0 thì dừng
             if (totalBoost <= 0)
             {
                 isBoostDecreasing = false;
@@ -1692,13 +1656,7 @@ public class GManager : MonoBehaviour
             {
                 fuelMoneyText.text = "" + moneyFuel;
             }
-
-            // CÔNG THỨC MỚI: Tăng durationFuel theo rateFuel
-            // Mỗi lần nâng cấp thêm 5% -> rateFuel tăng 5%
-            // durationFuel = baseDuration * (1 + rateFuel/100)
-            CalculateUpgradeValues(); // Tính toán lại tất cả giá trị
-
-            // THÊM: Lưu ngay sau khi nâng cấp
+            CalculateUpgradeValues(); 
             SaveUpgradeData();
             SaveTotalMoney();
             CheckPlane.instance.CheckMoneyForUpgradeButtonNext();
@@ -1707,18 +1665,14 @@ public class GManager : MonoBehaviour
         }
     }
 
-    // Hàm tính toán lại tất cả giá trị nâng cấp
     void CalculateUpgradeValues()
     {
-        // Tính durationFuel dựa trên rateFuel
         durationFuel = baseDurationFuel * (1 + (rateFuel / 100f));
         durationFuel = (float)Math.Round(durationFuel, 1);
 
-        // Tính launchForce dựa trên ratePower (cho consistency)
         launchForce = baseLaunchForce * (1 + (ratePower / 100f));
         launchForce = (float)Math.Round(launchForce, 1);
 
-        // Tính totalBoost dựa trên rateBoost (cho consistency)
         totalBoost = baseTotalBoost * (1 + (rateBoost / 100f));
         totalBoost = (float)Math.Round(totalBoost, 1);
 
@@ -1757,10 +1711,8 @@ public class GManager : MonoBehaviour
                 boostMoneyText.text = "" + moneyBoost;
             }
 
-            // Sử dụng hàm tính toán chung
             CalculateUpgradeValues();
 
-            // THÊM: Lưu ngay sau khi nâng cấp
             SaveUpgradeData();
             SaveTotalMoney();
             CheckPlane.instance.CheckMoneyForUpgradeButtonNext();
@@ -1802,11 +1754,7 @@ public class GManager : MonoBehaviour
             {
                 powerMoneyText.text = "" + moneyPower;
             }
-
-            // Sử dụng hàm tính toán chung
             CalculateUpgradeValues();
-
-            // THÊM: Lưu ngay sau khi nâng cấp
             SaveUpgradeData();
             SaveTotalMoney();
             CheckPlane.instance.CheckMoneyForUpgradeButtonNext();
@@ -1866,23 +1814,18 @@ public class GManager : MonoBehaviour
     }
     public float tempDistanceTraveled = 0f;
 
-    // ...existing code...
-
     [Header("Achievement Milestone System")]
-    public float achievementStartDistance = 0f; // Khoảng cách bắt đầu milestone
-    public float milestoneDistance = 380f; // Khoảng cách mỗi milestone
+    public float achievementStartDistance = 0f; 
+    public float milestoneDistance = 380f; 
     public float milestoneDistance2 = 360f;
     void UpdateSliderAchievement()
     {
         if (sliderAchievement != null)
         {
-            // Tính khoảng cách trong milestone hiện tại
             float distanceInCurrentMilestone = distanceTraveled - achievementStartDistance;
             
-            // Tính toán giá trị slider dựa trên progress trong milestone
             float targetValue = Mathf.Clamp01(distanceInCurrentMilestone / milestoneDistance);
 
-            // Cập nhật slider với hiệu ứng mượt mà
             float smoothSpeed = 2f;
             sliderAchievement.value = Mathf.Lerp(sliderAchievement.value, targetValue, smoothSpeed * Time.deltaTime);
             if(sliderAchievement.value >= 0.75f)
@@ -1891,7 +1834,6 @@ public class GManager : MonoBehaviour
             }
         }
 
-        // Debug info
         if (currentAltitude > altitudeDragStart)
         {
             float altitudeRatio = (currentAltitude - altitudeDragStart) / (maxAltitude - altitudeDragStart);
@@ -1906,16 +1848,16 @@ public class GManager : MonoBehaviour
 
     public void ResetAchievementSlider()
     {
-        achievementStartDistance = distanceTraveled; // Reset điểm bắt đầu
-        sliderAchievement.value = 0f; // Reset slider về 0
+        achievementStartDistance = distanceTraveled; 
+        sliderAchievement.value = 0f; 
         Debug.Log($"Achievement slider reset at distance: {achievementStartDistance:F0}m");
     }
 
     [Header("RotationZ Oscillation")]
 
     public float angleRangeMax = 22f;
-    public float angleRangeMin = -30f;        // Phạm vi góc dao động ±20 độ
-    public float speed = 1f;            // Tốc độ dao động
+    public float angleRangeMin = -30f;       
+    public float speed = 1f;           
     public bool isRotationOscillating = true;
     public bool isCheckBonus = true;
     private float startZ;
@@ -1947,14 +1889,10 @@ public class GManager : MonoBehaviour
                 float angle = angleNew > 180f ? angleNew - 360f : angleNew;
                 if (angle < -3f && angle > -8f)
                 {
-                    // s
-                    // isBonus = true;
                     Debug.Log("isBonus: " + isBonus);
                     isCheckBonus = false;
                 }
                 else{
-                    // newMapText.text = "MIN POWER!";
-                    // isBonus = false;
                     Debug.Log("isBonus: " + isBonus);
                     isCheckBonus = false;
                 }

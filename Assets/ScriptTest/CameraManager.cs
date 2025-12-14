@@ -538,7 +538,6 @@ Vector3 CalculateGroundVisiblePosition()
         Debug.Log($"CameraManager: Force follow set to {follow}");
     }
     
-    // THÊM: Method để force follow ngay lập tức với aircraft hiện tại
     public void ForceFollowCurrentAircraft()
     {
         if (aircraftTransform != null)
