@@ -30,8 +30,8 @@ public class CameraManager : MonoBehaviour
     public float screenTransitionSpeed = 1f; // Tốc độ chuyển đổi screenY
     private float currentScreenY; // ScreenY hiện tại
     private float currentScreenX; // ScreenX hiện tại
-    public float screenXDelay = 0.3f; // ScreenX ban đầu (lệch trái/phải)
-    public float screenYDelay = 0.86f; // ScreenY ban đầu (cao hơn một chút)
+    public float screenXDelay = 0.4f; // ScreenX ban đầu (lệch trái/phải)
+    public float screenYDelay = 0.7f; // ScreenY ban đầu (cao hơn một chút)
     public float screenBlendSpeed = 2f; // Tốc độ blend về 0.5, 0.5
     
     [Header("Ground và Aircraft references")]
@@ -63,6 +63,11 @@ public class CameraManager : MonoBehaviour
     // Flag để khóa screen position khi đã đạt target
     private bool isScreenPositionLocked = false;
     private const float SCREEN_LOCK_THRESHOLD = 0.001f;
+    
+    // Smoothing cho velocity detection
+    private float smoothedVelocityY = 0f;
+    public float velocitySmoothTime = 0.1f; // Thời gian smooth velocity
+    private float velocityYDerivative = 0f;
 
 
     void Start()
@@ -113,8 +118,35 @@ public class CameraManager : MonoBehaviour
                 float delayProgress = Mathf.Clamp01(timeSinceStart / cameraDelayTime);
                 float t = Mathf.SmoothStep(0f, 1f, delayProgress);
 
+                // Tính target screenY dựa trên altitude và velocity để tránh giật
+                float currentAltitude = GManager.instance != null ? GManager.instance.currentAltitude : 0f;
+                
+                // Lấy velocity để xác định hướng bay
+                float velocityY = 0f;
+                if (aircraftTransform != null && GManager.instance.airplaneRigidbody2D != null)
+                {
+                    velocityY = GManager.instance.airplaneRigidbody2D.velocity.y;
+                }
+                bool isAscending = velocityY > 0.1f;
+                
+                float targetScreenY;
+                if (currentAltitude < 15f)
+                {
+                    // Dưới 15m: bay lên = 0.4
+                    targetScreenY = 0.5f;
+                }
+                else if (currentAltitude < 20f)
+                {
+                    float altT = (currentAltitude - 15f) / 5f;
+                    targetScreenY = Mathf.Lerp(0.4f, 0.3f, altT);
+                }
+                else
+                {
+                    targetScreenY = 0.5f; // Altitude cao thì về 0.5
+                }
+
                 float blendedX = Mathf.Lerp(delayStartScreenX, 0.5f, t);
-                float blendedY = Mathf.Lerp(delayStartScreenY, 0.5f, t);
+                float blendedY = Mathf.Lerp(delayStartScreenY, targetScreenY, t);
 
                 transposer.m_ScreenX = blendedX;
                 transposer.m_ScreenY = blendedY;
@@ -124,7 +156,7 @@ public class CameraManager : MonoBehaviour
                 // Debug mỗi 0.5s
                 if (Mathf.FloorToInt(timeSinceStart * 2f) != Mathf.FloorToInt((timeSinceStart - Time.deltaTime) * 2f))
                 {
-                    Debug.Log($"🎥 Delay Blending: {timeSinceStart:F1}s/{cameraDelayTime}s - ScreenX: {currentScreenX:F2} → 0.5, ScreenY: {currentScreenY:F2} → 0.5");
+                    Debug.Log($"🎥 Delay Blending: {timeSinceStart:F1}s/{cameraDelayTime}s - ScreenX: {currentScreenX:F2} → 0.5, ScreenY: {currentScreenY:F2} → {targetScreenY:F2} (Alt: {currentAltitude:F1}m)");
                 }
             }
 
@@ -135,15 +167,33 @@ public class CameraManager : MonoBehaviour
             {
                 isCameraDelayActive = false;
                 
-                // ✅ Đảm bảo ScreenX/Y chính xác = 0.5 trước khi bật Follow/LookAt
+                // ✅ Đảm bảo ScreenX/Y đã được blend mượt mà đến target theo altitude
                 if (transposer != null)
                 {
+                    // Tính target screenY cuối cùng dựa trên altitude
+                    float currentAltitude = GManager.instance != null ? GManager.instance.currentAltitude : 0f;
+                    float finalScreenY;
+                    if (currentAltitude < 15f)
+                    {
+                        finalScreenY = 0.5f;
+                    }
+                    else if (currentAltitude < 20f)
+                    {
+                        float altT = (currentAltitude - 15f) / 5f;
+                        finalScreenY = Mathf.Lerp(0.5f, 0.3f, altT);
+                    }
+                    else
+                    {
+                        finalScreenY = 0.5f;
+                    }
+                    
                     transposer.m_ScreenX = 0.5f;
-                    transposer.m_ScreenY = 0.5f;
+                    transposer.m_ScreenY = finalScreenY;
                     currentScreenX = 0.5f;
-                    currentScreenY = 0.5f;
-                    isScreenPositionLocked = true;
-                    Debug.Log("✅ ScreenX/Y locked at 0.5, 0.5 - Starting blend to Follow/LookAt");
+                    currentScreenY = finalScreenY;
+                    // KHÔNG khóa để có thể chuyển đổi theo altitude
+                    isScreenPositionLocked = false;
+                    Debug.Log($"✅ ScreenX/Y set to 0.5, {finalScreenY:F2} (Alt: {currentAltitude:F1}m) - Starting blend to Follow/LookAt");
                 }
                 
                 BeginBlend();
@@ -187,17 +237,40 @@ public class CameraManager : MonoBehaviour
                 wasFollowDisabled = false;
 
                 
-                // Đặt screenY về giá trị target cuối cùng
+                // Đặt screenY theo altitude hiện tại - đã được blend mượt mà trong quá trình blend
                 var transposer = virtualCamera.GetCinemachineComponent<CinemachineFramingTransposer>();
                 if (transposer != null)
                 {
-                    // ✅ Đảm bảo ScreenX/Y = 0.5 sau khi hoàn tất blend
+                    // KHÔNG khóa - để HandleScreenYTransition có thể điều chỉnh theo altitude
+                    float currentAltitude = GManager.instance != null ? GManager.instance.currentAltitude : 0f;
+                    
+                    // Tính target screenY dựa trên altitude
+                    float finalScreenY;
+                    if (currentAltitude < 15f)
+                    {
+                        finalScreenY = 0.5f;
+                    }
+                    else if (currentAltitude < 20f)
+                    {
+                        float t = (currentAltitude - 15f) / 5f;
+                        finalScreenY = Mathf.Lerp(0.5f, 0.3f, t);
+                    }
+                    else if (currentAltitude <= 45f)
+                    {
+                        finalScreenY = 0.3f;
+                    }
+                    else
+                    {
+                        finalScreenY = 0.5f;
+                    }
+                    
+                    transposer.m_ScreenY = finalScreenY;
+                    currentScreenY = finalScreenY;
                     transposer.m_ScreenX = 0.5f;
-                    transposer.m_ScreenY = 0.5f;
                     currentScreenX = 0.5f;
-                    currentScreenY = 0.5f;
-                    isScreenPositionLocked = true;
-                    Debug.Log("✅ ScreenX/Y locked at 0.5, 0.5 after blend complete");
+                    isScreenPositionLocked = false;
+                    
+                    Debug.Log($"✅ Blend complete - ScreenY: {finalScreenY:F1} for altitude: {currentAltitude:F1}m");
                 }
                 
                 Debug.Log("Camera blend hoàn tất - Follow/LookAt enabled");
@@ -224,14 +297,35 @@ public class CameraManager : MonoBehaviour
                     // Lerp từ orthoSize ban đầu đến orthoSize target
                     virtualCamera.m_Lens.OrthographicSize = Mathf.Lerp(blendStartOrthoSize, targetOrthoSizeNow, smoothProgress);
                     
-                    // BLEND SCREEN X/Y MƯỢT MÀ - Giữ cố định ở 0.5, 0.5
+                    // BLEND SCREEN X/Y MƯỢT MÀ - Từ 0.5 sang giá trị target theo altitude
                     var transposer = virtualCamera.GetCinemachineComponent<CinemachineFramingTransposer>();
                     if (transposer != null)
                     {
+                        // Tính target screenY dựa trên altitude hiện tại
+                        float targetScreenYForAltitude;
+                        if (currentAltitude < 15f)
+                        {
+                            targetScreenYForAltitude = 0.4f;
+                        }
+                        else if (currentAltitude < 20f)
+                        {
+                            float t = (currentAltitude - 15f) / 5f;
+                            targetScreenYForAltitude = Mathf.Lerp(0.4f, 0.3f, t);
+                        }
+                        else if (currentAltitude <= 45f)
+                        {
+                            targetScreenYForAltitude = 0.3f;
+                        }
+                        else
+                        {
+                            targetScreenYForAltitude = 0.5f;
+                        }
+                        
+                        // Blend mượt mà từ screenY ban đầu (0.5) sang target
                         transposer.m_ScreenX = 0.5f;
-                        transposer.m_ScreenY = 0.5f;
+                        transposer.m_ScreenY = Mathf.Lerp(0.5f, targetScreenYForAltitude, smoothProgress);
                         currentScreenX = 0.5f;
-                        currentScreenY = 0.5f;
+                        currentScreenY = transposer.m_ScreenY;
                     }
                     
                     // Debug mỗi 0.2s
@@ -282,7 +376,7 @@ public class CameraManager : MonoBehaviour
         }
         else if (altitude <= 15f)
         {
-            calculatedOrthoSize = Mathf.Lerp(7f, 20f, altitude / 20f);
+            calculatedOrthoSize = Mathf.Lerp(7f, 20f, altitude / 15f);
         }
         else
         {
@@ -305,31 +399,93 @@ public class CameraManager : MonoBehaviour
         var transposer = virtualCamera.GetCinemachineComponent<CinemachineFramingTransposer>();
         if (transposer == null) return;
         
-        // Xác định target screenY dựa trên trạng thái máy bay
+        // Xác định target screenX/Y dựa trên độ cao và hướng bay của máy bay
         float altitude = GManager.instance.currentAltitude;
-        bool isFlying = altitude > 5f;
         bool hasFuel = GManager.instance.isPlay;
         
-        float targetScreenY = (isFlying && hasFuel) ? screenYFlying : screenYGround;
-        float targetScreenX = 0.5f;
-        
-        // Kiểm tra nếu đã gần đạt target, khóa luôn
-        float distanceX = Mathf.Abs(currentScreenX - targetScreenX);
-        float distanceY = Mathf.Abs(currentScreenY - targetScreenY);
-        
-        if (distanceX < SCREEN_LOCK_THRESHOLD && distanceY < SCREEN_LOCK_THRESHOLD)
+        // Lấy velocity của máy bay và smooth để tránh giật
+        float targetVelocityY = 0f;
+        if (aircraftTransform != null && GManager.instance.airplaneRigidbody2D != null)
         {
-            transposer.m_ScreenX = targetScreenX;
-            transposer.m_ScreenY = targetScreenY;
-            currentScreenX = targetScreenX;
-            currentScreenY = targetScreenY;
-            isScreenPositionLocked = true;
-            Debug.Log($"✅ Screen position LOCKED at ({targetScreenX:F3}, {targetScreenY:F3})");
-            return;
+            targetVelocityY = GManager.instance.airplaneRigidbody2D.velocity.y;
         }
         
-        // Chuyển đổi mượt mà
-        currentScreenY = Mathf.Lerp(currentScreenY, targetScreenY, screenTransitionSpeed * Time.deltaTime);
+        // Smooth velocity để tránh nhảy target liên tục
+        smoothedVelocityY = Mathf.SmoothDamp(smoothedVelocityY, targetVelocityY, ref velocityYDerivative, velocitySmoothTime);
+        
+        bool isAscending = smoothedVelocityY > 0.5f; // Bay lên nếu smoothed velocity Y > 0.5
+        bool isDescending = smoothedVelocityY < -0.5f; // Bay xuống nếu smoothed velocity Y < -0.5
+        
+        float targetScreenX = 0.5f;
+        float targetScreenY;
+        
+        if (!hasFuel)
+        {
+            // Không bay hoặc hết nhiên liệu: giữ vị trí mặc định
+            targetScreenY = screenYGround;
+        }
+        else if (altitude < 15f)
+        {
+            // Dưới 15m: Phân biệt bay lên/xuống
+            if (isAscending)
+            {
+                // Bay lên: screenY = 0.4 để người chơi cảm nhận được máy bay bay lên
+                targetScreenY = 0.4f;
+            }
+            else if (isDescending)
+            {
+                // Bay xuống: screenY = 0.8 để nhìn thấy mặt đất tốt hơn
+                targetScreenY = 0.8f;
+            }
+            else
+            {
+                // Hover hoặc bay ngang: giữ nguyên giá trị hiện tại
+                targetScreenY = currentScreenY;
+            }
+        }
+        else if (altitude < 20f)
+        {
+            // 15-20m: Vùng chuyển tiếp mượt mà
+            float t = (altitude - 15f) / 5f;
+            if (isDescending)
+            {
+                // Bay xuống: chuyển từ 0.8 → 0.3
+                targetScreenY = Mathf.Lerp(0.8f, 0.3f, t);
+            }
+            else
+            {
+                // Bay lên hoặc hover: chuyển từ 0.4 → 0.3
+                targetScreenY = Mathf.Lerp(0.4f, 0.3f, t);
+            }
+        }
+        else if (altitude <= 45f)
+        {
+            // 20-45m: Giữ ở 0.3
+            targetScreenY = 0.3f;
+        }
+        else if (altitude < 50f)
+        {
+            // 45-50m: Vùng chuyển tiếp mượt mà từ 0.3 → 0.5
+            float t = (altitude - 45f) / 5f;
+            targetScreenY = Mathf.Lerp(0.3f, 0.5f, t);
+        }
+        else
+        {
+            // Trên 50m: Giữ ở 0.5
+            targetScreenY = 0.5f;
+        }
+        
+        // Chuyển đổi mượt mà với tốc độ động - tăng tốc khi cần di chuyển nhiều
+        float distanceToTarget = Mathf.Abs(targetScreenY - currentScreenY);
+        // Tăng tốc độ transition khi khoảng cách lớn (bay xuống nhanh)
+        float dynamicSpeed = screenTransitionSpeed;
+        if (distanceToTarget > 0.2f)
+        {
+            // Khi cần di chuyển > 0.2, tăng tốc độ lên 3-4 lần
+            dynamicSpeed = screenTransitionSpeed * Mathf.Lerp(3f, 4f, (distanceToTarget - 0.2f) / 0.4f);
+        }
+        
+        currentScreenY = Mathf.Lerp(currentScreenY, targetScreenY, dynamicSpeed * Time.deltaTime);
         currentScreenX = Mathf.Lerp(currentScreenX, targetScreenX, screenTransitionSpeed * Time.deltaTime);
         
         transposer.m_ScreenY = currentScreenY;

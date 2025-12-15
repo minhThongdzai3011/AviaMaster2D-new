@@ -8,8 +8,8 @@ using TMPro;
 public class StartGame : MonoBehaviour
 {
     public Image blackPanel; 
-    private Canvas fadeCanvas;
-    private Image fadePanel;
+    // private Canvas fadeCanvas;
+    // private Image fadePanel;
 
     [Header("Text Settings")]
     public TextMeshProUGUI loadingText1;
@@ -34,10 +34,10 @@ public class StartGame : MonoBehaviour
     void Start()
     {
         // TẠO blackPanel RIÊNG để DontDestroyOnLoad
-        CreateFadePanel();
+        // CreateFadePanel();
         
         // Đảm bảo panel đen hoàn toàn từ đầu
-        fadePanel.color = new Color(0, 0, 0, 1f);
+        // fadePanel.color = new Color(0, 0, 0, 1f);
         
         // Giữ script này qua scene
         DontDestroyOnLoad(gameObject);
@@ -57,7 +57,7 @@ public class StartGame : MonoBehaviour
         {
             Debug.Log("Scene tesfly đã load xong!");
             // Bắt đầu fade sau khi scene load
-            StartCoroutine(FadeInAfterSceneLoad());
+            // StartCoroutine(FadeInAfterSceneLoad());
             isLoading = false;
             
             
@@ -66,36 +66,36 @@ public class StartGame : MonoBehaviour
         }
     }
 
-    void CreateFadePanel()
-    {
-        // Tạo Canvas mới
-        GameObject canvasObj = new GameObject("FadeCanvas");
-        fadeCanvas = canvasObj.AddComponent<Canvas>();
-        fadeCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
+    // void CreateFadePanel()
+    // {
+    //     // Tạo Canvas mới
+    //     GameObject canvasObj = new GameObject("FadeCanvas");
+    //     fadeCanvas = canvasObj.AddComponent<Canvas>();
+    //     fadeCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
         
-        CanvasScaler scaler = canvasObj.AddComponent<CanvasScaler>();
-        scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-        scaler.referenceResolution = new Vector2(1920, 1080);
+    //     CanvasScaler scaler = canvasObj.AddComponent<CanvasScaler>();
+    //     scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+    //     scaler.referenceResolution = new Vector2(1920, 1080);
         
-        canvasObj.AddComponent<GraphicRaycaster>();
+    //     canvasObj.AddComponent<GraphicRaycaster>();
         
-        // Tạo Image Panel đen
-        GameObject panelObj = new GameObject("BlackPanel");
-        panelObj.transform.SetParent(canvasObj.transform, false);
+    //     // Tạo Image Panel đen
+    //     GameObject panelObj = new GameObject("BlackPanel");
+    //     panelObj.transform.SetParent(canvasObj.transform, false);
         
-        fadePanel = panelObj.AddComponent<Image>();
-        fadePanel.color = new Color(0, 0, 0, 1f);
+    //     fadePanel = panelObj.AddComponent<Image>();
+    //     fadePanel.color = new Color(0, 0, 0, 1f);
         
-        // Phủ toàn màn hình
-        RectTransform rectTransform = panelObj.GetComponent<RectTransform>();
-        rectTransform.anchorMin = Vector2.zero;
-        rectTransform.anchorMax = Vector2.one;
-        rectTransform.sizeDelta = Vector2.zero;
-        rectTransform.anchoredPosition = Vector2.zero;
+    //     // Phủ toàn màn hình
+    //     RectTransform rectTransform = panelObj.GetComponent<RectTransform>();
+    //     rectTransform.anchorMin = Vector2.zero;
+    //     rectTransform.anchorMax = Vector2.one;
+    //     rectTransform.sizeDelta = Vector2.zero;
+    //     rectTransform.anchoredPosition = Vector2.zero;
         
-        // Giữ Canvas qua scene
-        DontDestroyOnLoad(canvasObj);
-    }
+    //     // Giữ Canvas qua scene
+    //     DontDestroyOnLoad(canvasObj);
+    // }
 
     void LoadNextScene()
     {
@@ -103,28 +103,28 @@ public class StartGame : MonoBehaviour
         SceneManager.LoadScene("tesfly");
     }
 
-    IEnumerator FadeInAfterSceneLoad()
-    {
-        // Đợi scene load hoàn toàn
-        yield return new WaitForSeconds(0.3f);
+    // IEnumerator FadeInAfterSceneLoad()
+    // {
+    //     // Đợi scene load hoàn toàn
+    //     yield return new WaitForSeconds(0.3f);
         
-        Debug.Log("Bắt đầu fade in từ đen sang trong suốt...");
+    //     Debug.Log("Bắt đầu fade in từ đen sang trong suốt...");
         
-        // Fade alpha từ 1 -> 0 trong 2s (tăng thời gian để rõ hơn)
-        fadePanel.DOFade(0f, 2f).SetEase(Ease.InOutQuad).OnComplete(() =>
-        {
-            Debug.Log("Fade in hoàn tất!");
+    //     // Fade alpha từ 1 -> 0 trong 2s (tăng thời gian để rõ hơn)
+    //     fadePanel.DOFade(0f, 2f).SetEase(Ease.InOutQuad).OnComplete(() =>
+    //     {
+    //         Debug.Log("Fade in hoàn tất!");
             
-            // Xóa canvas sau khi fade xong
-            if (fadeCanvas != null)
-            {
-                Destroy(fadeCanvas.gameObject, 0.5f);
-            }
+    //         // Xóa canvas sau khi fade xong
+    //         if (fadeCanvas != null)
+    //         {
+    //             Destroy(fadeCanvas.gameObject, 0.5f);
+    //         }
             
-            // Xóa script này
-            Destroy(gameObject, 0.5f);
-        });
-    }
+    //         // Xóa script này
+    //         Destroy(gameObject, 0.5f);
+    //     });
+    // }
 
     private int state = 0;
     public bool isLoading = true;

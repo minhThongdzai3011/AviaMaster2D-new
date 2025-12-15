@@ -321,6 +321,8 @@ public class Plane : MonoBehaviour
             Debug.LogWarning("Airplane Rigidbody2D not found!");
             yield break;
         }
+        GManager.instance.downFuelImage.gameObject.SetActive(false);
+        GManager.instance.upAircraftImage.gameObject.SetActive(false);
         
         // Lấy góc ban đầu khi máy bay chạm đất
         float initialAngleZ = GetCurrentRotationZ(airplaneRb);

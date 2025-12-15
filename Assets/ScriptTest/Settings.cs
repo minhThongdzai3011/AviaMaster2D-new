@@ -84,11 +84,11 @@ public class Settings : MonoBehaviour
     void Start()
     {
         instance = this;
-        playerName = PlayerPrefs.GetString("player-name", "");
+       // playerName = PlayerPrefs.GetString("player-name", "");
         Debug.Log("Loaded HighScore: " + (int)PlayerPrefs.GetInt("HighScore", 0));
         highScoreText.text = " " + (int)PlayerPrefs.GetInt("HighScore", 0);
         
-        inputField.text = playerName;
+        //inputField.text = playerName;
         isColdDownTimeLuckyWheel = PlayerPrefs.GetInt("LuckyWheelColdDownAds", 0) == 1;
         if (isColdDownTimeLuckyWheel)
         {
@@ -422,11 +422,12 @@ public class Settings : MonoBehaviour
             });
     }
 
-    
+    public bool isOpenLuckyWheel = false;
     public void openWheel()
     {
         if (isAnimating) return;
         pannelGray.gameObject.SetActive(true);
+        isOpenLuckyWheel = true;
         AudioManager.instance.PlaySound(AudioManager.instance.buttonSoundClip);
         Debug.Log("Mở Win Image!");
         CheckPlane.instance.SetActiveLuckyWheel();
@@ -478,6 +479,7 @@ public class Settings : MonoBehaviour
                 pannelGray.gameObject.SetActive(false);
                 CheckPlane.instance.ResetActiveLuckyWheel();
                 Debug.Log("Lucky Wheel Image animation đóng hoàn thành!");
+                isOpenLuckyWheel = false;
             });
     }
 
@@ -485,30 +487,33 @@ public class Settings : MonoBehaviour
     {
         
         if (isAnimating) return;
-        pannelGray.gameObject.SetActive(true);
-        AudioManager.instance.PlaySound(AudioManager.instance.buttonSoundClip);
-        Debug.Log("Mở Win Image!");
+        if (!isOpenLuckyWheel)
+        {
+            pannelGray.gameObject.SetActive(true);
+            AudioManager.instance.PlaySound(AudioManager.instance.buttonSoundClip);
+            Debug.Log("Mở Win Image!");
 
-        CheckPlane.instance.SetActiveLeaderBoard();
-        // Dừng tất cả animation đang chạy
-        DOTween.Kill(GManager.instance.leaderBoardImage.transform);
-        isAnimating = true;
+            CheckPlane.instance.SetActiveLeaderBoard();
+            // Dừng tất cả animation đang chạy
+            DOTween.Kill(GManager.instance.leaderBoardImage.transform);
+            isAnimating = true;
 
-        // Hiển thị lucky wheel image
-        lastDistanceText.gameObject.SetActive(false);
-        GManager.instance.leaderBoardImage.gameObject.SetActive(true);
+            // Hiển thị lucky wheel image
+            lastDistanceText.gameObject.SetActive(false);
+            GManager.instance.leaderBoardImage.gameObject.SetActive(true);
 
-        // Cập nhật UI trước khi hiển thị
-        UpdateUI();
+            // Cập nhật UI trước khi hiển thị
+            UpdateUI();
 
-        // Animation mở lucky wheel image
-        GManager.instance.leaderBoardImage.transform.localScale = Vector3.zero;
-        GManager.instance.leaderBoardImage.transform.DOScale(Vector3.one, openDuration)
-            .SetEase(openEase)
-            .OnComplete(() => {
-                isAnimating = false;
-                Debug.Log("Lucky Wheel Image animation mở hoàn thành!");
-            });
+            // Animation mở lucky wheel image
+            GManager.instance.leaderBoardImage.transform.localScale = Vector3.zero;
+            GManager.instance.leaderBoardImage.transform.DOScale(Vector3.one, openDuration)
+                .SetEase(openEase)
+                .OnComplete(() => {
+                    isAnimating = false;
+                    Debug.Log("Lucky Wheel Image animation mở hoàn thành!");
+                });
+        }
     }
 
     public void exitLeaderBoard()
@@ -784,8 +789,8 @@ public class Settings : MonoBehaviour
     public void saveNameInputField()
     {
         playerName = inputField.text;
-        PlayerPrefs.SetString("player-name", playerName);
-        PlayerPrefs.Save();
+        //PlayerPrefs.SetString("player-name", playerName);
+       // PlayerPrefs.Save();
     }
 
     public void NotificationNewMap()

@@ -491,8 +491,6 @@ public class MapSpawner : MonoBehaviour
         SwitchToNextMap(nextMap);
     }
 
-
-    // THÊM: Method để reset tất cả map flags
     void ResetAllMapFlags()
     {
         isCityMap = false;
@@ -641,6 +639,9 @@ public class MapSpawner : MonoBehaviour
             case 5: mapPrefabs = mapLavaPrefabs; isLavaMap = true; break;
         }
     }
+
+
+    
 
     public void CheckMap01(){
         

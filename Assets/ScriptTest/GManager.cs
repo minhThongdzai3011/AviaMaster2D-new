@@ -922,18 +922,18 @@ public class GManager : MonoBehaviour
         // {
         //     PauseGame();
         // }
-        // if (Input.GetKeyDown(KeyCode.Keypad0))
-        // {
-        //     AgainGame();
-        // }
-        // if (Input.GetKey(KeyCode.Keypad2))
-        // {
-        //     totalMoney += 1000;
-        //     PlayerPrefs.SetFloat("TotalMoney", totalMoney);
-        //     PlayerPrefs.Save();
-        //     SaveTotalMoney();
+        if (Input.GetKeyDown(KeyCode.Keypad0))
+        {
+            AgainGame();
+        }
+        if (Input.GetKey(KeyCode.Keypad2))
+        {
+            totalMoney += 1000;
+            PlayerPrefs.SetFloat("TotalMoney", totalMoney);
+            PlayerPrefs.Save();
+            SaveTotalMoney();
 
-        // }
+        }
         // if (Input.GetKeyDown(KeyCode.Keypad3))
         // {
         //     MapSpawner.instance.isMapCityUnlocked = true;
@@ -1305,10 +1305,10 @@ public class GManager : MonoBehaviour
                 // Giảm hiệu quả boost theo độ cao
                 float altitudeEfficiency = CalculateAltitudeEfficiency();
 
-                float boostForce = 15f * actualPowerMultiplier * altitudeEfficiency;
-                if (boostForce > 15f)
+                float boostForce = 18f * actualPowerMultiplier * altitudeEfficiency;
+                if (boostForce > 18f)
                 {
-                    boostForce = 15f; // Giới hạn lực boost tối đa
+                    boostForce = 18f; // Giới hạn lực boost tối đa
                 }   
                 Debug.Log($"BoosterUp - AngleZ: {currentAngleZ:F2}°, PowerMult: {actualPowerMultiplier:F2}, AltEff: {altitudeEfficiency:F2}, BoostForce: {boostForce:F2}");
                 airplaneRigidbody2D.AddForce(boostDirection * boostForce, ForceMode2D.Force);
