@@ -487,45 +487,129 @@ public class Plane : MonoBehaviour
     public bool isFadeDone = false;
     IEnumerator FadeInText(float duration)
     {
+        // Fade Text
         Color c = GManager.instance.newMapText.color;
         c.a = 0;
         GManager.instance.newMapText.color = c;
+
+        // ✅ Fade Image cùng lúc (nếu đang active)
+        Color imgColor = Color.white;
+        bool hasImage = false;
+        if (Settings.instance.imageDiamondCoinText.gameObject.activeSelf)
+        {
+            hasImage = true;
+            imgColor = Settings.instance.imageDiamondCoinText.color;
+            imgColor.a = 0;
+            Settings.instance.imageDiamondCoinText.color = imgColor;
+        }
 
         float elapsed = 0f;
         while (elapsed < duration)
         {
             elapsed += Time.deltaTime;
-            c.a = Mathf.Clamp01(elapsed / duration);
+            float alpha = Mathf.Clamp01(elapsed / duration);
+            
+            // Fade text
+            c.a = alpha;
             GManager.instance.newMapText.color = c;
+            
+            // Fade image
+            if (hasImage)
+            {
+                imgColor.a = alpha;
+                Settings.instance.imageDiamondCoinText.color = imgColor;
+            }
+            
             yield return null;
         }
         isFadeDone = true;
         StartCoroutine(FadeOutText(2f));
-        
     }
+    
 
     IEnumerator FadeOutText(float duration)
     {
         if (!isFadeDone) yield break;
+        
         Color c = GManager.instance.newMapText.color;
+        Color imgColor = Settings.instance.imageDiamondCoinText.color;
+        bool hasImage = Settings.instance.imageDiamondCoinText.gameObject.activeSelf;
 
         float elapsed = 0f;
         while (elapsed < duration)
         {
             elapsed += Time.deltaTime;
-            c.a = 1f - Mathf.Clamp01(elapsed / duration);
+            float alpha = 1f - Mathf.Clamp01(elapsed / duration);
+            
+            // Fade text
+            c.a = alpha;
             GManager.instance.newMapText.color = c;
-            Settings.instance.imageDiamondCoinText.sprite = Settings.instance.spriteUIMask;
+            
+            // ✅ Fade image cùng lúc
+            if (hasImage)
+            {
+                imgColor.a = alpha;
+                Settings.instance.imageDiamondCoinText.color = imgColor;
+            }
+            
             yield return null;
         }
+        
+        // Đặt alpha = 0 cuối cùng
         c.a = 0;
         GManager.instance.newMapText.color = c;
-        if (isUseCoinDiamond){
-            Settings.instance.imageDiamondCoinText.color = c;
+        
+        // ✅ Ẩn image và reset sprite
+        if (isUseCoinDiamond)
+        {
+            imgColor.a = 0;
+            Settings.instance.imageDiamondCoinText.color = imgColor;
+            Settings.instance.imageDiamondCoinText.sprite = Settings.instance.spriteUIMask;
+            Settings.instance.imageDiamondCoinText.gameObject.SetActive(false);
             isUseCoinDiamond = false;
         }
-        Settings.instance.imageDiamondCoinText.gameObject.SetActive(false);
     }
+    private bool isImageFadeDone = false;
+    // IEnumerator FadeInImage(Image img, float duration)
+    // {
+    //     if (img == null) yield break;
+
+    //     Color c = img.color;
+    //     c.a = 0f;
+    //     img.color = c;
+
+    //     float elapsed = 0f;
+    //     while (elapsed < duration)
+    //     {
+    //         elapsed += Time.deltaTime;
+    //         c.a = Mathf.Clamp01(elapsed / duration);
+    //         img.color = c;
+    //         yield return null;
+    //     }
+
+    //     isImageFadeDone = true;
+
+    //     // Nếu muốn fade out giống Text
+    //     StartCoroutine(FadeOutImage(img, 2f));
+    // }
+    // IEnumerator FadeOutImage(Image img, float duration)
+    // {
+    //     if (!isImageFadeDone) yield break;
+    //     if (img == null) yield break;
+
+    //     Color c = img.color;
+
+    //     float elapsed = 0f;
+    //     while (elapsed < duration)
+    //     {
+    //         elapsed += Time.deltaTime;
+    //         c.a = 1f - Mathf.Clamp01(elapsed / duration);
+    //         img.color = c;
+    //         yield return null;
+    //     }
+    //     c.a = 0f;
+    //     img.color = c;
+    // }
 
 
     IEnumerator FadeFogImage()

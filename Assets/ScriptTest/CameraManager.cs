@@ -424,9 +424,9 @@ public class CameraManager : MonoBehaviour
             // Không bay hoặc hết nhiên liệu: giữ vị trí mặc định
             targetScreenY = screenYGround;
         }
-        else if (altitude < 15f)
+        else if (altitude < 20f)
         {
-            // Dưới 15m: Phân biệt bay lên/xuống
+            // Dưới 20m: Phân biệt bay lên/xuống
             if (isAscending)
             {
                 // Bay lên: screenY = 0.4 để người chơi cảm nhận được máy bay bay lên
@@ -434,8 +434,8 @@ public class CameraManager : MonoBehaviour
             }
             else if (isDescending)
             {
-                // Bay xuống: screenY = 0.8 để nhìn thấy mặt đất tốt hơn
-                targetScreenY = 0.8f;
+                // Bay xuống: screenY = 0.7 để nhìn thấy mặt đất tốt hơn
+                targetScreenY = 0.7f;
             }
             else
             {
@@ -443,14 +443,14 @@ public class CameraManager : MonoBehaviour
                 targetScreenY = currentScreenY;
             }
         }
-        else if (altitude < 20f)
+        else if (altitude < 25f)
         {
-            // 15-20m: Vùng chuyển tiếp mượt mà
-            float t = (altitude - 15f) / 5f;
+            // 20-25m: Vùng chuyển tiếp mượt mà
+            float t = (altitude - 20f) / 5f;
             if (isDescending)
             {
-                // Bay xuống: chuyển từ 0.8 → 0.3
-                targetScreenY = Mathf.Lerp(0.8f, 0.3f, t);
+                // Bay xuống: chuyển từ 0.7 → 0.3
+                targetScreenY = Mathf.Lerp(0.7f, 0.3f, t);
             }
             else
             {

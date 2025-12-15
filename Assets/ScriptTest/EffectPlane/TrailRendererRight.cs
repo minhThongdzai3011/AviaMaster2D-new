@@ -14,6 +14,7 @@ public class TrailRendererRight : MonoBehaviour
         trailRenderer = GetComponent<TrailRenderer>();
         Debug.Log("TrailRendererRight instance assigned." + (instance != null ? "Success" : "Failure"));
         Debug.Log("TrailRenderer component found: " + (trailRenderer != null ? "Yes" : "No"));
+        trailRenderer.enabled = false; // Khởi đầu tắt
     }
 
     // Update is called once per frame

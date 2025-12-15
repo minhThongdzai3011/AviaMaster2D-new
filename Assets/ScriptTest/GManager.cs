@@ -461,19 +461,19 @@ public class GManager : MonoBehaviour
         {
             if(TrailRendererLeft.instance != null && TrailRendererRight.instance != null && isBoost )
             {
-                TrailRendererLeft.instance.TrailEffect();
-                TrailRendererRight.instance.TrailEffect();
+                // TrailRendererLeft.instance.TrailEffect();
+                // TrailRendererRight.instance.TrailEffect();
                 Debug.Log("Trail Effects Activated" );
             }
             if (TrailRendererLeft.instance != null && TrailRendererLeft.instance.gameObject.activeInHierarchy && isBoost)
             {
-                TrailRendererLeft.instance.TrailEffect();
+                // TrailRendererLeft.instance.TrailEffect();
                 Debug.Log("Left Trail Effect Activated" );
             }
 
             if (TrailRendererRight.instance != null && TrailRendererRight.instance.gameObject.activeInHierarchy && isBoost)
             {
-                TrailRendererRight.instance.TrailEffect();
+                // TrailRendererRight.instance.TrailEffect();
                 Debug.Log("Right Trail Effect Activated" );
             }
 
@@ -828,83 +828,118 @@ public class GManager : MonoBehaviour
         }
 
         if (isPlay && isBoosted)
+{
+    bool isBoostPressed = Input.GetKey(KeyCode.Space) || isUseClickerBooster;
+    
+    // ✅ CHỈ XỬ LÝ NẾU CÒN BOOST
+    if (Input.GetKey(KeyCode.Space) && totalBoost > 0) // ✅ THÊM KIỂM TRA totalBoost > 0
+    {
+        Debug.Log("Space Key Down Detected - Boost available: " + totalBoost);
+        StartBoostDecrease();
+        
+        if (Plane.instance != null)
         {
-            bool isBoostPressed = Input.GetKey(KeyCode.Space) || isUseClickerBooster;
-            Debug.Log("isBoostPressed: " + isBoostPressed);
-            if (Input.GetKey(KeyCode.Space))
-            {
-                Debug.Log("Space Key Down Detected");
-                StartBoostDecrease();
-                if (Plane.instance != null)
-                {
-                    Debug.Log("Trail Renderer Instances: " + 
-                              "Left - " + (TrailRendererLeft.instance != null ? "Exists" : "Null") + ", " +
-                              "Right - " + (TrailRendererRight.instance != null ? "Exists" : "Null"));
-                    if(TrailRendererLeft.instance != null && TrailRendererRight.instance != null )
-                    {
-                        TrailRendererLeft.instance.isBoosterActive = true;
-                        TrailRendererLeft.instance.PlayTrail();
-                        TrailRendererRight.instance.isBoosterActive = true;
-                        TrailRendererRight.instance.PlayTrail();
-                        Debug.Log("Both Trail Effects Activated" );
-                    }
-                    else if(TrailRendererLeft.instance != null && TrailRendererLeft.instance.gameObject.activeInHierarchy )
-                    {
-                        TrailRendererLeft.instance.isBoosterActive = true;
-                        TrailRendererLeft.instance.PlayTrail();
-                        Debug.Log("Left Trail Effect Activated" );
-                    }
-                    else if(TrailRendererRight.instance != null && TrailRendererRight.instance.gameObject.activeInHierarchy )
-                    {
-                        TrailRendererRight.instance.isBoosterActive = true;
-                        TrailRendererRight.instance.PlayTrail();
-                        Debug.Log("Right Trail Effect Activated" );
-                    }
-                }
-            }
-            if (Input.GetKeyUp(KeyCode.Space))
-            {
-                StopBoostDecrease();
-                if (Plane.instance != null)
-                {
-                    if(TrailRendererLeft.instance != null && TrailRendererRight.instance != null )
-                    {
-                        TrailRendererLeft.instance.isBoosterActive = false;
-                        TrailRendererLeft.instance.TrailEffect();
-                        TrailRendererRight.instance.isBoosterActive = false;
-                        TrailRendererRight.instance.TrailEffect();
-                        Debug.Log("Both Trail Effects Deactivated" );
-                    }
-                    else if(TrailRendererLeft.instance != null && TrailRendererLeft.instance.gameObject.activeInHierarchy )
-                    {
-                        TrailRendererLeft.instance.isBoosterActive = false;
-                        TrailRendererLeft.instance.TrailEffect();
-                        Debug.Log("Left Trail Effect Deactivated" );
-                    }
-                    else if(TrailRendererRight.instance != null && TrailRendererRight.instance.gameObject.activeInHierarchy )
-                    {
-                        TrailRendererRight.instance.isBoosterActive = false;
-                        TrailRendererRight.instance.TrailEffect();
-                        Debug.Log("Right Trail Effect Deactivated" );
-                    }
-                }
-            }
+            Debug.Log("Trail Renderer Instances: " + 
+                      "Left - " + (TrailRendererLeft.instance != null ? "Exists" : "Null") + ", " +
+                      "Right - " + (TrailRendererRight.instance != null ? "Exists" : "Null"));
             
-            if (isBoostPressed)
+            // ✅ BẬT TRAIL CHỈ KHI CÒN BOOST
+            if(TrailRendererLeft.instance != null && TrailRendererRight.instance != null)
             {
-                BoosterUp();
-                buttonBoosterPlaneImage.color = Color.gray;
+                TrailRendererLeft.instance.isBoosterActive = true;
+                TrailRendererLeft.instance.PlayTrail();
+                TrailRendererRight.instance.isBoosterActive = true;
+                TrailRendererRight.instance.PlayTrail();
+                EffectFuel.instance.StartBlink();
+                Debug.Log("Both Trail Effects Activated");
             }
-            else
+            else if(TrailRendererLeft.instance != null && TrailRendererLeft.instance.gameObject.activeInHierarchy)
             {
-                isBoosterActive = false;
-                if (isBoostDecreasing && !Input.GetKey(KeyCode.Space) && !isUseClickerBooster)
-                {
-                    StopBoostDecrease();
-                }
-                buttonBoosterPlaneImage.color = Color.white;
+                TrailRendererLeft.instance.isBoosterActive = true;
+                TrailRendererLeft.instance.PlayTrail();
+                EffectFuel.instance.StartBlink();
+                Debug.Log("Left Trail Effect Activated");
+            }
+            else if(TrailRendererRight.instance != null && TrailRendererRight.instance.gameObject.activeInHierarchy)
+            {
+                TrailRendererRight.instance.isBoosterActive = true;
+                TrailRendererRight.instance.PlayTrail();
+                EffectFuel.instance.StartBlink();
+                Debug.Log("Right Trail Effect Activated");
             }
         }
+    }
+    else if (Input.GetKey(KeyCode.Space) && totalBoost <= 0)
+    {
+        // ✅ HẾT BOOST - HIỂN THỊ THÔNG BÁO
+        Debug.LogWarning("⚠️ Out of boost! Cannot activate trail effects.");
+        
+        // ✅ TẮT TRAIL NẾU ĐANG BẬT
+        if (TrailRendererLeft.instance != null)
+        {
+            TrailRendererLeft.instance.isBoosterActive = false;
+            TrailRendererLeft.instance.PlayTrail();
+        }
+        if (TrailRendererRight.instance != null)
+        {
+            TrailRendererRight.instance.isBoosterActive = false;
+            TrailRendererRight.instance.PlayTrail();
+        }
+        if (EffectFuel.instance != null)
+        {
+            EffectFuel.instance.StopBlink();
+        }
+    }
+    
+    // ✅ THÊM: TẮT TRAIL KHI THẢ SPACE
+    if (Input.GetKeyUp(KeyCode.Space))
+    {
+        StopBoostDecrease();
+        
+        if (Plane.instance != null)
+        {
+            if(TrailRendererLeft.instance != null && TrailRendererRight.instance != null)
+            {
+                TrailRendererLeft.instance.isBoosterActive = false;
+                TrailRendererLeft.instance.PlayTrail();
+                TrailRendererRight.instance.isBoosterActive = false;
+                TrailRendererRight.instance.PlayTrail();
+                EffectFuel.instance.StopBlink();
+                Debug.Log("Both Trail Effects Deactivated");
+            }
+            else if(TrailRendererLeft.instance != null && TrailRendererLeft.instance.gameObject.activeInHierarchy)
+            {
+                TrailRendererLeft.instance.isBoosterActive = false;
+                TrailRendererLeft.instance.PlayTrail();
+                EffectFuel.instance.StopBlink();
+                Debug.Log("Left Trail Effect Deactivated");
+            }
+            else if(TrailRendererRight.instance != null && TrailRendererRight.instance.gameObject.activeInHierarchy)
+            {
+                TrailRendererRight.instance.isBoosterActive = false;
+                TrailRendererRight.instance.PlayTrail();
+                EffectFuel.instance.StopBlink();
+                Debug.Log("Right Trail Effect Deactivated");
+            }
+        }
+    }
+    
+    // ✅ XỬ LÝ BOOST BUTTON (CHỈ KHI CÒN BOOST)
+    if (isBoostPressed && totalBoost > 0)
+    {
+        BoosterUp();
+        buttonBoosterPlaneImage.color = Color.gray;
+    }
+    else
+    {
+        isBoosterActive = false;
+        if (isBoostDecreasing && !Input.GetKey(KeyCode.Space) && !isUseClickerBooster)
+        {
+            StopBoostDecrease();
+        }
+        buttonBoosterPlaneImage.color = Color.white;
+    }
+}
 
         // if (Input.GetKeyDown(KeyCode.Keypad1))
         // {
@@ -1316,21 +1351,21 @@ public class GManager : MonoBehaviour
                 if(TrailRendererLeft.instance != null && TrailRendererRight.instance != null)
                 {
                     TrailRendererLeft.instance.isBoosterActive = false;
-                    TrailRendererLeft.instance.TrailEffect();
+                    // TrailRendererLeft.instance.TrailEffect();
                     TrailRendererRight.instance.isBoosterActive = false;
-                    TrailRendererRight.instance.TrailEffect();
+                    // TrailRendererRight.instance.TrailEffect();
                     Debug.Log("Both Trail Effects Deactivated (Out of Boost)");
                 }
                 else if(TrailRendererLeft.instance != null && TrailRendererLeft.instance.gameObject.activeInHierarchy)
                 {
                     TrailRendererLeft.instance.isBoosterActive = false;
-                    TrailRendererLeft.instance.TrailEffect();
+                    // TrailRendererLeft.instance.TrailEffect();
                     Debug.Log("Left Trail Effect Deactivated (Out of Boost)");
                 }
                 else if(TrailRendererRight.instance != null && TrailRendererRight.instance.gameObject.activeInHierarchy)
                 {
                     TrailRendererRight.instance.isBoosterActive = false;
-                    TrailRendererRight.instance.TrailEffect();
+                    // TrailRendererRight.instance.TrailEffect();
                     Debug.Log("Right Trail Effect Deactivated (Out of Boost)");
                 }
             }
