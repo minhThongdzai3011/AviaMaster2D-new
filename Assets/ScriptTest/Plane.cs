@@ -57,24 +57,20 @@ public class Plane : MonoBehaviour
             isStopExplosionEffect = false;
             isGrounded = true;
 
-            Debug.Log("*** MÁY BAY CHẠM ĐẤT - BẮT ĐẦU HỆ THỐNG DỪNG ***");
+            Debug.Log("Máy bay đã chạm đất.");
             
-            // THÊM: Thông báo cho GManager biết máy bay đã chạm đất
             if (GManager.instance != null)
             {
                 GManager.instance.OnPlaneGroundCollision();
-                // Tắt các hệ thống có thể can thiệp velocity
                 GManager.instance.isControllable = false;
                 GManager.instance.isBoosterActive = false;
             }
 
-            // Dừng các hiệu ứng
             if (RotaryFront.instance != null)
                 RotaryFront.instance.StopWithDeceleration(3.0f);
             
             smokeEffect.Stop();
             
-            // *** QUAN TRỌNG: Gọi UpMass() để giảm tốc độ ***
             StartCoroutine(UpMass());
         }
     }
@@ -313,7 +309,6 @@ public class Plane : MonoBehaviour
     
     IEnumerator UpMass()
     {
-        // Lấy Rigidbody2D từ GManager
         Rigidbody2D airplaneRb = GManager.instance.airplaneRigidbody2D;
         
         if (airplaneRb == null)
@@ -324,7 +319,6 @@ public class Plane : MonoBehaviour
         GManager.instance.downFuelImage.gameObject.SetActive(false);
         GManager.instance.upAircraftImage.gameObject.SetActive(false);
         
-        // Lấy góc ban đầu khi máy bay chạm đất
         float initialAngleZ = GetCurrentRotationZ(airplaneRb);
         float initialAngleX = airplaneRb.transform.eulerAngles.x;
         if (initialAngleZ < -15f || initialAngleZ > 15f){
@@ -332,21 +326,19 @@ public class Plane : MonoBehaviour
             AudioManager.instance.StopPlayerSound();
             MakePlaneBlackAndExplode();
             Debug.Log("Airplane crashed due to excessive tilt angle: " + initialAngleZ);
-            TextIntro.instance.GetRandomTextWinMessage(0); // bad
+            TextIntro.instance.GetRandomTextWinMessage(0); 
         }
         else{
             AudioManager.instance.PlaySound(AudioManager.instance.perfectLandingSoundClip);
             AudioManager.instance.StopPlayerSound();
-            TextIntro.instance.GetRandomTextWinMessage(1); // good
+            TextIntro.instance.GetRandomTextWinMessage(1); 
             Settings.instance.ImageErrorAngleZ.gameObject.SetActive(false);
 
 
-            if (initialAngleX > 180f) initialAngleX -= 360f; // Chuẩn hóa về [-180, 180]
+            if (initialAngleX > 180f) initialAngleX -= 360f; 
             
-            // Lấy velocity ban đầu
             Vector2 initialVelocity = airplaneRb.velocity;
             
-            // Thời gian để giảm góc và velocity về 0 (có thể điều chỉnh)
             float duration = 3f;
             float elapsedTime = 0f;
             
@@ -354,11 +346,9 @@ public class Plane : MonoBehaviour
             {
                 elapsedTime += Time.deltaTime;
                 
-                // Tính tỷ lệ giảm dần (từ 1 về 0)
                 float t = elapsedTime / duration;
-                float smoothT = 1f - t; // Giảm từ 1 về 0
+                float smoothT = 1f - t; 
                 
-                // Giảm từ từ rotation về 0
                 float targetAngleZ = initialAngleZ * smoothT;
                 float targetAngleX = initialAngleX * smoothT;
                 Vector3 currentRotation = airplaneRb.transform.eulerAngles;
@@ -366,21 +356,18 @@ public class Plane : MonoBehaviour
                 currentRotation.x = targetAngleX;
                 airplaneRb.transform.eulerAngles = currentRotation;
                 
-                // Giảm từ từ velocity về 0
                 Vector2 targetVelocity = initialVelocity * smoothT;
                 airplaneRb.velocity = targetVelocity;
                 
                 yield return null;
             }
             
-            // Đảm bảo rotation và velocity về 0 hoàn toàn
             Vector3 finalRotation = airplaneRb.transform.eulerAngles;
             finalRotation.z = 0f;
             finalRotation.x = 0f;
             airplaneRb.transform.eulerAngles = finalRotation;
             airplaneRb.velocity = Vector2.zero;
             
-            // Có thể thêm logic khi máy bay đã dừng hoàn toàn
             Debug.Log("Airplane stopped sliding");
             StartCoroutine(OpenImageWIn());
             }
@@ -397,33 +384,25 @@ public class Plane : MonoBehaviour
 
         Debug.Log("Making plane black and explode");
 
-        // Đổi vật liệu nếu có
         var planeRenderer = GetComponent<Renderer>();
         if (planeRenderer != null && blackMaterial != null)
             planeRenderer.material = blackMaterial;
 
-        // RESET / TWEEN ROTATION
         if (resetRotationOnExplode && GManager.instance != null && GManager.instance.airplaneRigidbody2D != null)
         {
             var rb = GManager.instance.airplaneRigidbody2D;
             rb.angularVelocity = 0f;
 
-            // Tween về góc thẳng (Z = 0)
             Vector3 targetEuler = rb.transform.eulerAngles;
             targetEuler.z = 0f;
 
-            // Nếu có DOTween: tween mượt
             rb.transform.DORotate(targetEuler, explodeRotationResetTime)
                 .SetEase(Ease.OutQuad)
                 .OnComplete(() =>
                 {
-                    // Khóa luôn rotation tránh lệch lại
                     rb.constraints = RigidbodyConstraints2D.FreezeRotation;
                 });
         }
-
-        // Nếu không dùng DOTween thì có thể làm tức thì:
-        // var e = transform.eulerAngles; e.z = 0; transform.eulerAngles = e;
 
         EffectRotaryFront.ExplodeAll();
         if (DestroyWheels.instance != null) DestroyWheels.instance.Explode();
@@ -434,8 +413,6 @@ public class Plane : MonoBehaviour
 
         StartCoroutine(DelayTwoSeconds(2f));
     }
-
-    // Hàm helper lấy rotation Z chuẩn hóa về [-180, 180]
     float GetCurrentRotationZ(Rigidbody2D rb)
     {
         float z = rb.transform.eulerAngles.z;
@@ -449,7 +426,6 @@ public class Plane : MonoBehaviour
         
         float  finalDistance = GManager.instance.distanceTraveled;
         Debug.Log("Opening Win Image... 1" + finalDistance);
-        // Đang lỗi ở đây: Chưa post điểm lên leaderboard được
         if (LeaderboardManager.Instance != null)
         {
             LeaderboardManager.Instance.PostScore((int)finalDistance);
@@ -457,7 +433,6 @@ public class Plane : MonoBehaviour
         yield return new WaitForSeconds(2f);
         if (!isAddMoneyDone)
         {
-            // THÊM: Lưu GameObject máy bay hiện tại trước khi kết thúc game
             SaveCurrentAirplane();
             AudioManager.instance.PlaySound(AudioManager.instance.victorySoundClip);
             GManager.instance.coinEffect.Stop();
@@ -468,9 +443,6 @@ public class Plane : MonoBehaviour
             Debug.Log("Money from Distance: " + moneyDistance + " | Current Money: " + moneyCollect + " | Total Money: " + moneyTotal1);
             
             Debug.Log("Updated Total Money: " + GManager.instance.totalMoney);
-            // Settings.instance.totalMoneyPlayText.text = "" + moneyTotal;
-
-            // Cập nhật UI
             GManager.instance.totalMoneyText.text = "" + GManager.instance.totalMoney;
             GManager.instance.moneyText.text = "" + moneyCollect;
 
@@ -482,15 +454,11 @@ public class Plane : MonoBehaviour
                 Debug.Log("Opening Win Image... 3" + (int)finalDistance);
                 PlayerPrefs.Save();
             }
-
-
-            // Lưu TotalMoney và đảm bảo lưu ngay
             
             Settings.instance.OpenWinImage();
         }
     }
     
-    // THÊM: Hàm lưu tên GameObject máy bay hiện tại
     void SaveCurrentAirplane()
     {
         if (GManager.instance != null && GManager.instance.airplaneRigidbody2D != null)
