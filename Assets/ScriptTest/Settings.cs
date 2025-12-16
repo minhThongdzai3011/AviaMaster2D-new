@@ -48,6 +48,7 @@ public class Settings : MonoBehaviour
     public Image imageFill;
     public Image imageDiamondCoinText;
     public Image imageHighScore;
+    public Image imageGuide;
 
     [Header("Button Settings")]
     public Button AdsButton;
@@ -95,19 +96,29 @@ public class Settings : MonoBehaviour
             AdsLuckyWheelButton.gameObject.SetActive(false);
         }
         
-        currentTime = PlayerPrefs.GetInt("SaveTime", 900);
-        if (currentTime < 900)
+        currentTime = PlayerPrefs.GetInt("SaveTime", 10);
+
+        if (currentTime < 10 && currentTime > 0) 
         {
-            countdownText.text = currentTime.ToString();
-            StartCoroutine(CountdownCoroutine());
             resultText.text = "Waiting...";
             isSpinning = false;
-
+            StartCountdown(); 
         }
-        if (currentTime == 0)
+        else if (currentTime <= 0)
         {
+            resultText.text = "Spin";
+            isSpinning = true;
             AdsLuckyWheelButton.gameObject.SetActive(false);
         }
+        else
+        {
+            resultText.text = "Spin";
+            isSpinning = true;
+        }
+        // if (currentTime == 0)
+        // {
+        //     AdsLuckyWheelButton.gameObject.SetActive(false);
+        // }
 
         // Load settings từ PlayerPrefs
         LoadSettings();
@@ -669,7 +680,6 @@ public class Settings : MonoBehaviour
         {
             isCloseWinImage = true;
             butttonExitImageWin.gameObject.SetActive(true);
-            // AdsButton.gameObject.SetActive(true);
             
 
             Debug.Log("Cho phép đóng WinImage!");
@@ -680,42 +690,55 @@ public class Settings : MonoBehaviour
     public bool isCountingDown = false;
     public void StartCountdown()
     {
-        if (isCountingDown)
+        if (!isCountingDown) 
         {
+            isCountingDown = true;
             StartCoroutine(CountdownCoroutine());
+            Debug.Log("Countdown coroutine started!");
         }
     }
 
-    
     public IEnumerator CountdownCoroutine()
     {
-        if (isSpinning)
+        while (currentTime > 0)
         {
+            int minutes = currentTime / 60;
+            int seconds = currentTime % 60;
 
-            while (currentTime > 0)
-            {
-                int minutes = currentTime / 60;
-                int seconds = currentTime % 60;
+            // ✅ Hiển thị countdown
+            resultText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+            
+            // ✅ LƯU currentTime mỗi giây
+            PlayerPrefs.SetInt("SaveTime", currentTime);
+            PlayerPrefs.Save();
 
-                countdownText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
-
-                yield return new WaitForSeconds(1f);
-                currentTime--;
-            }
-
-            countdownText.text = " ";
-            Debug.Log("Countdown finished!");
-            resultText.text = "Spin";
-            isSpinning = true;
-            isCountingDown = false;
+            yield return new WaitForSeconds(1f);
+            currentTime--;
         }
-    }
 
-    public void Exitpannel()
-    {
-        AudioManager.instance.PlaySound(AudioManager.instance.exitSoundClip);
-        pannel.gameObject.SetActive(false);
+        Debug.Log("Countdown finished!");
+        
+        // ✅ Reset về trạng thái có thể spin
+        resultText.text = "Spin";
+        isSpinning = true;
+        isCountingDown = false;
+        
+        // ✅ Ẩn nút AdsLuckyWheel nếu đang hiển thị
+        if (AdsLuckyWheelButton != null)
+        {
+            AdsLuckyWheelButton.gameObject.SetActive(false);
+        }
+        
+        // ✅ Reset flag cold down
+        isColdDownTimeLuckyWheel = false;
+        PlayerPrefs.SetInt("LuckyWheelColdDownAds", 0);
+        PlayerPrefs.Save();
     }
+    // public void Exitpannel()
+    // {
+    //     AudioManager.instance.PlaySound(AudioManager.instance.exitSoundClip);
+    //     pannel.gameObject.SetActive(false);
+    // }
 
     public void buttonChestClicked()
     {
@@ -868,7 +891,10 @@ public class Settings : MonoBehaviour
     }
      
 
-
+    public void HineGuide()
+    {
+        GuideManager.instance.HideGuide();
+    }
 
     
 

@@ -17,6 +17,7 @@ public class Plane : MonoBehaviour
     public ParticleSystem smokeEffect;
     public TrailRenderer trailEffect;
     public TrailRenderer trailRenderer;
+    public TrailRenderer trailRendererPerfect;
 
     public bool isGrounded = false;
 
@@ -123,7 +124,6 @@ public class Plane : MonoBehaviour
             if (!PositionX.instance.isMaxPower)
             {
                 GManager.instance.durationFuel = 0f;
-                StartCoroutine(DelaytoEndGame());
                 Debug.Log("Bonus2 collected - Ending game soon");
                 GManager.instance.newMapText.text = "Fastest balloon pop ever… and you lost!";
                 StartCoroutine(FadeInText(1f));

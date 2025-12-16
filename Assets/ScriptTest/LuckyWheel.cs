@@ -50,21 +50,24 @@ public class LuckyWheel : MonoBehaviour
 
     public void Rotate()
     {
-        AudioManager.instance.PlaySound(AudioManager.instance.luckyWheelSoundClip);
-        if (Settings.instance.isSpinning)
+        Debug.Log("Rotate called. isSpinning: " + Settings.instance.isSpinning + ", resultText: " + Settings.instance.resultText.text);
+        
+        if (Settings.instance.isSpinning && Settings.instance.resultText.text == "Spin")
         {
-
+            AudioManager.instance.PlaySound(AudioManager.instance.luckyWheelSoundClip);
             RotatePower = Random.Range(minRotatePower, maxRotatePower);
             StopPower = Random.Range(minStopPower, maxStopPower);
+            
             if (inRotate == 0)
             {
                 rbody.AddTorque(RotatePower);
                 inRotate = 1;
-                
             }
-
         }
-        // Settings.instance.AdsLuckyWheelButton.gameObject.SetActive(true);
+        else if (!Settings.instance.isSpinning)
+        {
+            Settings.instance.pannel.gameObject.SetActive(false);
+        }
     }
     public float rot;
 
@@ -141,16 +144,23 @@ public class LuckyWheel : MonoBehaviour
             Debug.Log("Rot " + adjustedRot);
         }
 
-        StartCoroutine(WaitAndPrint(1f, rawRot, a , b));
+        StartCoroutine(WaitAndPrint(0f, rawRot, a , b));
         Settings.instance.isSpinning = false;
+
     }
 
     public void Win(string Score)
     {
         print("You Win " + Score);
-        Settings.instance.resultText.text = "Waiting...";
-        Settings.instance.isCountingDown = true;
-        Settings.instance.StartCountdown();
+        
+        Settings.instance.currentTime = 10;
+        PlayerPrefs.SetInt("SaveTime", Settings.instance.currentTime);
+        PlayerPrefs.Save();
+        
+        Settings.instance.isSpinning = false;
+        Settings.instance.StartCountdown(); 
+        StartCoroutine(DelayTwoSeconds(2f));
+        Debug.Log("Win - Countdown started with 10 seconds");
     }
 
     IEnumerator WaitAndPrint(float waitTime, float rot , int a , string b)
@@ -175,6 +185,12 @@ public class LuckyWheel : MonoBehaviour
     IEnumerator StopWheel(float waitTime)
     {
         yield return new WaitForSeconds(waitTime);
+    }
+
+    IEnumerator DelayTwoSeconds(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        Settings.instance.pannel.gameObject.SetActive(false);
     }
 
 }

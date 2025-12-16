@@ -38,8 +38,6 @@ public class PositionX : MonoBehaviour
 
     public void checkPlay()
     {
-        if (BirdGuide.instance.isShowGuide == false)
-        {
             transform.DOPause();
             newPositionX = transform.position;
             float deltaX = newPositionX.x - positionX.x;
@@ -53,6 +51,10 @@ public class PositionX : MonoBehaviour
             if (temp >= 87.5f)
             {
                 isMaxPower = true;
+
+                // Plane.instance.trailRendererPerfect.gameObject.SetActive(true);
+                // Plane.instance.trailEffect.gameObject.SetActive(false);
+
                 GManager.instance.isBonus = true;    
                 Debug.Log(" Kích hoạt Max Power!");
                 AudioManager.instance.PlaySound(AudioManager.instance.perfectAngleSoundClip);
@@ -69,16 +71,22 @@ public class PositionX : MonoBehaviour
                 if (Plane.instance.explosionEffect != null) Plane.instance.explosionEffect.Play();
 
                 StartCoroutine(DelayTwoSeconds(1f));
+                TrailRendererRight.instance.ChangeColor();
             }
             else
             {
                 isMaxPower = false;
+
+                // Plane.instance.trailRendererPerfect.gameObject.SetActive(false);
+                // Plane.instance.trailEffect.gameObject.SetActive(true);
+
                 Debug.Log(" Không kích hoạt Max Power.");
                 AudioManager.instance.PlaySound(AudioManager.instance.notPerfectAngleSoundClip);
                 GManager.instance.isBonus = false;
                 Settings.instance.imageDiamondCoinText.gameObject.SetActive(false);
+                TrailRendererRight.instance.ChangeColor();
             }
-            }
+            
         }
     public void RandomTextMaxPower(){
         string[] texts = {
@@ -104,7 +112,6 @@ public class PositionX : MonoBehaviour
         yield return new WaitForSeconds(duration);
         Debug.Log("Bắt đầu Fade Out Text");
         
-        // ✅ SỬ DỤNG DOTween để fade alpha từ 1 → 0
         GManager.instance.newMapText.DOFade(0f, 1f).OnComplete(() =>
         {
             Debug.Log("Text đã biến mất hoàn toàn!");
