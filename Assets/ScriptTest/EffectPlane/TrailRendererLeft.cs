@@ -4,16 +4,24 @@ using UnityEngine;
 
 public class TrailRendererLeft : MonoBehaviour
 {
-    public static TrailRendererLeft instance;
+    public static TrailRendererLeft  instance;
     public bool isBoosterActive = false;
     private TrailRenderer trailRenderer;
+    private Gradient originalGradient;
     // Start is called before the first frame update
     void Start()
     {
         instance = this;
         trailRenderer = GetComponent<TrailRenderer>();
-        Debug.Log("TrailRendererLeft instance assigned." + (instance != null ? "Success" : "Failure"));
+
+        originalGradient = trailRenderer.colorGradient;
+
+        Debug.Log("TrailRendererRight instance assigned." + (instance != null ? "Success" : "Failure"));
         Debug.Log("TrailRenderer component found: " + (trailRenderer != null ? "Yes" : "No"));
+        // trailRenderer.enabled = false; // Khởi đầu tắt
+
+        
+        
     }
 
     // Update is called once per frame
@@ -24,15 +32,41 @@ public class TrailRendererLeft : MonoBehaviour
 
     public void PlayTrail()
     {
-        if(isBoosterActive)
+        Debug.Log("PlayTrail called. isBoosterActive: " + isBoosterActive + ", isMaxPower: " + PositionX.instance.isMaxPower);
+        if(isBoosterActive && !PositionX.instance.isMaxPower)
         {
+            float time = 0.24f;
+            Gradient gradientPerfect = new Gradient();
+            gradientPerfect.SetKeys(
+                new GradientColorKey[] { new GradientColorKey(Color.red, 0.0f), new GradientColorKey(Color.yellow, 0.5f), new GradientColorKey(Color.white, 1.0f) },
+                new GradientAlphaKey[] { new GradientAlphaKey(1.0f, 0.0f), new GradientAlphaKey(0.5f, 0.5f), new GradientAlphaKey(0.0f, 1.0f) }
+            );
+            trailRenderer.colorGradient = gradientPerfect;
+            trailRenderer.time = time;
+            trailRenderer.enabled = true;
+
+            Debug.Log("TrailRenderer enabled: " + trailRenderer.enabled);
+        }
+        else if (isBoosterActive && PositionX.instance.isMaxPower)
+        {
+            float time = 0.24f;
+            Debug.Log("Activating TrailRenderer with normal gradient.");
+            Gradient gradient = new Gradient();
+            gradient.SetKeys(
+                new GradientColorKey[] { new GradientColorKey(Color.yellow, 0.0f), new GradientColorKey(Color.green, 0.5f), new GradientColorKey(Color.cyan, 1.0f) },
+                new GradientAlphaKey[] { new GradientAlphaKey(1.0f, 0.0f), new GradientAlphaKey(0.5f, 0.5f), new GradientAlphaKey(0.0f, 1.0f) }
+            );
+            trailRenderer.colorGradient = gradient;
+            trailRenderer.time = time;
             trailRenderer.enabled = true;
             Debug.Log("TrailRenderer enabled: " + trailRenderer.enabled);
         }
         else
         {
-            trailRenderer.enabled = false;
-            Debug.Log("TrailRenderer enabled: " + trailRenderer.enabled);
+            float time = 0.12f;
+            trailRenderer.time = time;
+            trailRenderer.enabled = true;
+
         }
     }
 
@@ -62,7 +96,6 @@ public class TrailRendererLeft : MonoBehaviour
             elapsed += Time.deltaTime;
             trail.time = Mathf.Lerp(startTime, 0f, elapsed / duration);
 
-            Debug.Log($"{name} fading... time = {trail.time}");
 
             yield return null;
         }
@@ -71,6 +104,27 @@ public class TrailRendererLeft : MonoBehaviour
         trail.time = startTime;
 
         Debug.Log($"{name} fade DONE");
+    } public void ChangeColor()
+    {
+        if (PositionX.instance.isMaxPower)
+        {
+            Gradient gradientPerfect = new Gradient();
+            gradientPerfect.SetKeys(
+                new GradientColorKey[] { new GradientColorKey(Color.yellow, 0.0f), new GradientColorKey(Color.green, 0.5f), new GradientColorKey(Color.cyan, 1.0f) },
+                new GradientAlphaKey[] { new GradientAlphaKey(1.0f, 0.0f), new GradientAlphaKey(0.5f, 0.5f), new GradientAlphaKey(0.0f, 1.0f) }
+            );
+            trailRenderer.colorGradient = gradientPerfect;
+        }
+        else
+        {
+            Gradient gradient = new Gradient();
+            gradient.SetKeys(
+                new GradientColorKey[] { new GradientColorKey(Color.red, 0.0f), new GradientColorKey(Color.yellow, 0.5f), new GradientColorKey(Color.white, 1.0f) },
+                new GradientAlphaKey[] { new GradientAlphaKey(1.0f, 0.0f), new GradientAlphaKey(0.5f, 0.5f), new GradientAlphaKey(0.0f, 1.0f) }
+            );
+            trailRenderer.colorGradient = gradient;
+
+        }
     }
 
 }

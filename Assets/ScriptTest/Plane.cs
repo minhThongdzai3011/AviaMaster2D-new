@@ -49,6 +49,7 @@ public class Plane : MonoBehaviour
             explosionEffect.Stop();
         }
 
+
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -67,8 +68,17 @@ public class Plane : MonoBehaviour
                 GManager.instance.isBoosterActive = false;
             }
 
-            if (RotaryFront.instance != null)
-                RotaryFront.instance.StopWithDeceleration(3.0f);
+            // Dừng tất cả cánh quạt
+            foreach (var propeller in RotaryFront.instances)
+            {
+                if (propeller != null)
+                    propeller.StopWithDeceleration(3.0f);
+            }
+            foreach (var propeller in RotaryFrontZ.instances)
+            {
+                if (propeller != null)
+                    propeller.StopWithDeceleration(3.0f);
+            }
             
             smokeEffect.Stop();
             
@@ -478,8 +488,17 @@ public class Plane : MonoBehaviour
             GManager.instance.isControllable = false;
             GManager.instance.isBoosterActive = false;
         }
-        if (RotaryFront.instance != null)
-            RotaryFront.instance.StopWithDeceleration(3.0f);
+        // Dừng tất cả cánh quạt
+        foreach (var propeller in RotaryFront.instances)
+        {
+            if (propeller != null)
+                propeller.StopWithDeceleration(3.0f);
+        }
+        foreach (var propeller in RotaryFrontZ.instances)
+        {
+            if (propeller != null)
+                propeller.StopWithDeceleration(3.0f);
+        }
         
         smokeEffect.Stop();
         StartCoroutine(OpenImageWIn());

@@ -72,6 +72,7 @@ public class PositionX : MonoBehaviour
 
                 StartCoroutine(DelayTwoSeconds(1f));
                 TrailRendererRight.instance.ChangeColor();
+                if( TrailRendererLeft.instance != null ){TrailRendererLeft.instance.ChangeColor();}
             }
             else
             {
@@ -85,6 +86,7 @@ public class PositionX : MonoBehaviour
                 GManager.instance.isBonus = false;
                 Settings.instance.imageDiamondCoinText.gameObject.SetActive(false);
                 TrailRendererRight.instance.ChangeColor();
+                if( TrailRendererLeft.instance != null ){TrailRendererLeft.instance.ChangeColor();}
             }
             
         }

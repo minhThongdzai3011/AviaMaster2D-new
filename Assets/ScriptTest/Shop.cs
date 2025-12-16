@@ -655,6 +655,7 @@ public class Shop : MonoBehaviour
         if(gameObjectsPlanes != null && gameObjectsPlanes.Length > 0){
             defaultPlane = gameObjectsPlanes[0];
             GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[0];
+            isRotaryFrontZDone = false;
             CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[0].transform;
             CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[0].transform;
             gameObjectsPlanes[0].SetActive(true);
@@ -719,6 +720,7 @@ public class Shop : MonoBehaviour
         // Thay đổi defaultPlane
         if(gameObjectsPlanes != null && gameObjectsPlanes.Length > 1){
             defaultPlane = gameObjectsPlanes[1];
+            isRotaryFrontZDone = false;
             CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[1].transform;
             CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[1].transform;
             GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[1];
@@ -785,6 +787,7 @@ public class Shop : MonoBehaviour
         if(gameObjectsPlanes != null && gameObjectsPlanes.Length > 2){
             defaultPlane = gameObjectsPlanes[2];
             GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[2];
+            isRotaryFrontZDone = false;
             CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[2].transform;
             CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[2].transform;
             gameObjectsPlanes[2].SetActive(true);
@@ -849,6 +852,7 @@ public class Shop : MonoBehaviour
         if(gameObjectsPlanes != null && gameObjectsPlanes.Length > 3){
             defaultPlane = gameObjectsPlanes[3];
             GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[3];
+            isRotaryFrontZDone = false;
             CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[3].transform;
             CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[3].transform;
             gameObjectsPlanes[3].SetActive(true);
@@ -913,6 +917,7 @@ public class Shop : MonoBehaviour
         if(gameObjectsPlanes != null && gameObjectsPlanes.Length > 4){
             defaultPlane = gameObjectsPlanes[4];
             GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[4];
+            isRotaryFrontZDone = false;
             CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[4].transform;
             CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[4].transform;
             gameObjectsPlanes[4].SetActive(true);
@@ -977,6 +982,7 @@ public class Shop : MonoBehaviour
         if(gameObjectsPlanes != null && gameObjectsPlanes.Length > 5){
             defaultPlane = gameObjectsPlanes[5];
             GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[5];
+            isRotaryFrontZDone = false;
             CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[5].transform;
             CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[5].transform;
             gameObjectsPlanes[5].SetActive(true);
@@ -1106,6 +1112,7 @@ public class Shop : MonoBehaviour
         if(gameObjectsPlanes != null && gameObjectsPlanes.Length > 7){
             defaultPlane = gameObjectsPlanes[7];
             GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[7];
+            isRotaryFrontZDone = false;
             CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[7].transform;
             CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[7].transform;
             gameObjectsPlanes[7].SetActive(true);
@@ -1170,6 +1177,7 @@ public class Shop : MonoBehaviour
         if(gameObjectsPlanes != null && gameObjectsPlanes.Length > 8){
             defaultPlane = gameObjectsPlanes[8];
             GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[8];
+            isRotaryFrontZDone = false;
             CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[8].transform;
             CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[8].transform;
             gameObjectsPlanes[8].SetActive(true);
@@ -1234,6 +1242,7 @@ public class Shop : MonoBehaviour
         if(gameObjectsPlanes != null && gameObjectsPlanes.Length > 9){
             defaultPlane = gameObjectsPlanes[9];
             GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[9];
+            isRotaryFrontZDone = false;
             CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[9].transform;
             CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[9].transform;
             gameObjectsPlanes[9].SetActive(true);
@@ -1299,6 +1308,7 @@ public class Shop : MonoBehaviour
         if(gameObjectsPlanes != null && gameObjectsPlanes.Length > 10){
             defaultPlane = gameObjectsPlanes[10];
             GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[10];
+            isRotaryFrontZDone = false;
             CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[10].transform;
             CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[10].transform;
             gameObjectsPlanes[10].SetActive(true);
@@ -1363,6 +1373,7 @@ public class Shop : MonoBehaviour
         if(gameObjectsPlanes != null && gameObjectsPlanes.Length > 11){
             defaultPlane = gameObjectsPlanes[11];
             GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[11];
+            isRotaryFrontZDone = false;
             CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[11].transform;
             CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[11].transform;
             gameObjectsPlanes[11].SetActive(true);
@@ -1427,6 +1438,7 @@ public class Shop : MonoBehaviour
         if(gameObjectsPlanes != null && gameObjectsPlanes.Length > 12){
             defaultPlane = gameObjectsPlanes[12];
             GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[12];
+            isRotaryFrontZDone = false;
             CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[12].transform;
             CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[12].transform;
             gameObjectsPlanes[12].SetActive(true);

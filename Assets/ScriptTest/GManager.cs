@@ -272,40 +272,48 @@ public class GManager : MonoBehaviour
         float targetX = airplaneRigidbody2D.position.x + r;
 
         // Thay thế đoạn code trong LaunchSequence():
-        if(airplaneRigidbody2D.name == "Forest" || airplaneRigidbody2D.name == "Avocado" || airplaneRigidbody2D.name == "BeeGee" || airplaneRigidbody2D.name == "Pancake" || airplaneRigidbody2D.name == "Scruffy") 
+        Debug.Log("Preparing to start horizontal flight..." + airplaneRigidbody2D.name);
+        if(airplaneRigidbody2D.name == "Forest" || airplaneRigidbody2D.name == "Avocado" || airplaneRigidbody2D.name == "BeeGee" || airplaneRigidbody2D.name == "Pancake" || airplaneRigidbody2D.name == "Scruffy" || airplaneRigidbody2D.name == "Jungle") 
         {
             Debug.Log("Start Rotation Front" + airplaneRigidbody2D.name +" isRotary " + Shop.instance.isRotaryFrontZDone);
 
-            // THAY ĐỔI: Tìm RotaryFront trên máy bay hiện tại thay vì dùng singleton
+            // THAY ĐỔI: Tìm TẤT CẢ RotaryFront trên máy bay để hỗ trợ nhiều cánh quạt
             if (Shop.instance.isRotaryFrontZDone)
             {
-
-                RotaryFrontZ currentRotaryFront = airplaneRigidbody2D.GetComponentInChildren<RotaryFrontZ>();
-                Debug.Log($"[DEBUG] Component: {currentRotaryFront}, " +
-                            $"IsNull: {currentRotaryFront == null}, " +
-                            $"IsActive: {(currentRotaryFront != null ? currentRotaryFront.gameObject.activeInHierarchy : false)}");
-                if (currentRotaryFront != null && currentRotaryFront.gameObject.activeInHierarchy)
+                RotaryFrontZ[] propellers = airplaneRigidbody2D.GetComponentsInChildren<RotaryFrontZ>();
+                Debug.Log($"[DEBUG] Found {propellers.Length} RotaryFrontZ propellers on {airplaneRigidbody2D.name}");
+                
+                foreach (var propeller in propellers)
                 {
-                    currentRotaryFront.StartRotation();
-                    Debug.Log($"Started rotation on Z {airplaneRigidbody2D.name}");
-                    Debug.Log("RotaryFrontZ StartRotation called from GManager" + currentRotaryFront);
+                    if (propeller != null && propeller.gameObject.activeInHierarchy)
+                    {
+                        propeller.StartRotation();
+                        Debug.Log($"Started rotation on RotaryFrontZ: {propeller.gameObject.name}");
+                    }
                 }
-                else{
-                    Debug.LogWarning($"RotaryFrontZ component not found on {airplaneRigidbody2D.name}");
+                
+                if (propellers.Length == 0)
+                {
+                    Debug.LogWarning($"No RotaryFrontZ component found on {airplaneRigidbody2D.name}");
                 }
             }
-            else{
+            else
+            {
+                RotaryFront[] propellers = airplaneRigidbody2D.GetComponentsInChildren<RotaryFront>();
+                Debug.Log($"[DEBUG] Found {propellers.Length} RotaryFront propellers on {airplaneRigidbody2D.name}");
                 
-                RotaryFront currentRotaryFront = airplaneRigidbody2D.GetComponentInChildren<RotaryFront>();
-                Debug.Log($"[DEBUG] 1 Component: {currentRotaryFront}, " +
-                            $"IsNull: {currentRotaryFront == null}, " +
-                            $"IsActive: {(currentRotaryFront != null ? currentRotaryFront.gameObject.activeInHierarchy : false)}");
-                if (currentRotaryFront != null && currentRotaryFront.gameObject.activeInHierarchy)
+                foreach (var propeller in propellers)
                 {
-                    currentRotaryFront.StartRotation();
+                    if (propeller != null && propeller.gameObject.activeInHierarchy)
+                    {
+                        propeller.StartRotation();
+                        Debug.Log($"Started rotation on RotaryFront: {propeller.gameObject.name}");
+                    }
+                }
+                
+                if (propellers.Length > 0)
+                {
                     AudioManager.instance.PlayPlayerSound(AudioManager.instance.takeOffSoundClip);
-                    Debug.Log($"Started rotation on {airplaneRigidbody2D.name}");
-                    Debug.Log("RotaryFront StartRotation called from GManager" + currentRotaryFront);
                 }
             }
         }

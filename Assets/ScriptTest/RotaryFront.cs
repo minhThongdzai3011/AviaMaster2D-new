@@ -1,9 +1,11 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class RotaryFront : MonoBehaviour
 {
-    public static RotaryFront instance { get; private set; }
+    // Thay đổi từ singleton sang List để hỗ trợ nhiều cánh quạt
+    public static List<RotaryFront> instances = new List<RotaryFront>();
 
     [Header("Rotation")]
     [Tooltip("Tốc độ quay (độ/giây)")]
@@ -25,12 +27,11 @@ public class RotaryFront : MonoBehaviour
 
     void Awake()
     {
-        // Singleton nhẹ, nếu cần thay đổi behavior hãy điều chỉnh
-        if (instance != null && instance != this)
+        // Thêm instance này vào list
+        if (!instances.Contains(this))
         {
-            return;
+            instances.Add(this);
         }
-        instance = this;
 
         initialLocalRotation = transform.localRotation;
     }
@@ -47,7 +48,7 @@ public class RotaryFront : MonoBehaviour
 
     void OnDestroy()
     {
-        if (instance == this) instance = null;
+        instances.Remove(this);
     }
 
     // Bắt đầu quay nếu chưa chạy
