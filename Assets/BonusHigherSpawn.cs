@@ -63,20 +63,28 @@ public class BonusHigherSpawn : MonoBehaviour
     void SpawnRocketItem()
     {
         if (BonusPrefabs.Length == 0) return;
-        if (GManager.instance.isControllable)
-        {
-            int prefabIndex = Random.Range(0, BonusPrefabs.Length);
-            Vector3 spawnPosition = new Vector3(
-                someVector.x + spawnRangeX,
-                Random.Range(spawnRangeYmin, spawnRangeYmax),
-                someVector.z
-            );
+        if (!GManager.instance.isControllable) return;
+        if (Plane.instance == null) return;
 
-            Instantiate(BonusPrefabs[prefabIndex], spawnPosition, BonusPrefabs[prefabIndex].transform.rotation);
-            Debug.Log("Spawned Bonus at: " + spawnPosition);
-            spawnRangeX += Random.Range(rangeXmin, rangeXmax);
-        }
+        int prefabIndex = Random.Range(0, BonusPrefabs.Length);
+
+        Vector3 planePos = Plane.instance.transform.position;
+
+        Vector3 spawnPosition = new Vector3(
+            planePos.x + Random.Range(-spawnRangeX, spawnRangeX), 
+            planePos.y + Random.Range(rangeXmin, rangeXmax),    
+            planePos.z
+        );
+
+        Instantiate(
+            BonusPrefabs[prefabIndex],
+            spawnPosition,
+            Quaternion.identity
+        );
+
+        Debug.Log("Spawned Bonus at: " + spawnPosition);
     }
+
 
     public void DeleteSpawnedItems()
     {

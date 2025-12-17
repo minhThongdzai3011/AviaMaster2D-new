@@ -107,6 +107,30 @@ public class Plane : MonoBehaviour
                 Destroy(other.gameObject);
             }
         }
+        if (other.CompareTag("Diamond"))
+        {
+            AudioManager.instance.PlaySound(AudioManager.instance.collectDiamondSoundClip);
+            GManager.instance.totalDiamond += 1;
+            GManager.instance.totalDiamondText.text = GManager.instance.totalDiamond.ToString("F0");
+            Debug.Log("Diamond collected +1" + GManager.instance.totalDiamond);
+            PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
+            PlayerPrefs.Save();
+            GManager.instance.SaveTotalDiamond();
+            Destroy(other.gameObject);
+        }
+        if (other.CompareTag("Boom"))
+        {
+            AudioManager.instance.PlaySound(AudioManager.instance.explosionSoundClip);
+            
+            if (CameraManager.instance != null)
+            {
+                CameraManager.instance.FreezeCamera();
+            }
+            MakePlaneBlackAndExplode();
+            GManager.instance.newMapText.text = "Space isn’t empty enough for this pilot!";
+            GManager.instance.airplaneRigidbody2D.velocity = Vector2.zero;
+            
+        }
         if (other.CompareTag("bird"))
         {
             AudioManager.instance.PlaySound(AudioManager.instance.crashBonusSoundClip);

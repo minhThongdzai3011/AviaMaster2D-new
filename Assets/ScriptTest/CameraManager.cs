@@ -74,6 +74,9 @@ public class CameraManager : MonoBehaviour
     private bool isBlendingScreenPosition = false;
     private float screenBlendStartTime = 0f;
     public float screenPositionBlendTime = 2f; // Thời gian blend ScreenX/Y
+    
+    // Flag để freeze camera hoàn toàn (khi nổ boom)
+    private bool isCameraFrozen = false;
 
 
     void Start()
@@ -112,6 +115,9 @@ public class CameraManager : MonoBehaviour
 
     void FixedUpdate()
     {
+        // DỪNG HOÀN TOÀN camera nếu bị frozen (khi đâm Boom)
+        if (isCameraFrozen) return;
+        
         // Xử lý blend ScreenX/Y độc lập
         if (isBlendingScreenPosition)
         {
@@ -656,9 +662,38 @@ Vector3 CalculateGroundVisiblePosition()
         );
     }
     
+    // Method để freeze camera hoàn toàn (khi đâm Boom)
+    public void FreezeCamera()
+    {
+        // Tắt tất cả Follow/LookAt
+        if (virtualCamera != null)
+        {
+            virtualCamera.Follow = null;
+            virtualCamera.LookAt = null;
+        }
+        
+        // Set flag frozen để dừng mọi logic trong FixedUpdate
+        isCameraFrozen = true;
+        
+        // Dừng tất cả animation và movement
+        isCameraDelayActive = false;
+        isBlending = false;
+        isFollowingAircraft = false;
+        isBlendingScreenPosition = false;
+        isScreenPositionLocked = true;
+        
+        // Tắt Cinemachine để không tự động di chuyển
+        SetCinemachineActive(false);
+        
+        Debug.Log($"✋ Camera FROZEN at explosion position: {virtualCamera.transform.position}");
+    }
+    
     // Method để reset camera về vị trí ban đầu
     public void ResetCamera()
     {
+        // Bỏ frozen flag
+        isCameraFrozen = false;
+        
         targetOrthoSize = baseOrthoSize;
         isFollowingAircraft = false;
         virtualCamera.transform.position = originalCameraPosition;

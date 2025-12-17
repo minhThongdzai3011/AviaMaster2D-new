@@ -42,6 +42,8 @@ TagManager:
   - NofitiDesert
   - NofitiIce
   - NofitiLava
+  - Diamond
+  - Boom
   layers:
   - Default
   - TransparentFX

@@ -512,6 +512,7 @@ public class GManager : MonoBehaviour
         RocketSpawner.instance.StartSpawning();
         BonusSpawner.instance.StartSpawning();
         BonusHigherSpawn.instance.StartSpawning();
+        DiamondHigherSpawn.instance.StartSpawning();
         Debug.Log($"Máy bay bắt đầu điều khiển với durationFuel = {durationFuel}s (rateFuel = {rateFuel}%)");
         if (PositionX.instance.isMaxPower)
         {

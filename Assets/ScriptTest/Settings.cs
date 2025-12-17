@@ -97,6 +97,11 @@ public class Settings : MonoBehaviour
         }
         
         currentTime = PlayerPrefs.GetInt("SaveTime", 100);
+        
+        // Load chest tier (giới hạn tối đa là 3)
+        chestTier = PlayerPrefs.GetInt("ChestTier", 1);
+        if (chestTier > 3) chestTier = 3;
+        Debug.Log($"Loaded ChestTier: {chestTier} - Requirement: {GetCurrentRequirement()}coin -> Reward: {GetCurrentReward()}coin");
 
         if (currentTime < 100 && currentTime > 0) 
         {
@@ -559,12 +564,17 @@ public class Settings : MonoBehaviour
     public bool isPrizeCoin = false;
     bool isCheckAddTargetValue = true;
     public bool isPrizeCoinDone = true;
+    
+    [Header("Chest Tier System")]
+    public int chestTier = 1; // Lần thứ mấy (1, 2, 3)
+    public float[] chestRequirements = { 500f, 1000f, 2000f }; // Coin cần kiếm được
+    public int[] chestRewards = { 2000, 5000, 10000 }; // Phần thưởng tương ứng
     void UpdateSliderPrizeCoin()
     {
         if (prizeSlider != null)
         {
-            // Tính toán giá trị mục tiêu dựa trên khoảng cách bay được
-            float maxDistanceCoin = 500f; // Khoảng cách tối đa để đạt 100%
+            // Tính toán giá trị mục tiêu dựa trên tier hiện tại
+            float maxDistanceCoin = GetCurrentRequirement(); // Thay đổi theo tier
 
             if (Plane.instance == null)
             {
@@ -604,21 +614,43 @@ public class Settings : MonoBehaviour
     public bool isShakeZ = false;
     public bool isShake = true;
 
+
+    private Tween shakeTween;
+
     public void ShakeZ()
     {
-        if (isShakeZ && isShake)
-        {
-            RectTransform rect = chestImage.rectTransform;
+        if (!isShakeZ || !isShake) return;
 
-            rect.DOShakeRotation(0.2f, new Vector3(0, 0, 20), 10, 90, false)
-                .SetEase(Ease.OutQuad)
-                .SetLoops(4, LoopType.Restart);
+        RectTransform rect = chestImage.rectTransform;
 
-            isShakeZ = false;
-            isShake = false;
-            isButtonChestClickeds = true;
-        }
+        // Kill tween cũ nếu có
+        shakeTween?.Kill();
+
+        // Lắc LIÊN TỤC trong 2 giây
+        Tween shake2s = rect.DOShakeRotation(
+                0.2f,                    // mỗi nhịp lắc nhỏ
+                new Vector3(0, 0, 5),    // độ lắc
+                10,
+                90,
+                false
+            )
+            .SetEase(Ease.OutQuad)
+            .SetLoops(10, LoopType.Restart); 
+            // 0.2s * 10 = 2 GIÂY
+
+        // Sequence: lắc 2s -> dừng 1s -> lặp
+        shakeTween = DOTween.Sequence()
+            .Append(shake2s)
+            .AppendInterval(1f)          // ⏸️ DỪNG 1 GIÂY
+            .SetLoops(-1, LoopType.Restart);
+
+        isShakeZ = false;
+        isShake = false;
+        isButtonChestClickeds = true;
     }
+
+
+
 
     // IEnumerator StopShakeZ()
     // {
@@ -775,12 +807,28 @@ public class Settings : MonoBehaviour
         }
         AudioManager.instance.PlaySound(AudioManager.instance.buttonSoundClip);
         
+        // Lấy phần thưởng theo tier hiện tại
+        int currentReward = GetCurrentReward();
+        Debug.Log($"Chest Tier {chestTier} claimed! Reward: {currentReward} coins");
+        
         Sequence seq = DOTween.Sequence();
-        seq.Append(DOVirtual.Float(totalValue, totalValue+2000, 2f, v =>
+        seq.Append(DOVirtual.Float(totalValue, totalValue + currentReward, 2f, v =>
         {
             totalMoneyPlayText.text = ((int)v).ToString();
         }));
-        totalValue += 2000;
+        totalValue += currentReward;
+        
+        // Tăng tier (giới hạn ở 3)
+        if (chestTier < 3)
+        {
+            chestTier++;
+            PlayerPrefs.SetInt("ChestTier", chestTier);
+            Debug.Log($"Chest tier increased to {chestTier}! Next requirement: {GetCurrentRequirement()}coin -> {GetCurrentReward()}coin");
+        }
+        else
+        {
+            Debug.Log($"Max chest tier reached! Stays at tier 3: {GetCurrentRequirement()}coin -> {GetCurrentReward()}coin");
+        }
         PlayerPrefs.SetFloat("TotalMoney", GManager.instance.totalMoney);
         PlayerPrefs.Save();
         
@@ -893,6 +941,19 @@ public class Settings : MonoBehaviour
     public void HineGuide()
     {
         GuideManager.instance.HideGuide();
+    }
+    
+    // Helper methods cho Chest Tier System
+    float GetCurrentRequirement()
+    {
+        int index = Mathf.Clamp(chestTier - 1, 0, chestRequirements.Length - 1);
+        return chestRequirements[index];
+    }
+    
+    int GetCurrentReward()
+    {
+        int index = Mathf.Clamp(chestTier - 1, 0, chestRewards.Length - 1);
+        return chestRewards[index];
     }
 
     

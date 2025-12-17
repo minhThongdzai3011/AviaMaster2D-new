@@ -18,10 +18,20 @@ public class Shop : MonoBehaviour
 
     [Header("Enhanced Carousel System")]
     public Image[] planeImages; 
+    public Image[] planeBackgrounds;
+    public Button[] planeButtons;
+
     
     [Header("Visual Settings")]
-    public float moveDuration = 0.5f;
-    public Ease moveEase = Ease.OutQuart;
+    public float moveDuration = 0.6f;
+    public Ease moveEase = Ease.OutCubic;
+    
+    [Header("Carousel Layout - 14 planes total")]
+    public float centerScale = 1.0f;        // Scale máy bay ở giữa (567)
+    public float sideScale = 0.7f;          // Scale máy bay 2 bên
+    public float hiddenScale = 0.5f;        // Scale máy bay ẩn
+    public float spacing = 400f;            // Khoảng cách giữa các máy bay
+    public float depthFadeAlpha = 0.3f;     // Độ mờ của máy bay xa
     
     [Header("Advanced Effects")]
     public float rotationAngle = 20f;
@@ -176,15 +186,15 @@ public class Shop : MonoBehaviour
         originalPositions = new Vector2[length];
         currentOrder = new int[length];
         
-        // Lưu vị trí ban đầu và khởi tạo thứ tự
+        // Khởi tạo thứ tự: 0-13 tương ứng với 14 máy bay
         for (int i = 0; i < length; i++)
         {
-            originalPositions[i] = planeImages[i].rectTransform.anchoredPosition;
             currentOrder[i] = i;
+            originalPositions[i] = planeImages[i].rectTransform.anchoredPosition;
         }
         
-        // Thiết lập trạng thái ban đầu với hiệu ứng
-        StartCoroutine(InitialShowcase());
+        // Đặt vị trí ban đầu ngay lập tức (không animation)
+        UpdateCarouselDisplay(immediate: true);
     }
     
     // Method để reinitialize carousel khi cần
@@ -195,22 +205,7 @@ public class Shop : MonoBehaviour
         {
             currentOrder[i] = i;
         }
-        UpdateCarouselDisplay();
-    }
-    
-    IEnumerator InitialShowcase()
-    {
-        // Hiệu ứng xuất hiện đơn giản
-        foreach (var img in planeImages)
-        {
-            img.transform.localScale = Vector3.one;
-            img.color = Color.white;
-        }
-        
-        yield return new WaitForSeconds(0.1f);
-        
-        // Áp dụng trạng thái carousel
-        UpdateCarouselDisplay();
+        UpdateCarouselDisplay(immediate: true);
     }
     
     IEnumerator ShowPlaneWithEffect(int index, float delay)
@@ -251,74 +246,183 @@ public class Shop : MonoBehaviour
     {
         isAnimating = true;
         
-        // Phase 1: Slide out với hiệu ứng 3D
-        yield return StartCoroutine(SlideOutEffect(direction));
+        // Lưu trạng thái cũ trước khi shift
+        int[] oldOrder = (int[])currentOrder.Clone();
         
-        // Cập nhật thứ tự
+        // Shift order trước khi animate
         ShiftOrder(direction);
         
-        // Phase 2: Slide in với hiệu ứng mới
-        yield return StartCoroutine(SlideInEffect(-direction));
-        
-        // Phase 3: Cập nhật trạng thái carousel
-        UpdateCarouselDisplay();
+        // Animate với fade in/out effect
+        yield return StartCoroutine(AnimateCarouselTransition(direction, oldOrder));
         
         isAnimating = false;
     }
     
-    IEnumerator SlideOutEffect(int direction)
+    IEnumerator AnimateCarouselTransition(int direction, int[] oldOrder)
     {
-        Sequence slideOut = DOTween.Sequence();
+        // direction: -3 = sang phải (ấn arrow phải), +3 = sang trái (ấn arrow trái)
+        // Offset 100px cho fade effect
+        float fadeOffset = 100f;
+        
+        // Xác định hướng di chuyển màn hình:
+        // Arrow PHẢI (-3): các ảnh di chuyển SANG TRÁI (moveDirection = -1)
+        // Arrow TRÁI (+3): các ảnh di chuyển SANG PHẢI (moveDirection = +1)
+        float moveDirection = direction > 0 ? 1f : -1f;
+        
+        // ========== PHASE 1: FADE OUT (0.5 * moveDuration) ==========
+        Sequence fadeOutSeq = DOTween.Sequence();
         
         for (int i = 0; i < planeImages.Length; i++)
         {
             Image plane = planeImages[i];
-            Vector3 targetPos = plane.rectTransform.anchoredPosition + 
-                               new Vector2(direction * 50f, 0f);
+            Button button = planeButtons[i];
+            Image background = planeBackgrounds[i];
+            Vector2 currentPos = plane.rectTransform.anchoredPosition;
+            Vector2 fadeOutPos = currentPos + new Vector2(moveDirection * fadeOffset, 0);
             
-            slideOut.Join(plane.rectTransform.DOAnchorPos(targetPos, moveDuration)
-                .SetEase(Ease.OutQuart));
+            // Tất cả ảnh di chuyển 100px và fade out đồng thời
+            fadeOutSeq.Join(plane.rectTransform.DOAnchorPos(fadeOutPos, moveDuration * 0.5f)
+                .SetEase(Ease.OutQuad));
+            fadeOutSeq.Join(plane.DOFade(0f, moveDuration * 0.5f)
+                .SetEase(Ease.InQuad));
+
+            fadeOutSeq.Join(background.DOFade(0f, moveDuration * 0.5f)
+                .SetEase(Ease.InQuad));
+            fadeOutSeq.Join(button.image.DOFade(0f, moveDuration * 0.5f)
+                .SetEase(Ease.InQuad));
         }
         
-        yield return slideOut.WaitForCompletion();
+        yield return fadeOutSeq.WaitForCompletion();
+        
+        // ========== PHASE 2: REPOSITION ==========
+        // Set tất cả ảnh về vị trí bắt đầu của fade in (vị trí đích - 100px từ hướng ngược lại)
+        for (int i = 0; i < planeImages.Length; i++)
+        {
+            Image plane = planeImages[i];
+            Button button = planeButtons[i];
+            Image background = planeBackgrounds[i];
+            CarouselState targetState = CalculateCarouselState(i);
+            
+            // Vị trí bắt đầu fade in: từ phía ngược lại + 100px
+            Vector2 fadeInStartPos = targetState.position - new Vector2(moveDirection * fadeOffset, 0);
+            plane.rectTransform.anchoredPosition = fadeInStartPos;
+            
+            // Set alpha = 0
+            Color c = plane.color;
+            c.a = 0;
+            plane.color = c;
+            
+            // Set scale và rotation ngay lập tức
+            plane.transform.localScale = Vector3.one * targetState.scale;
+            plane.transform.rotation = Quaternion.Euler(0, targetState.rotationY, 0);
+        }
+        
+        // ========== PHASE 3: FADE IN (0.5 * moveDuration) ==========
+        Sequence fadeInSeq = DOTween.Sequence();
+        
+        for (int i = 0; i < planeImages.Length; i++)
+        {
+            Image plane = planeImages[i];
+            Button button = planeButtons[i];
+            Image background = planeBackgrounds[i];
+            CarouselState targetState = CalculateCarouselState(i);
+            
+            // Tất cả ảnh di chuyển về vị trí đích và fade in đồng thời
+            fadeInSeq.Join(plane.rectTransform.DOAnchorPos(targetState.position, moveDuration * 0.5f)
+                .SetEase(Ease.OutQuad));
+            fadeInSeq.Join(plane.DOFade(targetState.alpha, moveDuration * 0.5f)
+                .SetEase(Ease.OutQuad));
+            fadeInSeq.Join(background.DOFade(targetState.alpha, moveDuration * 0.5f)
+                .SetEase(Ease.OutQuad));
+            fadeInSeq.Join(button.image.DOFade(targetState.alpha, moveDuration * 0.5f)
+                .SetEase(Ease.OutQuad));
+        }
+        
+        yield return fadeInSeq.WaitForCompletion();
     }
     
-    IEnumerator SlideInEffect(int direction)
+    void UpdateCarouselDisplay(bool immediate = false)
     {
-        // Reset positions for slide in
-        for (int i = 0; i < planeImages.Length; i++)
-        {
-            Vector3 startPos = originalPositions[currentOrder[i]] + 
-                              new Vector2(direction * 100f, 0f);
-            planeImages[i].rectTransform.anchoredPosition = startPos;
-        }
-        
-        Sequence slideIn = DOTween.Sequence();
-        
         for (int i = 0; i < planeImages.Length; i++)
         {
             Image plane = planeImages[i];
-            Vector2 targetPos = originalPositions[currentOrder[i]];
+            CarouselState state = CalculateCarouselState(i);
             
-            slideIn.Join(plane.rectTransform.DOAnchorPos(targetPos, moveDuration)
-                .SetEase(moveEase));
+            if (immediate)
+            {
+                // Set ngay lập tức không animation
+                plane.rectTransform.anchoredPosition = state.position;
+                plane.transform.localScale = Vector3.one * state.scale;
+                plane.color = new Color(1, 1, 1, state.alpha);
+                plane.transform.rotation = Quaternion.Euler(0, state.rotationY, 0);
+            }
+            else
+            {
+                // Animate mượt
+                plane.rectTransform.DOAnchorPos(state.position, moveDuration).SetEase(moveEase);
+                plane.transform.DOScale(state.scale, moveDuration).SetEase(Ease.OutBack);
+                plane.DOFade(state.alpha, moveDuration * 0.8f);
+                plane.transform.DORotate(new Vector3(0, state.rotationY, 0), moveDuration).SetEase(Ease.OutQuad);
+            }
         }
-        
-        yield return slideIn.WaitForCompletion();
     }
     
-    void UpdateCarouselDisplay()
+    // Struct để lưu trạng thái carousel của mỗi máy bay
+    struct CarouselState
     {
-        for (int i = 0; i < planeImages.Length; i++)
+        public Vector2 position;
+        public float scale;
+        public float alpha;
+        public float rotationY;
+    }
+    
+    // Tính toán vị trí, scale, alpha cho mỗi máy bay trong carousel
+    CarouselState CalculateCarouselState(int visualIndex)
+    {
+        CarouselState state = new CarouselState();
+        int planeIndex = currentOrder[visualIndex];
+        
+        // 14 máy bay: indices 0-13
+        // Center: 6, 7, 8 (visible)
+        // Left (hidden): 0-5 (ngoài canvas bên trái)
+        // Right (hidden): 9-13 (ngoài canvas bên phải)
+        
+        // Sử dụng originalPositions làm base
+        Vector2 basePos = originalPositions[planeIndex];
+        state.position = basePos;
+        
+        // Xác định vị trí trong carousel (0-13)
+        int centerOffset = planeIndex - 7; // -7 đến +6 (7 là center)
+        
+        // Máy bay ở giữa (6, 7, 8) - visible and large
+        if (planeIndex >= 5 && planeIndex <= 7)
         {
-            Image plane = planeImages[i];
+            state.scale = centerScale;
+            state.alpha = 1.0f;
+            state.rotationY = 0f;
             
-            // Giữ scale = 1 cho tất cả máy bay
-            plane.transform.localScale = Vector3.one;
-            
-            // Giữ màu trắng cho tất cả máy bay
-            plane.color = Color.white;
+            // Nhấn mạnh máy bay chính giữa (index 7)
+            if (planeIndex == 6)
+            {
+                state.scale = centerScale * 1.05f; // Hơi to hơn một chút
+            }
         }
+        // Máy bay bên trái (0-5) - smaller and faded
+        else if (planeIndex < 5)
+        {
+            state.scale = sideScale;
+            state.alpha = depthFadeAlpha;
+            state.rotationY = 15f; // Xoay nhẹ để tạo perspective
+        }
+        // Máy bay bên phải (9-13) - smaller and faded
+        else // planeIndex > 8
+        {
+            state.scale = sideScale;
+            state.alpha = depthFadeAlpha;
+            state.rotationY = -15f; // Xoay ngược chiều
+        }
+        
+        return state;
     }
     
     IEnumerator PulseGlowEffect(Image centerPlane)
