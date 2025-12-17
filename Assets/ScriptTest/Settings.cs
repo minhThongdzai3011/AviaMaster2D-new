@@ -96,9 +96,9 @@ public class Settings : MonoBehaviour
             AdsLuckyWheelButton.gameObject.SetActive(false);
         }
         
-        currentTime = PlayerPrefs.GetInt("SaveTime", 10);
+        currentTime = PlayerPrefs.GetInt("SaveTime", 100);
 
-        if (currentTime < 10 && currentTime > 0) 
+        if (currentTime < 100 && currentTime > 0) 
         {
             resultText.text = "Waiting...";
             isSpinning = false;
@@ -421,9 +421,7 @@ public class Settings : MonoBehaviour
                 lastDistanceText.gameObject.SetActive(true);
                 winImage.gameObject.SetActive(false);
                 isAnimating = false;
-
-                // reset
-                targetValue = 0;
+                
                 Plane.instance.moneyCollect = 0;
                 Plane.instance.moneyDistance = 0;
                 Plane.instance.moneyTotal1 = 0;
@@ -584,7 +582,7 @@ public class Settings : MonoBehaviour
             PlayerPrefs.SetFloat("PrizeSliderValue", targetValue);
             PlayerPrefs.Save();
             // Cập nhật slider với hiệu ứng mượt mà
-            float smoothSpeed = 2f; // Tốc độ cập nhật (càng cao càng nhanh)
+            float smoothSpeed = 2f; 
             prizeSlider.fillAmount = Mathf.Lerp(prizeSlider.fillAmount, targetValue, smoothSpeed * Time.deltaTime);
             if (prizeSlider. fillAmount >= 1f)
             {
@@ -675,7 +673,6 @@ public class Settings : MonoBehaviour
         Debug.Log("Total Value: " + totalValue);
         isPrizeCoin = true;
 
-        // 4. finish → set allow close
         seq.OnComplete(() =>
         {
             isCloseWinImage = true;
@@ -705,10 +702,8 @@ public class Settings : MonoBehaviour
             int minutes = currentTime / 60;
             int seconds = currentTime % 60;
 
-            // ✅ Hiển thị countdown
             resultText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
             
-            // ✅ LƯU currentTime mỗi giây
             PlayerPrefs.SetInt("SaveTime", currentTime);
             PlayerPrefs.Save();
 
@@ -718,18 +713,15 @@ public class Settings : MonoBehaviour
 
         Debug.Log("Countdown finished!");
         
-        // ✅ Reset về trạng thái có thể spin
         resultText.text = "Spin";
         isSpinning = true;
         isCountingDown = false;
         
-        // ✅ Ẩn nút AdsLuckyWheel nếu đang hiển thị
         if (AdsLuckyWheelButton != null)
         {
             AdsLuckyWheelButton.gameObject.SetActive(false);
         }
         
-        // ✅ Reset flag cold down
         isColdDownTimeLuckyWheel = false;
         PlayerPrefs.SetInt("LuckyWheelColdDownAds", 0);
         PlayerPrefs.Save();
@@ -791,13 +783,21 @@ public class Settings : MonoBehaviour
         totalValue += 2000;
         PlayerPrefs.SetFloat("TotalMoney", GManager.instance.totalMoney);
         PlayerPrefs.Save();
+        
+        targetValue = 0;
+        prizeSlider.fillAmount = 0;
+        PlayerPrefs.SetFloat("PrizeSliderValue", 0f);
+        PlayerPrefs.Save();
+        isCheckAddTargetValue = true;
+        isPrizeCoin = false; 
+        isShake = true; 
+        isPrizeCoinDone = true; 
+        
         Debug.Log("Đóng Prize Chest Image!");
 
-        // Dừng tất cả animation đang chạy
         DOTween.Kill(prizeChestImage.transform);
         isAnimating = true;
 
-        // Animation đóng prize chest image
         prizeChestImage.transform.DOScale(Vector3.zero, closeDuration)
             .SetEase(closeEase)
             .OnComplete(() =>
@@ -805,7 +805,6 @@ public class Settings : MonoBehaviour
                 prizeChestImage.gameObject.SetActive(false);
                 isAnimating = false;
                 Debug.Log("Prize Chest Image animation đóng hoàn thành!");
-                
             });
     }
     public string playerName = "";

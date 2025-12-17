@@ -153,14 +153,14 @@ public class LuckyWheel : MonoBehaviour
     {
         print("You Win " + Score);
         
-        Settings.instance.currentTime = 10;
+        Settings.instance.currentTime = 100;
         PlayerPrefs.SetInt("SaveTime", Settings.instance.currentTime);
         PlayerPrefs.Save();
         
         Settings.instance.isSpinning = false;
         Settings.instance.StartCountdown(); 
         StartCoroutine(DelayTwoSeconds(2f));
-        Debug.Log("Win - Countdown started with 10 seconds");
+        Debug.Log("Win - Countdown started with 100 seconds");
     }
 
     IEnumerator WaitAndPrint(float waitTime, float rot , int a , string b)

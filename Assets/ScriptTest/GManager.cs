@@ -967,10 +967,10 @@ public class GManager : MonoBehaviour
         }
     }
 
-        // if (Input.GetKeyDown(KeyCode.Keypad1))
-        // {
-        //     PauseGame();
-        // }
+        if (Input.GetKeyDown(KeyCode.Keypad1))
+        {
+            PauseGame();
+        }
         if (Input.GetKeyDown(KeyCode.Keypad0))
         {
             AgainGame();
@@ -983,23 +983,23 @@ public class GManager : MonoBehaviour
             SaveTotalMoney();
 
         }
-        // if (Input.GetKeyDown(KeyCode.Keypad3))
-        // {
-        //     MapSpawner.instance.isMapCityUnlocked = true;
-        //     PlayerPrefs.SetInt("IsMapCityUnlocked", 1);
-        //     MapSpawner.instance.isMapDesertUnlocked = true;
-        //     PlayerPrefs.SetInt("IsMapDesertUnlocked", 1);
-        //     MapSpawner.instance.isMapBeachUnlocked = true;
-        //     PlayerPrefs.SetInt("IsMapBeachUnlocked", 1);
-        //     MapSpawner.instance.isMapFieldUnlocked = true;
-        //     PlayerPrefs.SetInt("IsMapFieldUnlocked", 1);
-        //     MapSpawner.instance.isMapIceUnlocked = true;
-        //     PlayerPrefs.SetInt("IsMapIceUnlocked", 1);
-        //     MapSpawner.instance.isMapLavaUnlocked = true;
-        //     PlayerPrefs.SetInt("IsMapLavaUnlocked", 1);
-        //     PlayerPrefs.Save();
-        //     AgainGame();
-        // }
+        if (Input.GetKeyDown(KeyCode.Keypad3))
+        {
+            MapSpawner.instance.isMapCityUnlocked = true;
+            PlayerPrefs.SetInt("IsMapCityUnlocked", 1);
+            MapSpawner.instance.isMapDesertUnlocked = true;
+            PlayerPrefs.SetInt("IsMapDesertUnlocked", 1);
+            MapSpawner.instance.isMapBeachUnlocked = true;
+            PlayerPrefs.SetInt("IsMapBeachUnlocked", 1);
+            MapSpawner.instance.isMapFieldUnlocked = true;
+            PlayerPrefs.SetInt("IsMapFieldUnlocked", 1);
+            MapSpawner.instance.isMapIceUnlocked = true;
+            PlayerPrefs.SetInt("IsMapIceUnlocked", 1);
+            MapSpawner.instance.isMapLavaUnlocked = true;
+            PlayerPrefs.SetInt("IsMapLavaUnlocked", 1);
+            PlayerPrefs.Save();
+            AgainGame();
+        }
         if (Input.GetKeyDown(KeyCode.Keypad4)) 
         {
             totalDiamond += 1000;

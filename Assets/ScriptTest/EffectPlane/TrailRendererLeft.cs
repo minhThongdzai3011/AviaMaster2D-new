@@ -127,4 +127,9 @@ public class TrailRendererLeft : MonoBehaviour
         }
     }
 
+    public void StopTrail()
+    {
+        trailRenderer.enabled = false;
+    }
+
 }

@@ -90,15 +90,16 @@ public class Plane : MonoBehaviour
     {
         if (other.CompareTag("Coin") || other.CompareTag("Respawn"))
         {
-            AnimCoin anim = other.GetComponent<AnimCoin>();
+            // AnimCoin anim = other.GetComponent<AnimCoin>();
             AudioManager.instance.PlaySound(AudioManager.instance.collectMoneySoundClip);
-            if (anim != null)
+            if (PositionX.instance.isMaxPower)
             {
                 // tăng tiền ngay (hoặc bạn có thể tăng tiền khi animation hoàn tất trong AnimCoin)
                 moneyCollect += 2;
 
-                anim.collected = true;
-                anim.Collect();
+                // anim.collected = true;
+                // anim.Collect();
+                Destroy(other.gameObject);
             }
             else
             {
@@ -130,6 +131,8 @@ public class Plane : MonoBehaviour
            // EffectExplosionBonus.instance.ExplosionEffect1();
             // Destroy(other.gameObject);
             other.gameObject.GetComponent<SpriteRenderer>().enabled = false;
+            if(TrailRendererRight.instance != null ) TrailRendererRight.instance.StopTrail();
+            if(TrailRendererLeft.instance != null ) TrailRendererLeft.instance.StopTrail();
             Debug.Log("Bonus2 collected - Fuel to 0" + PositionX.instance.isMaxPower);
             if (!PositionX.instance.isMaxPower)
             {

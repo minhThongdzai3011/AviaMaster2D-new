@@ -22,10 +22,13 @@ public class PositionX : MonoBehaviour
 
         positionX = transform.position;
         
-        // Di chuyển position.x thêm 100 đơn vị trong 1 giây
-        transform.DOMoveX(transform.position.x + 3.2f, 0.8f)
-            .SetLoops(-1, LoopType.Yoyo) 
-            .SetEase(Ease.Linear);      
+        Sequence seq = DOTween.Sequence();
+
+        seq.Append(transform.DOMoveX(transform.position.x + 1.3f, 0.4f).SetEase(Ease.Linear));
+        seq.Append(transform.DOMoveX(transform.position.x + 1.5f, 0.05f).SetEase(Ease.Linear)); 
+        seq.Append(transform.DOMoveX(transform.position.x + 3.2f, 0.3f).SetEase(Ease.Linear));
+
+        seq.SetLoops(-1, LoopType.Yoyo);     
     
     }
 
@@ -38,7 +41,7 @@ public class PositionX : MonoBehaviour
 
     public void checkPlay()
     {
-            transform.DOPause();
+            DOTween.PauseAll();
             newPositionX = transform.position;
             float deltaX = newPositionX.x - positionX.x;
             Debug.Log($"Delta X: {deltaX:F2}");
@@ -47,8 +50,8 @@ public class PositionX : MonoBehaviour
             temp = Mathf.Clamp(temp, 0, 100);
             Debug.Log($"Temp Value: {temp}%");
             
-            // ✅ Set isMaxPower NGAY LẬP TỨC
-            if (temp >= 87.5f)
+            
+            if ( 41f <= temp && temp <= 58f)
             {
                 isMaxPower = true;
 
@@ -117,8 +120,6 @@ public class PositionX : MonoBehaviour
         GManager.instance.newMapText.DOFade(0f, 1f).OnComplete(() =>
         {
             Debug.Log("Text đã biến mất hoàn toàn!");
-            // Optional: Ẩn text sau khi fade
-            // GManager.instance.newMapText.gameObject.SetActive(false);
         });
     }
 }
