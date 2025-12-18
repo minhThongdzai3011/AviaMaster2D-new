@@ -126,7 +126,13 @@ public class Plane : MonoBehaviour
             {
                 CameraManager.instance.FreezeCamera();
             }
+            GManager.instance.stopDisplayDistance = true;
+            string tempDistant = GManager.instance.distanceTraveled.ToString("F0");
+            GManager.instance.distanceText.text = tempDistant + " ft";
+            GManager.instance.upAircraftImage.gameObject.SetActive(false);
+            GManager.instance.downFuelImage.gameObject.SetActive(false);
             MakePlaneBlackAndExplode();
+            TextIntro.instance.GetRandomTextWinMessage(0); 
             GManager.instance.newMapText.text = "Space isn’t empty enough for this pilot!";
             GManager.instance.airplaneRigidbody2D.velocity = Vector2.zero;
             
@@ -714,7 +720,6 @@ public class Plane : MonoBehaviour
         }
         else if(count == 1){
             GManager.instance.durationFuel += 5f;
-            
             Debug.Log("Rocket collected - +5s fuel" + GManager.instance.durationFuel);
             isAddFuel = true;
             GManager.instance.newMapText.text = "Bonus +5s fuel";

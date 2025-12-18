@@ -42,6 +42,7 @@ public class GManager : MonoBehaviour
     public bool isBoosterActive = false;
     public float boostDecreaseRate = 100f;
     private bool isBoostDecreasing = false;
+    public bool stopDisplayDistance = false;
     private Coroutine boostCoroutine;
     public int money = 0; 
     public int diamonds = 0; 
@@ -669,14 +670,15 @@ public class GManager : MonoBehaviour
                 minVelocityX = launchForce / 1.34f;
                 Debug.Log($"Normal Power! minVelocityX set to {minVelocityX} m/s");
             }
-            if (minVelocityX < 15f && !Plane.instance.isGrounded) minVelocityX = 15f; // Đảm bảo tối thiểu 15 m/s
+            if (minVelocityX < 20f && !Plane.instance.isGrounded) minVelocityX = 20f; // Đảm bảo tối thiểu 20 m/s
+            if (minVelocityX > 40f && !Plane.instance.isGrounded) minVelocityX = 40f; // Giới hạn tối đa 40 m/s
             if (currentVel.x < minVelocityX && !Plane.instance.isGrounded)
             {
                 currentVel.x = minVelocityX;
                 airplaneRigidbody2D.velocity = currentVel;
                 if (debugCounter % 60 == 0)
                 {
-                    Debug.Log($"Duy trì velocity.x tối thiểu 8 m/s: {currentVel}");
+                    Debug.Log($"Duy trì velocity.x tối thiểu 20 m/s: {currentVel}");
                 }
             }
             
@@ -860,7 +862,7 @@ public class GManager : MonoBehaviour
         bool isBoostPressed = Input.GetKey(KeyCode.Space) || isUseClickerBooster;
         
         // ✅ CHỈ XỬ LÝ NẾU CÒN BOOST
-        if (Input.GetKey(KeyCode.Space) && totalBoost > 0) // ✅ THÊM KIỂM TRA totalBoost > 0
+        if (Input.GetKey(KeyCode.Space) && totalBoost > 0) 
         {
             Debug.Log("Space Key Down Detected - Boost available: " + totalBoost);
             StartBoostDecrease();
@@ -978,7 +980,7 @@ public class GManager : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.Keypad2))
         {
-            totalMoney += 1000;
+            totalMoney += 10000;
             PlayerPrefs.SetFloat("TotalMoney", totalMoney);
             PlayerPrefs.Save();
             SaveTotalMoney();
@@ -1011,7 +1013,7 @@ public class GManager : MonoBehaviour
         }
 
 
-        if (distanceText != null) distanceText.text = distanceTraveled.ToString("F0") + " ft";
+        if (distanceText != null && !stopDisplayDistance) distanceText.text = distanceTraveled.ToString("F0") + " ft";
         if (altitudeText != null)
         {
             altitudeText.text = currentAltitude.ToString("F2") + " m";
@@ -1597,10 +1599,13 @@ public class GManager : MonoBehaviour
     public IEnumerator DecreaseSliderFuel(float durationFuel)
     {
         float timer = 0f;
+        float temp = 0f;
         float startValue = sliderFuel.value;
         float endValue = 0f;
         if (Plane.instance.isAddFuel){
             durationFuel += 5f;
+            temp = 5/durationFuel;
+            sliderFuel.value += temp;
         }
         Plane.instance.isAddFuel = false;
 
@@ -1710,7 +1715,6 @@ public class GManager : MonoBehaviour
                 }
                 else if (moneyFuel >= 1000000 && moneyFuel < 1000000000)
                 {
-                    fuelMoneyText.fontSize = 28;
                     fuelMoneyText.text = (moneyFuel / 1000000f).ToString("F1") + "M";
                 }
             }
@@ -1752,6 +1756,7 @@ public class GManager : MonoBehaviour
             moneyBoost = moneyBoost * 1.25f;
             totalMoney = (int)Math.Round(totalMoney, 0);
             totalMoneyText.text = totalMoney.ToString("F0");
+            totalBoostMaxPower = totalBoost;
             PlayerPrefs.SetFloat("TotalMoney", totalMoney);
             PlayerPrefs.Save();
             moneyBoost = (int)Math.Round(moneyBoost, 1);
@@ -1764,7 +1769,6 @@ public class GManager : MonoBehaviour
                 }
                 else if (moneyBoost >= 1000000 && moneyBoost < 1000000000)
                 {
-                    boostMoneyText.fontSize = 28;
                     boostMoneyText.text = (moneyBoost / 1000000f).ToString("F1") + "M";
                 }
             }
@@ -1808,7 +1812,6 @@ public class GManager : MonoBehaviour
                 }
                 else if (moneyPower >= 1000000 && moneyPower < 1000000000)
                 {
-                    powerMoneyText.fontSize = 28;
                     powerMoneyText.text = (moneyPower / 1000000f).ToString("F1") + "M";
                 }
             }
@@ -1837,7 +1840,6 @@ public class GManager : MonoBehaviour
             }
             else if (moneyPower >= 1000000 && moneyPower < 1000000000)
             {
-                powerMoneyText.fontSize = 28;
                 powerMoneyText.text = (moneyPower / 1000000f).ToString("F1") + "M";
             }
         }
@@ -1850,7 +1852,6 @@ public class GManager : MonoBehaviour
             }
             else if (moneyBoost >= 1000000 && moneyBoost < 1000000000)
             {
-                boostMoneyText.fontSize = 28;
                 boostMoneyText.text = (moneyBoost / 1000000f).ToString("F1") + "M";
             }
         }
@@ -1862,7 +1863,6 @@ public class GManager : MonoBehaviour
             }
             else if (moneyFuel >= 1000000 && moneyFuel < 1000000000)
             {
-                fuelMoneyText.fontSize = 28;
                 fuelMoneyText.text = (moneyFuel / 1000000f).ToString("F1") + "M";
             }
         }

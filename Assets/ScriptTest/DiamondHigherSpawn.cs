@@ -71,8 +71,8 @@ public class DiamondHigherSpawn : MonoBehaviour
         Vector3 planePos = Plane.instance.transform.position;
 
         Vector3 spawnPosition = new Vector3(
-            planePos.x + Random.Range(-spawnRangeX, spawnRangeX), 
-             Random.Range(rangeXmin, rangeXmax),    
+            planePos.x + Random.Range(rangeXmin, rangeXmax), 
+             Random.Range(spawnRangeYmin, spawnRangeYmax),    
             planePos.z
         );
 

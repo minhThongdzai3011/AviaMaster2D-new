@@ -628,20 +628,18 @@ public class Settings : MonoBehaviour
 
         // Lắc LIÊN TỤC trong 2 giây
         Tween shake2s = rect.DOShakeRotation(
-                0.2f,                    // mỗi nhịp lắc nhỏ
-                new Vector3(0, 0, 5),    // độ lắc
+                0.2f,                    
+                new Vector3(0, 0, 5),    
                 10,
                 90,
                 false
             )
             .SetEase(Ease.OutQuad)
             .SetLoops(10, LoopType.Restart); 
-            // 0.2s * 10 = 2 GIÂY
 
-        // Sequence: lắc 2s -> dừng 1s -> lặp
         shakeTween = DOTween.Sequence()
             .Append(shake2s)
-            .AppendInterval(1f)          // ⏸️ DỪNG 1 GIÂY
+            .AppendInterval(1f)          
             .SetLoops(-1, LoopType.Restart);
 
         isShakeZ = false;
@@ -763,7 +761,6 @@ public class Settings : MonoBehaviour
     //     AudioManager.instance.PlaySound(AudioManager.instance.exitSoundClip);
     //     pannel.gameObject.SetActive(false);
     // }
-
     public void buttonChestClicked()
     {
         if (isButtonChestClickeds)
@@ -774,7 +771,7 @@ public class Settings : MonoBehaviour
             AudioManager.instance.PlaySound(AudioManager.instance.buttonSoundClip);
 
             // Dừng tất cả animation đang chạy
-            DOTween.Kill(prizeChestImage.transform);
+            DOTween.Kill(chestImage.transform);
             isAnimating = true;
 
             // Hiển thị prize chest image
@@ -794,6 +791,7 @@ public class Settings : MonoBehaviour
                     // prizeSlider.value = 0f;
                 });
             isButtonChestClickeds = false;
+            shakeTween?.Kill();
         }
     }
     

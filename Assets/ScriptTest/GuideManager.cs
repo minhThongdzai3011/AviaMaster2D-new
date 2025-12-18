@@ -46,6 +46,7 @@ public class GuideManager : MonoBehaviour
         // AnimButton.instance.PlayScaleAnim();
         Time.timeScale = 0f;
         Settings.instance.lastDistanceText.gameObject.SetActive(false);
+        AudioManager.instance.audioSoundPlayer.volume = 0f;
         OpenGuide();
         
     }
@@ -54,6 +55,7 @@ public class GuideManager : MonoBehaviour
         Time.timeScale = 1f;
         Settings.instance.lastDistanceText.gameObject.SetActive(true);
         Settings.instance.imageGuide.gameObject.SetActive(false);
+        AudioManager.instance.audioSoundPlayer.volume = 0.5f;
         // AnimButton.instance.StopAnim();
     }
     public void OpenGuide()
