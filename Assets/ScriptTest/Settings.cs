@@ -24,6 +24,7 @@ public class Settings : MonoBehaviour
     public TextMeshProUGUI NotificationNewMapText;
     public TextMeshProUGUI x2CoinText;
     public TextMeshProUGUI highScoreText;
+    public TextMeshProUGUI prizeChestText;
     [Header("Image Settings")]
     public Image musicImageOn;
     public Image musicImageOff;
@@ -98,9 +99,9 @@ public class Settings : MonoBehaviour
         
         currentTime = PlayerPrefs.GetInt("SaveTime", 100);
         
-        // Load chest tier (giới hạn tối đa là 3)
+        // Load chest tier (giới hạn tối đa là 4)
         chestTier = PlayerPrefs.GetInt("ChestTier", 1);
-        if (chestTier > 3) chestTier = 3;
+        if (chestTier > 4) chestTier = 4;
         Debug.Log($"Loaded ChestTier: {chestTier} - Requirement: {GetCurrentRequirement()}coin -> Reward: {GetCurrentReward()}coin");
 
         if (currentTime < 100 && currentTime > 0) 
@@ -567,8 +568,8 @@ public class Settings : MonoBehaviour
     
     [Header("Chest Tier System")]
     public int chestTier = 1; // Lần thứ mấy (1, 2, 3)
-    public float[] chestRequirements = { 500f, 1000f, 2000f }; // Coin cần kiếm được
-    public int[] chestRewards = { 2000, 5000, 10000 }; // Phần thưởng tương ứng
+    public float[] chestRequirements = { 500f, 1000f, 2000f, 2000f }; // Coin cần kiếm được
+    public int[] chestRewards = { 2000, 5000, 12000, 15000 }; // Phần thưởng tương ứng
     void UpdateSliderPrizeCoin()
     {
         if (prizeSlider != null)
@@ -768,6 +769,8 @@ public class Settings : MonoBehaviour
             if (isAnimating) return;
 
             Debug.Log("Mở Win Image!");
+            int currentReward = GetCurrentReward();
+            prizeChestText.text = "+ " + currentReward.ToString();
             AudioManager.instance.PlaySound(AudioManager.instance.buttonSoundClip);
 
             // Dừng tất cả animation đang chạy
@@ -816,8 +819,8 @@ public class Settings : MonoBehaviour
         }));
         totalValue += currentReward;
         
-        // Tăng tier (giới hạn ở 3)
-        if (chestTier < 3)
+        // Tăng tier (giới hạn ở 4)
+        if (chestTier < 4)
         {
             chestTier++;
             PlayerPrefs.SetInt("ChestTier", chestTier);
