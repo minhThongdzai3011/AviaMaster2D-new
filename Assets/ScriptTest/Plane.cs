@@ -120,21 +120,36 @@ public class Plane : MonoBehaviour
         }
         if (other.CompareTag("Boom"))
         {
-            AudioManager.instance.PlaySound(AudioManager.instance.explosionSoundClip);
-            
-            if (CameraManager.instance != null)
+            if (PositionX.instance.isMaxPower)
             {
-                CameraManager.instance.FreezeCamera();
+                AudioManager.instance.PlaySound(AudioManager.instance.obstacleCollisionSoundClip);
+            EffectExplosionBonus ef = other.GetComponent<EffectExplosionBonus>();
+                ef.ExplosionEffect();
+                ef.ExplosionEffect1();
+
+                //EffectExplosionBonus.instance.ExplosionEffect();
+            // EffectExplosionBonus.instance.ExplosionEffect1();
+                // Destroy(other.gameObject);
+                other.gameObject.GetComponent<SpriteRenderer>().enabled = false;
             }
-            GManager.instance.stopDisplayDistance = true;
-            string tempDistant = GManager.instance.distanceTraveled.ToString("F0");
-            GManager.instance.distanceText.text = tempDistant + " ft";
-            GManager.instance.upAircraftImage.gameObject.SetActive(false);
-            GManager.instance.downFuelImage.gameObject.SetActive(false);
-            MakePlaneBlackAndExplode();
-            TextIntro.instance.GetRandomTextWinMessage(0); 
-            GManager.instance.newMapText.text = "Space isn’t empty enough for this pilot!";
-            GManager.instance.airplaneRigidbody2D.velocity = Vector2.zero;
+            else
+            {
+                AudioManager.instance.PlaySound(AudioManager.instance.explosionSoundClip);
+            
+                if (CameraManager.instance != null)
+                {
+                    CameraManager.instance.FreezeCamera();
+                }
+                GManager.instance.stopDisplayDistance = true;
+                string tempDistant = GManager.instance.distanceTraveled.ToString("F0");
+                GManager.instance.distanceText.text = tempDistant + " ft";
+                GManager.instance.upAircraftImage.gameObject.SetActive(false);
+                GManager.instance.downFuelImage.gameObject.SetActive(false);
+                MakePlaneBlackAndExplode();
+                TextIntro.instance.GetRandomTextWinMessage(0); 
+                GManager.instance.newMapText.text = "Space isn’t empty enough for this pilot!";
+                GManager.instance.airplaneRigidbody2D.velocity = Vector2.zero;
+            }
             
         }
         if (other.CompareTag("bird"))

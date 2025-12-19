@@ -8,6 +8,7 @@ public class PositionX : MonoBehaviour
     public static PositionX instance;
     public Vector2 positionX;
     public Vector2 newPositionX;
+    public float timePerfect = 0f;
 
     private void Awake()
     {
@@ -17,7 +18,7 @@ public class PositionX : MonoBehaviour
     void Start()
     
     {
-
+        Debug.Log("Time Perfect: " + timePerfect);
 
 
         positionX = transform.position;

@@ -514,7 +514,9 @@ public class GManager : MonoBehaviour
         BonusSpawner.instance.StartSpawning();
         BonusHigherSpawn.instance.StartSpawning();
         DiamondHigherSpawn.instance.StartSpawning();
-        Debug.Log($"Máy bay bắt đầu điều khiển với durationFuel = {durationFuel}s (rateFuel = {rateFuel}%)");
+        // CatDiamondSpawner.instance.StartSpawning();
+        PositionX.instance.timePerfect = 0.5f * durationFuel;
+        Debug.Log($"Máy bay bắt đầu điều khiển với durationFuel = {durationFuel}s (rateFuel = {PositionX.instance.timePerfect})");
         if (PositionX.instance.isMaxPower)
         {
             durationFuel += 5f;
@@ -784,6 +786,7 @@ public class GManager : MonoBehaviour
 
         UpdateAirplaneRotationX();
 
+        CountPerfectTime();
 
         if (isVelocity && !isHorizontalFlying && !isPlay)
         {
@@ -1706,6 +1709,7 @@ public class GManager : MonoBehaviour
             totalMoneyText.text = totalMoney.ToString("F0");
             PlayerPrefs.SetFloat("TotalMoney", totalMoney);
             PlayerPrefs.Save();
+            
             moneyFuel = (int)Math.Round(moneyFuel, 1);
             if (moneyFuel > 999)
             {
@@ -1728,6 +1732,7 @@ public class GManager : MonoBehaviour
             CheckPlane.instance.CheckMoneyForUpgradeButtonNext();
             levelFuelText.text = "Fuel capacity increased by " + rateFuel + "%";
             Debug.Log($"UpgradeFuel: Level {levelFuel}, Rate {rateFuel}%, Duration {durationFuel}s");
+            PositionX.instance.timePerfect = durationFuel * 0.5f;
         }
     }
 
@@ -2027,7 +2032,6 @@ public class GManager : MonoBehaviour
             }
             else if (totalMoney >= 1000000 && totalMoney < 1000000000)
             {
-                totalMoneyText.fontSize = 28;
                 totalMoneyText.text = (totalMoney / 1000000f).ToString("F1") + "m";
             }
         }
@@ -2048,7 +2052,6 @@ public class GManager : MonoBehaviour
             }
             else if (totalDiamond >= 1000000 && totalDiamond < 1000000000)
             {
-                totalDiamondText.fontSize = 28;
                 totalDiamondText.text = (totalDiamond / 1000000f).ToString("F1") + "m";
             }
         }
@@ -2153,7 +2156,93 @@ public class GManager : MonoBehaviour
         SaveTotalDiamond();
     }
 
+    // Đếm thời gian perfect
+    public float perfectTime = 0f;
+    private bool isEndingMaxPower = false;
     
+    public void CountPerfectTime()
+    {
+        if (PositionX.instance.isMaxPower && !isEndingMaxPower && isBoosted)
+        {
+            perfectTime += Time.deltaTime;
+            if (perfectTime >= PositionX.instance.timePerfect)
+            {
+                StartCoroutine(EndMaxPowerEffect());
+            }
+        }
+        else if (!PositionX.instance.isMaxPower)
+        {
+            perfectTime = 0f;
+        }
+    }
+
+    IEnumerator EndMaxPowerEffect()
+    {
+        isEndingMaxPower = true;
+        Debug.Log("Starting Max Power End Effect - Blinking for 2 seconds");
+        
+        // Nhấp nháy giữa màu gốc và gold trong 2 giây
+        float blinkDuration = 2f;
+        float blinkInterval = 0.15f; // Tốc độ nhấp nháy
+        float elapsed = 0f;
+        bool isGold = true;
+        
+        while (elapsed < blinkDuration)
+        {
+            if (EffectAirplane.instance != null)
+            {
+                if (isGold)
+                {
+                    EffectAirplane.instance.MakePlaneGold();
+                    // Đổi propellers và wheels sang gold
+                    foreach (var propeller in EffectRotaryFront.instances)
+                    {
+                        propeller.gameObject.GetComponent<Renderer>().material = Plane.instance.GoldMaterial;
+                    }
+                    if (DestroyWheels.instance != null)
+                    {
+                        DestroyWheels.instance.Golden();
+                    }
+                }
+                else
+                {
+                    EffectAirplane.instance.RestoreOriginalMaterial();
+                    // Restore propellers và wheels về màu gốc
+                    EffectRotaryFront.RestoreAllOriginalMaterials();
+                    if (DestroyWheels.instance != null)
+                    {
+                        DestroyWheels.instance.RestoreOriginalMaterial();
+                    }
+                }
+                isGold = !isGold;
+            }
+            
+            yield return new WaitForSeconds(blinkInterval);
+            elapsed += blinkInterval;
+        }
+        
+        // Restore về màu gốc cho tất cả
+        if (EffectAirplane.instance != null)
+        {
+            EffectAirplane.instance.RestoreOriginalMaterial();
+        }
+        
+        // Restore propellers về màu gốc
+        EffectRotaryFront.RestoreAllOriginalMaterials();
+        
+        // Restore wheels về màu gốc
+        if (DestroyWheels.instance != null)
+        {
+            DestroyWheels.instance.RestoreOriginalMaterial();
+        }
+        
+        // Tắt Max Power
+        PositionX.instance.isMaxPower = false;
+        isEndingMaxPower = false;
+        perfectTime = 0f;
+        
+        Debug.Log("Max Power Ended - Restored all materials to original");
+    }
 
 
 

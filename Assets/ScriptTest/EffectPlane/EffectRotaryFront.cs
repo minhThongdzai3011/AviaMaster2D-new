@@ -12,6 +12,8 @@ public class EffectRotaryFront : MonoBehaviour
     public float torque = 2f;       // lực xoay thêm để chân thực
 
     private bool exploded = false;
+    private Material originalMaterial;
+    private Renderer propellerRenderer;
 
     void Awake() {
         instances.Add(this);
@@ -30,6 +32,13 @@ public class EffectRotaryFront : MonoBehaviour
         {
             rb.isKinematic = true;
             rb.simulated = false; // tắt physics ban đầu
+        }
+        
+        // Lưu material gốc
+        propellerRenderer = GetComponent<Renderer>();
+        if (propellerRenderer != null)
+        {
+            originalMaterial = propellerRenderer.material;
         }
     }
 
@@ -80,6 +89,22 @@ public class EffectRotaryFront : MonoBehaviour
         foreach (var inst in instances)
         {
             inst.Golden();
+        }
+    }
+
+    public void RestoreOriginalMaterial()
+    {
+        if (propellerRenderer != null && originalMaterial != null)
+        {
+            propellerRenderer.material = originalMaterial;
+        }
+    }
+
+    public static void RestoreAllOriginalMaterials()
+    {
+        foreach (var inst in instances)
+        {
+            inst.RestoreOriginalMaterial();
         }
     }
 

@@ -25,6 +25,7 @@ public class Settings : MonoBehaviour
     public TextMeshProUGUI x2CoinText;
     public TextMeshProUGUI highScoreText;
     public TextMeshProUGUI prizeChestText;
+    public TextMeshProUGUI prizeNextChestText;
     [Header("Image Settings")]
     public Image musicImageOn;
     public Image musicImageOff;
@@ -771,6 +772,17 @@ public class Settings : MonoBehaviour
             Debug.Log("Mở Win Image!");
             int currentReward = GetCurrentReward();
             prizeChestText.text = "+ " + currentReward.ToString();
+            int index = Mathf.Clamp(chestTier - 1, 0, chestRewards.Length - 1);
+            if (index + 1 < chestRewards.Length)
+            {
+                int currentNextReward = chestRewards[index + 1];
+                prizeNextChestText.text = "Next : " + currentNextReward.ToString();
+            }
+            else
+            {
+                int currentNextReward = chestRewards[3];
+                prizeNextChestText.text = "Next : " + currentNextReward.ToString();
+            }
             AudioManager.instance.PlaySound(AudioManager.instance.buttonSoundClip);
 
             // Dừng tất cả animation đang chạy

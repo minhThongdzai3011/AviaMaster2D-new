@@ -11,6 +11,8 @@ public class DestroyWheels : MonoBehaviour
     public float torque = 2f;       // lực xoay thêm để chân thực
 
     private bool exploded = false;
+    private Material originalMaterial;
+    private Renderer wheelRenderer;
 
     void Awake() {
         instance = this;
@@ -29,6 +31,13 @@ public class DestroyWheels : MonoBehaviour
         {
             rb.isKinematic = true;
             rb.simulated = false; // tắt physics ban đầu
+        }
+        
+        // Lưu material gốc
+        wheelRenderer = GetComponent<Renderer>();
+        if (wheelRenderer != null)
+        {
+            originalMaterial = wheelRenderer.material;
         }
     }
 
@@ -61,6 +70,14 @@ public class DestroyWheels : MonoBehaviour
         {
             Debug.Log("Golden propeller");
             gameObject.GetComponent<Renderer>().material = Plane.instance.GoldMaterial;
+        }
+    }
+
+    public void RestoreOriginalMaterial()
+    {
+        if (wheelRenderer != null && originalMaterial != null)
+        {
+            wheelRenderer.material = originalMaterial;
         }
     }
 }
