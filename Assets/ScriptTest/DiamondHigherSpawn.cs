@@ -82,7 +82,7 @@ public class DiamondHigherSpawn : MonoBehaviour
             Quaternion.identity
         );
 
-        Debug.Log("Spawned Bonus at: " + spawnPosition);
+        
     }
 
 

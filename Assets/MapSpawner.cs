@@ -322,7 +322,7 @@ public class MapSpawner : MonoBehaviour
         while (true)
         {
             count = GameObject.FindGameObjectsWithTag("Map").Length;
-            if (count < 20)
+            if (count < 121)
             {
                 
                 CheckMap();

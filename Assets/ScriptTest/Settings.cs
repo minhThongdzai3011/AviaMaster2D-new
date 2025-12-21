@@ -568,7 +568,7 @@ public class Settings : MonoBehaviour
     public bool isPrizeCoinDone = true;
     
     [Header("Chest Tier System")]
-    public int chestTier = 1; // Lần thứ mấy (1, 2, 3)
+    public int chestTier = 1; // Lần thứ mấy (1, 2, 3, 4)
     public float[] chestRequirements = { 500f, 1000f, 2000f, 2000f }; // Coin cần kiếm được
     public int[] chestRewards = { 2000, 5000, 12000, 15000 }; // Phần thưởng tương ứng
     void UpdateSliderPrizeCoin()
@@ -769,19 +769,20 @@ public class Settings : MonoBehaviour
         {
             if (isAnimating) return;
 
-            Debug.Log("Mở Win Image!");
+            Debug.Log("Mở Chest Image!");
             int currentReward = GetCurrentReward();
             prizeChestText.text = "+ " + currentReward.ToString();
-            int index = Mathf.Clamp(chestTier - 1, 0, chestRewards.Length - 1);
-            if (index + 1 < chestRewards.Length)
+            
+            // Hiển thị phần thưởng tiếp theo hoặc MAX nếu đã đạt tier 4
+            if (chestTier < 4)
             {
-                int currentNextReward = chestRewards[index + 1];
-                prizeNextChestText.text = "Next : " + currentNextReward.ToString();
+                int nextReward = chestRewards[chestTier]; // chestTier là tier hiện tại, chestTier là index của tier kế tiếp
+                prizeNextChestText.text = "Next : " + nextReward.ToString();
             }
             else
             {
-                int currentNextReward = chestRewards[3];
-                prizeNextChestText.text = "Next : " + currentNextReward.ToString();
+                // Đã đạt tier 4 (max tier), tier 4 sẽ lặp lại
+                prizeNextChestText.text = "Next : " + chestRewards[3].ToString() + " (MAX)";
             }
             AudioManager.instance.PlaySound(AudioManager.instance.buttonSoundClip);
 
@@ -824,6 +825,10 @@ public class Settings : MonoBehaviour
         int currentReward = GetCurrentReward();
         Debug.Log($"Chest Tier {chestTier} claimed! Reward: {currentReward} coins");
         
+        // Cộng tiền ngay lập tức
+        GManager.instance.totalMoney += currentReward;
+        
+        // Hiển thị animation cộng tiền
         Sequence seq = DOTween.Sequence();
         seq.Append(DOVirtual.Float(totalValue, totalValue + currentReward, 2f, v =>
         {
@@ -831,16 +836,17 @@ public class Settings : MonoBehaviour
         }));
         totalValue += currentReward;
         
-        // Tăng tier (giới hạn ở 4)
+        // Tăng tier (giới hạn ở 4, sau đó lặp lại tier 4)
         if (chestTier < 4)
         {
             chestTier++;
             PlayerPrefs.SetInt("ChestTier", chestTier);
-            Debug.Log($"Chest tier increased to {chestTier}! Next requirement: {GetCurrentRequirement()}coin -> {GetCurrentReward()}coin");
+            Debug.Log($"Chest tier increased to {chestTier}! Next requirement: {GetCurrentRequirement()}coin -> Reward: {GetCurrentReward()}coin");
         }
         else
         {
-            Debug.Log($"Max chest tier reached! Stays at tier 3: {GetCurrentRequirement()}coin -> {GetCurrentReward()}coin");
+            // Đã đạt tier 4 (max), giữ nguyên tier 4 để lặp lại
+            Debug.Log($"Max chest tier reached! Stays at tier 4: {GetCurrentRequirement()}coin -> Reward: {GetCurrentReward()}coin");
         }
         PlayerPrefs.SetFloat("TotalMoney", GManager.instance.totalMoney);
         PlayerPrefs.Save();

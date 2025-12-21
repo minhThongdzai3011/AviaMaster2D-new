@@ -9,6 +9,7 @@ public class RocketSpawner : MonoBehaviour
 
     [Header("Vật phẩm Rocket")]
     public GameObject[] rocketPrefabs;
+    public GameObject[] diamondPrefabs;
 
     [Header("Spawn Range 2D")]
     public float spawnRangeYmin = -2f;
@@ -21,6 +22,10 @@ public class RocketSpawner : MonoBehaviour
     public int maxRocketItems = 20;
     public float rangeXmin = 60f;
     public float rangeXmax = 120f;
+
+    private int deletedCoinCount = 0;
+    private int coinSpawnCount = 0;
+
 
     private CinemachineVirtualCamera mainCamera;
     private Vector3 cameraPos;
@@ -82,12 +87,62 @@ public class RocketSpawner : MonoBehaviour
             spawnPosition,
             rocketPrefabs[prefabIndex].transform.rotation
         );
+
+        // ===== LOGIC MỚI =====
+        coinSpawnCount++;
+
+        if (coinSpawnCount >= 5)
+        {
+            coinSpawnCount = 0;
+            SpawnDiamond();
+        }
     }
+
 
     public void DeleteSpawnedItems()
     {
         GameObject[] spawnedItems = GameObject.FindGameObjectsWithTag("Coin");
+
         foreach (GameObject item in spawnedItems)
+        {
             Destroy(item);
+
+            deletedCoinCount++;
+
+            // Cứ 5 coin bị xóa thì spawn 1 diamond
+            if (deletedCoinCount >= 5)
+            {
+                deletedCoinCount = 0;
+                SpawnDiamond();
+            }
+        }
     }
+
+
+    void SpawnDiamond()
+    {
+        if (diamondPrefabs == null || diamondPrefabs.Length == 0) return;
+        if (!GManager.instance.isControllable) return;
+
+        int prefabIndex = Random.Range(0, diamondPrefabs.Length);
+
+        float offsetX = Random.Range(rangeXmin, rangeXmax);
+        float offsetY = Random.Range(spawnRangeYmin, spawnRangeYmax);
+
+        Vector3 spawnPosition = new Vector3(
+            cameraPos.x + offsetX,
+            cameraPos.y + offsetY,
+            cameraPos.z
+        );
+
+        Instantiate(
+            diamondPrefabs[prefabIndex],
+            spawnPosition,
+            diamondPrefabs[prefabIndex].transform.rotation
+        );
+
+        Debug.Log("Diamond Spawned (after 5 coins)");
+    }
+
+
 }

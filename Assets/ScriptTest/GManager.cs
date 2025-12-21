@@ -670,7 +670,6 @@ public class GManager : MonoBehaviour
             }
             else{
                 minVelocityX = launchForce / 1.34f;
-                Debug.Log($"Normal Power! minVelocityX set to {minVelocityX} m/s");
             }
             if (minVelocityX < 20f && !Plane.instance.isGrounded) minVelocityX = 20f; // Đảm bảo tối thiểu 20 m/s
             if (minVelocityX > 40f && !Plane.instance.isGrounded) minVelocityX = 40f; // Giới hạn tối đa 40 m/s
