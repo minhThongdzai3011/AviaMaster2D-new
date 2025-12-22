@@ -25,6 +25,19 @@ public class Plane : MonoBehaviour
     public int moneyCollect = 0;
     public int moneyTotal1 = 0;
     public bool isUseCoinDiamond = false;
+
+    [Header ("Kiểm tra đáp cánh an toàn airport")]
+    public bool isBoom = false;
+    public bool isAirPortCity = false;
+    public bool isAirPortBeach = false;
+    public bool isAirPortDesert = false;
+    public bool isAirPortField = false;
+    public bool isAirPortIce = false;
+    public bool isAirPortLava = false;
+    
+    // Track airport hiện tại player đang ở trong
+    private string currentAirportTag = "";
+
     // Start is called before the first frame update
 
     void Awake()
@@ -52,6 +65,8 @@ public class Plane : MonoBehaviour
 
     }
 
+
+
     void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Ground") && !isGrounded)
@@ -60,6 +75,68 @@ public class Plane : MonoBehaviour
             isGrounded = true;
 
             Debug.Log("Máy bay đã chạm đất.");
+            
+            // *** KIỂM TRA HẠ CÁNH AN TOÀN TẠI AIRPORT ***
+            float initialAngleZ = GetCurrentRotationZ(GManager.instance.airplaneRigidbody2D);
+            bool isSafeLanding = (initialAngleZ >= -15f && initialAngleZ <= 15f);
+            
+            if (isSafeLanding && !string.IsNullOrEmpty(currentAirportTag))
+            {
+                Debug.Log($"[SAFE LANDING] Landed safely at {currentAirportTag}!");
+                
+                // Set airport flag tương ứng
+                switch (currentAirportTag)
+                {
+                    case "MapStartCity":
+                        isAirPortCity = true;
+                        GManager.instance.isSuperBonus = true;   
+                        GManager.instance.isBonus = false; 
+                        PlayerPrefs.SetInt("LastSafeLandingAirport", 0);
+                        Debug.Log("[SAFE LANDING] Next game will start at City map");
+                        break;
+                    case "MapStartBeach":
+                        isAirPortBeach = true;
+                        GManager.instance.isSuperBonus = true; 
+                        GManager.instance.isBonus = false; 
+                        PlayerPrefs.SetInt("LastSafeLandingAirport", 1);
+                        Debug.Log("[SAFE LANDING] Next game will start at Beach map");
+                        break;
+                    case "MapStartDesert":
+                        isAirPortDesert = true;
+                        GManager.instance.isSuperBonus = true;
+                        GManager.instance.isBonus = false;  
+                        PlayerPrefs.SetInt("LastSafeLandingAirport", 2);
+                        Debug.Log("[SAFE LANDING] Next game will start at Desert map");
+                        break;
+                    case "MapStartField":
+                        isAirPortField = true;
+                        GManager.instance.isSuperBonus = true; 
+                        GManager.instance.isBonus = false; 
+                        PlayerPrefs.SetInt("LastSafeLandingAirport", 3);
+                        Debug.Log("[SAFE LANDING] Next game will start at Field map");
+                        break;
+                    case "MapStartIce":
+                        isAirPortIce = true;
+                        GManager.instance.isSuperBonus = true; 
+                        GManager.instance.isBonus = false; 
+                        PlayerPrefs.SetInt("LastSafeLandingAirport", 4);
+                        Debug.Log("[SAFE LANDING] Next game will start at Ice map");
+                        break;
+                    case "MapStartLava":
+                        isAirPortLava = true;
+                        GManager.instance.isSuperBonus = true; 
+                        GManager.instance.isBonus = false;
+                        PlayerPrefs.SetInt("LastSafeLandingAirport", 5);
+                        Debug.Log("[SAFE LANDING] Next game will start at Lava map");
+                        break;
+                }
+                PlayerPrefs.Save();
+            }
+            else if (!isSafeLanding)
+            {
+                Debug.Log("[UNSAFE LANDING] Angle too steep, not counted as safe landing");
+                isBoom = true;
+            }
             
             if (GManager.instance != null)
             {
@@ -85,7 +162,7 @@ public class Plane : MonoBehaviour
             StartCoroutine(UpMass());
         }
     }
-
+        
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Coin") || other.CompareTag("Respawn"))
@@ -218,13 +295,10 @@ public class Plane : MonoBehaviour
             PlayerPrefs.SetInt("IsMapCityUnlocked", 1); // Lưu trạng thái mở khóa
             BonusSpawner.instance.rocketPrefabs = ChangeBonusMap.instance.bonusMapCity;
             PlayerPrefs.Save();
-            if(MapSpawner.instance.isMapCityUnlocked){
-                Settings.instance.NotificationNewMapText.text = "Welcome to City Map!";
-            }
-            else{
-                Settings.instance.NotificationNewMapText.text = "You have unlocked the City Map!";
-            }
-            Settings.instance.NotificationNewMap();
+            
+            // Track airport hiện tại
+            currentAirportTag = "MapStartCity";
+            Debug.Log("[AIRPORT] Entered City Airport zone");
         }
         
         if (other.CompareTag("MapStartBeach"))
@@ -234,13 +308,10 @@ public class Plane : MonoBehaviour
             PlayerPrefs.SetInt("IsMapBeachUnlocked", 1); // Lưu trạng thái mở khóa
             BonusSpawner.instance.rocketPrefabs = ChangeBonusMap.instance.bonusMapBeach;
             PlayerPrefs.Save();
-            if(MapSpawner.instance.isMapBeachUnlocked){
-                Settings.instance.NotificationNewMapText.text = "Welcome to Beach Map!";
-            }
-            else{
-                Settings.instance.NotificationNewMapText.text = "You have unlocked the Beach Map!";
-            }
-            Settings.instance.NotificationNewMap();
+            
+            // Track airport hiện tại
+            currentAirportTag = "MapStartBeach";
+            Debug.Log("[AIRPORT] Entered Beach Airport zone");
         }
         
         if (other.CompareTag("MapStartDesert"))
@@ -250,13 +321,10 @@ public class Plane : MonoBehaviour
             PlayerPrefs.SetInt("IsMapDesertUnlocked", 1); // Lưu trạng thái mở khóa
             BonusSpawner.instance.rocketPrefabs = ChangeBonusMap.instance.bonusMapDesert;
             PlayerPrefs.Save();
-            if(MapSpawner.instance.isMapDesertUnlocked){
-                Settings.instance.NotificationNewMapText.text = "Welcome to Desert Map!";
-            }
-            else{
-                Settings.instance.NotificationNewMapText.text = "You have unlocked the Desert Map!";
-            }
-            Settings.instance.NotificationNewMap();
+            
+            // Track airport hiện tại
+            currentAirportTag = "MapStartDesert";
+            Debug.Log("[AIRPORT] Entered Desert Airport zone");
         }
         
         if (other.CompareTag("MapStartField"))
@@ -266,13 +334,10 @@ public class Plane : MonoBehaviour
             PlayerPrefs.SetInt("IsMapFieldUnlocked", 1); // Lưu trạng thái mở khóa
             BonusSpawner.instance.rocketPrefabs = ChangeBonusMap.instance.bonusMapField;
             PlayerPrefs.Save();
-            if(MapSpawner.instance.isMapFieldUnlocked){
-                Settings.instance.NotificationNewMapText.text = "Welcome to Field Map!";
-            }
-            else{
-                Settings.instance.NotificationNewMapText.text = "You have unlocked the Field Map!";
-            }
-            Settings.instance.NotificationNewMap();
+            
+            // Track airport hiện tại
+            currentAirportTag = "MapStartField";
+            Debug.Log("[AIRPORT] Entered Field Airport zone");
         }
         
         if (other.CompareTag("MapStartIce"))
@@ -282,13 +347,10 @@ public class Plane : MonoBehaviour
             PlayerPrefs.SetInt("IsMapIceUnlocked", 1); // Lưu trạng thái mở khóa
             BonusSpawner.instance.rocketPrefabs = ChangeBonusMap.instance.bonusMapIce;
             PlayerPrefs.Save();
-            if(MapSpawner.instance.isMapIceUnlocked){
-                Settings.instance.NotificationNewMapText.text = "Welcome to Ice Map!";
-            }
-            else{
-                Settings.instance.NotificationNewMapText.text = "You have unlocked the Ice Map!";
-            }
-            Settings.instance.NotificationNewMap();
+            
+            // Track airport hiện tại
+            currentAirportTag = "MapStartIce";
+            Debug.Log("[AIRPORT] Entered Ice Airport zone");
         }
         
         if (other.CompareTag("MapStartLava"))
@@ -298,13 +360,10 @@ public class Plane : MonoBehaviour
             PlayerPrefs.SetInt("IsMapLavaUnlocked", 1); // Lưu trạng thái mở khóa
             BonusSpawner.instance.rocketPrefabs = ChangeBonusMap.instance.bonusMapLava;
             PlayerPrefs.Save();
-            if(MapSpawner.instance.isMapLavaUnlocked){
-                Settings.instance.NotificationNewMapText.text = "Welcome to Lava Map!";
-            }
-            else{
-                Settings.instance.NotificationNewMapText.text = "You have unlocked the Lava Map!";
-            }
-            Settings.instance.NotificationNewMap();
+            
+            // Track airport hiện tại
+            currentAirportTag = "MapStartLava";
+            Debug.Log("[AIRPORT] Entered Lava Airport zone");
         }
         if (other.CompareTag("NofitiCity"))
         {
@@ -387,6 +446,8 @@ public class Plane : MonoBehaviour
             MakePlaneBlackAndExplode();
             Debug.Log("Airplane crashed due to excessive tilt angle: " + initialAngleZ);
             TextIntro.instance.GetRandomTextWinMessage(0); 
+            isBoom = true;
+            GManager.instance.isBonus = false;   
         }
         else{
             AudioManager.instance.PlaySound(AudioManager.instance.perfectLandingSoundClip);
@@ -427,7 +488,7 @@ public class Plane : MonoBehaviour
             finalRotation.x = 0f;
             airplaneRb.transform.eulerAngles = finalRotation;
             airplaneRb.velocity = Vector2.zero;
-            
+            GManager.instance.isBonus = true;   
             Debug.Log("Airplane stopped sliding");
             StartCoroutine(OpenImageWIn());
             }

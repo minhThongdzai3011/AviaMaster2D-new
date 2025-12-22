@@ -12,6 +12,19 @@ public class MapSpawner : MonoBehaviour
     public GameObject mapStartPrefab;
     public GameObject[] mapPrefabs;
 
+    [Header("Debug Spawn 5 Map")]
+    private int spawnCountInCurrentMap = 0;
+    private GameObject airPortMap;
+
+    [Header("Airport Prefabs")]
+    public GameObject[] mapCityAirportPrefabs;
+    public GameObject[] mapBeachAirportPrefabs;
+    public GameObject[] mapDesertAirportPrefabs;
+    public GameObject[] mapFieldAirportPrefabs;
+    public GameObject[] mapIceAirportPrefabs;
+    public GameObject[] mapLavaAirportPrefabs;
+
+
     [Header("MapCity")]
     public int mapCityIndex = 0;
     public bool isCityMap = false;
@@ -110,15 +123,74 @@ public class MapSpawner : MonoBehaviour
 
     void Start()
     {
+        // *** KIỂM TRA HẠ CÁNH AN TOÀN LẦN TRƯỚC ***
+        int lastSafeLanding = PlayerPrefs.GetInt("LastSafeLandingAirport", -1);
         
-
-        if (isMapCityUnlocked && !isMapBeachUnlocked)
+        if (lastSafeLanding >= 0)
         {
-            mapPrefabs = mapCityPrefabs;
-            isCityMap = true;
-            mapStart[0].SetActive(true);
-            checkMapStartCitySpawned = true;  // *** SỬA: true vì City đã được chọn ***
+            Debug.Log($"[START] Player landed safely at airport {lastSafeLanding} last game!");
+            
+            // Bắt đầu từ map đã hạ cánh an toàn
+            switch (lastSafeLanding)
+            {
+                case 0: // City
+                    mapPrefabs = mapCityPrefabs;
+                    isCityMap = true;
+                    mapStart[0].SetActive(true);
+                    checkMapStartCitySpawned = true;
+                    Debug.Log("[START] Starting at City map due to safe landing");
+                    break;
+                case 1: // Beach
+                    mapPrefabs = mapBeachPrefabs;
+                    isBeachMap = true;
+                    mapStart[1].SetActive(true);
+                    checkMapStartBeachSpawned = true;
+                    Debug.Log("[START] Starting at Beach map due to safe landing");
+                    break;
+                case 2: // Desert
+                    mapPrefabs = mapDesertPrefabs;
+                    isDesertMap = true;
+                    mapStart[2].SetActive(true);
+                    checkMapStartDesertSpawned = true;
+                    Debug.Log("[START] Starting at Desert map due to safe landing");
+                    break;
+                case 3: // Field
+                    mapPrefabs = mapFieldPrefabs;
+                    isFieldMap = true;
+                    mapStart[3].SetActive(true);
+                    checkMapStartFieldSpawned = true;
+                    Debug.Log("[START] Starting at Field map due to safe landing");
+                    break;
+                case 4: // Ice
+                    mapPrefabs = mapIcePrefabs;
+                    isIceMap = true;
+                    mapStart[4].SetActive(true);
+                    checkMapStartIceSpawned = true;
+                    Debug.Log("[START] Starting at Ice map due to safe landing");
+                    break;
+                case 5: // Lava
+                    mapPrefabs = mapLavaPrefabs;
+                    isLavaMap = true;
+                    mapStart[5].SetActive(true);
+                    checkMapStartLavaSpawned = true;
+                    Debug.Log("[START] Starting at Lava map due to safe landing");
+                    break;
+            }
+            
+            // Clear safe landing flag
+            PlayerPrefs.SetInt("LastSafeLandingAirport", -1);
+            PlayerPrefs.Save();
         }
+        else
+        {
+            // Logic cũ - random map dựa vào unlock status
+            if (isMapCityUnlocked && !isMapBeachUnlocked)
+            {
+                mapPrefabs = mapCityPrefabs;
+                isCityMap = true;
+                mapStart[0].SetActive(true);
+                checkMapStartCitySpawned = true;
+            }
         if (isMapBeachUnlocked && !isMapDesertUnlocked)
         {
             int isRandomIndexMapStart = Random.Range(0, 2);
@@ -278,8 +350,16 @@ public class MapSpawner : MonoBehaviour
                 mapStart[isRandomIndexMapStart].SetActive(true);
                 checkMapStartLavaSpawned = true;
             }
+            }
         }
+        
         RandomMap();
+        
+        // *** KHỞI TẠO lastMapSwitchIndex để tránh switch liên tục ***
+        int currentMapCount = GameObject.FindGameObjectsWithTag("Map").Length;
+        lastMapSwitchIndex = currentMapCount / 20;
+        Debug.Log($"[INIT] Current map count: {currentMapCount}, starting at index: {lastMapSwitchIndex}");
+        
         StartCoroutine(SpawnMapCoroutine());
         
     }
@@ -292,27 +372,12 @@ public class MapSpawner : MonoBehaviour
 
     void Update()
     {
-        countMapSpawned = GameObject.FindGameObjectsWithTag("Map").Length;
-        if (countMapSpawned <= 20)
-        {
-            stopCheckSpawnRate01 = false;
-        }
-        else if (countMapSpawned > 20 && countMapSpawned <= 40)
-        {
-            stopCheckSpawnRate12 = false;
-        }
-        else if (countMapSpawned > 40 && countMapSpawned <= 60)
-        {
-            stopCheckSpawnRate23 = false;
-        }
-        else if (countMapSpawned > 60 && countMapSpawned <= 80)
-        {
-            stopCheckSpawnRate34 = false;
-        }
-        else if (countMapSpawned > 80 && countMapSpawned <= 100)
-        {
-            stopCheckSpawnRate45 = false;
-        }
+        // *** Chỉ đếm map tiles, không đếm airports ***
+        int totalMapObjects = GameObject.FindGameObjectsWithTag("Map").Length;
+        int airportCount = GameObject.FindGameObjectsWithTag("Airport").Length;
+        countMapSpawned = totalMapObjects - airportCount; // Trừ airports ra khỏi count
+        
+        // *** KHÔNG SET FLAGS Ở ĐÂY - Để tránh override logic trong CheckSpawnChangeMap ***
     }
 
     IEnumerator SpawnMapCoroutine()
@@ -335,31 +400,32 @@ public class MapSpawner : MonoBehaviour
             } 
         }
     }
-    void SpawnMapItem()
+void SpawnMapItem()
     {
         if (mapPrefabs.Length == 0) return;
 
         bool needSpawnTransition = false;
         
+        Debug.Log($"[SPAWN CHECK] isCityMap={isCityMap}, checkMapStartCitySpawned={checkMapStartCitySpawned}, isBeachMap={isBeachMap}, checkMapStartBeachSpawned={checkMapStartBeachSpawned}");
+        
         if (isCityMap && !checkMapStartCitySpawned)
         {
-            // Spawn Beach transition và start cho City cycle
+            Debug.Log("[TRANSITION] Detected City transition needed, calling CheckSpawnChangeMap()");
             CheckSpawnChangeMap();
             checkMapStartCitySpawned = true;
             needSpawnTransition = true;
-            Debug.Log("Spawned City->Beach transition");
+            Debug.Log("[TRANSITION] Spawned City transition");
         }
         else if (isBeachMap && !checkMapStartBeachSpawned)
         {
-            // Spawn Desert transition và start cho Beach cycle  
+            Debug.Log("[TRANSITION] Detected Beach transition needed, calling CheckSpawnChangeMap()");
             CheckSpawnChangeMap();
             checkMapStartBeachSpawned = true;
             needSpawnTransition = true;
-            Debug.Log("Spawned Beach->Desert transition");
+            Debug.Log("[TRANSITION] Spawned Beach transition");
         }
         else if (isDesertMap && !checkMapStartDesertSpawned)
         {
-            // Spawn Field transition và start cho Desert cycle
             CheckSpawnChangeMap();
             checkMapStartDesertSpawned = true;
             needSpawnTransition = true;
@@ -367,7 +433,6 @@ public class MapSpawner : MonoBehaviour
         }
         else if (isFieldMap && !checkMapStartFieldSpawned)
         {
-            // Spawn Ice transition và start cho Field cycle
             CheckSpawnChangeMap();
             checkMapStartFieldSpawned = true;
             needSpawnTransition = true;
@@ -375,7 +440,6 @@ public class MapSpawner : MonoBehaviour
         }
         else if (isIceMap && !checkMapStartIceSpawned)
         {
-            // Spawn Lava transition và start cho Ice cycle
             CheckSpawnChangeMap();
             checkMapStartIceSpawned = true;
             needSpawnTransition = true;
@@ -383,20 +447,18 @@ public class MapSpawner : MonoBehaviour
         }
         else if (isLavaMap && !checkMapStartLavaSpawned)
         {
-            // Lava không có transition tiếp theo, chỉ đánh dấu
             CheckMap45();
             checkMapStartLavaSpawned = true;
             needSpawnTransition = true;
             Debug.Log("Lava map - no next transition");
         }
         
-        // *** QUAN TRỌNG: Nếu vừa spawn transition, return để không spawn map ngay lập tức ***
         if (needSpawnTransition)
         {
             return;
         }
 
-        // *** SỬA: Set Y range dựa trên map type hiện tại (KHÔNG dựa trên StartSpawned) ***
+        // Set Y range based on current map type
         if (isCityMap)
         {
             spawnRangeYmin = spawnRangeYCityMin; 
@@ -421,52 +483,127 @@ public class MapSpawner : MonoBehaviour
         {
             spawnRangeYmin = spawnRangeYLavaMin;
         }
-        else
-        {
-            // Fallback: dựa trên StartSpawned flags
-            if(isCityStartSpawned)
-            {
-                spawnRangeYmin = spawnRangeYCityMin;
-                Debug.Log("City StartSpawned - Y: " + spawnRangeYmin);
-            }
-            else if (isBeachStartSpawned)
-            {
-                spawnRangeYmin = spawnRangeYBeachMin;
-                Debug.Log("Beach StartSpawned - Y: " + spawnRangeYmin);
-            }
-            else if (isDesertStartSpawned)
-            {
-                spawnRangeYmin = spawnRangeYDesertMin;
-                Debug.Log("Desert StartSpawned - Y: " + spawnRangeYmin);
-            }
-            else if (isFieldStartSpawned)
-            {
-                spawnRangeYmin = spawnRangeYFieldMin;
-                Debug.Log("Field StartSpawned - Y: " + spawnRangeYmin);
-            }
-            else if (isIceStartSpawned)
-            {
-                spawnRangeYmin = spawnRangeYIceMin;
-                Debug.Log("Ice StartSpawned - Y: " + spawnRangeYmin);
-            }
-            else if (isLavaStartSpawned)
-            {
-                spawnRangeYmin = spawnRangeYLavaMin;
-                Debug.Log("Lava StartSpawned - Y: " + spawnRangeYmin);
-            }
-        }
 
         // *** SPAWN ACTUAL MAP ITEMS ***
         int prefabIndex = Random.Range(0, mapPrefabs.Length);
         Vector3 spawnPosition = new Vector3(spawnRangeX, spawnRangeYmin, 0f);
         
         GameObject spawnedMap = Instantiate(mapPrefabs[prefabIndex], spawnPosition, mapPrefabs[prefabIndex].transform.rotation);
+        
         spawnRangeX += 30f;
-        
-        
-    }
-    
+        spawnCountInCurrentMap++;
 
+    
+        int modResult = spawnCountInCurrentMap % 5;
+        bool countCheck = spawnCountInCurrentMap <= 15;
+        
+        if (spawnCountInCurrentMap % 5 == 0 && spawnCountInCurrentMap <= 15)
+        {
+            
+            GameObject airportToSpawn = null;
+            
+            if (isCityMap && mapCityAirportPrefabs != null && mapCityAirportPrefabs.Length > 0)
+            {
+                int airportIndex = (spawnCountInCurrentMap / 5) - 1; // map 5 -> index 0, map 10 -> index 1, map 15 -> index 2
+                Debug.Log($"[AIRPORT] Calculated airport index: {airportIndex}");
+                if (airportIndex < mapCityAirportPrefabs.Length)
+                {
+                    airportToSpawn = mapCityAirportPrefabs[airportIndex];
+                    // Lấy Y từ mapCityStartPrefab
+                    if (mapCityStartPrefab != null)
+                    {
+                        spawnRangeYmin = -4.2f;
+                    }
+                }
+                else
+                {
+                    Debug.LogWarning($"[AIRPORT] Airport index {airportIndex} out of range for City airports (length: {mapCityAirportPrefabs.Length})");
+                }
+            }
+            else if (isBeachMap && mapBeachAirportPrefabs != null && mapBeachAirportPrefabs.Length > 0)
+            {
+                Debug.Log($"[AIRPORT] Beach map detected. Array length: {mapBeachAirportPrefabs.Length}");
+                int airportIndex = (spawnCountInCurrentMap / 5) - 1;
+                Debug.Log($"[AIRPORT] Calculated airport index: {airportIndex}");
+                if (airportIndex < mapBeachAirportPrefabs.Length)
+                {
+                    airportToSpawn = mapBeachAirportPrefabs[airportIndex];
+                    // Lấy Y từ mapBeachStartPrefab
+                    if (mapBeachStartPrefab != null)
+                    {
+                        spawnRangeYmin = -4.2f;
+                    }
+                }
+            }
+            else if (isDesertMap && mapDesertAirportPrefabs != null && mapDesertAirportPrefabs.Length > 0)
+            {
+                int airportIndex = (spawnCountInCurrentMap / 5) - 1;
+                if (airportIndex < mapDesertAirportPrefabs.Length)
+                {
+                    airportToSpawn = mapDesertAirportPrefabs[airportIndex];
+                    // Lấy Y từ mapDesertStartPrefab
+                    if (mapDesertStartPrefab != null)
+                    {
+                        spawnRangeYmin = -4.2f;
+                    }
+                }
+            }
+            else if (isFieldMap && mapFieldAirportPrefabs != null && mapFieldAirportPrefabs.Length > 0)
+            {
+                int airportIndex = (spawnCountInCurrentMap / 5) - 1;
+                if (airportIndex < mapFieldAirportPrefabs.Length)
+                {
+                    airportToSpawn = mapFieldAirportPrefabs[airportIndex];
+                    // Lấy Y từ mapFieldStartPrefab
+                    if (mapFieldStartPrefab != null)
+                    {
+                        spawnRangeYmin = -4.2f;
+                    }
+                }
+            }
+            else if (isIceMap && mapIceAirportPrefabs != null && mapIceAirportPrefabs.Length > 0)
+            {
+                int airportIndex = (spawnCountInCurrentMap / 5) - 1;
+                if (airportIndex < mapIceAirportPrefabs.Length)
+                {
+                    airportToSpawn = mapIceAirportPrefabs[airportIndex];
+                    // Lấy Y từ mapIceStartPrefab
+                    if (mapIceStartPrefab != null)
+                    {
+                        spawnRangeYmin = -4.2f;
+                    }
+                }
+            }
+            else if (isLavaMap && mapLavaAirportPrefabs != null && mapLavaAirportPrefabs.Length > 0)
+            {
+                int airportIndex = (spawnCountInCurrentMap / 5) - 1;
+                if (airportIndex < mapLavaAirportPrefabs.Length)
+                {
+                    airportToSpawn = mapLavaAirportPrefabs[airportIndex];
+                    // Lấy Y từ mapLavaStartPrefab
+                    if (mapLavaStartPrefab != null)
+                    {
+                        spawnRangeYmin = -4.2f;
+                    }
+                }
+            }
+
+            // Spawn airport if found
+            if (airportToSpawn != null)
+            {
+                Vector3 airportPosition = new Vector3(spawnRangeX, spawnRangeYmin, 0f);
+                GameObject spawnedAirport = Instantiate(airportToSpawn, airportPosition, airportToSpawn.transform.rotation);
+                spawnedAirport.name = $"AIRPORT_{spawnCountInCurrentMap}"; // Đặt tên để dễ tìm
+                spawnedAirport.tag = "Airport"; // *** Gắn tag riêng để không bị đếm vào countMapSpawned ***
+                spawnRangeX += 30f;
+                Debug.Log($"[AIRPORT] Spawned airport at map {spawnCountInCurrentMap}, tagged as 'Airport'");
+            }
+            else
+            {
+                Debug.LogWarning($"[AIRPORT] No airport prefab found for current biome at map {spawnCountInCurrentMap}");
+            }
+        }
+    }
     public void DeleteSpawnedItems()
     {
         GameObject[] spawnedItems = GameObject.FindGameObjectsWithTag("Map");
@@ -474,21 +611,42 @@ public class MapSpawner : MonoBehaviour
         {
             Destroy(item);
         }
+        
+        // *** Xóa cả airports ***
+        GameObject[] spawnedAirports = GameObject.FindGameObjectsWithTag("Airport");
+        foreach (GameObject airport in spawnedAirports)
+        {
+            Destroy(airport);
+        }
+        
         spawnRangeX = -12f;
+        lastMapSwitchIndex = -1; // *** RESET để bắt đầu từ đầu ***
+        spawnCountInCurrentMap = 0; // *** RESET counter ***
         Reset();
 
     }
 
+    private int lastMapSwitchIndex = -1; // Track khi nào đã switch map
+    
     public void CheckMap()
     {
-        int countSpawned = GameObject.FindGameObjectsWithTag("Map").Length;
+        // *** Chỉ đếm map tiles, không đếm airports ***
+        int totalMapObjects = GameObject.FindGameObjectsWithTag("Map").Length;
+        int airportCount = GameObject.FindGameObjectsWithTag("Airport").Length;
+        int countSpawned = totalMapObjects - airportCount;
 
         int index = countSpawned / 20;   // Mỗi 20 map → đổi map
         if (index >= tempSpawnList.Count)
             return;
 
-        int nextMap = tempSpawnList[index];
-        SwitchToNextMap(nextMap);
+        // *** CHỈ SWITCH KHI INDEX THAY ĐỔI ***
+        if (index != lastMapSwitchIndex)
+        {
+            int nextMap = tempSpawnList[index];
+            SwitchToNextMap(nextMap);
+            lastMapSwitchIndex = index;
+            Debug.Log($"[MAP SWITCH] Switched at map count: {countSpawned}, index: {index}");
+        }
     }
 
     void ResetAllMapFlags()
@@ -499,6 +657,44 @@ public class MapSpawner : MonoBehaviour
         isFieldMap = false;
         isIceMap = false;
         isLavaMap = false;
+        
+        // *** RESET transition flags để spawn transition maps khi chuyển biome ***
+        checkMapStartCitySpawned = false;
+        checkMapStartBeachSpawned = false;
+        checkMapStartDesertSpawned = false;
+        checkMapStartFieldSpawned = false;
+        checkMapStartIceSpawned = false;
+        checkMapStartLavaSpawned = false;
+        
+        // *** RESET stopCheckSpawnRate flags để cho phép spawn transition ***
+        // Dựa vào lastMapSwitchIndex để biết đang ở transition nào
+        if (lastMapSwitchIndex == 0)
+        {
+            stopCheckSpawnRate01 = false;
+            Debug.Log("[RESET] Enabled transition 0->1");
+        }
+        else if (lastMapSwitchIndex == 1)
+        {
+            stopCheckSpawnRate12 = false;
+            Debug.Log("[RESET] Enabled transition 1->2");
+        }
+        else if (lastMapSwitchIndex == 2)
+        {
+            stopCheckSpawnRate23 = false;
+            Debug.Log("[RESET] Enabled transition 2->3");
+        }
+        else if (lastMapSwitchIndex == 3)
+        {
+            stopCheckSpawnRate34 = false;
+            Debug.Log("[RESET] Enabled transition 3->4");
+        }
+        else if (lastMapSwitchIndex == 4)
+        {
+            stopCheckSpawnRate45 = false;
+            Debug.Log("[RESET] Enabled transition 4->5");
+        }
+        
+        Debug.Log("[RESET] Reset all map transition flags");
     }
 
 
@@ -592,52 +788,89 @@ public class MapSpawner : MonoBehaviour
             return;
         }
 
+        Debug.Log($"[CHECK SPAWN] stopCheckSpawnRate01={stopCheckSpawnRate01}, stopCheckSpawnRate12={stopCheckSpawnRate12}");
+        
         if (!stopCheckSpawnRate01)
         {
+            Debug.Log("[CHECK SPAWN] Calling CheckMap01()");
             CheckMap01();
             stopCheckSpawnRate01 = true;
+            Debug.Log("[CHECK SPAWN] ✓ Đã spawn transition map 0-1");
             return;
         }
         if (!stopCheckSpawnRate12)
         {
             CheckMap12();
             stopCheckSpawnRate12 = true;
+            Debug.Log("Đã spawn transition map 1-2");
             return;
         }
         if (!stopCheckSpawnRate23)
         {
             CheckMap23();
             stopCheckSpawnRate23 = true;
+            Debug.Log("Đã spawn transition map 2-3");
             return;
         }
         if (!stopCheckSpawnRate34)
         {
             CheckMap34();
             stopCheckSpawnRate34 = true;
+            Debug.Log("Đã spawn transition map 3-4");
             return;
         }
         if (!stopCheckSpawnRate45)
         {
             CheckMap45();
             stopCheckSpawnRate45 = true;
+            Debug.Log("Đã spawn transition map 4-5");
             return;
         }
 
     }
 
-        void SwitchToNextMap(int mapType)
+    public void SwitchToNextMap(int mapType)
     {
         ResetAllMapFlags();
 
+        spawnCountInCurrentMap = 0; 
+
         switch (mapType)
         {
-            case 0: mapPrefabs = mapCityPrefabs; isCityMap = true; break;
-            case 1: mapPrefabs = mapBeachPrefabs; isBeachMap = true; break;
-            case 2: mapPrefabs = mapDesertPrefabs; isDesertMap = true; break;
-            case 3: mapPrefabs = mapFieldPrefabs; isFieldMap = true; break;
-            case 4: mapPrefabs = mapIcePrefabs; isIceMap = true; break;
-            case 5: mapPrefabs = mapLavaPrefabs; isLavaMap = true; break;
+            case 0: 
+                mapPrefabs = mapCityPrefabs; 
+                isCityMap = true; 
+                // *** KHÔNG SET checkMapStartCitySpawned = true ở đây ***
+                // *** Để SpawnMapItem() tự detect và spawn transition ***
+                Debug.Log("[SWITCH] Switched to City, ready for transition spawn");
+                break;
+            case 1: 
+                mapPrefabs = mapBeachPrefabs; 
+                isBeachMap = true; 
+                Debug.Log("[SWITCH] Switched to Beach, ready for transition spawn");
+                break;
+            case 2: 
+                mapPrefabs = mapDesertPrefabs; 
+                isDesertMap = true; 
+                Debug.Log("[SWITCH] Switched to Desert, ready for transition spawn");
+                break;
+            case 3: 
+                mapPrefabs = mapFieldPrefabs; 
+                isFieldMap = true; 
+                Debug.Log("[SWITCH] Switched to Field, ready for transition spawn");
+                break;
+            case 4: 
+                mapPrefabs = mapIcePrefabs; 
+                isIceMap = true; 
+                Debug.Log("[SWITCH] Switched to Ice, ready for transition spawn");
+                break;
+            case 5: 
+                mapPrefabs = mapLavaPrefabs; 
+                isLavaMap = true; 
+                Debug.Log("[SWITCH] Switched to Lava, ready for transition spawn");
+                break;
         }
+        Debug.Log($"[MAP SWITCH] Switched to map type {mapType}, counter reset to 0");
     }
 
 

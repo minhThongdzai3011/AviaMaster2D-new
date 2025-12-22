@@ -1018,6 +1018,46 @@ public class GManager : MonoBehaviour
             SaveTotalDiamond();
         }
 
+        if(Plane.instance != null && Input.GetKeyDown(KeyCode.Keypad5))
+        {
+            Plane.instance.isAirPortBeach = true;
+            PlayerPrefs.SetInt("LastSafeLandingAirport", 1);
+            PlayerPrefs.Save();
+            AgainGame();
+            return; 
+        }
+        if(Plane.instance != null && Input.GetKeyDown(KeyCode.Keypad6))
+        {
+            Plane.instance.isAirPortDesert = true;
+            PlayerPrefs.SetInt("LastSafeLandingAirport", 2);
+            PlayerPrefs.Save();
+            AgainGame();
+            return; 
+        }
+        if(Plane.instance != null && Input.GetKeyDown(KeyCode.Keypad7))
+        {
+            Plane.instance.isAirPortField = true;
+            PlayerPrefs.SetInt("LastSafeLandingAirport", 3);
+            PlayerPrefs.Save();
+            AgainGame();
+            return; 
+        }
+        if(Plane.instance != null && Input.GetKeyDown(KeyCode.Keypad8))
+        {
+            Plane.instance.isAirPortIce = true;
+            PlayerPrefs.SetInt("LastSafeLandingAirport", 4);
+            PlayerPrefs.Save();
+            AgainGame();
+            return; 
+        }
+        if(Plane.instance != null && Input.GetKeyDown(KeyCode.Keypad9))
+        {
+            Plane.instance.isAirPortLava = true;
+            PlayerPrefs.SetInt("LastSafeLandingAirport", 5);
+            PlayerPrefs.Save();
+            AgainGame();
+            return; 
+        }
 
         if (distanceText != null && !stopDisplayDistance) distanceText.text = distanceTraveled.ToString("F0") + " ft";
         if (altitudeText != null)
@@ -1936,6 +1976,7 @@ public class GManager : MonoBehaviour
     private float startZ;
     private float startWheelZ;
     public bool isBonus = false;
+    public bool isSuperBonus = false;
     public void rotationAngleZ()
     {
         if (isRotationOscillating)

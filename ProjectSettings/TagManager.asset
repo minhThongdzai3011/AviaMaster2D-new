@@ -44,6 +44,8 @@ TagManager:
   - NofitiLava
   - Diamond
   - Boom
+  - Airport
+  - MapTransition
   layers:
   - Default
   - TransparentFX

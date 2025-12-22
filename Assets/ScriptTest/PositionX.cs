@@ -59,7 +59,7 @@ public class PositionX : MonoBehaviour
                 // Plane.instance.trailRendererPerfect.gameObject.SetActive(true);
                 // Plane.instance.trailEffect.gameObject.SetActive(false);
 
-                GManager.instance.isBonus = true;    
+                // GManager.instance.isBonus = true;    
                 Debug.Log(" Kích hoạt Max Power!");
                 AudioManager.instance.PlaySound(AudioManager.instance.perfectAngleSoundClip);
                 Settings.instance.imageDiamondCoinText.gameObject.SetActive(false);
@@ -87,7 +87,7 @@ public class PositionX : MonoBehaviour
 
                 Debug.Log(" Không kích hoạt Max Power.");
                 AudioManager.instance.PlaySound(AudioManager.instance.notPerfectAngleSoundClip);
-                GManager.instance.isBonus = false;
+                // GManager.instance.isBonus = false;
                 Settings.instance.imageDiamondCoinText.gameObject.SetActive(false);
                 TrailRendererRight.instance.ChangeColor();
                 if( TrailRendererLeft.instance != null ){TrailRendererLeft.instance.ChangeColor();}

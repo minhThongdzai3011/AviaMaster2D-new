@@ -682,7 +682,16 @@ public class Settings : MonoBehaviour
             totalValue *= 2;
             bonusText.text = "Bonus : x2";
             GManager.instance.isBonus = false;
+            GManager.instance.isSuperBonus = false;
         }
+        else if (GManager.instance.isSuperBonus)
+        {
+            totalValue *= 5;
+            bonusText.text = "Super Bonus : x5";
+            GManager.instance.isSuperBonus = false;
+            GManager.instance.isBonus = false;
+        }
+
         else bonusText.text = "No Bonus";
 
         Sequence seq = DOTween.Sequence();
