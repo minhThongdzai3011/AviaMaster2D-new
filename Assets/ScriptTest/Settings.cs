@@ -26,6 +26,11 @@ public class Settings : MonoBehaviour
     public TextMeshProUGUI highScoreText;
     public TextMeshProUGUI prizeChestText;
     public TextMeshProUGUI prizeNextChestText;
+    public TextMeshProUGUI value1Text;
+    public TextMeshProUGUI value2Text;
+    public TextMeshProUGUI value3Text;
+    public TextMeshProUGUI value4Text;
+    
     [Header("Image Settings")]
     public Image musicImageOn;
     public Image musicImageOff;
@@ -139,7 +144,7 @@ public class Settings : MonoBehaviour
         StartCountdown();
         GManager.instance.coinEffect.Stop();
     }
-
+    public bool isAltitudeImageActive = true;
     public void Update()
     {
         if (isPrizeCoin)
@@ -147,7 +152,7 @@ public class Settings : MonoBehaviour
             UpdateSliderPrizeCoin();
         }
         altitudeText.text = "" + (int)GManager.instance.currentAltitude + " m";
-        if (GManager.instance.currentAltitude >= 30)
+        if (GManager.instance.currentAltitude >= 30 && isAltitudeImageActive)
         {
             altitudeImage.gameObject.SetActive(true);
         }
@@ -568,15 +573,13 @@ public class Settings : MonoBehaviour
     public bool isPrizeCoinDone = true;
     
     [Header("Chest Tier System")]
-    public int chestTier = 1; // Lần thứ mấy (1, 2, 3, 4)
-    public float[] chestRequirements = { 500f, 1000f, 2000f, 2000f }; // Coin cần kiếm được
-    public int[] chestRewards = { 2000, 5000, 12000, 15000 }; // Phần thưởng tương ứng
-    void UpdateSliderPrizeCoin()
+    public int chestTier = 1; 
+    public float[] chestRequirements = { 500f, 1000f, 2000f, 2000f };
+    public int[] chestRewards = { 2000, 5000, 12000, 15000 };     void UpdateSliderPrizeCoin()
     {
         if (prizeSlider != null)
         {
-            // Tính toán giá trị mục tiêu dựa trên tier hiện tại
-            float maxDistanceCoin = GetCurrentRequirement(); // Thay đổi theo tier
+            float maxDistanceCoin = GetCurrentRequirement();
 
             if (Plane.instance == null)
             {
@@ -773,15 +776,23 @@ public class Settings : MonoBehaviour
             int currentReward = GetCurrentReward();
             prizeChestText.text = "+ " + currentReward.ToString();
             
-            // Hiển thị phần thưởng tiếp theo hoặc MAX nếu đã đạt tier 4
+            // Hiển thị phần thưởng tiếp theo
             if (chestTier < 4)
             {
-                int nextReward = chestRewards[chestTier]; // chestTier là tier hiện tại, chestTier là index của tier kế tiếp
-                prizeNextChestText.text = "Next : " + nextReward.ToString();
+                int nextRewardIndex = chestTier; 
+                if (nextRewardIndex < chestRewards.Length)
+                {
+                    int nextReward = chestRewards[nextRewardIndex];
+                    prizeNextChestText.text = "Next : " + nextReward.ToString();
+                    Debug.Log($"ChestTier: {chestTier}, Next reward index: {nextRewardIndex}, Next reward: {nextReward}");
+                }
+                else
+                {
+                    Debug.LogError($"Next reward index {nextRewardIndex} out of bounds! Array length: {chestRewards.Length}");
+                }
             }
             else
             {
-                // Đã đạt tier 4 (max tier), tier 4 sẽ lặp lại
                 prizeNextChestText.text = "Next : " + chestRewards[3].ToString() + " (MAX)";
             }
             AudioManager.instance.PlaySound(AudioManager.instance.buttonSoundClip);

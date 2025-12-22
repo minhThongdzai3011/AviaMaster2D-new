@@ -393,6 +393,10 @@ public class GManager : MonoBehaviour
 
         // Bước 3: Chờ đến khi đạt độ cao và xoay dần dần
         float targetAltitude = startPosition.y + boostedAltitude;
+        if(PositionX.instance != null && PositionX.instance.isMaxPower)
+        {
+            targetAltitude += boostedAltitude * 0.5f; // Tăng thêm 50% nếu max power
+        }
         float startAltitude = airplaneRigidbody2D.position.y;
         
         // ✅ Lấy góc HIỆN TẠI từ Bước 1 (thay vì giả định 0°)
@@ -672,7 +676,7 @@ public class GManager : MonoBehaviour
                 minVelocityX = launchForce / 1.34f;
             }
             if (minVelocityX < 20f && !Plane.instance.isGrounded) minVelocityX = 20f; // Đảm bảo tối thiểu 20 m/s
-            if (minVelocityX > 40f && !Plane.instance.isGrounded) minVelocityX = 40f; // Giới hạn tối đa 40 m/s
+            if (minVelocityX > 40f && !Plane.instance.isGrounded) minVelocityX = 35f; // Giới hạn tối đa 40 m/s
             if (currentVel.x < minVelocityX && !Plane.instance.isGrounded)
             {
                 currentVel.x = minVelocityX;
@@ -1732,6 +1736,7 @@ public class GManager : MonoBehaviour
             levelFuelText.text = "Fuel capacity increased by " + rateFuel + "%";
             Debug.Log($"UpgradeFuel: Level {levelFuel}, Rate {rateFuel}%, Duration {durationFuel}s");
             PositionX.instance.timePerfect = durationFuel * 0.5f;
+            LuckyWheel.instance.checkValueLuckyWheel();
         }
     }
 
@@ -1788,6 +1793,7 @@ public class GManager : MonoBehaviour
             CheckPlane.instance.CheckMoneyForUpgradeButtonNext();
             levelBoostText.text = "Flight stability increased " + rateBoost + "%";
             Debug.Log($"UpgradeBoost: Level {levelBoost}, Rate {rateBoost}%, TotalBoost {totalBoost}");
+            LuckyWheel.instance.checkValueLuckyWheel();
         }
 
     }
@@ -1830,6 +1836,7 @@ public class GManager : MonoBehaviour
 
             levelPowerText.text = "Initial thrust increased by " + ratePower + "%";
             Debug.Log($"UpgradePower: Level {levelPower}, Rate {ratePower}%, Force {launchForce}");
+            LuckyWheel.instance.checkValueLuckyWheel();
         }
     }
 

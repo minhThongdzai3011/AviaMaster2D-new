@@ -88,10 +88,9 @@ public class RocketSpawner : MonoBehaviour
             rocketPrefabs[prefabIndex].transform.rotation
         );
 
-        // ===== LOGIC MỚI =====
         coinSpawnCount++;
 
-        if (coinSpawnCount >= 5)
+        if (coinSpawnCount >= 3)
         {
             coinSpawnCount = 0;
             SpawnDiamond();

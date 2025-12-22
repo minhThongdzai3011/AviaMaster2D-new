@@ -13,16 +13,39 @@ public class LuckyWheel : MonoBehaviour
     public float maxRotatePower = 1800f;
     public float minStopPower = 200f;
     public float maxStopPower = 400f;
+    public int[] normalLuckValues = { 12500, 17500, 5000, 7500 };
+    public int[] superLuckValues = { 25000, 35000, 15000, 20000 };
+    public int[] ultraLuckValues = { 50000, 75000, 30000, 40000 };
     private Rigidbody2D rbody;
     public Sprite prizeSpriteImageCoin;
     public Sprite prizeSpriteCoin;
     int inRotate;
     // Start is called before the first frame update
-    void Start()
+    public void Awake()
     {
         instance = this;
         rbody = GetComponent<Rigidbody2D>();
-        
+        int a = PlayerPrefs.GetInt("isLuckyWheel", 0);
+        if (a == 1)
+        {
+            normalLuckValues = superLuckValues;
+        }
+        else if (a == 2)
+        {
+            normalLuckValues = ultraLuckValues;
+        }
+        else
+        {
+            normalLuckValues = new int[] { 12500, 17500, 5000, 7500 };
+        }
+    }
+    void Start()
+    {
+        // Gọi sau khi Settings.instance đã được khởi tạo
+        if (Settings.instance != null)
+        {
+            ChangeTextValueLuckyWheel();
+        }
     }
     float t;
 
@@ -47,6 +70,71 @@ public class LuckyWheel : MonoBehaviour
         }
         
     }
+    public void checkValueLuckyWheel()
+    {
+        // Đảm bảo các mảng reward được khởi tạo đúng
+        if (superLuckValues == null || superLuckValues.Length < 4)
+        {
+            superLuckValues = new int[] { 25000, 35000, 15000, 20000 };
+            Debug.LogWarning("superLuckValues was null or invalid, reinitializing...");
+        }
+        
+        if (ultraLuckValues == null || ultraLuckValues.Length < 4)
+        {
+            ultraLuckValues = new int[] { 50000, 75000, 30000, 40000 };
+            Debug.LogWarning("ultraLuckValues was null or invalid, reinitializing...");
+        }
+        
+        // Kiểm tra từ cao xuống thấp để đảm bảo logic đúng
+        // Tier 3: > 50000 -> Ultra Luck (phần thưởng cao nhất)
+        if (GManager.instance.moneyFuel > 50000 || GManager.instance.moneyBoost > 50000 || GManager.instance.moneyPower > 50000)
+        {
+            normalLuckValues = new int[] { ultraLuckValues[0], ultraLuckValues[1], ultraLuckValues[2], ultraLuckValues[3] };
+            PlayerPrefs.SetInt("isLuckyWheel", 2);
+            PlayerPrefs.Save();
+            Debug.Log("Lucky Wheel set to ULTRA LUCK: [" + string.Join(", ", normalLuckValues) + "]");
+            ChangeTextValueLuckyWheel();
+        }
+        // Tier 2: > 20000 và <= 50000 -> Super Luck (phần thưởng trung bình)
+        else if (GManager.instance.moneyFuel > 20000 || GManager.instance.moneyBoost > 20000 || GManager.instance.moneyPower > 20000)
+        {
+            normalLuckValues = new int[] { superLuckValues[0], superLuckValues[1], superLuckValues[2], superLuckValues[3] };
+            PlayerPrefs.SetInt("isLuckyWheel", 1);
+            PlayerPrefs.Save();
+            Debug.Log("Lucky Wheel set to SUPER LUCK: [" + string.Join(", ", normalLuckValues) + "]");
+            ChangeTextValueLuckyWheel();
+        }
+        // Tier 1: <= 20000 -> Normal Luck (phần thưởng cơ bản)
+        else
+        {
+            normalLuckValues = new int[] { 12500, 17500, 5000, 7500 };
+            PlayerPrefs.SetInt("isLuckyWheel", 0);
+            PlayerPrefs.Save();
+            Debug.Log("Lucky Wheel set to NORMAL LUCK: [12500, 17500, 5000, 7500]");
+            ChangeTextValueLuckyWheel();
+        }
+    }
+
+    public void ChangeTextValueLuckyWheel()
+    {
+        if (Settings.instance == null)
+        {
+            Debug.LogWarning("Settings.instance is null, skipping ChangeTextValueLuckyWheel");
+            return;
+        }
+        
+        if (normalLuckValues == null || normalLuckValues.Length < 4)
+        {
+            Debug.LogError("normalLuckValues is null or has insufficient elements!");
+            return;
+        }
+        
+        Settings.instance.value1Text.text = normalLuckValues[0] + "";
+        Settings.instance.value2Text.text = normalLuckValues[1] + "";
+        Settings.instance.value3Text.text = normalLuckValues[2] + "";
+        Settings.instance.value4Text.text = normalLuckValues[3] + "";
+    }
+
 
     public void Rotate()
     {
@@ -82,9 +170,9 @@ public class LuckyWheel : MonoBehaviour
         if (adjustedRot >= 0 && adjustedRot < 45)
         {
             Win("12500Coin");
-            a = 12500;
+            a = normalLuckValues[0];
             b = "Coin";
-            GManager.instance.AddCoinByLuckyWheel(12500);
+            GManager.instance.AddCoinByLuckyWheel(normalLuckValues[0]);
             Debug.Log("Rot " + adjustedRot);
         }
         else if (adjustedRot >= 45 && adjustedRot < 90)
@@ -98,9 +186,9 @@ public class LuckyWheel : MonoBehaviour
         else if (adjustedRot >= 90 && adjustedRot < 135)
         {
             Win("17500Coin");
-            a = 17500;
+            a = normalLuckValues[1];
             b = "Coin";
-            GManager.instance.AddCoinByLuckyWheel(17500);
+            GManager.instance.AddCoinByLuckyWheel(normalLuckValues[1]);
             Debug.Log("Rot " + adjustedRot);
         }
         else if (adjustedRot >= 135 && adjustedRot < 180)
@@ -114,9 +202,9 @@ public class LuckyWheel : MonoBehaviour
         else if (adjustedRot >= 180 && adjustedRot < 225)
         {
             Win("5000Coin");
-            a = 5000;
+            a = normalLuckValues[2];
             b = "Coin";
-            GManager.instance.AddCoinByLuckyWheel(5000);
+            GManager.instance.AddCoinByLuckyWheel(normalLuckValues[2]);
             Debug.Log("Rot " + adjustedRot);
         }
         else if (adjustedRot >= 225 && adjustedRot < 270)
@@ -130,9 +218,9 @@ public class LuckyWheel : MonoBehaviour
         else if (adjustedRot >= 270 && adjustedRot < 315)
         {
             Win("7500Coin");
-            a = 7500;
+            a = normalLuckValues[3];
             b = "Coin";
-            GManager.instance.AddCoinByLuckyWheel(7500);
+            GManager.instance.AddCoinByLuckyWheel(normalLuckValues[3]);
             Debug.Log("Rot " + adjustedRot);
         }
         else // 315 <= adjustedRot < 360
