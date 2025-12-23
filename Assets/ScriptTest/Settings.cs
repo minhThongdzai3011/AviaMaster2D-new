@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening; // Import DOTween
 
+
 public class Settings : MonoBehaviour
 {
     public static Settings instance;
@@ -103,14 +104,14 @@ public class Settings : MonoBehaviour
             AdsLuckyWheelButton.gameObject.SetActive(false);
         }
         
-        currentTime = PlayerPrefs.GetInt("SaveTime", 100);
+        currentTime = PlayerPrefs.GetInt("SaveTime", 10);
         
         // Load chest tier (giới hạn tối đa là 4)
         chestTier = PlayerPrefs.GetInt("ChestTier", 1);
         if (chestTier > 4) chestTier = 4;
         Debug.Log($"Loaded ChestTier: {chestTier} - Requirement: {GetCurrentRequirement()}coin -> Reward: {GetCurrentReward()}coin");
 
-        if (currentTime < 100 && currentTime > 0) 
+        if (currentTime < 10 && currentTime > 0) 
         {
             resultText.text = "Waiting...";
             isSpinning = false;
@@ -677,7 +678,7 @@ public class Settings : MonoBehaviour
 
         totalValue = distanceValue + collectValue;
 
-        if (GManager.instance.isBonus)
+        if (GManager.instance.isBonus && !GManager.instance.isSuperBonus)
         {
             totalValue *= 2;
             bonusText.text = "Bonus : x2";
@@ -687,6 +688,7 @@ public class Settings : MonoBehaviour
         else if (GManager.instance.isSuperBonus)
         {
             totalValue *= 5;
+            bonusText.color = new Color32(156, 147, 0, 255);
             bonusText.text = "Super Bonus : x5";
             GManager.instance.isSuperBonus = false;
             GManager.instance.isBonus = false;
@@ -802,7 +804,7 @@ public class Settings : MonoBehaviour
             }
             else
             {
-                prizeNextChestText.text = "Next : " + chestRewards[3].ToString() + " (MAX)";
+                prizeNextChestText.text = "Max : " + chestRewards[3].ToString();
             }
             AudioManager.instance.PlaySound(AudioManager.instance.buttonSoundClip);
 
@@ -841,14 +843,11 @@ public class Settings : MonoBehaviour
         }
         AudioManager.instance.PlaySound(AudioManager.instance.buttonSoundClip);
         
-        // Lấy phần thưởng theo tier hiện tại
         int currentReward = GetCurrentReward();
         Debug.Log($"Chest Tier {chestTier} claimed! Reward: {currentReward} coins");
         
-        // Cộng tiền ngay lập tức
         GManager.instance.totalMoney += currentReward;
         
-        // Hiển thị animation cộng tiền
         Sequence seq = DOTween.Sequence();
         seq.Append(DOVirtual.Float(totalValue, totalValue + currentReward, 2f, v =>
         {
@@ -856,7 +855,6 @@ public class Settings : MonoBehaviour
         }));
         totalValue += currentReward;
         
-        // Tăng tier (giới hạn ở 4, sau đó lặp lại tier 4)
         if (chestTier < 4)
         {
             chestTier++;
@@ -865,7 +863,6 @@ public class Settings : MonoBehaviour
         }
         else
         {
-            // Đã đạt tier 4 (max), giữ nguyên tier 4 để lặp lại
             Debug.Log($"Max chest tier reached! Stays at tier 4: {GetCurrentRequirement()}coin -> Reward: {GetCurrentReward()}coin");
         }
         PlayerPrefs.SetFloat("TotalMoney", GManager.instance.totalMoney);

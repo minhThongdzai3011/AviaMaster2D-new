@@ -176,10 +176,37 @@ public class GManager : MonoBehaviour
         Physics2D.gravity = new Vector2(0f, -9.81f * gravityScale);
         totalMoney = PlayerPrefs.GetFloat("TotalMoney", 0);
         totalMoneyText.text = totalMoney.ToString("F0");
-        
+        if (LuckyWheel.instance != null)
+        {
+            LuckyWheel.instance.checkValueLuckyWheel();
+        }
+        else
+        {
+            // Delay check nếu LuckyWheel chưa sẵn sàng
+            StartCoroutine(DelayedLuckyWheelCheck());
+        }
         SaveTotalMoney();
         SaveTotalDiamond();
         totalBoostMaxPower = totalBoost;
+        
+        // Kiểm tra LuckyWheel sau khi tất cả đã được khởi tạo
+        StartCoroutine(DelayedLuckyWheelCheck());
+    }
+    
+    // Coroutine để kiểm tra LuckyWheel sau một chút
+    IEnumerator DelayedLuckyWheelCheck()
+    {
+        yield return new WaitForSeconds(0.1f);
+        
+        if (LuckyWheel.instance != null)
+        {
+            LuckyWheel.instance.checkValueLuckyWheel();
+            Debug.Log("Delayed LuckyWheel check completed in Start()");
+        }
+        else
+        {
+            Debug.LogWarning("LuckyWheel.instance still null after delay in Start()");
+        }
     }
 
     
@@ -256,7 +283,7 @@ public class GManager : MonoBehaviour
     }
 
     public bool controlPlane = false;
-
+    public bool isPlayBolide = false;
     IEnumerator LaunchSequence()
     {
         yield return new WaitForSeconds(0.5f);
@@ -266,7 +293,7 @@ public class GManager : MonoBehaviour
         
         // THÊM: Set flag bay ngang
         isHorizontalFlying = true;
-        
+        isPlayBolide = true;
         // Bước 1: Di chuyển ngang một đoạn r
         float r = 10f;
         float horizontalSpeed = 10f;
@@ -541,14 +568,14 @@ public class GManager : MonoBehaviour
                 Debug.Log($"Thời gian điều khiển: {Mathf.FloorToInt(timer)}s / {durationFuel}s");
             }
 
-            if (Input.GetKey(KeyCode.A))
+            if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
             {
                 PlainUp();
                 buttonDownImage.color = Color.white;
                 buttonUpImage.color = Color.gray;
 
             }
-            else if (Input.GetKey(KeyCode.D))
+            else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
             {
                 PlainDown();
                 buttonDownImage.color = Color.gray;
@@ -688,21 +715,21 @@ public class GManager : MonoBehaviour
             }
             
             // Kiểm tra input A/D để điều khiển góc rơi
-            bool hasPlayerInput = Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D);
+            bool hasPlayerInput = Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow);
             
             if (hasPlayerInput)
             {
                 float targetAngle = currentZ0;
                 float controlSpeed = 80f; // Tốc độ điều khiển (độ/giây)
                 
-                if (Input.GetKey(KeyCode.A))
+                if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
                 {
                     // A: Xoay lên (ít nghiêng xuống) - hướng về -10°
                     targetAngle = Mathf.MoveTowards(currentZ0, -10f, controlSpeed * Time.deltaTime);
                     buttonDownImage.color = Color.white;
                     buttonUpImage.color = Color.gray;
                 }
-                else if (Input.GetKey(KeyCode.D))
+                else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
                 {
                     // D: Xoay xuống (nghiêng xuống nhiều) - hướng về -35°
                     targetAngle = Mathf.MoveTowards(currentZ0, -35f, controlSpeed * Time.deltaTime);
@@ -815,7 +842,7 @@ public class GManager : MonoBehaviour
                 PlainDown();
             }
         }
-        if (!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D) && !isHoldingButtonUp && !isHoldingButtonDown && isControllable && !isHorizontalFlying)
+        if (!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D) && !isHoldingButtonUp && !isHoldingButtonDown && isControllable && !isHorizontalFlying &&  !Input.GetKey(KeyCode.LeftArrow) && !Input.GetKey(KeyCode.RightArrow))
         {
             checkControlPlane = true;
         }
@@ -986,7 +1013,7 @@ public class GManager : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.Keypad2))
         {
-            totalMoney += 10000;
+            totalMoney += 100000;
             PlayerPrefs.SetFloat("TotalMoney", totalMoney);
             PlayerPrefs.Save();
             SaveTotalMoney();
@@ -1023,7 +1050,6 @@ public class GManager : MonoBehaviour
             Plane.instance.isAirPortBeach = true;
             PlayerPrefs.SetInt("LastSafeLandingAirport", 1);
             PlayerPrefs.Save();
-            AgainGame();
             return; 
         }
         if(Plane.instance != null && Input.GetKeyDown(KeyCode.Keypad6))
@@ -1031,7 +1057,7 @@ public class GManager : MonoBehaviour
             Plane.instance.isAirPortDesert = true;
             PlayerPrefs.SetInt("LastSafeLandingAirport", 2);
             PlayerPrefs.Save();
-            AgainGame();
+            Debug.Log("[CHEAT] Set safe landing to Desert (2), use Keypad0 to restart");
             return; 
         }
         if(Plane.instance != null && Input.GetKeyDown(KeyCode.Keypad7))
@@ -1039,7 +1065,7 @@ public class GManager : MonoBehaviour
             Plane.instance.isAirPortField = true;
             PlayerPrefs.SetInt("LastSafeLandingAirport", 3);
             PlayerPrefs.Save();
-            AgainGame();
+            Debug.Log("[CHEAT] Set safe landing to Field (3), use Keypad0 to restart");
             return; 
         }
         if(Plane.instance != null && Input.GetKeyDown(KeyCode.Keypad8))
@@ -1047,7 +1073,7 @@ public class GManager : MonoBehaviour
             Plane.instance.isAirPortIce = true;
             PlayerPrefs.SetInt("LastSafeLandingAirport", 4);
             PlayerPrefs.Save();
-            AgainGame();
+            Debug.Log("[CHEAT] Set safe landing to Ice (4), use Keypad0 to restart");
             return; 
         }
         if(Plane.instance != null && Input.GetKeyDown(KeyCode.Keypad9))
@@ -1055,8 +1081,16 @@ public class GManager : MonoBehaviour
             Plane.instance.isAirPortLava = true;
             PlayerPrefs.SetInt("LastSafeLandingAirport", 5);
             PlayerPrefs.Save();
-            AgainGame();
+            Debug.Log("[CHEAT] Set safe landing to Lava (5), use Keypad0 to restart");
             return; 
+        }
+        
+        // Keypad0 để restart game với delay
+        if(Input.GetKeyDown(KeyCode.Keypad0))
+        {
+            Debug.Log("[CHEAT] Manual restart requested via Keypad0");
+            AgainGame();
+            return;
         }
 
         if (distanceText != null && !stopDisplayDistance) distanceText.text = distanceTraveled.ToString("F0") + " ft";
@@ -1103,8 +1137,8 @@ public class GManager : MonoBehaviour
         if (currentZ > 180f) currentZ -= 360f;
 
         // THÊM: Kiểm tra cả keyboard VÀ button
-        bool isUpPressed = Input.GetKey(KeyCode.A) || isHoldingButtonUp;
-        bool isDownPressed = Input.GetKey(KeyCode.D) || isHoldingButtonDown;
+        bool isUpPressed = Input.GetKey(KeyCode.A) || isHoldingButtonUp || Input.GetKey(KeyCode.LeftArrow);
+        bool isDownPressed = Input.GetKey(KeyCode.D) || isHoldingButtonDown || Input.GetKey(KeyCode.RightArrow);
 
         // Điều khiển lên (A key HOẶC button Up) - CHỈ ĐIỀU CHỈNH, KHÔNG GHI ĐÈ auto-rotation
         if (isUpPressed)
@@ -1543,11 +1577,29 @@ public class GManager : MonoBehaviour
         money = 0;
         saveTime = Settings.instance.currentTime;
         PlayerPrefs.SetInt("SaveTime", saveTime);
-        PlayerPrefs.Save();
-        isVelocity = true;
-        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
         
-            SaveTotalMoney();
+        // Đảm bảo tất cả PlayerPrefs được save
+        PlayerPrefs.Save();
+        Debug.Log("[AGAIN_GAME] PlayerPrefs saved, starting delayed scene reload...");
+        
+        isVelocity = true;
+        
+        // Thêm delay nhỏ để đảm bảo PlayerPrefs được flush to disk
+        StartCoroutine(DelayedSceneReload());
+        
+        SaveTotalMoney();
+    }
+    
+    // Coroutine để delay reload scene
+    IEnumerator DelayedSceneReload()
+    {
+        // Chờ 0.1 giây để đảm bảo PlayerPrefs được flush
+        yield return new WaitForSecondsRealtime(0.1f);
+        
+        int lastSafeLanding = PlayerPrefs.GetInt("LastSafeLandingAirport", -1);
+        Debug.Log($"[AGAIN_GAME] About to reload scene. LastSafeLanding: {lastSafeLanding}");
+        
+        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
     }
 
 
@@ -1776,7 +1828,16 @@ public class GManager : MonoBehaviour
             levelFuelText.text = "Fuel capacity increased by " + rateFuel + "%";
             Debug.Log($"UpgradeFuel: Level {levelFuel}, Rate {rateFuel}%, Duration {durationFuel}s");
             PositionX.instance.timePerfect = durationFuel * 0.5f;
-            LuckyWheel.instance.checkValueLuckyWheel();
+            
+            // Thêm null check cho LuckyWheel.instance
+            if (LuckyWheel.instance != null)
+            {
+                LuckyWheel.instance.checkValueLuckyWheel();
+            }
+            else
+            {
+                Debug.LogWarning("LuckyWheel.instance is null in UpgradeFuel");
+            }
         }
     }
 
@@ -1833,7 +1894,16 @@ public class GManager : MonoBehaviour
             CheckPlane.instance.CheckMoneyForUpgradeButtonNext();
             levelBoostText.text = "Flight stability increased " + rateBoost + "%";
             Debug.Log($"UpgradeBoost: Level {levelBoost}, Rate {rateBoost}%, TotalBoost {totalBoost}");
-            LuckyWheel.instance.checkValueLuckyWheel();
+            
+            // Thêm null check cho LuckyWheel.instance
+            if (LuckyWheel.instance != null)
+            {
+                LuckyWheel.instance.checkValueLuckyWheel();
+            }
+            else
+            {
+                Debug.LogWarning("LuckyWheel.instance is null in UpgradeBoost");
+            }
         }
 
     }
@@ -1876,7 +1946,16 @@ public class GManager : MonoBehaviour
 
             levelPowerText.text = "Initial thrust increased by " + ratePower + "%";
             Debug.Log($"UpgradePower: Level {levelPower}, Rate {ratePower}%, Force {launchForce}");
-            LuckyWheel.instance.checkValueLuckyWheel();
+            
+            // Thêm null check cho LuckyWheel.instance
+            if (LuckyWheel.instance != null)
+            {
+                LuckyWheel.instance.checkValueLuckyWheel();
+            }
+            else
+            {
+                Debug.LogWarning("LuckyWheel.instance is null in UpgradePower");
+            }
         }
     }
 
@@ -2290,7 +2369,6 @@ public class GManager : MonoBehaviour
         
         Debug.Log("Max Power Ended - Restored all materials to original");
     }
-
 
 
     

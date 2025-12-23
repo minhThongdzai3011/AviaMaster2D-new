@@ -20,36 +20,35 @@ public class LuckyWheel : MonoBehaviour
     public Sprite prizeSpriteImageCoin;
     public Sprite prizeSpriteCoin;
     int inRotate;
-    // Start is called before the first frame update
     public void Awake()
     {
         instance = this;
         rbody = GetComponent<Rigidbody2D>();
-        int a = PlayerPrefs.GetInt("isLuckyWheel", 0);
-        if (a == 1)
-        {
-            normalLuckValues = superLuckValues;
-        }
-        else if (a == 2)
-        {
-            normalLuckValues = ultraLuckValues;
-        }
-        else
-        {
-            normalLuckValues = new int[] { 12500, 17500, 5000, 7500 };
-        }
+          ValidateArrays();
     }
     void Start()
     {
+          ValidateArrays();
         // Gọi sau khi Settings.instance đã được khởi tạo
         if (Settings.instance != null)
         {
-            ChangeTextValueLuckyWheel();
+            int a = PlayerPrefs.GetInt("isLuckyWheel", 0);
+            if (a == 1)
+            {
+                normalLuckValues = superLuckValues;
+            }
+            else if (a == 2)
+            {
+                normalLuckValues = ultraLuckValues;
+            }
+            else
+            {
+                normalLuckValues = new int[] { 12500, 17500, 5000, 7500 };
+            }
         }
     }
     float t;
 
-    // Update is called once per frame
     void Update()
     {
         if (rbody.angularVelocity > 0)
@@ -72,7 +71,7 @@ public class LuckyWheel : MonoBehaviour
     }
     public void checkValueLuckyWheel()
     {
-        // Đảm bảo các mảng reward được khởi tạo đúng
+         ValidateArrays();
         if (superLuckValues == null || superLuckValues.Length < 4)
         {
             superLuckValues = new int[] { 25000, 35000, 15000, 20000 };
@@ -85,8 +84,6 @@ public class LuckyWheel : MonoBehaviour
             Debug.LogWarning("ultraLuckValues was null or invalid, reinitializing...");
         }
         
-        // Kiểm tra từ cao xuống thấp để đảm bảo logic đúng
-        // Tier 3: > 50000 -> Ultra Luck (phần thưởng cao nhất)
         if (GManager.instance.moneyFuel > 50000 || GManager.instance.moneyBoost > 50000 || GManager.instance.moneyPower > 50000)
         {
             normalLuckValues = new int[] { ultraLuckValues[0], ultraLuckValues[1], ultraLuckValues[2], ultraLuckValues[3] };
@@ -95,7 +92,6 @@ public class LuckyWheel : MonoBehaviour
             Debug.Log("Lucky Wheel set to ULTRA LUCK: [" + string.Join(", ", normalLuckValues) + "]");
             ChangeTextValueLuckyWheel();
         }
-        // Tier 2: > 20000 và <= 50000 -> Super Luck (phần thưởng trung bình)
         else if (GManager.instance.moneyFuel > 20000 || GManager.instance.moneyBoost > 20000 || GManager.instance.moneyPower > 20000)
         {
             normalLuckValues = new int[] { superLuckValues[0], superLuckValues[1], superLuckValues[2], superLuckValues[3] };
@@ -104,7 +100,6 @@ public class LuckyWheel : MonoBehaviour
             Debug.Log("Lucky Wheel set to SUPER LUCK: [" + string.Join(", ", normalLuckValues) + "]");
             ChangeTextValueLuckyWheel();
         }
-        // Tier 1: <= 20000 -> Normal Luck (phần thưởng cơ bản)
         else
         {
             normalLuckValues = new int[] { 12500, 17500, 5000, 7500 };
@@ -143,8 +138,9 @@ public class LuckyWheel : MonoBehaviour
         if (Settings.instance.isSpinning && Settings.instance.resultText.text == "Spin")
         {
             AudioManager.instance.PlaySound(AudioManager.instance.luckyWheelSoundClip);
-            RotatePower = Random.Range(minRotatePower, maxRotatePower);
-            StopPower = Random.Range(minStopPower, maxStopPower);
+            // RotatePower = Random.Range(minRotatePower, maxRotatePower);
+
+            // StopPower = Random.Range(minStopPower, maxStopPower);
             
             if (inRotate == 0)
             {
@@ -163,6 +159,19 @@ public class LuckyWheel : MonoBehaviour
     {
         int a; string b;
         if (!Settings.instance.isSpinning) return;
+
+            if (normalLuckValues == null || normalLuckValues.Length < 4)
+    {
+        Debug.LogError("normalLuckValues is invalid in GetReward! Auto-fixing...");
+        ValidateArrays();
+        
+        // Nếu vẫn lỗi, dừng function
+        if (normalLuckValues == null || normalLuckValues.Length < 4)
+        {
+            Debug.LogError("Failed to fix normalLuckValues! Stopping GetReward.");
+            return;
+        }
+    }
 
         float rawRot = transform.eulerAngles.z;
         float adjustedRot = ((transform.eulerAngles.z + 360f) % 360f) % 360f;
@@ -241,14 +250,14 @@ public class LuckyWheel : MonoBehaviour
     {
         print("You Win " + Score);
         
-        Settings.instance.currentTime = 100;
+        Settings.instance.currentTime = 10;
         PlayerPrefs.SetInt("SaveTime", Settings.instance.currentTime);
         PlayerPrefs.Save();
         
         Settings.instance.isSpinning = false;
         Settings.instance.StartCountdown(); 
         StartCoroutine(DelayTwoSeconds(2f));
-        Debug.Log("Win - Countdown started with 100 seconds");
+        Debug.Log("Win - Countdown started with 10 seconds");
     }
 
     IEnumerator WaitAndPrint(float waitTime, float rot , int a , string b)
@@ -279,6 +288,27 @@ public class LuckyWheel : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
         Settings.instance.pannel.gameObject.SetActive(false);
+    }
+
+    void ValidateArrays()
+    {
+        if (superLuckValues == null || superLuckValues.Length < 4)
+        {
+            superLuckValues = new int[] { 25000, 35000, 15000, 20000 };
+            Debug.LogWarning("superLuckValues was invalid, reinitialized");
+        }
+        
+        if (ultraLuckValues == null || ultraLuckValues.Length < 4)
+        {
+            ultraLuckValues = new int[] { 50000, 75000, 30000, 40000 };
+            Debug.LogWarning("ultraLuckValues was invalid, reinitialized");
+        }
+        
+        if (normalLuckValues == null || normalLuckValues.Length < 4)
+        {
+            normalLuckValues = new int[] { 12500, 17500, 5000, 7500 };
+            Debug.LogWarning("normalLuckValues was invalid, reinitialized");
+        }
     }
 
 }

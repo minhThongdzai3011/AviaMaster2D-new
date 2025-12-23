@@ -205,7 +205,7 @@ public class Plane : MonoBehaviour
                 ef.ExplosionEffect1();
 
                 //EffectExplosionBonus.instance.ExplosionEffect();
-            // EffectExplosionBonus.instance.ExplosionEffect1();
+                // EffectExplosionBonus.instance.ExplosionEffect1();
                 // Destroy(other.gameObject);
                 other.gameObject.GetComponent<SpriteRenderer>().enabled = false;
             }
@@ -228,6 +228,7 @@ public class Plane : MonoBehaviour
                 GManager.instance.airplaneRigidbody2D.velocity = Vector2.zero;
                 Settings.instance.isAltitudeImageActive = false;
                 Settings.instance. altitudeImage.gameObject.SetActive(false);
+                // StartCoroutine(DelayOneSecond(2f));
             }
             
         }
@@ -288,7 +289,7 @@ public class Plane : MonoBehaviour
             Settings.instance.imageDiamondCoinText.sprite = Settings.instance.spriteDiamond;
             StartCoroutine(FadeInText(1f));
         }
-        if (other.CompareTag("MapStartCity"))
+        if (other.CompareTag("MapStartCity") && !isBoom)
         {
             AudioManager.instance.PlaySound(AudioManager.instance.unlockMapSoundClip);
             MapSpawner.instance.isMapCityUnlocked = true;
@@ -301,7 +302,7 @@ public class Plane : MonoBehaviour
             Debug.Log("[AIRPORT] Entered City Airport zone");
         }
         
-        if (other.CompareTag("MapStartBeach"))
+        if (other.CompareTag("MapStartBeach") && !isBoom)
         {
             AudioManager.instance.PlaySound(AudioManager.instance.unlockMapSoundClip);
             MapSpawner.instance.isMapBeachUnlocked = true;
@@ -314,7 +315,7 @@ public class Plane : MonoBehaviour
             Debug.Log("[AIRPORT] Entered Beach Airport zone");
         }
         
-        if (other.CompareTag("MapStartDesert"))
+        if (other.CompareTag("MapStartDesert") && !isBoom)
         {
             AudioManager.instance.PlaySound(AudioManager.instance.unlockMapSoundClip);
             MapSpawner.instance.isMapDesertUnlocked = true;
@@ -327,7 +328,7 @@ public class Plane : MonoBehaviour
             Debug.Log("[AIRPORT] Entered Desert Airport zone");
         }
         
-        if (other.CompareTag("MapStartField"))
+        if (other.CompareTag("MapStartField") && !isBoom)
         {
             AudioManager.instance.PlaySound(AudioManager.instance.unlockMapSoundClip);
             MapSpawner.instance.isMapFieldUnlocked = true;
@@ -340,7 +341,7 @@ public class Plane : MonoBehaviour
             Debug.Log("[AIRPORT] Entered Field Airport zone");
         }
         
-        if (other.CompareTag("MapStartIce"))
+        if (other.CompareTag("MapStartIce") && !isBoom)
         {
             AudioManager.instance.PlaySound(AudioManager.instance.unlockMapSoundClip);
             MapSpawner.instance.isMapIceUnlocked = true;
@@ -353,7 +354,7 @@ public class Plane : MonoBehaviour
             Debug.Log("[AIRPORT] Entered Ice Airport zone");
         }
         
-        if (other.CompareTag("MapStartLava"))
+        if (other.CompareTag("MapStartLava") && !isBoom)
         {
             AudioManager.instance.PlaySound(AudioManager.instance.unlockMapSoundClip);
             MapSpawner.instance.isMapLavaUnlocked = true;
@@ -367,57 +368,95 @@ public class Plane : MonoBehaviour
         }
         if (other.CompareTag("NofitiCity"))
         {
+            
             AudioManager.instance.PlaySound(AudioManager.instance.unlockMapSoundClip);
             BonusSpawner.instance.rocketPrefabs = ChangeBonusMap.instance.bonusMapCity;
-            
-            Settings.instance.NotificationNewMapText.text = "It’s so noisy, is this Map City?";
-            
-            Settings.instance.NotificationNewMap();
+            if (GManager.instance.distanceTraveled >= 100f)
+            {
+                Settings.instance.NotificationNewMapText.text = "Beautiful sky above… Welcome to City Map!";
+                Settings.instance.NotificationNewMap();
+            }
+            else
+            {
+                Settings.instance.NotificationNewMapText.text = "It’s so noisy, is this Map City?";
+                Settings.instance.NotificationNewMap();
+            }
         }
         if (other.CompareTag("NofitiBeach"))
         {
             AudioManager.instance.PlaySound(AudioManager.instance.unlockMapSoundClip);
             BonusSpawner.instance.rocketPrefabs = ChangeBonusMap.instance.bonusMapBeach;
-            
-            Settings.instance.NotificationNewMapText.text = "Wow, what a beautiful beach!";
-            
-            Settings.instance.NotificationNewMap();
+
+            if (GManager.instance.distanceTraveled >= 100f)
+            {
+                Settings.instance.NotificationNewMapText.text = "Under this vast sky, everything feels possible.";
+                Settings.instance.NotificationNewMap();
+            }
+            else
+            {
+                Settings.instance.NotificationNewMapText.text = "The sound of waves is so relaxing!";
+                Settings.instance.NotificationNewMap();
+            }
         }
         if (other.CompareTag("NofitiDesert"))
         {
             AudioManager.instance.PlaySound(AudioManager.instance.unlockMapSoundClip);
             BonusSpawner.instance.rocketPrefabs = ChangeBonusMap.instance.bonusMapDesert;
-            
-            Settings.instance.NotificationNewMapText.text = "I want to become a cowboy when I come to this Desert map!";
-            
-            Settings.instance.NotificationNewMap();
+            if (GManager.instance.distanceTraveled >= 100f)
+            {
+                Settings.instance.NotificationNewMapText.text = "The desert stretches endlessly under the blazing sun.";
+                Settings.instance.NotificationNewMap();
+            }
+            else
+            {
+                Settings.instance.NotificationNewMapText.text = "The heat is intense, but the view is worth it!";
+                Settings.instance.NotificationNewMap();
+            }
         }
         if (other.CompareTag("NofitiField"))
         {
             AudioManager.instance.PlaySound(AudioManager.instance.unlockMapSoundClip);
             BonusSpawner.instance.rocketPrefabs = ChangeBonusMap.instance.bonusMapField;
-            
-            Settings.instance.NotificationNewMapText.text = "This Field map is beautiful, the air is fresh!";
-            
-            Settings.instance.NotificationNewMap();
+            if (GManager.instance.distanceTraveled >= 100f)
+            {
+                Settings.instance.NotificationNewMapText.text = "Flying over endless fields, freedom feels real.";
+                Settings.instance.NotificationNewMap();
+            }
+            else
+            {
+                Settings.instance.NotificationNewMapText.text = "This Field map is beautiful, the air is fresh!";
+                Settings.instance.NotificationNewMap();
+            }
         }
         if (other.CompareTag("NofitiIce"))
         {
             AudioManager.instance.PlaySound(AudioManager.instance.unlockMapSoundClip);
             BonusSpawner.instance.rocketPrefabs = ChangeBonusMap.instance.bonusMapIce;
-            
-            Settings.instance.NotificationNewMapText.text = "Oh, so cold! Did we just reach the Ice Map?";
-            
-            Settings.instance.NotificationNewMap();
+            if (GManager.instance.distanceTraveled >= 100f)
+            {
+                Settings.instance.NotificationNewMapText.text = "The icy expanse sparkles under the sun, a frozen wonderland.";
+                Settings.instance.NotificationNewMap();
+            }
+            else
+            {
+                Settings.instance.NotificationNewMapText.text = "Brrr... it's chilly up here, but the view is stunning!";
+                Settings.instance.NotificationNewMap();
+            }
         }
         if (other.CompareTag("NofitiLava"))
         {
             AudioManager.instance.PlaySound(AudioManager.instance.unlockMapSoundClip);
             BonusSpawner.instance.rocketPrefabs = ChangeBonusMap.instance.bonusMapLava;
-            
-            Settings.instance.NotificationNewMapText.text = "Hey, lava ahead!";
-            
-            Settings.instance.NotificationNewMap();
+            if (GManager.instance.distanceTraveled >= 100f)
+            {
+                Settings.instance.NotificationNewMapText.text = "The fiery landscape below is both terrifying and mesmerizing.";
+                Settings.instance.NotificationNewMap();
+            }
+            else
+            {
+                Settings.instance.NotificationNewMapText.text = "Hey, lava ahead! Stay safe up here!";
+                Settings.instance.NotificationNewMap();
+            }
         }
         
     
@@ -815,5 +854,13 @@ public class Plane : MonoBehaviour
         yield return new WaitForSeconds(delay);
         
         StartCoroutine(DelaytoEndGame());
+    }
+
+    IEnumerator DelayOneSecond(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        Rigidbody2D airplaneRb = GManager.instance.airplaneRigidbody2D;
+        airplaneRb.gameObject.SetActive(false);
+        Debug.Log("Airplane deactivated after delay");
     }
 }
