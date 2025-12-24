@@ -583,7 +583,7 @@ public class Plane : MonoBehaviour
     public int hightScore;
     IEnumerator OpenImageWIn()
     {
-        
+        GManager.instance.LoadMoneyUpgrade();
         float  finalDistance = GManager.instance.distanceTraveled;
         Debug.Log("Opening Win Image... 1" + finalDistance);
         if (LeaderboardManager.Instance != null)
@@ -836,8 +836,12 @@ public class Plane : MonoBehaviour
             
         }
         else if(count == 1){
-            GManager.instance.durationFuel += 5f;
-            Debug.Log("Rocket collected - +5s fuel" + GManager.instance.durationFuel);
+            float addedFuelTime = 5f;
+            GManager.instance.durationFuel += addedFuelTime;
+            float fuelRatio = addedFuelTime / GManager.instance.durationFuel;
+            GManager.instance.sliderFuel.value = Mathf.Min(1f, GManager.instance.sliderFuel.value + fuelRatio);
+            
+            Debug.Log($"Bird collected - +{addedFuelTime}s fuel, new durationFuel: {GManager.instance.durationFuel}s, slider value: {GManager.instance.sliderFuel.value}");
             isAddFuel = true;
             GManager.instance.newMapText.text = "Bonus +5s fuel";
             StartCoroutine(FadeInText(1f));

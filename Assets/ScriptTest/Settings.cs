@@ -846,7 +846,7 @@ public class Settings : MonoBehaviour
         int currentReward = GetCurrentReward();
         Debug.Log($"Chest Tier {chestTier} claimed! Reward: {currentReward} coins");
         
-        GManager.instance.totalMoney += currentReward;
+        // GManager.instance.totalMoney += currentReward;
         
         Sequence seq = DOTween.Sequence();
         seq.Append(DOVirtual.Float(totalValue, totalValue + currentReward, 2f, v =>

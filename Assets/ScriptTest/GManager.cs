@@ -815,7 +815,7 @@ public class GManager : MonoBehaviour
         ApplyAltitudeDrag();
 
         UpdateAirplaneRotationX();
-
+        
         CountPerfectTime();
 
         if (isVelocity && !isHorizontalFlying && !isPlay)
@@ -1697,29 +1697,36 @@ public class GManager : MonoBehaviour
     public IEnumerator DecreaseSliderFuel(float durationFuel)
     {
         float timer = 0f;
-        float temp = 0f;
         float startValue = sliderFuel.value;
         float endValue = 0f;
-        if (Plane.instance.isAddFuel){
-            durationFuel += 5f;
-            temp = 5/durationFuel;
-            sliderFuel.value += temp;
-        }
-        Plane.instance.isAddFuel = false;
-
+        
+        float originalDuration = durationFuel;
+        
         while (timer < durationFuel)
         {
             timer += Time.deltaTime;
 
-            sliderFuel.value = Mathf.Lerp(startValue, endValue, timer / durationFuel);
+            if (Plane.instance.isAddFuel)
+            {
+                float remainingTime = durationFuel - timer;
+                float totalTime = durationFuel;
+                
+                float newSliderValue = remainingTime / totalTime;
+                sliderFuel.value = Mathf.Min(1f, newSliderValue);
+                
+                Plane.instance.isAddFuel = false;
+                
+                Debug.Log($"Fuel added during flight - New duration: {durationFuel}s, Slider updated to: {sliderFuel.value}");
+            }
+            
+            float currentProgress = timer / durationFuel;
+            sliderFuel.value = Mathf.Lerp(startValue, endValue, currentProgress);
 
             yield return null;
         }
 
-
         sliderFuel.value = endValue;
     }
-
     public float totalBoostMaxPower ;
     // Giảm boost theo thời gian
     private IEnumerator DecreaseSliderBoost()
