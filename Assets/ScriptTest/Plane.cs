@@ -62,7 +62,6 @@ public class Plane : MonoBehaviour
             explosionEffect.Stop();
         }
 
-
     }
 
 
@@ -579,6 +578,19 @@ public class Plane : MonoBehaviour
         if (z > 180f) z -= 360f;
         return z;
     }
+    
+    // Helper method để format số tiền thành dạng rút gọn
+    string FormatMoney(float money)
+    {
+        if (money >= 1000000000)
+            return (money / 1000000000f).ToString("F1") + "B";
+        else if (money >= 1000000)
+            return (money / 1000000f).ToString("F1") + "M";
+        else if (money >= 1000)
+            return (money / 1000f).ToString("F1") + "k";
+        else
+            return money.ToString("F0");
+    }
     private bool isAddMoneyDone = false;
     public int hightScore;
     IEnumerator OpenImageWIn()
@@ -603,7 +615,7 @@ public class Plane : MonoBehaviour
             Debug.Log("Money from Distance: " + moneyDistance + " | Current Money: " + moneyCollect + " | Total Money: " + moneyTotal1);
             
             Debug.Log("Updated Total Money: " + GManager.instance.totalMoney);
-            GManager.instance.totalMoneyText.text = "" + GManager.instance.totalMoney;
+            GManager.instance.totalMoneyText.text = FormatMoney(GManager.instance.totalMoney);
             GManager.instance.moneyText.text = "" + moneyCollect;
 
             hightScore = PlayerPrefs.GetInt("HighScore", 0);

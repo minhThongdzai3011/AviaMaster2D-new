@@ -1116,6 +1116,18 @@ public class GManager : MonoBehaviour
 
         moneyText.text = Plane.instance.moneyCollect.ToString() + " $";
         totalDiamondText.text = totalDiamond.ToString("F0");
+
+        if (sliderFuel.value <= 0f )
+        {
+            if(TrailRendererLeft.instance != null)
+            {
+                TrailRendererLeft.instance.StopTrail();
+            }
+            if(TrailRendererRight.instance != null)
+            {
+                TrailRendererRight.instance.StopTrail();
+            }
+        }
     }
 
     void HandleAircraftControl()
