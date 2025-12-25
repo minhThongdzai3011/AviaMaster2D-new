@@ -31,6 +31,7 @@ public class Settings : MonoBehaviour
     public TextMeshProUGUI value2Text;
     public TextMeshProUGUI value3Text;
     public TextMeshProUGUI value4Text;
+    public TextMeshProUGUI superBonusText;
     
     [Header("Image Settings")]
     public Image musicImageOn;

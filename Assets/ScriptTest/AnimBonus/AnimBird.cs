@@ -16,7 +16,15 @@ public class AnimBird : MonoBehaviour
 
     void Update()
     {
-        // Tính toán dao động Y
+        if (GManager.instance != null && GManager.instance.isCheckErrorAngleZ)
+        {
+            SetSpeedX();
+        }
+
+    }
+
+    public void SetSpeedX()
+    {
         float newY = startPos.y + Mathf.Sin(Time.time * frequency) * amplitude;
 
         // Tăng dần vị trí X theo thời gian

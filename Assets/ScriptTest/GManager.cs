@@ -731,14 +731,14 @@ public class GManager : MonoBehaviour
                 }
                 else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
                 {
-                    // D: Xoay xuống (nghiêng xuống nhiều) - hướng về -35°
-                    targetAngle = Mathf.MoveTowards(currentZ0, -35f, controlSpeed * Time.deltaTime);
+                    // D: Xoay xuống (nghiêng xuống nhiều) - hướng về -50°
+                    targetAngle = Mathf.MoveTowards(currentZ0, -50f, controlSpeed * Time.deltaTime);
                     buttonDownImage.color = Color.gray;
                     buttonUpImage.color = Color.white;
                 }
                 
                 // Giới hạn góc trong khoảng cho phép
-                targetAngle = Mathf.Clamp(targetAngle, -35f, -10f);
+                targetAngle = Mathf.Clamp(targetAngle, -50f, -10f);
                 
                 // Áp dụng góc với tính đến lực khí động
                 float smoothAngle = Mathf.LerpAngle(currentZ0, targetAngle, Time.deltaTime * 6f);
@@ -2385,6 +2385,14 @@ public class GManager : MonoBehaviour
         PositionX.instance.isMaxPower = false;
         isEndingMaxPower = false;
         perfectTime = 0f;
+        if(TrailRendererRight.instance != null)
+        {
+            TrailRendererRight.instance.ChangeColor();
+        }
+        if(TrailRendererLeft.instance != null)
+        {
+            TrailRendererLeft.instance.ChangeColor();
+        }
         
         Debug.Log("Max Power Ended - Restored all materials to original");
     }

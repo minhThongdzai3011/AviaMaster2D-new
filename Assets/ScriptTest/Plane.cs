@@ -34,6 +34,9 @@ public class Plane : MonoBehaviour
     public bool isAirPortField = false;
     public bool isAirPortIce = false;
     public bool isAirPortLava = false;
+
+    [Header("Kiểm tra máy bay khi dừng lại có ở airport không")]
+    public bool isInAirPort = false;
     
     // Track airport hiện tại player đang ở trong
     private string currentAirportTag = "";
@@ -75,63 +78,11 @@ public class Plane : MonoBehaviour
 
             Debug.Log("Máy bay đã chạm đất.");
             
-            // *** KIỂM TRA HẠ CÁNH AN TOÀN TẠI AIRPORT ***
+            // *** CHỈ KIỂM TRA ANGLE, KHÔNG SET SUPER BONUS Ở ĐÂY ***
             float initialAngleZ = GetCurrentRotationZ(GManager.instance.airplaneRigidbody2D);
             bool isSafeLanding = (initialAngleZ >= -15f && initialAngleZ <= 15f);
             
-            if (isSafeLanding && !string.IsNullOrEmpty(currentAirportTag))
-            {
-                Debug.Log($"[SAFE LANDING] Landed safely at {currentAirportTag}!");
-                
-                // Set airport flag tương ứng
-                switch (currentAirportTag)
-                {
-                    case "MapStartCity":
-                        isAirPortCity = true;
-                        GManager.instance.isSuperBonus = true;   
-                        GManager.instance.isBonus = false; 
-                        PlayerPrefs.SetInt("LastSafeLandingAirport", 0);
-                        Debug.Log("[SAFE LANDING] Next game will start at City map");
-                        break;
-                    case "MapStartBeach":
-                        isAirPortBeach = true;
-                        GManager.instance.isSuperBonus = true; 
-                        GManager.instance.isBonus = false; 
-                        PlayerPrefs.SetInt("LastSafeLandingAirport", 1);
-                        Debug.Log("[SAFE LANDING] Next game will start at Beach map");
-                        break;
-                    case "MapStartDesert":
-                        isAirPortDesert = true;
-                        GManager.instance.isSuperBonus = true;
-                        GManager.instance.isBonus = false;  
-                        PlayerPrefs.SetInt("LastSafeLandingAirport", 2);
-                        Debug.Log("[SAFE LANDING] Next game will start at Desert map");
-                        break;
-                    case "MapStartField":
-                        isAirPortField = true;
-                        GManager.instance.isSuperBonus = true; 
-                        GManager.instance.isBonus = false; 
-                        PlayerPrefs.SetInt("LastSafeLandingAirport", 3);
-                        Debug.Log("[SAFE LANDING] Next game will start at Field map");
-                        break;
-                    case "MapStartIce":
-                        isAirPortIce = true;
-                        GManager.instance.isSuperBonus = true; 
-                        GManager.instance.isBonus = false; 
-                        PlayerPrefs.SetInt("LastSafeLandingAirport", 4);
-                        Debug.Log("[SAFE LANDING] Next game will start at Ice map");
-                        break;
-                    case "MapStartLava":
-                        isAirPortLava = true;
-                        GManager.instance.isSuperBonus = true; 
-                        GManager.instance.isBonus = false;
-                        PlayerPrefs.SetInt("LastSafeLandingAirport", 5);
-                        Debug.Log("[SAFE LANDING] Next game will start at Lava map");
-                        break;
-                }
-                PlayerPrefs.Save();
-            }
-            else if (!isSafeLanding)
+            if (!isSafeLanding)
             {
                 Debug.Log("[UNSAFE LANDING] Angle too steep, not counted as safe landing");
                 isBoom = true;
@@ -186,9 +137,9 @@ public class Plane : MonoBehaviour
         if (other.CompareTag("Diamond"))
         {
             AudioManager.instance.PlaySound(AudioManager.instance.collectDiamondSoundClip);
-            GManager.instance.totalDiamond += 100;
+            GManager.instance.totalDiamond += 10;
             GManager.instance.totalDiamondText.text = GManager.instance.totalDiamond.ToString("F0");
-            Debug.Log("Diamond collected +100" + GManager.instance.totalDiamond);
+            Debug.Log("Diamond collected +10" + GManager.instance.totalDiamond);
             PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
             PlayerPrefs.Save();
             GManager.instance.SaveTotalDiamond();
@@ -458,8 +409,21 @@ public class Plane : MonoBehaviour
             }
         }
         
+    }
     
-        
+    void OnTriggerExit2D(Collider2D other)
+    {
+        // Clear currentAirportTag khi máy bay rời khỏi airport zone
+        if (other.CompareTag("MapStartCity") || 
+            other.CompareTag("MapStartBeach") || 
+            other.CompareTag("MapStartDesert") || 
+            other.CompareTag("MapStartField") || 
+            other.CompareTag("MapStartIce") || 
+            other.CompareTag("MapStartLava"))
+        {
+            Debug.Log($"[AIRPORT] Left {other.tag} zone - clearing currentAirportTag");
+            currentAirportTag = "";
+        }
     }
     
     
@@ -526,7 +490,69 @@ public class Plane : MonoBehaviour
             finalRotation.x = 0f;
             airplaneRb.transform.eulerAngles = finalRotation;
             airplaneRb.velocity = Vector2.zero;
+            isInAirPort = true;
             GManager.instance.isBonus = true;   
+            
+            // *** KIỂM TRA VÀ SET SUPER BONUS SAU KHI MÁY BAY DỪNG HOÀN TOÀN ***
+            if (!string.IsNullOrEmpty(currentAirportTag))
+            {
+                Debug.Log($"[SAFE LANDING] Landed safely at {currentAirportTag} after stopping!");
+                
+                // Set airport flag tương ứng và super bonus
+                switch (currentAirportTag)
+                {
+                    case "MapStartCity":
+                        isAirPortCity = true;
+                        GManager.instance.isSuperBonus = true;   
+                        GManager.instance.isBonus = false; 
+                        PlayerPrefs.SetInt("LastSafeLandingAirport", 0);
+                        Settings.instance.superBonusText.gameObject.SetActive(true);
+                        Debug.Log("[SAFE LANDING] Next game will start at City map - SuperBonus activated!");
+                        break;
+                    case "MapStartBeach":
+                        isAirPortBeach = true;
+                        GManager.instance.isSuperBonus = true; 
+                        GManager.instance.isBonus = false;  
+                        PlayerPrefs.SetInt("LastSafeLandingAirport", 1);
+                        Settings.instance.superBonusText.gameObject.SetActive(true);
+                        Debug.Log("[SAFE LANDING] Next game will start at Beach map - SuperBonus activated!");
+                        break;
+                    case "MapStartDesert":
+                        isAirPortDesert = true;
+                        GManager.instance.isSuperBonus = true;
+                        GManager.instance.isBonus = false;  
+                        PlayerPrefs.SetInt("LastSafeLandingAirport", 2);
+                        Settings.instance.superBonusText.gameObject.SetActive(true);
+                        Debug.Log("[SAFE LANDING] Next game will start at Desert map - SuperBonus activated!");
+                        break;
+                    case "MapStartField":
+                        isAirPortField = true;
+                        GManager.instance.isSuperBonus = true; 
+                        GManager.instance.isBonus = false; 
+                        PlayerPrefs.SetInt("LastSafeLandingAirport", 3);
+                        Settings.instance.superBonusText.gameObject.SetActive(true);
+                        Debug.Log("[SAFE LANDING] Next game will start at Field map - SuperBonus activated!");
+                        break;
+                    case "MapStartIce":
+                        isAirPortIce = true;
+                        GManager.instance.isSuperBonus = true; 
+                        GManager.instance.isBonus = false; 
+                        PlayerPrefs.SetInt("LastSafeLandingAirport", 4);
+                        Settings.instance.superBonusText.gameObject.SetActive(true);
+                        Debug.Log("[SAFE LANDING] Next game will start at Ice map - SuperBonus activated!");
+                        break;
+                    case "MapStartLava":
+                        isAirPortLava = true;
+                        GManager.instance.isSuperBonus = true; 
+                        GManager.instance.isBonus = false; 
+                        PlayerPrefs.SetInt("LastSafeLandingAirport", 5);
+                        Settings.instance.superBonusText.gameObject.SetActive(true);
+                        Debug.Log("[SAFE LANDING] Next game will start at Lava map - SuperBonus activated!");
+                        break;
+                }
+                PlayerPrefs.Save();
+            }
+            
             Debug.Log("Airplane stopped sliding");
             StartCoroutine(OpenImageWIn());
             }

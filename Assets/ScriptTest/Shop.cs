@@ -710,9 +710,9 @@ public class Shop : MonoBehaviour
     public void buyPlane1(){
         StartCoroutine(PlayButtonEffect(0));
         if(!isBuyPlane1Done){
-            if(GManager.instance.totalDiamond >= 2500)
+            if(GManager.instance.totalDiamond >= 500)
             {
-                GManager.instance.totalDiamond -= 2500;
+                GManager.instance.totalDiamond -= 500;
                 AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
                 PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
                 PlayerPrefs.Save();
@@ -776,9 +776,9 @@ public class Shop : MonoBehaviour
     public void buyPlane2(){
         StartCoroutine(PlayButtonEffect(1));
         if(!isBuyPlane2Done){
-            if(GManager.instance.totalDiamond >= 2500)
+            if(GManager.instance.totalDiamond >= 750)
             {
-                GManager.instance.totalDiamond -= 2500;
+                GManager.instance.totalDiamond -= 750;
                 AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
                 PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
                 PlayerPrefs.Save();
@@ -842,9 +842,9 @@ public class Shop : MonoBehaviour
     public void buyPlane3(){
         StartCoroutine(PlayButtonEffect(2));
         if(!isBuyPlane3Done){
-            if(GManager.instance.totalDiamond >= 2500)
+            if(GManager.instance.totalDiamond >= 1000)
             {
-                GManager.instance.totalDiamond -= 2500;
+                GManager.instance.totalDiamond -= 1000;
                 AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
                 PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
                 PlayerPrefs.Save();
@@ -908,9 +908,9 @@ public class Shop : MonoBehaviour
     public void buyPlane4(){
         StartCoroutine(PlayButtonEffect(3));
         if(!isBuyPlane4Done){
-            if(GManager.instance.totalDiamond >= 2500)
+            if(GManager.instance.totalDiamond >= 1500)
             {
-                GManager.instance.totalDiamond -= 2500;
+                GManager.instance.totalDiamond -= 1500;
                 AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
                 PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
                 PlayerPrefs.Save();
@@ -973,9 +973,9 @@ public class Shop : MonoBehaviour
     public void buyPlane5(){
         StartCoroutine(PlayButtonEffect(4));
         if(!isBuyPlane5Done){
-            if(GManager.instance.totalDiamond >= 2500)
+            if(GManager.instance.totalDiamond >= 1700)
             {
-                GManager.instance.totalDiamond -= 2500;
+                GManager.instance.totalDiamond -= 1700;
                 AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
                 PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
                 PlayerPrefs.Save();
@@ -1038,9 +1038,9 @@ public class Shop : MonoBehaviour
     public void buyPlane6(){
         StartCoroutine(PlayButtonEffect(5));
         if(!isBuyPlane6Done){
-            if(GManager.instance.totalDiamond >= 2500)
+            if(GManager.instance.totalDiamond >= 2000)
             {
-                GManager.instance.totalDiamond -= 2500;
+                GManager.instance.totalDiamond -= 2000;
                 AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
                 PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
                 PlayerPrefs.Save();
@@ -1103,9 +1103,9 @@ public class Shop : MonoBehaviour
     public void buyPlane7(){
         StartCoroutine(PlayButtonEffect(6));
         if(!isBuyPlane7Done){
-            if(GManager.instance.totalDiamond >= 2500)
+            if(GManager.instance.totalDiamond >= 2000)
             {
-                GManager.instance.totalDiamond -= 2500;
+                GManager.instance.totalDiamond -= 2000;
                 AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
                 PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
                 PlayerPrefs.Save();
@@ -1168,9 +1168,9 @@ public class Shop : MonoBehaviour
     public void buyPlane8(){
         StartCoroutine(PlayButtonEffect(7));
         if(!isBuyPlane8Done){
-            if(GManager.instance.totalDiamond >= 2500)
+            if(GManager.instance.totalDiamond >= 2000)
             {
-                GManager.instance.totalDiamond -= 2500;
+                GManager.instance.totalDiamond -= 2000;
                 AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
                 PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
                 PlayerPrefs.Save();
@@ -1233,9 +1233,9 @@ public class Shop : MonoBehaviour
     public void buyPlane9(){
         StartCoroutine(PlayButtonEffect(8));
         if(!isBuyPlane9Done){
-            if(GManager.instance.totalDiamond >= 2500)
+            if(GManager.instance.totalDiamond >= 2200)
             {
-                GManager.instance.totalDiamond -= 2500;
+                GManager.instance.totalDiamond -= 2200;
                 AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
                 PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
                 PlayerPrefs.Save();
@@ -1298,9 +1298,9 @@ public class Shop : MonoBehaviour
     public void buyPlane10(){
         StartCoroutine(PlayButtonEffect(9));
         if(!isBuyPlane10Done){
-            if(GManager.instance.totalDiamond >= 2500)
+            if(GManager.instance.totalDiamond >= 2200)
             {
-                GManager.instance.totalDiamond -= 2500;
+                GManager.instance.totalDiamond -= 2200;
                 AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
                 PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
                 PlayerPrefs.Save();
@@ -1363,9 +1363,9 @@ public class Shop : MonoBehaviour
     public void buyPlane11(){
         StartCoroutine(PlayButtonEffect(10));
         if(!isBuyPlane11Done){
-            if(GManager.instance.totalDiamond >= 2500)
+            if(GManager.instance.totalDiamond >= 2200)
             {
-                GManager.instance.totalDiamond -= 2500;
+                GManager.instance.totalDiamond -= 2200;
                 AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
                 PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
                 PlayerPrefs.Save();
