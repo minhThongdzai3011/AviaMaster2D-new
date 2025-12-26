@@ -123,7 +123,10 @@ public class MissionDaily : MonoBehaviour
                 textDailyMission2.text = "Mission Completed";
                 imageDailyMission2.color = Color.yellow;
                 buttonDailyMission2.image.color = Color.yellow;
-                dailyMission1Progress++;
+                if (!isDailyMission1Completed)
+                {
+                    dailyMission1Progress++;
+                }
                 UpdateDailyMission();
             }
         }
@@ -141,7 +144,10 @@ public class MissionDaily : MonoBehaviour
                 textDailyMission3.text = "Mission Completed";
                 imageDailyMission3.color = Color.yellow;
                 buttonDailyMission3.image.color = Color.yellow;
-                dailyMission1Progress++;
+                if (!isDailyMission1Completed)
+                {
+                    dailyMission1Progress++;
+                }
                 UpdateDailyMission();
             }
         }
@@ -158,7 +164,10 @@ public class MissionDaily : MonoBehaviour
                 textDailyMission4.text = "Mission Completed";
                 imageDailyMission4.color = Color.yellow;
                 buttonDailyMission4.image.color = Color.yellow;
-                dailyMission1Progress++;
+                if (!isDailyMission1Completed)
+                {
+                    dailyMission1Progress++;
+                }
                 UpdateDailyMission();
             }
         }
@@ -175,7 +184,10 @@ public class MissionDaily : MonoBehaviour
                 textDailyMission5.text = "Mission Completed";
                 imageDailyMission5.color = Color.yellow;
                 buttonDailyMission5.image.color = Color.yellow;
-                dailyMission1Progress++;
+                if (!isDailyMission1Completed)
+                {
+                    dailyMission1Progress++;
+                }
                 UpdateDailyMission();
             }
         }
