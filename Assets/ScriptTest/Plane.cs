@@ -123,6 +123,8 @@ public class Plane : MonoBehaviour
             {
                 // tăng tiền ngay (hoặc bạn có thể tăng tiền khi animation hoàn tất trong AnimCoin)
                 moneyCollect += 20;
+                MissionDaily.instance.dailyMission2Progress += 20;
+                MissionDaily.instance.UpdateDailyMission();
 
                 // anim.collected = true;
                 // anim.Collect();
@@ -131,6 +133,8 @@ public class Plane : MonoBehaviour
             else
             {
                 moneyCollect += 10;
+                MissionDaily.instance.dailyMission2Progress += 10;
+                MissionDaily.instance.UpdateDailyMission();
                 Destroy(other.gameObject);
             }
         }
@@ -439,7 +443,8 @@ public class Plane : MonoBehaviour
         }
         GManager.instance.downFuelImage.gameObject.SetActive(false);
         GManager.instance.upAircraftImage.gameObject.SetActive(false);
-        
+        MissionDaily.instance.dailyMission3Progress++;
+        MissionDaily.instance.UpdateDailyMission();
         float initialAngleZ = GetCurrentRotationZ(airplaneRb);
         float initialAngleX = airplaneRb.transform.eulerAngles.x;
         if (initialAngleZ < -15f || initialAngleZ > 15f){
@@ -508,6 +513,8 @@ public class Plane : MonoBehaviour
                         PlayerPrefs.SetInt("LastSafeLandingAirport", 0);
                         Settings.instance.superBonusText.gameObject.SetActive(true);
                         Debug.Log("[SAFE LANDING] Next game will start at City map - SuperBonus activated!");
+                        MissionDaily.instance.dailyMission4Progress++;
+                        MissionDaily.instance.UpdateDailyMission();
                         break;
                     case "MapStartBeach":
                         isAirPortBeach = true;
@@ -516,6 +523,8 @@ public class Plane : MonoBehaviour
                         PlayerPrefs.SetInt("LastSafeLandingAirport", 1);
                         Settings.instance.superBonusText.gameObject.SetActive(true);
                         Debug.Log("[SAFE LANDING] Next game will start at Beach map - SuperBonus activated!");
+                        MissionDaily.instance.dailyMission4Progress++;
+                        MissionDaily.instance.UpdateDailyMission();
                         break;
                     case "MapStartDesert":
                         isAirPortDesert = true;
@@ -524,6 +533,8 @@ public class Plane : MonoBehaviour
                         PlayerPrefs.SetInt("LastSafeLandingAirport", 2);
                         Settings.instance.superBonusText.gameObject.SetActive(true);
                         Debug.Log("[SAFE LANDING] Next game will start at Desert map - SuperBonus activated!");
+                        MissionDaily.instance.dailyMission4Progress++;
+                        MissionDaily.instance.UpdateDailyMission();
                         break;
                     case "MapStartField":
                         isAirPortField = true;
@@ -532,6 +543,8 @@ public class Plane : MonoBehaviour
                         PlayerPrefs.SetInt("LastSafeLandingAirport", 3);
                         Settings.instance.superBonusText.gameObject.SetActive(true);
                         Debug.Log("[SAFE LANDING] Next game will start at Field map - SuperBonus activated!");
+                        MissionDaily.instance.dailyMission4Progress++;
+                        MissionDaily.instance.UpdateDailyMission();
                         break;
                     case "MapStartIce":
                         isAirPortIce = true;
@@ -540,6 +553,8 @@ public class Plane : MonoBehaviour
                         PlayerPrefs.SetInt("LastSafeLandingAirport", 4);
                         Settings.instance.superBonusText.gameObject.SetActive(true);
                         Debug.Log("[SAFE LANDING] Next game will start at Ice map - SuperBonus activated!");
+                        MissionDaily.instance.dailyMission4Progress++;
+                        MissionDaily.instance.UpdateDailyMission();
                         break;
                     case "MapStartLava":
                         isAirPortLava = true;
@@ -548,6 +563,8 @@ public class Plane : MonoBehaviour
                         PlayerPrefs.SetInt("LastSafeLandingAirport", 5);
                         Settings.instance.superBonusText.gameObject.SetActive(true);
                         Debug.Log("[SAFE LANDING] Next game will start at Lava map - SuperBonus activated!");
+                        MissionDaily.instance.dailyMission4Progress++;
+                        MissionDaily.instance.UpdateDailyMission();
                         break;
                 }
                 PlayerPrefs.Save();

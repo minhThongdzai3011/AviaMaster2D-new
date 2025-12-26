@@ -577,7 +577,8 @@ public class Settings : MonoBehaviour
     [Header("Chest Tier System")]
     public int chestTier = 1; 
     public float[] chestRequirements = { 500f, 1000f, 2000f, 2000f };
-    public int[] chestRewards = { 2000, 5000, 12000, 15000 };     void UpdateSliderPrizeCoin()
+    public int[] chestRewards = { 2000, 5000, 12000, 15000 };     
+    void UpdateSliderPrizeCoin()
     {
         if (prizeSlider != null)
         {
@@ -787,7 +788,8 @@ public class Settings : MonoBehaviour
             Debug.Log("Mở Chest Image!");
             int currentReward = GetCurrentReward();
             prizeChestText.text = "+ " + currentReward.ToString();
-            
+            MissionDaily.instance.dailyMission5Progress++;
+            MissionDaily.instance.UpdateDailyMission();
             // Hiển thị phần thưởng tiếp theo
             if (chestTier < 4)
             {
