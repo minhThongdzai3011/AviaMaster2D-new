@@ -3,6 +3,7 @@ using UnityEngine;
 using TMPro;
 using DG.Tweening;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class MissionManager : MonoBehaviour
 {
@@ -20,9 +21,20 @@ public class MissionManager : MonoBehaviour
 
     [Header("Page Text")]
     public TextMeshProUGUI textPage;
+    public TextMeshProUGUI textQuantityReward;
 
     [Header(" Imange Mission")]
     public Image misssionImage;
+    public Image notificationImage;
+
+    [Header("Block Button")]
+    public Button settingButton;
+    public Button shopButton;
+    public EventTrigger luckyWheelButton;
+    public EventTrigger leaderBoardButton;
+    public EventTrigger moreGameButton;
+
+    public int textQuantityRewardValue = 0;
 
     private int currentPage = 1;
     private const int maxPage = 3;
@@ -55,6 +67,7 @@ public class MissionManager : MonoBehaviour
         if (nextPage < 1) nextPage = maxPage;
 
         ChangePage(nextPage, -1);
+        AudioManager.instance.PlaySound(AudioManager.instance.leftRightShopSoundClip);
     }
 
     public void OnRightButtonClick()
@@ -65,6 +78,7 @@ public class MissionManager : MonoBehaviour
         if (nextPage > maxPage) nextPage = 1;
 
         ChangePage(nextPage, 1);
+        AudioManager.instance.PlaySound(AudioManager.instance.leftRightShopSoundClip);
     }
     
 
@@ -213,6 +227,17 @@ public class MissionManager : MonoBehaviour
         AudioManager.instance.PlaySound(AudioManager.instance.buttonSoundClip);
         Settings.instance.pannelGray.gameObject.SetActive(true);
         
+        // Button block khi mở mission
+        settingButton.interactable = false;
+        shopButton.interactable = false;
+        luckyWheelButton.GetComponent<EventTrigger>().enabled = false;
+        leaderBoardButton.GetComponent<EventTrigger>().enabled = false;
+        moreGameButton.GetComponent<EventTrigger>().enabled = false;
+
+        CheckPlane.instance.SetActiveLeaderBoard();
+        CheckPlane.instance.SetActiveMoreGame();
+        CheckPlane.instance.SetActiveLuckyWheel();
+
         // Dừng tất cả animation đang chạy
         DOTween.Kill(misssionImage.transform);
         
@@ -225,7 +250,9 @@ public class MissionManager : MonoBehaviour
         misssionImage.transform.localScale = Vector3.zero;
         misssionImage.transform.DOScale(Vector3.one, 0.5f)
             .SetEase(Ease.OutBack)
-            .OnComplete(() => {
+            .OnComplete(() =>
+            {
+                
             });
     }
 
@@ -245,7 +272,15 @@ public class MissionManager : MonoBehaviour
                 Settings.instance.lastDistanceText.gameObject.SetActive(true);
                 misssionImage.gameObject.SetActive(false);
                 Settings.instance.pannelGray.gameObject.SetActive(false);
-
+                // Bỏ block button khi đóng mission
+                settingButton.interactable = true;
+                shopButton.interactable = true; 
+                luckyWheelButton.GetComponent<EventTrigger>().enabled = true;
+                leaderBoardButton.GetComponent<EventTrigger>().enabled = true;
+                moreGameButton.GetComponent<EventTrigger>().enabled = true;
+                CheckPlane.instance.ResetActiveLeaderBoard();
+                CheckPlane.instance.ResetActiveMoreGame();
+                CheckPlane.instance.ResetActiveLuckyWheel();
             });
     }
 }

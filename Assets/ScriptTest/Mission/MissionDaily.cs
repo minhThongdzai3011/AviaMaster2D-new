@@ -5,6 +5,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using System;
+using System.Linq;
 
 
 public class MissionDaily : MonoBehaviour
@@ -55,6 +56,12 @@ public class MissionDaily : MonoBehaviour
     public int dailyMission5Target = 1;
     private DateTime endOfDay;
     public TextMeshProUGUI countdownText;
+    public bool isReceivedDaily1Reward = false;
+    public bool isReceivedDaily2Reward = false;
+    public bool isReceivedDaily3Reward = false;
+    public bool isReceivedDaily4Reward = false;
+    public bool isReceivedDaily5Reward = false;
+
 
 
     // Start is called before the first frame update
@@ -66,9 +73,11 @@ public class MissionDaily : MonoBehaviour
             Destroy(gameObject);    
         Load();
         UpdateDailyMission();
+        completeRewardCollection();
 
         DateTime now = DateTime.Now;
         endOfDay = new DateTime(now.Year, now.Month, now.Day, 23, 59, 59);
+        
 
 
     }
@@ -97,6 +106,13 @@ public class MissionDaily : MonoBehaviour
     {
         if (!isDailyMission1Completed)
         {
+            bool[] bools = { isDailyMission1Completed,
+                             isDailyMission2Completed,
+                             isDailyMission3Completed,
+                             isDailyMission4Completed,
+                             isDailyMission5Completed};
+            dailyMission1Progress = bools.Count(b => b);
+
             imageFillDailyMission1.fillAmount = (float)dailyMission1Progress / dailyMission1Target;
             Debug.Log("Daily Mission 1 Progress: " + imageFillDailyMission1.fillAmount);
             textDailyMission1.text =dailyMission1Progress + "/" + dailyMission1Target;
@@ -108,6 +124,10 @@ public class MissionDaily : MonoBehaviour
                 textDailyMission1.text = "Mission Completed";
                 imageDailyMission1.color = Color.yellow;
                 buttonDailyMission1.image.color = Color.yellow;
+                
+                MissionManager.instance.textQuantityRewardValue++;
+                MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
+                MissionManager.instance.notificationImage.gameObject.SetActive(true);
             }
         }
         if (!isDailyMission2Completed)
@@ -123,11 +143,11 @@ public class MissionDaily : MonoBehaviour
                 textDailyMission2.text = "Mission Completed";
                 imageDailyMission2.color = Color.yellow;
                 buttonDailyMission2.image.color = Color.yellow;
-                if (!isDailyMission1Completed)
-                {
-                    dailyMission1Progress++;
-                }
                 UpdateDailyMission();
+                
+                MissionManager.instance.textQuantityRewardValue++;
+                MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
+                MissionManager.instance.notificationImage.gameObject.SetActive(true);
             }
         }
         if (!isDailyMission3Completed)
@@ -144,11 +164,11 @@ public class MissionDaily : MonoBehaviour
                 textDailyMission3.text = "Mission Completed";
                 imageDailyMission3.color = Color.yellow;
                 buttonDailyMission3.image.color = Color.yellow;
-                if (!isDailyMission1Completed)
-                {
-                    dailyMission1Progress++;
-                }
                 UpdateDailyMission();
+                
+                MissionManager.instance.textQuantityRewardValue++;
+                MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
+                MissionManager.instance.notificationImage.gameObject.SetActive(true);
             }
         }
         if (!isDailyMission4Completed)
@@ -164,11 +184,11 @@ public class MissionDaily : MonoBehaviour
                 textDailyMission4.text = "Mission Completed";
                 imageDailyMission4.color = Color.yellow;
                 buttonDailyMission4.image.color = Color.yellow;
-                if (!isDailyMission1Completed)
-                {
-                    dailyMission1Progress++;
-                }
                 UpdateDailyMission();
+                
+                MissionManager.instance.textQuantityRewardValue++;
+                MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
+                MissionManager.instance.notificationImage.gameObject.SetActive(true);
             }
         }
         if (!isDailyMission5Completed)
@@ -184,11 +204,11 @@ public class MissionDaily : MonoBehaviour
                 textDailyMission5.text = "Mission Completed";
                 imageDailyMission5.color = Color.yellow;
                 buttonDailyMission5.image.color = Color.yellow;
-                if (!isDailyMission1Completed)
-                {
-                    dailyMission1Progress++;
-                }
                 UpdateDailyMission();
+                
+                MissionManager.instance.textQuantityRewardValue++;
+                MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
+                MissionManager.instance.notificationImage.gameObject.SetActive(true);
             }
         }
         Save();
@@ -201,6 +221,12 @@ public class MissionDaily : MonoBehaviour
         PlayerPrefs.SetInt("DailyMission3Progress", dailyMission3Progress);
         PlayerPrefs.SetInt("DailyMission4Progress", dailyMission4Progress);
         PlayerPrefs.SetInt("DailyMission5Progress", dailyMission5Progress);
+
+        PlayerPrefs.SetInt("IsReceivedDaily1Reward", isReceivedDaily1Reward ? 1 : 0);
+        PlayerPrefs.SetInt("IsReceivedDaily2Reward", isReceivedDaily2Reward ? 1 : 0);
+        PlayerPrefs.SetInt("IsReceivedDaily3Reward", isReceivedDaily3Reward ? 1 : 0);
+        PlayerPrefs.SetInt("IsReceivedDaily4Reward", isReceivedDaily4Reward ? 1 : 0);
+        PlayerPrefs.SetInt("IsReceivedDaily5Reward", isReceivedDaily5Reward ? 1 : 0);
     }
 
     public void Load()
@@ -210,6 +236,12 @@ public class MissionDaily : MonoBehaviour
         dailyMission3Progress = PlayerPrefs.GetInt("DailyMission3Progress", 0);
         dailyMission4Progress = PlayerPrefs.GetInt("DailyMission4Progress", 0);
         dailyMission5Progress = PlayerPrefs.GetInt("DailyMission5Progress", 0);
+
+        isReceivedDaily1Reward = PlayerPrefs.GetInt("IsReceivedDaily1Reward", 0) == 1;
+        isReceivedDaily2Reward = PlayerPrefs.GetInt("IsReceivedDaily2Reward", 0) == 1;
+        isReceivedDaily3Reward = PlayerPrefs.GetInt("IsReceivedDaily3Reward", 0) == 1;
+        isReceivedDaily4Reward = PlayerPrefs.GetInt("IsReceivedDaily4Reward", 0) == 1;
+        isReceivedDaily5Reward = PlayerPrefs.GetInt("IsReceivedDaily5Reward", 0) == 1;
     }
 
     public void ResetDailyMissions()
@@ -231,6 +263,12 @@ public class MissionDaily : MonoBehaviour
         buttonDailyMission3.interactable = false;
         buttonDailyMission4.interactable = false;
         buttonDailyMission5.interactable = false;
+
+        isReceivedDaily1Reward = false;
+        isReceivedDaily2Reward = false;
+        isReceivedDaily3Reward = false;
+        isReceivedDaily4Reward = false;
+        isReceivedDaily5Reward = false;
 
         imageDailyMission1.color = Color.gray;
         imageDailyMission2.color = Color.gray;
@@ -257,7 +295,23 @@ public class MissionDaily : MonoBehaviour
             buttonDailyMission1.interactable = false;
             imageDailyMission1.color = Color.gray;
             buttonDailyMission1.image.color = Color.gray;
+            isReceivedDaily1Reward = true;
+            textDailyMission1.text = "Claimed";
+
+            MissionPlane.instance.planeMission1Progress += 10;
+            MissionPlane.instance.UpdatePlaneMission();
+            MissionPlane.instance.Save();
+            if(isReceivedDaily1Reward)
+            {
+                MissionManager.instance.textQuantityRewardValue--;
+                MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
+                if (MissionManager.instance.textQuantityRewardValue <= 0)
+                {
+                    MissionManager.instance.notificationImage.gameObject.SetActive(false);
+                }
+            }
             UpdateDailyMission();
+            Save();
         }
     }
     public void buttonMission2ClaimReward()
@@ -270,7 +324,24 @@ public class MissionDaily : MonoBehaviour
             buttonDailyMission2.interactable = false;
             imageDailyMission2.color = Color.gray;
             buttonDailyMission2.image.color = Color.gray;
+            isReceivedDaily2Reward = true;
+            textDailyMission2.text = "Claimed";
+
+            GManager.instance.totalDiamond += 50;
+            PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
+            PlayerPrefs.Save();
+            GManager.instance.SaveTotalDiamond();
+            if(isReceivedDaily2Reward)
+            {
+                MissionManager.instance.textQuantityRewardValue--;
+                MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
+                if (MissionManager.instance.textQuantityRewardValue <= 0)
+                {
+                    MissionManager.instance.notificationImage.gameObject.SetActive(false);
+                }
+            }
             UpdateDailyMission();
+            Save();
         }
     }
     public void buttonMission3ClaimReward()
@@ -283,7 +354,25 @@ public class MissionDaily : MonoBehaviour
             buttonDailyMission3.interactable = false;
             imageDailyMission3.color = Color.gray;
             buttonDailyMission3.image.color = Color.gray;
+            isReceivedDaily3Reward = true;
+            textDailyMission3.text = "Claimed";
+
+            GManager.instance.totalMoney += 3000f;
+            PlayerPrefs.SetFloat("TotalMoney", GManager.instance.totalMoney);
+            PlayerPrefs.Save();
+            GManager.instance.SaveTotalMoney();
+
+            if(isReceivedDaily3Reward)
+            {
+                MissionManager.instance.textQuantityRewardValue--;
+                MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
+                if (MissionManager.instance.textQuantityRewardValue <= 0)
+                {
+                    MissionManager.instance.notificationImage.gameObject.SetActive(false);
+                }
+            }
             UpdateDailyMission();
+            Save();
         }
     }
     public void buttonMission4ClaimReward()
@@ -296,7 +385,25 @@ public class MissionDaily : MonoBehaviour
             buttonDailyMission4.interactable = false;
             imageDailyMission4.color = Color.gray;
             buttonDailyMission4.image.color = Color.gray;
+            isReceivedDaily4Reward = true;
+            textDailyMission4.text = "Claimed";
+
+            GManager.instance.totalDiamond += 50;
+            PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
+            PlayerPrefs.Save();
+            GManager.instance.SaveTotalDiamond();
+
+            if(isReceivedDaily4Reward)
+            {
+                MissionManager.instance.textQuantityRewardValue--;
+                MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
+                if (MissionManager.instance.textQuantityRewardValue <= 0)
+                {
+                    MissionManager.instance.notificationImage.gameObject.SetActive(false);
+                }
+            }
             UpdateDailyMission();
+            Save();
         }
     }
     public void buttonMission5ClaimReward()
@@ -309,8 +416,57 @@ public class MissionDaily : MonoBehaviour
             buttonDailyMission5.interactable = false;
             imageDailyMission5.color = Color.gray;
             buttonDailyMission5.image.color = Color.gray;
+            isReceivedDaily5Reward = true;
+            textDailyMission5.text = "Claimed";
+
+            GManager.instance.totalMoney += 5000f;
+            PlayerPrefs.SetFloat("TotalMoney", GManager.instance.totalMoney);
+            PlayerPrefs.Save();
+            GManager.instance.SaveTotalMoney();
+            if(isReceivedDaily5Reward)
+            {
+                MissionManager.instance.textQuantityRewardValue--;
+                MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
+                if (MissionManager.instance.textQuantityRewardValue <= 0)
+                {
+                    MissionManager.instance.notificationImage.gameObject.SetActive(false);
+                }
+            }
             UpdateDailyMission();
+            Save();
         }
     }
 
+    public void completeRewardCollection(){
+        if(isReceivedDaily1Reward){
+            buttonDailyMission1.interactable = false;
+            imageDailyMission1.color = Color.gray;
+            buttonDailyMission1.image.color = Color.gray;
+            textDailyMission1.text = "Claimed";
+        }
+        if(isReceivedDaily2Reward){
+            buttonDailyMission2.interactable = false;
+            imageDailyMission2.color = Color.gray;
+            buttonDailyMission2.image.color = Color.gray;
+            textDailyMission2.text = "Claimed";
+        }
+        if(isReceivedDaily3Reward){
+            buttonDailyMission3.interactable = false;
+            imageDailyMission3.color = Color.gray;
+            buttonDailyMission3.image.color = Color.gray;
+            textDailyMission3.text = "Claimed";
+        }
+        if(isReceivedDaily4Reward){
+            buttonDailyMission4.interactable = false;
+            imageDailyMission4.color = Color.gray;
+            buttonDailyMission4.image.color = Color.gray;
+            textDailyMission4.text = "Claimed";
+        }
+        if(isReceivedDaily5Reward){
+            buttonDailyMission5.interactable = false;
+            imageDailyMission5.color = Color.gray;
+            buttonDailyMission5.image.color = Color.gray;
+            textDailyMission5.text = "Claimed";
+        }
+    }
 }

@@ -25,9 +25,9 @@ public class PositionX : MonoBehaviour
         
         Sequence seq = DOTween.Sequence();
 
-        seq.Append(transform.DOMoveX(transform.position.x + 1.3f, 0.4f).SetEase(Ease.Linear));
-        seq.Append(transform.DOMoveX(transform.position.x + 1.5f, 0.05f).SetEase(Ease.Linear)); 
-        seq.Append(transform.DOMoveX(transform.position.x + 3.2f, 0.3f).SetEase(Ease.Linear));
+        seq.Append(transform.DOMoveX(transform.position.x + 1.3f * 0.8f, 0.4f).SetEase(Ease.Linear));
+        seq.Append(transform.DOMoveX(transform.position.x + 1.5f * 0.8f, 0.05f).SetEase(Ease.Linear)); 
+        seq.Append(transform.DOMoveX(transform.position.x + 3.2f * 0.8f, 0.3f).SetEase(Ease.Linear));
 
         seq.SetLoops(-1, LoopType.Yoyo);     
     
@@ -47,7 +47,7 @@ public class PositionX : MonoBehaviour
             float deltaX = newPositionX.x - positionX.x;
             Debug.Log($"Delta X: {deltaX:F2}");
             
-            int temp = Mathf.RoundToInt((deltaX / 3.2f) * 100);
+            int temp = Mathf.RoundToInt((deltaX / (3.2f * 0.8f)) * 100);
             temp = Mathf.Clamp(temp, 0, 100);
             Debug.Log($"Temp Value: {temp}%");
             

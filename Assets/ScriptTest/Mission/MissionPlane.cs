@@ -5,62 +5,69 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using System;
+using DG.Tweening;
 
 
 public class MissionPlane : MonoBehaviour
 {
     public static MissionPlane instance;
-    [Header("Mission Daily Text")]
-    public TextMeshProUGUI textDailyMission1;
-    public TextMeshProUGUI textDailyMission2;
-    public TextMeshProUGUI textDailyMission3;
-    public TextMeshProUGUI textDailyMission4;
-    public TextMeshProUGUI textDailyMission5;
+    [Header("Mission Plane Text")]
+    public TextMeshProUGUI textPlaneMission1;
+    public TextMeshProUGUI textPlaneMission2;
+    public TextMeshProUGUI textPlaneMission3;
+    public TextMeshProUGUI textPlaneMission4;
+    public TextMeshProUGUI textPlaneMission5;
 
-    [Header("Mission Daily Image")]
-    public Image imageDailyMission1;
-    public Image imageDailyMission2;
-    public Image imageDailyMission3;
-    public Image imageDailyMission4;
-    public Image imageDailyMission5;
+    [Header("Mission Plane Image")]
+    public Image imagePlaneMission1;
+    public Image imagePlaneMission2;
+    public Image imagePlaneMission3;
+    public Image imagePlaneMission4;
+    public Image imagePlaneMission5;
 
-    [Header("Mission Daily Image Fill")]
-    public Image imageFillDailyMission1;
-    public Image imageFillDailyMission2;
-    public Image imageFillDailyMission3;
-    public Image imageFillDailyMission4;
-    public Image imageFillDailyMission5;
+    [Header("Mission Plane Image Fill")]
+    public Image imageFillPlaneMission1;
+    public Image imageFillPlaneMission2;
+    public Image imageFillPlaneMission3;
+    public Image imageFillPlaneMission4;
+    public Image imageFillPlaneMission5;
 
-    [Header("Mission Daily Button")]
-    public Button buttonDailyMission1;
-    public Button buttonDailyMission2;
-    public Button buttonDailyMission3;
-    public Button buttonDailyMission4;
-    public Button buttonDailyMission5;
-    [Header("Mission Daily")]
-    public bool isDailyMission1Completed = false;
-    public bool isDailyMission2Completed = false;
-    public bool isDailyMission3Completed = false;
-    public bool isDailyMission4Completed = false;
-    public bool isDailyMission5Completed = false;
-    public int dailyMission1Progress = 0;
-    public int dailyMission1Target = 4;
-    public int dailyMission2Progress = 0;
-    public int dailyMission2Target = 500;
-    public int dailyMission3Progress = 0;
-    public int dailyMission3Target = 3;
-    public int dailyMission4Progress = 0;
-    public int dailyMission4Target = 1;
-    public int dailyMission5Progress = 0;
-    public int dailyMission5Target = 1;
-    private DateTime endOfDay;
-    public TextMeshProUGUI countdownText;
-    public bool checkMission2DailyCompletedForMission1 = false;
-    public bool checkMission3DailyCompletedForMission1 = false;
-    public bool checkMission4DailyCompletedForMission1 = false;
-    public bool checkMission5DailyCompletedForMission1 = false;
+    [Header("Mission Plane Button")]
+    public Button buttonPlaneMission1;
+    public Button buttonPlaneMission2;
+    public Button buttonPlaneMission3;
+    public Button buttonPlaneMission4;
+    public Button buttonPlaneMission5;
+    [Header("Mission Plane")]
+    public bool isPlaneMission1Completed = false;
+    public bool isPlaneMission2Completed = false;
+    public bool isPlaneMission3Completed = false;
+    public bool isPlaneMission4Completed = false;
+    public bool isPlaneMission5Completed = false;
+    public int planeMission1Progress = 0;
+    public int planeMission1Target = 100;
+    public int planeMission2Progress = 0;
+    public int planeMission2Target = 100;
+    public int planeMission3Progress = 0;
+    public int planeMission3Target = 100;
+    public int planeMission4Progress = 0;
+    public int planeMission4Target = 100;
+    public int planeMission5Progress = 0;
+    public int planeMission5Target = 100;
 
+    public bool isReceivedPlane1Reward = false;
+    public bool isReceivedPlane2Reward = false;
+    public bool isReceivedPlane3Reward = false;
+    public bool isReceivedPlane4Reward = false;
+    public bool isReceivedPlane5Reward = false;
 
+    [Header("Information Super Plane")]
+    public Image superPlaneInfoImage;
+    public GameObject superPlaneInfoPlane1; 
+    public GameObject superPlaneInfoPlane2;
+    public GameObject superPlaneInfoPlane3;
+    public GameObject superPlaneInfoPlane4;
+    public GameObject superPlaneInfoPlane5;
 
     // Start is called before the first frame update
     void Start()
@@ -70,10 +77,10 @@ public class MissionPlane : MonoBehaviour
         else
             Destroy(gameObject);    
         Load();
-        UpdateDailyMission();
+        UpdatePlaneMission();
+        completeRewardCollection();
 
-        DateTime now = DateTime.Now;
-        endOfDay = new DateTime(now.Year, now.Month, now.Day, 23, 59, 59);
+        
 
 
     }
@@ -81,183 +88,460 @@ public class MissionPlane : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        DateTime now = DateTime.Now;
-        TimeSpan timeRemaining = endOfDay - now;
-
-        if (timeRemaining.TotalSeconds <= 0)
+        if (Input.GetKeyDown(KeyCode.P))
         {
-            countdownText.text = "00:00:00";
-            ResetDailyMissions();
-        }
-        else
-        {
-            // Hiển thị theo định dạng HH:mm:ss
-            countdownText.text = string.Format("{0:D2}:{1:D2}:{2:D2}",
-                timeRemaining.Hours, timeRemaining.Minutes, timeRemaining.Seconds);
+            planeMission1Progress = 100;
+            planeMission2Progress = 100;
+            planeMission3Progress = 100;
+            planeMission4Progress = 100;
+            planeMission5Progress = 100;
+            UpdatePlaneMission();
         }
 
     }
 
-    public void UpdateDailyMission()
+    public void UpdatePlaneMission()
     {
-        if (!isDailyMission1Completed)
+        if (!isPlaneMission1Completed)
         {
-            imageFillDailyMission1.fillAmount = (float)dailyMission1Progress / dailyMission1Target;
-            Debug.Log("Daily Mission 1 Progress: " + imageFillDailyMission1.fillAmount);
-            textDailyMission1.text =dailyMission1Progress + "/" + dailyMission1Target;
 
-            if (dailyMission1Progress >= dailyMission1Target)
+            imageFillPlaneMission1.fillAmount = (float)planeMission1Progress / planeMission1Target;
+            Debug.Log("Plane Mission 1 Progress: " + imageFillPlaneMission1.fillAmount);
+            if(!isReceivedPlane1Reward){
+                textPlaneMission1.text = planeMission1Progress + "/" + planeMission1Target;
+            }
+            else{
+                textPlaneMission1.text = "Claimed";
+            }
+
+            if (planeMission1Progress >= planeMission1Target)
             {
-                isDailyMission1Completed = true;
-                buttonDailyMission1.interactable = true;
-                textDailyMission1.text = "Mission Completed";
-                imageDailyMission1.color = Color.yellow;
-                buttonDailyMission1.image.color = Color.yellow;
+                isPlaneMission1Completed = true;
+                buttonPlaneMission1.interactable = true;
+                textPlaneMission1.text = "Mission Completed";
+                imagePlaneMission1.color = Color.yellow;
+                buttonPlaneMission1.image.color = Color.yellow;
+                
+                MissionManager.instance.textQuantityRewardValue++;
+                MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
+                MissionManager.instance.notificationImage.gameObject.SetActive(true);
             }
         }
-        if (!isDailyMission2Completed)
+        if (!isPlaneMission2Completed)
         {
-            imageFillDailyMission2.fillAmount = (float)dailyMission2Progress / dailyMission2Target;
-            Debug.Log("Daily Mission 2 Progress: " + imageFillDailyMission2.fillAmount);
-            textDailyMission2.text = dailyMission2Progress + "/" + dailyMission2Target;
+            imageFillPlaneMission2.fillAmount = (float)planeMission2Progress / planeMission2Target;
+            Debug.Log("Plane Mission 2 Progress: " + imageFillPlaneMission2.fillAmount);
+            if(!isReceivedPlane2Reward){
+                textPlaneMission2.text = planeMission2Progress + "/" + planeMission2Target;
+            }
+            else{
+                textPlaneMission2.text = "Claimed";
+            }
 
-            if (dailyMission2Progress >= dailyMission2Target)
+            if (planeMission2Progress >= planeMission2Target)
             {
-                isDailyMission2Completed = true;
-                buttonDailyMission2.interactable = true;
-                checkMission2DailyCompletedForMission1 = true;
-                textDailyMission2.text = "Mission Completed";
-                imageDailyMission2.color = Color.yellow;
-                buttonDailyMission2.image.color = Color.yellow;
-                if (checkMission2DailyCompletedForMission1)
-                {
-                    dailyMission1Progress++;
-                    UpdateDailyMission();
-                    checkMission2DailyCompletedForMission1 = false;
-                }
+                isPlaneMission2Completed = true;
+                buttonPlaneMission2.interactable = true;
+                textPlaneMission2.text = "Mission Completed";
+                imagePlaneMission2.color = Color.yellow;
+                buttonPlaneMission2.image.color = Color.yellow;
+                UpdatePlaneMission();
+                
+                MissionManager.instance.textQuantityRewardValue++;
+                MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
+                MissionManager.instance.notificationImage.gameObject.SetActive(true);
             }
         }
-        
+        if (!isPlaneMission3Completed)
+        {
+            imageFillPlaneMission3.fillAmount = (float)planeMission3Progress / planeMission3Target;
+           // Debug.Break(); tạm dừng bên Unity để kiểm tra giá trị
+            Debug.Log("Plane Mission 3 Progress: " + imageFillPlaneMission3.fillAmount);
+            if(!isReceivedPlane3Reward){
+                textPlaneMission3.text = planeMission3Progress + "/" + planeMission3Target;
+            }
+            else{
+                textPlaneMission3.text = "Claimed";
+            }
+
+            if (planeMission3Progress >= planeMission3Target)
+            {
+                isPlaneMission3Completed = true;
+                buttonPlaneMission3.interactable = true;
+                textPlaneMission3.text = "Mission Completed";
+                imagePlaneMission3.color = Color.yellow;
+                buttonPlaneMission3.image.color = Color.yellow;
+                UpdatePlaneMission();
+                
+                MissionManager.instance.textQuantityRewardValue++;
+                MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
+                MissionManager.instance.notificationImage.gameObject.SetActive(true);
+            }
+        }
+        if (!isPlaneMission4Completed)
+        {
+            imageFillPlaneMission4.fillAmount = (float)planeMission4Progress / planeMission4Target;
+            Debug.Log("Plane Mission 4 Progress: " + imageFillPlaneMission4.fillAmount);
+            if(!isReceivedPlane4Reward){
+                textPlaneMission4.text = planeMission4Progress + "/" + planeMission4Target;
+            }
+            else{
+                textPlaneMission4.text = "Claimed";
+            }
+
+            if (planeMission4Progress >= planeMission4Target)
+            {
+                isPlaneMission4Completed = true;
+                buttonPlaneMission4.interactable = true;
+                textPlaneMission4.text = "Mission Completed";
+                imagePlaneMission4.color = Color.yellow;
+                buttonPlaneMission4.image.color = Color.yellow;
+                UpdatePlaneMission();
+                
+                MissionManager.instance.textQuantityRewardValue++;
+                MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
+                MissionManager.instance.notificationImage.gameObject.SetActive(true);
+            }
+        }
+        if (!isPlaneMission5Completed)
+        {
+            imageFillPlaneMission5.fillAmount = (float)planeMission5Progress / planeMission5Target;
+            Debug.Log("Plane Mission 5 Progress: " + imageFillPlaneMission5.fillAmount);
+            if(!isReceivedPlane5Reward){
+                textPlaneMission5.text = planeMission5Progress + "/" + planeMission5Target;
+            }
+            else{
+                textPlaneMission5.text = "Claimed";
+            }
+
+            if (planeMission5Progress >= planeMission5Target)
+            {
+                isPlaneMission5Completed = true;
+                buttonPlaneMission5.interactable = true;
+                textPlaneMission5.text = "Mission Completed";
+                imagePlaneMission5.color = Color.yellow;
+                buttonPlaneMission5.image.color = Color.yellow;
+                UpdatePlaneMission();
+                
+                MissionManager.instance.textQuantityRewardValue++;
+                MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
+                MissionManager.instance.notificationImage.gameObject.SetActive(true);
+            }
+        }
         Save();
     }
 
     public void Save()
     {
-        PlayerPrefs.SetInt("DailyMission1Progress", dailyMission1Progress);
-        PlayerPrefs.SetInt("DailyMission2Progress", dailyMission2Progress);
-        PlayerPrefs.SetInt("DailyMission3Progress", dailyMission3Progress);
-        PlayerPrefs.SetInt("DailyMission4Progress", dailyMission4Progress);
-        PlayerPrefs.SetInt("DailyMission5Progress", dailyMission5Progress);
+        PlayerPrefs.SetInt("PlaneMission1Progress", planeMission1Progress);
+        PlayerPrefs.SetInt("PlaneMission2Progress", planeMission2Progress);
+        PlayerPrefs.SetInt("PlaneMission3Progress", planeMission3Progress);
+        PlayerPrefs.SetInt("PlaneMission4Progress", planeMission4Progress);
+        PlayerPrefs.SetInt("PlaneMission5Progress", planeMission5Progress);
+
+        PlayerPrefs.SetInt("IsReceivedPlane1Reward", isReceivedPlane1Reward ? 1 : 0);
+        PlayerPrefs.SetInt("IsReceivedPlane2Reward", isReceivedPlane2Reward ? 1 : 0);
+        PlayerPrefs.SetInt("IsReceivedPlane3Reward", isReceivedPlane3Reward ? 1 : 0);
+        PlayerPrefs.SetInt("IsReceivedPlane4Reward", isReceivedPlane4Reward ? 1 : 0);
+        PlayerPrefs.SetInt("IsReceivedPlane5Reward", isReceivedPlane5Reward ? 1 : 0);
     }
 
     public void Load()
     {
-        dailyMission1Progress = PlayerPrefs.GetInt("DailyMission1Progress", 0);
-        dailyMission2Progress = PlayerPrefs.GetInt("DailyMission2Progress", 0);
-        dailyMission3Progress = PlayerPrefs.GetInt("DailyMission3Progress", 0);
-        dailyMission4Progress = PlayerPrefs.GetInt("DailyMission4Progress", 0);
-        dailyMission5Progress = PlayerPrefs.GetInt("DailyMission5Progress", 0);
+        planeMission1Progress = PlayerPrefs.GetInt("PlaneMission1Progress", 0);
+        planeMission2Progress = PlayerPrefs.GetInt("PlaneMission2Progress", 0);
+        planeMission3Progress = PlayerPrefs.GetInt("PlaneMission3Progress", 0);
+        planeMission4Progress = PlayerPrefs.GetInt("PlaneMission4Progress", 0);
+        planeMission5Progress = PlayerPrefs.GetInt("PlaneMission5Progress", 0);
+
+        isReceivedPlane1Reward = PlayerPrefs.GetInt("IsReceivedPlane1Reward", 0) == 1;
+        isReceivedPlane2Reward = PlayerPrefs.GetInt("IsReceivedPlane2Reward", 0) == 1;
+        isReceivedPlane3Reward = PlayerPrefs.GetInt("IsReceivedPlane3Reward", 0) == 1;
+        isReceivedPlane4Reward = PlayerPrefs.GetInt("IsReceivedPlane4Reward", 0) == 1;
+        isReceivedPlane5Reward = PlayerPrefs.GetInt("IsReceivedPlane5Reward", 0) == 1;
     }
 
-    public void ResetDailyMissions()
+    public void ResetPlaneMissions()
     {
-        dailyMission1Progress = 0;
-        dailyMission2Progress = 0;
-        dailyMission3Progress = 0;
-        dailyMission4Progress = 0;
-        dailyMission5Progress = 0;
+        planeMission1Progress = 0;
+        planeMission2Progress = 0;
+        planeMission3Progress = 0;
+        planeMission4Progress = 0;
+        planeMission5Progress = 0;
 
-        isDailyMission1Completed = false;
-        isDailyMission2Completed = false;
-        isDailyMission3Completed = false;
-        isDailyMission4Completed = false;
-        isDailyMission5Completed = false;
+        isPlaneMission1Completed = false;
+        isPlaneMission2Completed = false;
+        isPlaneMission3Completed = false;
+        isPlaneMission4Completed = false;
+        isPlaneMission5Completed = false;
 
-        buttonDailyMission1.interactable = false;
-        buttonDailyMission2.interactable = false;
-        buttonDailyMission3.interactable = false;
-        buttonDailyMission4.interactable = false;
-        buttonDailyMission5.interactable = false;
+        buttonPlaneMission1.interactable = false;
+        buttonPlaneMission2.interactable = false;
+        buttonPlaneMission3.interactable = false;
+        buttonPlaneMission4.interactable = false;
+        buttonPlaneMission5.interactable = false;
 
-        imageDailyMission1.color = Color.gray;
-        imageDailyMission2.color = Color.gray;
-        imageDailyMission3.color = Color.gray;
-        imageDailyMission4.color = Color.gray;
-        imageDailyMission5.color = Color.gray;
+        isReceivedPlane1Reward = false;
+        isReceivedPlane2Reward = false;
+        isReceivedPlane3Reward = false;
+        isReceivedPlane4Reward = false;
+        isReceivedPlane5Reward = false;
 
-        buttonDailyMission1.image.color = Color.white;
-        buttonDailyMission2.image.color = Color.white;
-        buttonDailyMission3.image.color = Color.white;
-        buttonDailyMission4.image.color = Color.white;
-        buttonDailyMission5.image.color = Color.white;
+        imagePlaneMission1.color = Color.gray;
+        imagePlaneMission2.color = Color.gray;
+        imagePlaneMission3.color = Color.gray;
+        imagePlaneMission4.color = Color.gray;
+        imagePlaneMission5.color = Color.gray;
 
-        UpdateDailyMission();
+        buttonPlaneMission1.image.color = Color.white;
+        buttonPlaneMission2.image.color = Color.white;
+        buttonPlaneMission3.image.color = Color.white;
+        buttonPlaneMission4.image.color = Color.white;
+        buttonPlaneMission5.image.color = Color.white;
+
+        UpdatePlaneMission();
     }
 
     public void buttonMission1ClaimReward()
     {
-        if (isDailyMission1Completed)
+        if (isPlaneMission1Completed)
         {
-            Debug.Log("Daily Mission 1 Reward Claimed!");
-            isDailyMission1Completed = false;
-            dailyMission1Progress = 0;
-            buttonDailyMission1.interactable = false;
-            imageDailyMission1.color = Color.gray;
-            buttonDailyMission1.image.color = Color.gray;
-            UpdateDailyMission();
+            Debug.Log("Plane Mission 1 Reward Claimed!");
+            isPlaneMission1Completed = false;
+            planeMission1Progress = 0;
+            buttonPlaneMission1.interactable = false;
+            imagePlaneMission1.color = Color.gray;
+            buttonPlaneMission1.image.color = Color.gray;
+            isReceivedPlane1Reward = true;
+            textPlaneMission1.text = "Claimed";
+
+            if(isReceivedPlane1Reward)
+            {
+                MissionManager.instance.textQuantityRewardValue--;
+                MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
+                if (MissionManager.instance.textQuantityRewardValue <= 0)
+                {
+                    MissionManager.instance.notificationImage.gameObject.SetActive(false);
+                }
+            }
+            UpdatePlaneMission();
+            Save();
         }
     }
     public void buttonMission2ClaimReward()
     {
-        if (isDailyMission2Completed)
+        if (isPlaneMission2Completed)
         {
-            Debug.Log("Daily Mission 2 Reward Claimed!");
-            isDailyMission2Completed = false;
-            dailyMission2Progress = 0;
-            buttonDailyMission2.interactable = false;
-            imageDailyMission2.color = Color.gray;
-            buttonDailyMission2.image.color = Color.gray;
-            UpdateDailyMission();
+            Debug.Log("Plane Mission 2 Reward Claimed!");
+            isPlaneMission2Completed = false;
+            planeMission2Progress = 0;
+            buttonPlaneMission2.interactable = false;
+            imagePlaneMission2.color = Color.gray;
+            buttonPlaneMission2.image.color = Color.gray;
+            isReceivedPlane2Reward = true;
+            textPlaneMission2.text = "Claimed";
+
+            if(isReceivedPlane2Reward)
+            {
+                MissionManager.instance.textQuantityRewardValue--;
+                MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
+                if (MissionManager.instance.textQuantityRewardValue <= 0)
+                {
+                    MissionManager.instance.notificationImage.gameObject.SetActive(false);
+                }
+            }
+            UpdatePlaneMission();
+            Save();
         }
     }
     public void buttonMission3ClaimReward()
     {
-        if (isDailyMission3Completed)
+        if (isPlaneMission3Completed)
         {
-            Debug.Log("Daily Mission 3 Reward Claimed!");
-            isDailyMission3Completed = false;
-            dailyMission3Progress = 0;
-            buttonDailyMission3.interactable = false;
-            imageDailyMission3.color = Color.gray;
-            buttonDailyMission3.image.color = Color.gray;
-            UpdateDailyMission();
+            Debug.Log("Plane Mission 3 Reward Claimed!");
+            isPlaneMission3Completed = false;
+            planeMission3Progress = 0;
+            buttonPlaneMission3.interactable = false;
+            imagePlaneMission3.color = Color.gray;
+            buttonPlaneMission3.image.color = Color.gray;
+            isReceivedPlane3Reward = true;
+            textPlaneMission3.text = "Claimed";
+
+            if(isReceivedPlane3Reward)
+            {
+                MissionManager.instance.textQuantityRewardValue--;
+                MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
+                if (MissionManager.instance.textQuantityRewardValue <= 0)
+                {
+                    MissionManager.instance.notificationImage.gameObject.SetActive(false);
+                }
+            }
+            UpdatePlaneMission();
+            Save();
         }
     }
     public void buttonMission4ClaimReward()
     {
-        if (isDailyMission4Completed)
+        if (isPlaneMission4Completed)
         {
-            Debug.Log("Daily Mission 4 Reward Claimed!");
-            isDailyMission4Completed = false;
-            dailyMission4Progress = 0;
-            buttonDailyMission4.interactable = false;
-            imageDailyMission4.color = Color.gray;
-            buttonDailyMission4.image.color = Color.gray;
-            UpdateDailyMission();
+            Debug.Log("Plane Mission 4 Reward Claimed!");
+            isPlaneMission4Completed = false;
+            planeMission4Progress = 0;
+            buttonPlaneMission4.interactable = false;
+            imagePlaneMission4.color = Color.gray;
+            buttonPlaneMission4.image.color = Color.gray;
+            isReceivedPlane4Reward = true;
+            textPlaneMission4.text = "Claimed";
+
+            if(isReceivedPlane4Reward)
+            {
+                MissionManager.instance.textQuantityRewardValue--;
+                MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
+                if (MissionManager.instance.textQuantityRewardValue <= 0)
+                {
+                    MissionManager.instance.notificationImage.gameObject.SetActive(false);
+                }
+            }
+            UpdatePlaneMission();
+            Save();
         }
     }
     public void buttonMission5ClaimReward()
     {
-        if (isDailyMission5Completed)
+        if (isPlaneMission5Completed)
         {
-            Debug.Log("Daily Mission 5 Reward Claimed!");
-            isDailyMission5Completed = false;
-            dailyMission5Progress = 0;
-            buttonDailyMission5.interactable = false;
-            imageDailyMission5.color = Color.gray;
-            buttonDailyMission5.image.color = Color.gray;
-            UpdateDailyMission();
+            Debug.Log("Plane Mission 5 Reward Claimed!");
+            isPlaneMission5Completed = false;
+            planeMission5Progress = 0;
+            buttonPlaneMission5.interactable = false;
+            imagePlaneMission5.color = Color.gray;
+            buttonPlaneMission5.image.color = Color.gray;
+            isReceivedPlane5Reward = true;
+            textPlaneMission5.text = "Claimed";
+
+            if(isReceivedPlane5Reward)
+            {
+                MissionManager.instance.textQuantityRewardValue--;
+                MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
+                if (MissionManager.instance.textQuantityRewardValue <= 0)
+                {
+                    MissionManager.instance.notificationImage.gameObject.SetActive(false);
+                }
+            }
+            UpdatePlaneMission();
+            Save();
         }
     }
+
+    public void completeRewardCollection(){
+        if(isReceivedPlane1Reward){
+            buttonPlaneMission1.interactable = false;
+            imagePlaneMission1.color = Color.gray;
+            buttonPlaneMission1.image.color = Color.gray;
+            textPlaneMission1.text = "Claimed";
+        }
+        if(isReceivedPlane2Reward){
+            buttonPlaneMission2.interactable = false;
+            imagePlaneMission2.color = Color.gray;
+            buttonPlaneMission2.image.color = Color.gray;
+            textPlaneMission2.text = "Claimed";
+        }
+        if(isReceivedPlane3Reward){
+            buttonPlaneMission3.interactable = false;
+            imagePlaneMission3.color = Color.gray;
+            buttonPlaneMission3.image.color = Color.gray;
+            textPlaneMission3.text = "Claimed";
+        }
+        if(isReceivedPlane4Reward){
+            buttonPlaneMission4.interactable = false;
+            imagePlaneMission4.color = Color.gray;
+            buttonPlaneMission4.image.color = Color.gray;
+            textPlaneMission4.text = "Claimed";
+        }
+        if(isReceivedPlane5Reward){
+            buttonPlaneMission5.interactable = false;
+            imagePlaneMission5.color = Color.gray;
+            buttonPlaneMission5.image.color = Color.gray;
+            textPlaneMission5.text = "Claimed";
+        }
+    }
+
+    public void OpenInfoSuperPlane(int planeIndex)
+    {
+        AudioManager.instance.PlaySound(AudioManager.instance.buttonSoundClip);
+
+        switch (planeIndex)
+        {
+            case 1:
+                superPlaneInfoPlane1.SetActive(true);
+                superPlaneInfoPlane2.SetActive(false);
+                superPlaneInfoPlane3.SetActive(false);
+                superPlaneInfoPlane4.SetActive(false);
+                superPlaneInfoPlane5.SetActive(false);
+                break;
+            case 2:
+                superPlaneInfoPlane1.SetActive(false);
+                superPlaneInfoPlane2.SetActive(true);
+                superPlaneInfoPlane3.SetActive(false);
+                superPlaneInfoPlane4.SetActive(false);
+                superPlaneInfoPlane5.SetActive(false);
+                break;
+            case 3:
+                superPlaneInfoPlane1.SetActive(false);
+                superPlaneInfoPlane2.SetActive(false);
+                superPlaneInfoPlane3.SetActive(true);
+                superPlaneInfoPlane4.SetActive(false);
+                superPlaneInfoPlane5.SetActive(false);
+                break;
+            case 4:
+                superPlaneInfoPlane1.SetActive(false);
+                superPlaneInfoPlane2.SetActive(false);
+                superPlaneInfoPlane3.SetActive(false);
+                superPlaneInfoPlane4.SetActive(true);
+                superPlaneInfoPlane5.SetActive(false);
+                break;
+            case 5:
+                superPlaneInfoPlane1.SetActive(false);
+                superPlaneInfoPlane2.SetActive(false);
+                superPlaneInfoPlane3.SetActive(false);
+                superPlaneInfoPlane4.SetActive(false);
+                superPlaneInfoPlane5.SetActive(true);
+                break;
+            default:
+                break;
+        }
+
+        // Dừng tất cả animation đang chạy
+        DOTween.Kill(superPlaneInfoImage.transform);
+        
+        // Hiển thị settings panel
+        superPlaneInfoImage.gameObject.SetActive(true);
+        
+        
+        // Animation mở settings (giống ShopImage)
+        superPlaneInfoImage.transform.localScale = Vector3.zero;
+        superPlaneInfoImage.transform.DOScale(Vector3.one, 0.5f)
+            .SetEase(Ease.OutBack)
+            .OnComplete(() =>
+            {
+                
+            });
+    }
+
+    public void CloseInfoSuperPlane()
+    {
+
+        AudioManager.instance.PlaySound(AudioManager.instance.exitSoundClip);
+
+        DOTween.Kill(superPlaneInfoImage.transform);
+
+        superPlaneInfoImage.transform.DOScale(Vector3.zero, 0.3f)
+            .SetEase(Ease.InBack)
+            .OnComplete(() =>
+            {
+                superPlaneInfoImage.gameObject.SetActive(false);
+            });
+    }
+
 
 }
