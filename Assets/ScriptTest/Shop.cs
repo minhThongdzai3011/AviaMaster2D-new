@@ -1657,17 +1657,29 @@ public class Shop : MonoBehaviour
         
         // Thay đổi defaultPlane
         if(gameObjectsPlanes != null && gameObjectsPlanes.Length > 14){
+            // Step 1: Disable all planes
+            for (int i=0; i<gameObjectsPlanes.Length; i++){
+                gameObjectsPlanes[i].SetActive(false);
+            }
+            
+            // Step 2: Disable all ChangePlane scripts to prevent velocity reset conflicts
+            DisableAllChangePlanes();
+            
+            // Step 3: Setup references
             defaultPlane = gameObjectsPlanes[14];
             GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[14];
             isRotaryFrontZDone = false;
+            
+            // Step 4: Enable the selected plane
+            gameObjectsPlanes[14].SetActive(true);
+            
+            // Step 5: Reset physics after enabling (important!)
+            airplanesRigidbody2D[14].velocity = Vector2.zero;
+            airplanesRigidbody2D[14].angularVelocity = 0f;
+            
+            // Step 6: Setup camera
             CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[14].transform;
             CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[14].transform;
-            gameObjectsPlanes[14].SetActive(true);
-            for (int i=0; i<gameObjectsPlanes.Length; i++){
-                if(i != 14){
-                    gameObjectsPlanes[i].SetActive(false);
-                }
-            }
             EnsureCameraSetup();
         }
         PlayerPrefs.SetInt("isCheckedPlaneIndex", isCheckedPlaneIndex);
@@ -1723,17 +1735,29 @@ public class Shop : MonoBehaviour
         
         // Thay đổi defaultPlane
         if(gameObjectsPlanes != null && gameObjectsPlanes.Length > 15){
+            // Step 1: Disable all planes
+            for (int i=0; i<gameObjectsPlanes.Length; i++){
+                gameObjectsPlanes[i].SetActive(false);
+            }
+            
+            // Step 2: Disable all ChangePlane scripts to prevent velocity reset conflicts
+            DisableAllChangePlanes();
+            
+            // Step 3: Setup references
             defaultPlane = gameObjectsPlanes[15];
             GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[15];
             isRotaryFrontZDone = false;
+            
+            // Step 4: Enable the selected plane
+            gameObjectsPlanes[15].SetActive(true);
+            
+            // Step 5: Reset physics after enabling (important!)
+            airplanesRigidbody2D[15].velocity = Vector2.zero;
+            airplanesRigidbody2D[15].angularVelocity = 0f;
+            
+            // Step 6: Setup camera
             CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[15].transform;
             CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[15].transform;
-            gameObjectsPlanes[15].SetActive(true);
-            for (int i=0; i<gameObjectsPlanes.Length; i++){
-                if(i != 15){
-                    gameObjectsPlanes[i].SetActive(false);
-                }
-            }
             EnsureCameraSetup();
         }
         PlayerPrefs.SetInt("isCheckedPlaneIndex", isCheckedPlaneIndex);
@@ -1789,17 +1813,29 @@ public class Shop : MonoBehaviour
         
         // Thay đổi defaultPlane
         if(gameObjectsPlanes != null && gameObjectsPlanes.Length > 16){
+            // Step 1: Disable all planes
+            for (int i=0; i<gameObjectsPlanes.Length; i++){
+                gameObjectsPlanes[i].SetActive(false);
+            }
+            
+            // Step 2: Disable all ChangePlane scripts to prevent velocity reset conflicts
+            DisableAllChangePlanes();
+            
+            // Step 3: Setup references
             defaultPlane = gameObjectsPlanes[16];
             GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[16];
             isRotaryFrontZDone = false;
+            
+            // Step 4: Enable the selected plane
+            gameObjectsPlanes[16].SetActive(true);
+            
+            // Step 5: Reset physics after enabling (important!)
+            airplanesRigidbody2D[16].velocity = Vector2.zero;
+            airplanesRigidbody2D[16].angularVelocity = 0f;
+            
+            // Step 6: Setup camera
             CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[16].transform;
             CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[16].transform;
-            gameObjectsPlanes[16].SetActive(true);
-            for (int i=0; i<gameObjectsPlanes.Length; i++){
-                if(i != 16){
-                    gameObjectsPlanes[i].SetActive(false);
-                }
-            }
             EnsureCameraSetup();
         }
         PlayerPrefs.SetInt("isCheckedPlaneIndex", isCheckedPlaneIndex);
@@ -1997,6 +2033,17 @@ public class Shop : MonoBehaviour
        PlayerPrefs.SetInt("isCheckedPlaneIndex", isCheckedPlaneIndex);
        PlayerPrefs.Save();
    }
+
+   // Helper method to disable all ChangePlane scripts to prevent velocity conflicts
+    private void DisableAllChangePlanes()
+    {
+        ChangePlane[] allChangePlanes = FindObjectsOfType<ChangePlane>(true); // Include inactive objects
+        foreach(ChangePlane cp in allChangePlanes)
+        {
+            cp.isRotationChangePlane = false;
+        }
+        Debug.Log($"Disabled {allChangePlanes.Length} ChangePlane scripts to prevent velocity conflicts");
+    }
 
    // THÊM: Method để đảm bảo camera luôn được gắn đúng
     public void EnsureCameraSetup()

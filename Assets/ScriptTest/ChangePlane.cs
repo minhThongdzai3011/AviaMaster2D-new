@@ -17,11 +17,18 @@ public class ChangePlane : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isRotationChangePlane)
+        // Only reset velocity if this is the active controlled plane
+        if (isRotationChangePlane && gameObject.activeInHierarchy)
         {
-            airplaneRigidbody2D = GManager.instance.airplaneRigidbody2D;
-            airplaneRigidbody2D.velocity = Vector2.zero;
-            airplaneRigidbody2D.angularVelocity = 0f;
+            if(GManager.instance != null && GManager.instance.airplaneRigidbody2D != null)
+            {
+                // Only reset velocity of this specific plane if it's the one being controlled
+                if(airplaneRigidbody2D == GManager.instance.airplaneRigidbody2D)
+                {
+                    airplaneRigidbody2D.velocity = Vector2.zero;
+                    airplaneRigidbody2D.angularVelocity = 0f;
+                }
+            }
         }
     }
 }
