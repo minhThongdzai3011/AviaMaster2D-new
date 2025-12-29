@@ -24,6 +24,8 @@ public class MissionDaily : MonoBehaviour
     public Image imageDailyMission3;
     public Image imageDailyMission4;
     public Image imageDailyMission5;
+    public Sprite spriteMissionIncomplete;
+    public Sprite spriteMissionClaimed;
 
     [Header("Mission Daily Image Fill")]
     public Image imageFillDailyMission1;
@@ -31,6 +33,17 @@ public class MissionDaily : MonoBehaviour
     public Image imageFillDailyMission3;
     public Image imageFillDailyMission4;
     public Image imageFillDailyMission5;
+    public Sprite spriteFillMissionIncomplete;
+    public Sprite spriteFillMissionCompleted;
+
+    [Header("Mission Daily Image Background Fill")]
+    public Image imageBackGroundFillDailyMission1;
+    public Image imageBackGroundFillDailyMission2;
+    public Image imageBackGroundFillDailyMission3;
+    public Image imageBackGroundFillDailyMission4;
+    public Image imageBackGroundFillDailyMission5;
+    public Sprite spriteBackGroundFillMissionIncomplete;
+    public Sprite spriteBackGroundFillMissionCompleted;
 
     [Header("Mission Daily Button")]
     public Button buttonDailyMission1;
@@ -38,6 +51,10 @@ public class MissionDaily : MonoBehaviour
     public Button buttonDailyMission3;
     public Button buttonDailyMission4;
     public Button buttonDailyMission5;
+    public Sprite spriteButtonIncomplete;
+    public Sprite spriteButtonCompleted;
+    public Sprite spriteButtonClaimed;
+
     [Header("Mission Daily")]
     public bool isDailyMission1Completed = false;
     public bool isDailyMission2Completed = false;
@@ -61,6 +78,11 @@ public class MissionDaily : MonoBehaviour
     public bool isReceivedDaily3Reward = false;
     public bool isReceivedDaily4Reward = false;
     public bool isReceivedDaily5Reward = false;
+    public bool isFasleButton1Clicked = false;
+    public bool isFasleButton2Clicked = false;
+    public bool isFasleButton3Clicked = false;
+    public bool isFasleButton4Clicked = false;
+    public bool isFasleButton5Clicked = false;
 
 
 
@@ -100,11 +122,25 @@ public class MissionDaily : MonoBehaviour
                 timeRemaining.Hours, timeRemaining.Minutes, timeRemaining.Seconds);
         }
 
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            ResetDailyMissions();
+        }
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            dailyMission1Progress = dailyMission1Target;
+            dailyMission2Progress = dailyMission2Target;
+            dailyMission3Progress = dailyMission3Target;
+            dailyMission4Progress = dailyMission4Target;
+            dailyMission5Progress = dailyMission5Target;
+            UpdateDailyMission();
+        }
+
     }
 
     public void UpdateDailyMission()
     {
-        if (!isDailyMission1Completed)
+        if (!isDailyMission1Completed && !isReceivedDaily1Reward)
         {
             bool[] bools = { isDailyMission1Completed,
                              isDailyMission2Completed,
@@ -114,7 +150,9 @@ public class MissionDaily : MonoBehaviour
             dailyMission1Progress = bools.Count(b => b);
 
             imageFillDailyMission1.fillAmount = (float)dailyMission1Progress / dailyMission1Target;
+            
             Debug.Log("Daily Mission 1 Progress: " + imageFillDailyMission1.fillAmount);
+            
             textDailyMission1.text =dailyMission1Progress + "/" + dailyMission1Target;
 
             if (dailyMission1Progress >= dailyMission1Target)
@@ -122,15 +160,14 @@ public class MissionDaily : MonoBehaviour
                 isDailyMission1Completed = true;
                 buttonDailyMission1.interactable = true;
                 textDailyMission1.text = "Mission Completed";
-                imageDailyMission1.color = Color.yellow;
-                buttonDailyMission1.image.color = Color.yellow;
+                buttonDailyMission1.image.sprite = spriteButtonCompleted;
                 
                 MissionManager.instance.textQuantityRewardValue++;
                 MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
                 MissionManager.instance.notificationImage.gameObject.SetActive(true);
             }
         }
-        if (!isDailyMission2Completed)
+        if (!isDailyMission2Completed && !isReceivedDaily2Reward)
         {
             imageFillDailyMission2.fillAmount = (float)dailyMission2Progress / dailyMission2Target;
             Debug.Log("Daily Mission 2 Progress: " + imageFillDailyMission2.fillAmount);
@@ -141,8 +178,7 @@ public class MissionDaily : MonoBehaviour
                 isDailyMission2Completed = true;
                 buttonDailyMission2.interactable = true;
                 textDailyMission2.text = "Mission Completed";
-                imageDailyMission2.color = Color.yellow;
-                buttonDailyMission2.image.color = Color.yellow;
+                buttonDailyMission2.image.sprite = spriteButtonCompleted;
                 UpdateDailyMission();
                 
                 MissionManager.instance.textQuantityRewardValue++;
@@ -150,8 +186,9 @@ public class MissionDaily : MonoBehaviour
                 MissionManager.instance.notificationImage.gameObject.SetActive(true);
             }
         }
-        if (!isDailyMission3Completed)
+        if (!isDailyMission3Completed && !isReceivedDaily3Reward)
         {
+            Debug.Log("dailyMission3Progress: " + dailyMission3Progress + " / dailyMission3Target: " + dailyMission3Target);
             imageFillDailyMission3.fillAmount = (float)dailyMission3Progress / dailyMission3Target;
            // Debug.Break(); tạm dừng bên Unity để kiểm tra giá trị
             Debug.Log("Daily Mission 3 Progress: " + imageFillDailyMission3.fillAmount);
@@ -162,8 +199,7 @@ public class MissionDaily : MonoBehaviour
                 isDailyMission3Completed = true;
                 buttonDailyMission3.interactable = true;
                 textDailyMission3.text = "Mission Completed";
-                imageDailyMission3.color = Color.yellow;
-                buttonDailyMission3.image.color = Color.yellow;
+                buttonDailyMission3.image.sprite = spriteButtonCompleted;
                 UpdateDailyMission();
                 
                 MissionManager.instance.textQuantityRewardValue++;
@@ -171,7 +207,7 @@ public class MissionDaily : MonoBehaviour
                 MissionManager.instance.notificationImage.gameObject.SetActive(true);
             }
         }
-        if (!isDailyMission4Completed)
+        if (!isDailyMission4Completed && !isReceivedDaily4Reward)
         {
             imageFillDailyMission4.fillAmount = (float)dailyMission4Progress / dailyMission4Target;
             Debug.Log("Daily Mission 4 Progress: " + imageFillDailyMission4.fillAmount);
@@ -182,8 +218,7 @@ public class MissionDaily : MonoBehaviour
                 isDailyMission4Completed = true;
                 buttonDailyMission4.interactable = true;
                 textDailyMission4.text = "Mission Completed";
-                imageDailyMission4.color = Color.yellow;
-                buttonDailyMission4.image.color = Color.yellow;
+                buttonDailyMission4.image.sprite = spriteButtonCompleted;
                 UpdateDailyMission();
                 
                 MissionManager.instance.textQuantityRewardValue++;
@@ -191,7 +226,7 @@ public class MissionDaily : MonoBehaviour
                 MissionManager.instance.notificationImage.gameObject.SetActive(true);
             }
         }
-        if (!isDailyMission5Completed)
+        if (!isDailyMission5Completed && !isReceivedDaily5Reward)
         {
             imageFillDailyMission5.fillAmount = (float)dailyMission5Progress / dailyMission5Target;
             Debug.Log("Daily Mission 5 Progress: " + imageFillDailyMission5.fillAmount);
@@ -202,8 +237,7 @@ public class MissionDaily : MonoBehaviour
                 isDailyMission5Completed = true;
                 buttonDailyMission5.interactable = true;
                 textDailyMission5.text = "Mission Completed";
-                imageDailyMission5.color = Color.yellow;
-                buttonDailyMission5.image.color = Color.yellow;
+                buttonDailyMission5.image.sprite = spriteButtonCompleted;
                 UpdateDailyMission();
                 
                 MissionManager.instance.textQuantityRewardValue++;
@@ -258,11 +292,11 @@ public class MissionDaily : MonoBehaviour
         isDailyMission4Completed = false;
         isDailyMission5Completed = false;
 
-        buttonDailyMission1.interactable = false;
-        buttonDailyMission2.interactable = false;
-        buttonDailyMission3.interactable = false;
-        buttonDailyMission4.interactable = false;
-        buttonDailyMission5.interactable = false;
+        isFasleButton1Clicked = false;
+        isFasleButton2Clicked = false;
+        isFasleButton3Clicked = false;
+        isFasleButton4Clicked = false;
+        isFasleButton5Clicked = false;
 
         isReceivedDaily1Reward = false;
         isReceivedDaily2Reward = false;
@@ -270,34 +304,49 @@ public class MissionDaily : MonoBehaviour
         isReceivedDaily4Reward = false;
         isReceivedDaily5Reward = false;
 
-        imageDailyMission1.color = Color.gray;
-        imageDailyMission2.color = Color.gray;
-        imageDailyMission3.color = Color.gray;
-        imageDailyMission4.color = Color.gray;
-        imageDailyMission5.color = Color.gray;
+        imageDailyMission1.sprite = spriteMissionIncomplete;
+        imageDailyMission2.sprite = spriteMissionIncomplete;
+        imageDailyMission3.sprite = spriteMissionIncomplete;
+        imageDailyMission4.sprite = spriteMissionIncomplete;
+        imageDailyMission5.sprite = spriteMissionIncomplete;
 
-        buttonDailyMission1.image.color = Color.white;
-        buttonDailyMission2.image.color = Color.white;
-        buttonDailyMission3.image.color = Color.white;
-        buttonDailyMission4.image.color = Color.white;
-        buttonDailyMission5.image.color = Color.white;
+        imageFillDailyMission1.sprite = spriteFillMissionIncomplete;
+        imageFillDailyMission2.sprite = spriteFillMissionIncomplete;
+        imageFillDailyMission3.sprite = spriteFillMissionIncomplete;
+        imageFillDailyMission4.sprite = spriteFillMissionIncomplete;
+        imageFillDailyMission5.sprite = spriteFillMissionIncomplete;
+
+        buttonDailyMission1.image.sprite = spriteButtonIncomplete;
+        buttonDailyMission2.image.sprite = spriteButtonIncomplete;
+        buttonDailyMission3.image.sprite = spriteButtonIncomplete;
+        buttonDailyMission4.image.sprite = spriteButtonIncomplete;
+        buttonDailyMission5.image.sprite = spriteButtonIncomplete;
+
+        imageBackGroundFillDailyMission1.sprite = spriteBackGroundFillMissionIncomplete;
+        imageBackGroundFillDailyMission2.sprite = spriteBackGroundFillMissionIncomplete;
+        imageBackGroundFillDailyMission3.sprite = spriteBackGroundFillMissionIncomplete;
+        imageBackGroundFillDailyMission4.sprite = spriteBackGroundFillMissionIncomplete;
+        imageBackGroundFillDailyMission5.sprite = spriteBackGroundFillMissionIncomplete;
 
         UpdateDailyMission();
     }
 
     public void buttonMission1ClaimReward()
     {
-        if (isDailyMission1Completed)
+        if (isDailyMission1Completed && !isFasleButton1Clicked)
         {
             Debug.Log("Daily Mission 1 Reward Claimed!");
+            
+            Debug.Log("Setting button sprite to claimed...");
+            buttonDailyMission1.image.sprite = spriteButtonClaimed;
+            Debug.Log("Button sprite set successfully: " + (buttonDailyMission1.image.sprite == spriteButtonClaimed));
             isDailyMission1Completed = false;
-            dailyMission1Progress = 0;
-            buttonDailyMission1.interactable = false;
-            imageDailyMission1.color = Color.gray;
-            buttonDailyMission1.image.color = Color.gray;
+            isFasleButton1Clicked = true;
+            imageDailyMission1.sprite = spriteMissionClaimed;
+            imageFillDailyMission1.sprite = spriteFillMissionCompleted;
             isReceivedDaily1Reward = true;
             textDailyMission1.text = "Claimed";
-
+            imageBackGroundFillDailyMission1.sprite = spriteBackGroundFillMissionCompleted;
             MissionPlane.instance.planeMission1Progress += 10;
             MissionPlane.instance.UpdatePlaneMission();
             MissionPlane.instance.Save();
@@ -310,22 +359,24 @@ public class MissionDaily : MonoBehaviour
                     MissionManager.instance.notificationImage.gameObject.SetActive(false);
                 }
             }
-            UpdateDailyMission();
             Save();
         }
     }
     public void buttonMission2ClaimReward()
     {
-        if (isDailyMission2Completed)
+        if (isDailyMission2Completed && !isFasleButton2Clicked)
         {
             Debug.Log("Daily Mission 2 Reward Claimed!");
+            
+            
+            buttonDailyMission2.image.sprite = spriteButtonClaimed;
             isDailyMission2Completed = false;
-            dailyMission2Progress = 0;
-            buttonDailyMission2.interactable = false;
-            imageDailyMission2.color = Color.gray;
-            buttonDailyMission2.image.color = Color.gray;
+            isFasleButton2Clicked = true;
+            imageDailyMission2.sprite = spriteMissionClaimed;
+            imageFillDailyMission2.sprite = spriteFillMissionCompleted;
             isReceivedDaily2Reward = true;
             textDailyMission2.text = "Claimed";
+            imageBackGroundFillDailyMission2.sprite = spriteBackGroundFillMissionCompleted; 
 
             GManager.instance.totalDiamond += 50;
             PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
@@ -340,23 +391,23 @@ public class MissionDaily : MonoBehaviour
                     MissionManager.instance.notificationImage.gameObject.SetActive(false);
                 }
             }
-            UpdateDailyMission();
             Save();
         }
     }
     public void buttonMission3ClaimReward()
     {
-        if (isDailyMission3Completed)
+        if (isDailyMission3Completed && !isFasleButton3Clicked)
         {
             Debug.Log("Daily Mission 3 Reward Claimed!");
+            
+            buttonDailyMission3.image.sprite = spriteButtonClaimed;
             isDailyMission3Completed = false;
-            dailyMission3Progress = 0;
-            buttonDailyMission3.interactable = false;
-            imageDailyMission3.color = Color.gray;
-            buttonDailyMission3.image.color = Color.gray;
+            isFasleButton3Clicked = true;
+            imageDailyMission3.sprite = spriteMissionClaimed;
+            imageFillDailyMission3.sprite = spriteFillMissionCompleted;
             isReceivedDaily3Reward = true;
             textDailyMission3.text = "Claimed";
-
+            imageBackGroundFillDailyMission3.sprite = spriteBackGroundFillMissionCompleted;
             GManager.instance.totalMoney += 3000f;
             PlayerPrefs.SetFloat("TotalMoney", GManager.instance.totalMoney);
             PlayerPrefs.Save();
@@ -371,21 +422,21 @@ public class MissionDaily : MonoBehaviour
                     MissionManager.instance.notificationImage.gameObject.SetActive(false);
                 }
             }
-            UpdateDailyMission();
             Save();
         }
     }
     public void buttonMission4ClaimReward()
     {
-        if (isDailyMission4Completed)
+        if (isDailyMission4Completed && !isFasleButton4Clicked)
         {
             Debug.Log("Daily Mission 4 Reward Claimed!");
+            buttonDailyMission4.image.sprite = spriteButtonClaimed;
             isDailyMission4Completed = false;
-            dailyMission4Progress = 0;
-            buttonDailyMission4.interactable = false;
-            imageDailyMission4.color = Color.gray;
-            buttonDailyMission4.image.color = Color.gray;
+            isFasleButton4Clicked = true;
+            imageDailyMission4.sprite = spriteMissionClaimed;
+            imageFillDailyMission4.sprite = spriteFillMissionCompleted;
             isReceivedDaily4Reward = true;
+            imageBackGroundFillDailyMission4.sprite = spriteBackGroundFillMissionCompleted;
             textDailyMission4.text = "Claimed";
 
             GManager.instance.totalDiamond += 50;
@@ -402,23 +453,25 @@ public class MissionDaily : MonoBehaviour
                     MissionManager.instance.notificationImage.gameObject.SetActive(false);
                 }
             }
-            UpdateDailyMission();
             Save();
         }
     }
     public void buttonMission5ClaimReward()
     {
-        if (isDailyMission5Completed)
+        if (isDailyMission5Completed && !isFasleButton5Clicked)
         {
             Debug.Log("Daily Mission 5 Reward Claimed!");
+            
+            buttonDailyMission5.image.sprite = spriteButtonClaimed;
+            Debug.Log("Button sprite set successfully: " + (buttonDailyMission5.image.sprite == spriteButtonClaimed));
             isDailyMission5Completed = false;
-            dailyMission5Progress = 0;
-            buttonDailyMission5.interactable = false;
-            imageDailyMission5.color = Color.gray;
-            buttonDailyMission5.image.color = Color.gray;
+            // buttonDailyMission5.interactable = false;
+            isFasleButton5Clicked = true;
+            imageDailyMission5.sprite = spriteMissionClaimed;
+            imageFillDailyMission5.sprite = spriteFillMissionCompleted;
             isReceivedDaily5Reward = true;
             textDailyMission5.text = "Claimed";
-
+            imageBackGroundFillDailyMission5 .sprite = spriteBackGroundFillMissionCompleted;
             GManager.instance.totalMoney += 5000f;
             PlayerPrefs.SetFloat("TotalMoney", GManager.instance.totalMoney);
             PlayerPrefs.Save();
@@ -439,33 +492,48 @@ public class MissionDaily : MonoBehaviour
 
     public void completeRewardCollection(){
         if(isReceivedDaily1Reward){
-            buttonDailyMission1.interactable = false;
-            imageDailyMission1.color = Color.gray;
-            buttonDailyMission1.image.color = Color.gray;
+            // buttonDailyMission1.interactable = false;
+            isFasleButton1Clicked = true;
+            imageDailyMission1.sprite = spriteMissionClaimed;
+            imageFillDailyMission1.sprite = spriteFillMissionCompleted;
+            buttonDailyMission1.image.sprite = spriteButtonClaimed;
+            imageBackGroundFillDailyMission1.sprite = spriteBackGroundFillMissionCompleted;
             textDailyMission1.text = "Claimed";
         }
         if(isReceivedDaily2Reward){
-            buttonDailyMission2.interactable = false;
-            imageDailyMission2.color = Color.gray;
-            buttonDailyMission2.image.color = Color.gray;
+            // buttonDailyMission2.interactable = false;
+            isFasleButton2Clicked = true;
+            imageDailyMission2.sprite = spriteMissionClaimed;
+            imageFillDailyMission2.sprite = spriteFillMissionCompleted;
+            buttonDailyMission2.image.sprite = spriteButtonClaimed;
+            imageBackGroundFillDailyMission2.sprite = spriteBackGroundFillMissionCompleted;
             textDailyMission2.text = "Claimed";
         }
         if(isReceivedDaily3Reward){
-            buttonDailyMission3.interactable = false;
-            imageDailyMission3.color = Color.gray;
-            buttonDailyMission3.image.color = Color.gray;
+            // buttonDailyMission3.interactable = false;
+            isFasleButton3Clicked = true;
+            imageDailyMission3.sprite = spriteMissionClaimed;
+            imageFillDailyMission3.sprite = spriteFillMissionCompleted;
+            buttonDailyMission3.image.sprite = spriteButtonClaimed;
+            imageBackGroundFillDailyMission3.sprite = spriteBackGroundFillMissionCompleted;
             textDailyMission3.text = "Claimed";
         }
         if(isReceivedDaily4Reward){
-            buttonDailyMission4.interactable = false;
-            imageDailyMission4.color = Color.gray;
-            buttonDailyMission4.image.color = Color.gray;
+            // buttonDailyMission4.interactable = false;
+            isFasleButton4Clicked = true;
+            imageDailyMission4.sprite = spriteMissionClaimed;
+            imageFillDailyMission4.sprite = spriteFillMissionCompleted;
+            buttonDailyMission4.image.sprite = spriteButtonClaimed;
+            imageBackGroundFillDailyMission4.sprite = spriteBackGroundFillMissionCompleted;
             textDailyMission4.text = "Claimed";
         }
         if(isReceivedDaily5Reward){
-            buttonDailyMission5.interactable = false;
-            imageDailyMission5.color = Color.gray;
-            buttonDailyMission5.image.color = Color.gray;
+            // buttonDailyMission5.interactable = false;
+            isFasleButton5Clicked = true;
+            imageDailyMission5.sprite = spriteMissionClaimed;
+            imageFillDailyMission5.sprite = spriteFillMissionCompleted;
+            buttonDailyMission5.image.sprite = spriteButtonClaimed;
+            imageBackGroundFillDailyMission5.sprite = spriteBackGroundFillMissionCompleted;
             textDailyMission5.text = "Claimed";
         }
     }

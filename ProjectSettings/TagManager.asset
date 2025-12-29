@@ -46,6 +46,7 @@ TagManager:
   - Boom
   - Airport
   - MapTransition
+  - Bullet
   layers:
   - Default
   - TransparentFX

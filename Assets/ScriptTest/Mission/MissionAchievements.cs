@@ -31,6 +31,8 @@ public class MissionAchievements : MonoBehaviour
     public Image imageAchievementMission3;
     public Image imageAchievementMission4;
     public Image imageAchievementMission5;
+    public Sprite spriteMissionIncomplete;
+    public Sprite spriteMissionClaimed;
 
     [Header("Mission Achievement Image Fill")]
     public Image imageFillAchievementMission1;
@@ -38,6 +40,17 @@ public class MissionAchievements : MonoBehaviour
     public Image imageFillAchievementMission3;
     public Image imageFillAchievementMission4;
     public Image imageFillAchievementMission5;
+    public Sprite spriteFillMissionIncomplete;
+    public Sprite spriteFillMissionCompleted;
+
+    [Header("Mission Plane Image Background Fill")]
+    public Image imageBackGroundFillPlaneMission1;
+    public Image imageBackGroundFillPlaneMission2;
+    public Image imageBackGroundFillPlaneMission3;
+    public Image imageBackGroundFillPlaneMission4;
+    public Image imageBackGroundFillPlaneMission5;
+    public Sprite spriteBackGroundFillMissionIncomplete;
+    public Sprite spriteBackGroundFillMissionCompleted;
 
     [Header("Mission Achievement Button")]
     public Button buttonAchievementMission1;
@@ -45,6 +58,10 @@ public class MissionAchievements : MonoBehaviour
     public Button buttonAchievementMission3;
     public Button buttonAchievementMission4;
     public Button buttonAchievementMission5;
+    public Sprite spriteButtonIncomplete;
+    public Sprite spriteButtonCompleted;
+    public Sprite spriteButtonClaimed;
+
     [Header("Mission Achievement Bool")]
     public bool isAchievementMission1Completed = false;
     public bool isAchievementMission2Completed = false;
@@ -88,7 +105,11 @@ public class MissionAchievements : MonoBehaviour
     public bool isReceivedAchievement3Reward = false;
     public bool isReceivedAchievement4Reward = false;
     public bool isReceivedAchievement5Reward = false;
-
+    public bool isFalseButton1ClickedAchie = false;
+    public bool isFalseButton2ClickedAchie = false;
+    public bool isFalseButton3ClickedAchie = false;
+    public bool isFalseButton4ClickedAchie = false;
+    public bool isFalseButton5ClickedAchie = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -114,7 +135,11 @@ public class MissionAchievements : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.A))
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            ResetAchievementMissions();
+        }
+        if (Input.GetKeyDown(KeyCode.A))
         {
             achievementMission1Progress = achievementMission1Target[achievementMission1CurrentLevel];
             achievementMission2Progress = achievementMission2Target[achievementMission2CurrentLevel];
@@ -122,7 +147,6 @@ public class MissionAchievements : MonoBehaviour
             achievementMission4Progress = achievementMission4Target[achievementMission4CurrentLevel];
             achievementMission5Progress = achievementMission5Target[achievementMission5CurrentLevel];
             UpdateAchievementMission();
-
         }
     }
 
@@ -162,24 +186,23 @@ public class MissionAchievements : MonoBehaviour
         // Achievement Mission 1
         if (achievementMission1CurrentLevel < achievementMission1Target.Length)
         {
-            if (!isAchievementMission1Completed)
+            if (!isAchievementMission1Completed && !isReceivedAchievement1Reward)
             {
                 imageFillAchievementMission1.fillAmount = (float)achievementMission1Progress / achievementMission1Target[achievementMission1CurrentLevel];
                 Debug.Log("Achievement Mission 1 Progress: " + imageFillAchievementMission1.fillAmount);
-                if(!isReceivedAchievement1Reward){
-                    textAchievementMission1.text = achievementMission1Progress + "/" + achievementMission1Target[achievementMission1CurrentLevel];
-                }
-                else{
-                    textAchievementMission1.text = "Claimed";
-                }
+                textAchievementMission1.text = achievementMission1Progress + "/" + achievementMission1Target[achievementMission1CurrentLevel];
 
                 if (achievementMission1Progress >= achievementMission1Target[achievementMission1CurrentLevel])
                 {
                     isAchievementMission1Completed = true;
                     buttonAchievementMission1.interactable = true;
                     textAchievementMission1.text = "Mission Completed";
-                    imageAchievementMission1.color = Color.yellow;
-                    buttonAchievementMission1.image.color = Color.yellow;
+                    buttonAchievementMission1.image.sprite = spriteButtonCompleted;
+                    imageFillAchievementMission1.sprite = spriteFillMissionCompleted;
+                    
+                    MissionManager.instance.textQuantityRewardValue++;
+                    MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
+                    MissionManager.instance.notificationImage.gameObject.SetActive(true);
                 }
             }
         }
@@ -187,8 +210,8 @@ public class MissionAchievements : MonoBehaviour
         {
             // Max level reached - set gray
             textAchievementMission1.text = "MAX LEVEL";
-            imageAchievementMission1.color = Color.gray;
-            buttonAchievementMission1.image.color = Color.gray;
+            imageAchievementMission1.sprite = spriteMissionClaimed;
+            buttonAchievementMission1.image.sprite = spriteButtonClaimed;
             buttonAchievementMission1.interactable = false;
             imageFillAchievementMission1.fillAmount = 1f;
         }
@@ -196,32 +219,31 @@ public class MissionAchievements : MonoBehaviour
         // Achievement Mission 2
         if (achievementMission2CurrentLevel < achievementMission2Target.Length)
         {
-            if (!isAchievementMission2Completed)
+            if (!isAchievementMission2Completed && !isReceivedAchievement2Reward)
             {
                 imageFillAchievementMission2.fillAmount = (float)achievementMission2Progress / achievementMission2Target[achievementMission2CurrentLevel];
                 Debug.Log("Achievement Mission 2 Progress: " + imageFillAchievementMission2.fillAmount);
-                if(!isReceivedAchievement2Reward){
-                    textAchievementMission2.text = achievementMission2Progress + "/" + achievementMission2Target[achievementMission2CurrentLevel];
-                }
-                else{
-                    textAchievementMission2.text = "Claimed";
-                }
+                textAchievementMission2.text = achievementMission2Progress + "/" + achievementMission2Target[achievementMission2CurrentLevel];
 
                 if (achievementMission2Progress >= achievementMission2Target[achievementMission2CurrentLevel])
                 {
                     isAchievementMission2Completed = true;
                     buttonAchievementMission2.interactable = true;
                     textAchievementMission2.text = "Mission Completed";
-                    imageAchievementMission2.color = Color.yellow;
-                    buttonAchievementMission2.image.color = Color.yellow;
+                    buttonAchievementMission2.image.sprite = spriteButtonCompleted;
+                    imageFillAchievementMission2.sprite = spriteFillMissionCompleted;
+                    
+                    MissionManager.instance.textQuantityRewardValue++;
+                    MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
+                    MissionManager.instance.notificationImage.gameObject.SetActive(true);
                 }
             }
         }
         else
         {
             textAchievementMission2.text = "MAX LEVEL";
-            imageAchievementMission2.color = Color.gray;
-            buttonAchievementMission2.image.color = Color.gray;
+            imageAchievementMission2.sprite = spriteMissionClaimed;
+            buttonAchievementMission2.image.sprite = spriteButtonClaimed;
             buttonAchievementMission2.interactable = false;
             imageFillAchievementMission2.fillAmount = 1f;
         }
@@ -229,32 +251,31 @@ public class MissionAchievements : MonoBehaviour
         // Achievement Mission 3
         if (achievementMission3CurrentLevel < achievementMission3Target.Length)
         {
-            if (!isAchievementMission3Completed)
+            if (!isAchievementMission3Completed && !isReceivedAchievement3Reward)
             {
                 imageFillAchievementMission3.fillAmount = (float)achievementMission3Progress / achievementMission3Target[achievementMission3CurrentLevel];
                 Debug.Log("Achievement Mission 3 Progress: " + imageFillAchievementMission3.fillAmount);
-                if(!isReceivedAchievement3Reward){
-                    textAchievementMission3.text = achievementMission3Progress + "/" + achievementMission3Target[achievementMission3CurrentLevel];
-                }
-                else{
-                    textAchievementMission3.text = "Claimed";
-                }
+                textAchievementMission3.text = achievementMission3Progress + "/" + achievementMission3Target[achievementMission3CurrentLevel];
 
                 if (achievementMission3Progress >= achievementMission3Target[achievementMission3CurrentLevel])
                 {
                     isAchievementMission3Completed = true;
                     buttonAchievementMission3.interactable = true;
                     textAchievementMission3.text = "Mission Completed";
-                    imageAchievementMission3.color = Color.yellow;
-                    buttonAchievementMission3.image.color = Color.yellow;
+                    buttonAchievementMission3.image.sprite = spriteButtonCompleted;
+                    imageFillAchievementMission3.sprite = spriteFillMissionCompleted;
+                    
+                    MissionManager.instance.textQuantityRewardValue++;
+                    MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
+                    MissionManager.instance.notificationImage.gameObject.SetActive(true);
                 }
             }
         }
         else
         {
             textAchievementMission3.text = "MAX LEVEL";
-            imageAchievementMission3.color = Color.gray;
-            buttonAchievementMission3.image.color = Color.gray;
+            imageAchievementMission3.sprite = spriteMissionClaimed;
+            buttonAchievementMission3.image.sprite = spriteButtonClaimed;
             buttonAchievementMission3.interactable = false;
             imageFillAchievementMission3.fillAmount = 1f;
         }
@@ -262,32 +283,31 @@ public class MissionAchievements : MonoBehaviour
         // Achievement Mission 4
         if (achievementMission4CurrentLevel < achievementMission4Target.Length)
         {
-            if (!isAchievementMission4Completed)
+            if (!isAchievementMission4Completed && !isReceivedAchievement4Reward)
             {
                 imageFillAchievementMission4.fillAmount = (float)achievementMission4Progress / achievementMission4Target[achievementMission4CurrentLevel];
                 Debug.Log("Achievement Mission 4 Progress: " + imageFillAchievementMission4.fillAmount);
-                if(!isReceivedAchievement4Reward){
-                    textAchievementMission4.text = achievementMission4Progress + "/" + achievementMission4Target[achievementMission4CurrentLevel];
-                }
-                else{
-                    textAchievementMission4.text = "Claimed";
-                }
+                textAchievementMission4.text = achievementMission4Progress + "/" + achievementMission4Target[achievementMission4CurrentLevel];
 
                 if (achievementMission4Progress >= achievementMission4Target[achievementMission4CurrentLevel])
                 {
                     isAchievementMission4Completed = true;
                     buttonAchievementMission4.interactable = true;
                     textAchievementMission4.text = "Mission Completed";
-                    imageAchievementMission4.color = Color.yellow;
-                    buttonAchievementMission4.image.color = Color.yellow;
+                    buttonAchievementMission4.image.sprite = spriteButtonCompleted;
+                    imageFillAchievementMission4.sprite = spriteFillMissionCompleted;
+                    
+                    MissionManager.instance.textQuantityRewardValue++;
+                    MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
+                    MissionManager.instance.notificationImage.gameObject.SetActive(true);
                 }
             }
         }
         else
         {
             textAchievementMission4.text = "MAX LEVEL";
-            imageAchievementMission4.color = Color.gray;
-            buttonAchievementMission4.image.color = Color.gray;
+            imageAchievementMission4.sprite = spriteMissionClaimed;
+            buttonAchievementMission4.image.sprite = spriteButtonClaimed;
             buttonAchievementMission4.interactable = false;
             imageFillAchievementMission4.fillAmount = 1f;
         }
@@ -295,32 +315,31 @@ public class MissionAchievements : MonoBehaviour
         // Achievement Mission 5
         if (achievementMission5CurrentLevel < achievementMission5Target.Length)
         {
-            if (!isAchievementMission5Completed)
+            if (!isAchievementMission5Completed && !isReceivedAchievement5Reward)
             {
                 imageFillAchievementMission5.fillAmount = (float)achievementMission5Progress / achievementMission5Target[achievementMission5CurrentLevel];
                 Debug.Log("Achievement Mission 5 Progress: " + imageFillAchievementMission5.fillAmount);
-                if(!isReceivedAchievement5Reward){
-                    textAchievementMission5.text = achievementMission5Progress + "/" + achievementMission5Target[achievementMission5CurrentLevel];
-                }
-                else{
-                    textAchievementMission5.text = "Claimed";
-                }
+                textAchievementMission5.text = achievementMission5Progress + "/" + achievementMission5Target[achievementMission5CurrentLevel];
 
                 if (achievementMission5Progress >= achievementMission5Target[achievementMission5CurrentLevel])
                 {
                     isAchievementMission5Completed = true;
                     buttonAchievementMission5.interactable = true;
                     textAchievementMission5.text = "Mission Completed";
-                    imageAchievementMission5.color = Color.yellow;
-                    buttonAchievementMission5.image.color = Color.yellow;
+                    buttonAchievementMission5.image.sprite = spriteButtonCompleted;
+                    imageFillAchievementMission5.sprite = spriteFillMissionCompleted;
+                    
+                    MissionManager.instance.textQuantityRewardValue++;
+                    MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
+                    MissionManager.instance.notificationImage.gameObject.SetActive(true);
                 }
             }
         }
         else
         {
             textAchievementMission5.text = "MAX LEVEL";
-            imageAchievementMission5.color = Color.gray;
-            buttonAchievementMission5.image.color = Color.gray;
+            imageAchievementMission5.sprite = spriteMissionClaimed;
+            buttonAchievementMission5.image.sprite = spriteButtonClaimed;
             buttonAchievementMission5.interactable = false;
             imageFillAchievementMission5.fillAmount = 1f;
         }
@@ -408,32 +427,63 @@ public class MissionAchievements : MonoBehaviour
         buttonAchievementMission4.interactable = false;
         buttonAchievementMission5.interactable = false;
 
+        isFalseButton1ClickedAchie = false;
+        isFalseButton2ClickedAchie = false;
+        isFalseButton3ClickedAchie = false;
+        isFalseButton4ClickedAchie = false;
+        isFalseButton5ClickedAchie = false;
+
         isReceivedAchievement1Reward = false;
         isReceivedAchievement2Reward = false;
         isReceivedAchievement3Reward = false;
         isReceivedAchievement4Reward = false;
         isReceivedAchievement5Reward = false;
 
-        imageAchievementMission1.color = Color.gray;
-        imageAchievementMission2.color = Color.gray;
-        imageAchievementMission3.color = Color.gray;
-        imageAchievementMission4.color = Color.gray;
-        imageAchievementMission5.color = Color.gray;
+        imageAchievementMission1.sprite = spriteMissionIncomplete;
+        imageAchievementMission2.sprite = spriteMissionIncomplete;
+        imageAchievementMission3.sprite = spriteMissionIncomplete;
+        imageAchievementMission4.sprite = spriteMissionIncomplete;
+        imageAchievementMission5.sprite = spriteMissionIncomplete;
 
-        buttonAchievementMission1.image.color = Color.white;
-        buttonAchievementMission2.image.color = Color.white;
-        buttonAchievementMission3.image.color = Color.white;
-        buttonAchievementMission4.image.color = Color.white;
-        buttonAchievementMission5.image.color = Color.white;
+        imageFillAchievementMission1.sprite = spriteFillMissionIncomplete;
+        imageFillAchievementMission2.sprite = spriteFillMissionIncomplete;
+        imageFillAchievementMission3.sprite = spriteFillMissionIncomplete;
+        imageFillAchievementMission4.sprite = spriteFillMissionIncomplete;
+        imageFillAchievementMission5.sprite = spriteFillMissionIncomplete;
+
+        buttonAchievementMission1.image.sprite = spriteButtonIncomplete;
+        buttonAchievementMission2.image.sprite = spriteButtonIncomplete;
+        buttonAchievementMission3.image.sprite = spriteButtonIncomplete;
+        buttonAchievementMission4.image.sprite = spriteButtonIncomplete;
+        buttonAchievementMission5.image.sprite = spriteButtonIncomplete;
+
+        imageBackGroundFillPlaneMission1.sprite = spriteBackGroundFillMissionIncomplete;
+        imageBackGroundFillPlaneMission2.sprite = spriteBackGroundFillMissionIncomplete;
+        imageBackGroundFillPlaneMission3.sprite = spriteBackGroundFillMissionIncomplete;
+        imageBackGroundFillPlaneMission4.sprite = spriteBackGroundFillMissionIncomplete;
+        imageBackGroundFillPlaneMission5.sprite = spriteBackGroundFillMissionIncomplete;
+
+        // Reset fillAmount
+        imageFillAchievementMission1.fillAmount = 0f;
+        imageFillAchievementMission2.fillAmount = 0f;
+        imageFillAchievementMission3.fillAmount = 0f;
+        imageFillAchievementMission4.fillAmount = 0f;
+        imageFillAchievementMission5.fillAmount = 0f;
 
         UpdateAchievementMission();
+        Save();
     }
 
     public void buttonMission1ClaimReward()
     {
-        if (isAchievementMission1Completed && achievementMission1CurrentLevel < achievementMission1Target.Length)
+        if (isAchievementMission1Completed && achievementMission1CurrentLevel < achievementMission1Target.Length && !isFalseButton1ClickedAchie)
         {
             Debug.Log("Achievement Mission 1 Reward Claimed! Level: " + (achievementMission1CurrentLevel + 1));
+            
+            buttonAchievementMission1.image.sprite = spriteButtonClaimed;
+            imageAchievementMission1.sprite = spriteMissionClaimed;
+            imageFillAchievementMission1.sprite = spriteFillMissionCompleted;
+            imageBackGroundFillPlaneMission1.sprite = spriteBackGroundFillMissionCompleted;
             
             // Tăng level (index) lên 1
             achievementMission1CurrentLevel++;
@@ -441,9 +491,7 @@ public class MissionAchievements : MonoBehaviour
             // Reset cho level mới
             isAchievementMission1Completed = false;
             achievementMission1Progress = 0;
-            buttonAchievementMission1.interactable = false;
-            imageAchievementMission1.color = Color.gray;
-            buttonAchievementMission1.image.color = Color.gray;
+            isFalseButton1ClickedAchie = true;
             isReceivedAchievement1Reward = true;
             textAchievementMission1.text = "Claimed";
             
@@ -457,21 +505,24 @@ public class MissionAchievements : MonoBehaviour
                 }
             }
             
-            UpdateAchievementMission();
+            Save();
         }
     }
     public void buttonMission2ClaimReward()
     {
-        if (isAchievementMission2Completed && achievementMission2CurrentLevel < achievementMission2Target.Length)
+        if (isAchievementMission2Completed && achievementMission2CurrentLevel < achievementMission2Target.Length && !isFalseButton2ClickedAchie)
         {
             Debug.Log("Achievement Mission 2 Reward Claimed! Level: " + (achievementMission2CurrentLevel + 1));
+            
+            buttonAchievementMission2.image.sprite = spriteButtonClaimed;
+            imageAchievementMission2.sprite = spriteMissionClaimed;
+            imageFillAchievementMission2.sprite = spriteFillMissionCompleted;
+            imageBackGroundFillPlaneMission2.sprite = spriteBackGroundFillMissionCompleted;
             
             achievementMission2CurrentLevel++;
             isAchievementMission2Completed = false;
             achievementMission2Progress = 0;
-            buttonAchievementMission2.interactable = false;
-            imageAchievementMission2.color = Color.gray;
-            buttonAchievementMission2.image.color = Color.gray;
+            isFalseButton2ClickedAchie = true;
             isReceivedAchievement2Reward = true;
             textAchievementMission2.text = "Claimed";
             
@@ -485,21 +536,24 @@ public class MissionAchievements : MonoBehaviour
                 }
             }
             
-            UpdateAchievementMission();
+            Save();
         }
     }
     public void buttonMission3ClaimReward()
     {
-        if (isAchievementMission3Completed && achievementMission3CurrentLevel < achievementMission3Target.Length)
+        if (isAchievementMission3Completed && achievementMission3CurrentLevel < achievementMission3Target.Length && !isFalseButton3ClickedAchie)
         {
             Debug.Log("Achievement Mission 3 Reward Claimed! Level: " + (achievementMission3CurrentLevel + 1));
+            
+            buttonAchievementMission3.image.sprite = spriteButtonClaimed;
+            imageAchievementMission3.sprite = spriteMissionClaimed;
+            imageFillAchievementMission3.sprite = spriteFillMissionCompleted;
+            imageBackGroundFillPlaneMission3.sprite = spriteBackGroundFillMissionCompleted;
             
             achievementMission3CurrentLevel++;
             isAchievementMission3Completed = false;
             achievementMission3Progress = 0;
-            buttonAchievementMission3.interactable = false;
-            imageAchievementMission3.color = Color.gray;
-            buttonAchievementMission3.image.color = Color.gray;
+            isFalseButton3ClickedAchie = true;
             isReceivedAchievement3Reward = true;
             textAchievementMission3.text = "Claimed";
             
@@ -513,21 +567,24 @@ public class MissionAchievements : MonoBehaviour
                 }
             }
             
-            UpdateAchievementMission();
+            Save();
         }
     }
     public void buttonMission4ClaimReward()
     {
-        if (isAchievementMission4Completed && achievementMission4CurrentLevel < achievementMission4Target.Length)
+        if (isAchievementMission4Completed && achievementMission4CurrentLevel < achievementMission4Target.Length && !isFalseButton4ClickedAchie)
         {
             Debug.Log("Achievement Mission 4 Reward Claimed! Level: " + (achievementMission4CurrentLevel + 1));
+            
+            buttonAchievementMission4.image.sprite = spriteButtonClaimed;
+            imageAchievementMission4.sprite = spriteMissionClaimed;
+            imageFillAchievementMission4.sprite = spriteFillMissionCompleted;
+            imageBackGroundFillPlaneMission4.sprite = spriteBackGroundFillMissionCompleted;
             
             achievementMission4CurrentLevel++;
             isAchievementMission4Completed = false;
             achievementMission4Progress = 0;
-            buttonAchievementMission4.interactable = false;
-            imageAchievementMission4.color = Color.gray;
-            buttonAchievementMission4.image.color = Color.gray;
+            isFalseButton4ClickedAchie = true;
             isReceivedAchievement4Reward = true;
             textAchievementMission4.text = "Claimed";
             
@@ -541,21 +598,24 @@ public class MissionAchievements : MonoBehaviour
                 }
             }
             
-            UpdateAchievementMission();
+            Save();
         }
     }
     public void buttonMission5ClaimReward()
     {
-        if (isAchievementMission5Completed && achievementMission5CurrentLevel < achievementMission5Target.Length)
+        if (isAchievementMission5Completed && achievementMission5CurrentLevel < achievementMission5Target.Length && !isFalseButton5ClickedAchie)
         {
             Debug.Log("Achievement Mission 5 Reward Claimed! Level: " + (achievementMission5CurrentLevel + 1));
+            
+            buttonAchievementMission5.image.sprite = spriteButtonClaimed;
+            imageAchievementMission5.sprite = spriteMissionClaimed;
+            imageFillAchievementMission5.sprite = spriteFillMissionCompleted;
+            imageBackGroundFillPlaneMission5.sprite = spriteBackGroundFillMissionCompleted;
             
             achievementMission5CurrentLevel++;
             isAchievementMission5Completed = false;
             achievementMission5Progress = 0;
-            buttonAchievementMission5.interactable = false;
-            imageAchievementMission5.color = Color.gray;
-            buttonAchievementMission5.image.color = Color.gray;
+            isFalseButton5ClickedAchie = true;
             isReceivedAchievement5Reward = true;
             textAchievementMission5.text = "Claimed";
             
@@ -569,39 +629,49 @@ public class MissionAchievements : MonoBehaviour
                 }
             }
             
-            UpdateAchievementMission();
+            Save();
         }
     }
 
     public void completeRewardCollection(){
         if(isReceivedAchievement1Reward){
             buttonAchievementMission1.interactable = false;
-            imageAchievementMission1.color = Color.gray;
-            buttonAchievementMission1.image.color = Color.gray;
+            imageAchievementMission1.sprite = spriteMissionClaimed;
+            imageFillAchievementMission1.sprite = spriteFillMissionCompleted;
+            buttonAchievementMission1.image.sprite = spriteButtonClaimed;
+            imageBackGroundFillPlaneMission1.sprite = spriteBackGroundFillMissionCompleted;
             textAchievementMission1.text = "Claimed";
         }
         if(isReceivedAchievement2Reward){
             buttonAchievementMission2.interactable = false;
-            imageAchievementMission2.color = Color.gray;
-            buttonAchievementMission2.image.color = Color.gray;
+            imageAchievementMission2.sprite = spriteMissionClaimed;
+            imageFillAchievementMission2.sprite = spriteFillMissionCompleted;
+            buttonAchievementMission2.image.sprite = spriteButtonClaimed;
+            imageBackGroundFillPlaneMission2.sprite = spriteBackGroundFillMissionCompleted;
             textAchievementMission2.text = "Claimed";
         }
         if(isReceivedAchievement3Reward){
             buttonAchievementMission3.interactable = false;
-            imageAchievementMission3.color = Color.gray;
-            buttonAchievementMission3.image.color = Color.gray;
+            imageAchievementMission3.sprite = spriteMissionClaimed;
+            imageFillAchievementMission3.sprite = spriteFillMissionCompleted;
+            buttonAchievementMission3.image.sprite = spriteButtonClaimed;
+            imageBackGroundFillPlaneMission3.sprite = spriteBackGroundFillMissionCompleted;
             textAchievementMission3.text = "Claimed";
         }
         if(isReceivedAchievement4Reward){
             buttonAchievementMission4.interactable = false;
-            imageAchievementMission4.color = Color.gray;
-            buttonAchievementMission4.image.color = Color.gray;
+            imageAchievementMission4.sprite = spriteMissionClaimed;
+            imageFillAchievementMission4.sprite = spriteFillMissionCompleted;
+            buttonAchievementMission4.image.sprite = spriteButtonClaimed;
+            imageBackGroundFillPlaneMission4.sprite = spriteBackGroundFillMissionCompleted;
             textAchievementMission4.text = "Claimed";
         }
         if(isReceivedAchievement5Reward){
             buttonAchievementMission5.interactable = false;
-            imageAchievementMission5.color = Color.gray;
-            buttonAchievementMission5.image.color = Color.gray;
+            imageAchievementMission5.sprite = spriteMissionClaimed;
+            imageFillAchievementMission5.sprite = spriteFillMissionCompleted;
+            buttonAchievementMission5.image.sprite = spriteButtonClaimed;
+            imageBackGroundFillPlaneMission5.sprite = spriteBackGroundFillMissionCompleted;
             textAchievementMission5.text = "Claimed";
         }
     }

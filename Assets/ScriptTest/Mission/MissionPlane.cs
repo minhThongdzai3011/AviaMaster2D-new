@@ -24,6 +24,9 @@ public class MissionPlane : MonoBehaviour
     public Image imagePlaneMission3;
     public Image imagePlaneMission4;
     public Image imagePlaneMission5;
+    public Sprite spriteMissionIncomplete;
+    public Sprite spriteMissionClaimed;
+
 
     [Header("Mission Plane Image Fill")]
     public Image imageFillPlaneMission1;
@@ -31,6 +34,17 @@ public class MissionPlane : MonoBehaviour
     public Image imageFillPlaneMission3;
     public Image imageFillPlaneMission4;
     public Image imageFillPlaneMission5;
+    public Sprite spriteFillMissionIncomplete;
+    public Sprite spriteFillMissionCompleted;
+
+    [Header("Mission Plane Image Background Fill")]
+    public Image imageBackGroundFillPlaneMission1;
+    public Image imageBackGroundFillPlaneMission2;
+    public Image imageBackGroundFillPlaneMission3;
+    public Image imageBackGroundFillPlaneMission4;
+    public Image imageBackGroundFillPlaneMission5;
+    public Sprite spriteBackGroundFillMissionIncomplete;
+    public Sprite spriteBackGroundFillMissionCompleted;
 
     [Header("Mission Plane Button")]
     public Button buttonPlaneMission1;
@@ -38,6 +52,10 @@ public class MissionPlane : MonoBehaviour
     public Button buttonPlaneMission3;
     public Button buttonPlaneMission4;
     public Button buttonPlaneMission5;
+    public Sprite spriteButtonIncomplete;
+    public Sprite spriteButtonCompleted;
+    public Sprite spriteButtonClaimed;
+
     [Header("Mission Plane")]
     public bool isPlaneMission1Completed = false;
     public bool isPlaneMission2Completed = false;
@@ -60,7 +78,11 @@ public class MissionPlane : MonoBehaviour
     public bool isReceivedPlane3Reward = false;
     public bool isReceivedPlane4Reward = false;
     public bool isReceivedPlane5Reward = false;
-
+    public bool isFalseButton1Clicked = false;
+    public bool isFalseButton2Clicked = false;
+    public bool isFalseButton3Clicked = false;
+    public bool isFalseButton4Clicked = false;
+    public bool isFalseButton5Clicked = false;
     [Header("Information Super Plane")]
     public Image superPlaneInfoImage;
     public GameObject superPlaneInfoPlane1; 
@@ -88,13 +110,17 @@ public class MissionPlane : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.P))
+        if (Input.GetKeyDown(KeyCode.Z))
         {
-            planeMission1Progress = 100;
-            planeMission2Progress = 100;
-            planeMission3Progress = 100;
-            planeMission4Progress = 100;
-            planeMission5Progress = 100;
+            ResetPlaneMissions();
+        }
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            planeMission1Progress = planeMission1Target;
+            planeMission2Progress = planeMission2Target;
+            planeMission3Progress = planeMission3Target;
+            planeMission4Progress = planeMission4Target;
+            planeMission5Progress = planeMission5Target;
             UpdatePlaneMission();
         }
 
@@ -102,49 +128,37 @@ public class MissionPlane : MonoBehaviour
 
     public void UpdatePlaneMission()
     {
-        if (!isPlaneMission1Completed)
+        if (!isPlaneMission1Completed && !isReceivedPlane1Reward)
         {
 
             imageFillPlaneMission1.fillAmount = (float)planeMission1Progress / planeMission1Target;
             Debug.Log("Plane Mission 1 Progress: " + imageFillPlaneMission1.fillAmount);
-            if(!isReceivedPlane1Reward){
-                textPlaneMission1.text = planeMission1Progress + "/" + planeMission1Target;
-            }
-            else{
-                textPlaneMission1.text = "Claimed";
-            }
+            textPlaneMission1.text = planeMission1Progress + "/" + planeMission1Target;
 
             if (planeMission1Progress >= planeMission1Target)
             {
                 isPlaneMission1Completed = true;
                 buttonPlaneMission1.interactable = true;
                 textPlaneMission1.text = "Mission Completed";
-                imagePlaneMission1.color = Color.yellow;
-                buttonPlaneMission1.image.color = Color.yellow;
+                buttonPlaneMission1.image.sprite = spriteButtonCompleted;
                 
                 MissionManager.instance.textQuantityRewardValue++;
                 MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
                 MissionManager.instance.notificationImage.gameObject.SetActive(true);
             }
         }
-        if (!isPlaneMission2Completed)
+        if (!isPlaneMission2Completed && !isReceivedPlane2Reward)
         {
             imageFillPlaneMission2.fillAmount = (float)planeMission2Progress / planeMission2Target;
             Debug.Log("Plane Mission 2 Progress: " + imageFillPlaneMission2.fillAmount);
-            if(!isReceivedPlane2Reward){
-                textPlaneMission2.text = planeMission2Progress + "/" + planeMission2Target;
-            }
-            else{
-                textPlaneMission2.text = "Claimed";
-            }
+            textPlaneMission2.text = planeMission2Progress + "/" + planeMission2Target;
 
             if (planeMission2Progress >= planeMission2Target)
             {
                 isPlaneMission2Completed = true;
                 buttonPlaneMission2.interactable = true;
                 textPlaneMission2.text = "Mission Completed";
-                imagePlaneMission2.color = Color.yellow;
-                buttonPlaneMission2.image.color = Color.yellow;
+                buttonPlaneMission2.image.sprite = spriteButtonCompleted;
                 UpdatePlaneMission();
                 
                 MissionManager.instance.textQuantityRewardValue++;
@@ -152,25 +166,19 @@ public class MissionPlane : MonoBehaviour
                 MissionManager.instance.notificationImage.gameObject.SetActive(true);
             }
         }
-        if (!isPlaneMission3Completed)
+        if (!isPlaneMission3Completed && !isReceivedPlane3Reward)
         {
             imageFillPlaneMission3.fillAmount = (float)planeMission3Progress / planeMission3Target;
            // Debug.Break(); tạm dừng bên Unity để kiểm tra giá trị
             Debug.Log("Plane Mission 3 Progress: " + imageFillPlaneMission3.fillAmount);
-            if(!isReceivedPlane3Reward){
-                textPlaneMission3.text = planeMission3Progress + "/" + planeMission3Target;
-            }
-            else{
-                textPlaneMission3.text = "Claimed";
-            }
+            textPlaneMission3.text = planeMission3Progress + "/" + planeMission3Target;
 
             if (planeMission3Progress >= planeMission3Target)
             {
                 isPlaneMission3Completed = true;
                 buttonPlaneMission3.interactable = true;
                 textPlaneMission3.text = "Mission Completed";
-                imagePlaneMission3.color = Color.yellow;
-                buttonPlaneMission3.image.color = Color.yellow;
+                buttonPlaneMission3.image.sprite = spriteButtonCompleted;
                 UpdatePlaneMission();
                 
                 MissionManager.instance.textQuantityRewardValue++;
@@ -178,24 +186,18 @@ public class MissionPlane : MonoBehaviour
                 MissionManager.instance.notificationImage.gameObject.SetActive(true);
             }
         }
-        if (!isPlaneMission4Completed)
+        if (!isPlaneMission4Completed && !isReceivedPlane4Reward)
         {
             imageFillPlaneMission4.fillAmount = (float)planeMission4Progress / planeMission4Target;
             Debug.Log("Plane Mission 4 Progress: " + imageFillPlaneMission4.fillAmount);
-            if(!isReceivedPlane4Reward){
-                textPlaneMission4.text = planeMission4Progress + "/" + planeMission4Target;
-            }
-            else{
-                textPlaneMission4.text = "Claimed";
-            }
+            textPlaneMission4.text = planeMission4Progress + "/" + planeMission4Target;
 
             if (planeMission4Progress >= planeMission4Target)
             {
                 isPlaneMission4Completed = true;
                 buttonPlaneMission4.interactable = true;
                 textPlaneMission4.text = "Mission Completed";
-                imagePlaneMission4.color = Color.yellow;
-                buttonPlaneMission4.image.color = Color.yellow;
+                buttonPlaneMission4.image.sprite = spriteButtonCompleted;
                 UpdatePlaneMission();
                 
                 MissionManager.instance.textQuantityRewardValue++;
@@ -203,24 +205,18 @@ public class MissionPlane : MonoBehaviour
                 MissionManager.instance.notificationImage.gameObject.SetActive(true);
             }
         }
-        if (!isPlaneMission5Completed)
+        if (!isPlaneMission5Completed && !isReceivedPlane5Reward)
         {
             imageFillPlaneMission5.fillAmount = (float)planeMission5Progress / planeMission5Target;
             Debug.Log("Plane Mission 5 Progress: " + imageFillPlaneMission5.fillAmount);
-            if(!isReceivedPlane5Reward){
-                textPlaneMission5.text = planeMission5Progress + "/" + planeMission5Target;
-            }
-            else{
-                textPlaneMission5.text = "Claimed";
-            }
+            textPlaneMission5.text = planeMission5Progress + "/" + planeMission5Target;
 
             if (planeMission5Progress >= planeMission5Target)
             {
                 isPlaneMission5Completed = true;
                 buttonPlaneMission5.interactable = true;
                 textPlaneMission5.text = "Mission Completed";
-                imagePlaneMission5.color = Color.yellow;
-                buttonPlaneMission5.image.color = Color.yellow;
+                buttonPlaneMission5.image.sprite = spriteButtonCompleted;
                 UpdatePlaneMission();
                 
                 MissionManager.instance.textQuantityRewardValue++;
@@ -275,11 +271,11 @@ public class MissionPlane : MonoBehaviour
         isPlaneMission4Completed = false;
         isPlaneMission5Completed = false;
 
-        buttonPlaneMission1.interactable = false;
-        buttonPlaneMission2.interactable = false;
-        buttonPlaneMission3.interactable = false;
-        buttonPlaneMission4.interactable = false;
-        buttonPlaneMission5.interactable = false;
+        isFalseButton1Clicked = false;
+        isFalseButton2Clicked = false;
+        isFalseButton3Clicked = false;
+        isFalseButton4Clicked = false;
+        isFalseButton5Clicked = false;
 
         isReceivedPlane1Reward = false;
         isReceivedPlane2Reward = false;
@@ -287,33 +283,55 @@ public class MissionPlane : MonoBehaviour
         isReceivedPlane4Reward = false;
         isReceivedPlane5Reward = false;
 
-        imagePlaneMission1.color = Color.gray;
-        imagePlaneMission2.color = Color.gray;
-        imagePlaneMission3.color = Color.gray;
-        imagePlaneMission4.color = Color.gray;
-        imagePlaneMission5.color = Color.gray;
+        imagePlaneMission1.sprite = spriteMissionIncomplete;
+        imagePlaneMission2.sprite = spriteMissionIncomplete;
+        imagePlaneMission3.sprite = spriteMissionIncomplete;
+        imagePlaneMission4.sprite = spriteMissionIncomplete;
+        imagePlaneMission5.sprite = spriteMissionIncomplete;
 
-        buttonPlaneMission1.image.color = Color.white;
-        buttonPlaneMission2.image.color = Color.white;
-        buttonPlaneMission3.image.color = Color.white;
-        buttonPlaneMission4.image.color = Color.white;
-        buttonPlaneMission5.image.color = Color.white;
+        imageFillPlaneMission1.sprite = spriteFillMissionIncomplete;
+        imageFillPlaneMission2.sprite = spriteFillMissionIncomplete;
+        imageFillPlaneMission3.sprite = spriteFillMissionIncomplete;
+        imageFillPlaneMission4.sprite = spriteFillMissionIncomplete;
+        imageFillPlaneMission5.sprite = spriteFillMissionIncomplete;
+
+        buttonPlaneMission1.image.sprite = spriteButtonIncomplete;
+        buttonPlaneMission2.image.sprite = spriteButtonIncomplete;
+        buttonPlaneMission3.image.sprite = spriteButtonIncomplete;
+        buttonPlaneMission4.image.sprite = spriteButtonIncomplete;
+        buttonPlaneMission5.image.sprite = spriteButtonIncomplete;
+
+        imageBackGroundFillPlaneMission1.sprite = spriteBackGroundFillMissionIncomplete;
+        imageBackGroundFillPlaneMission2.sprite = spriteBackGroundFillMissionIncomplete;
+        imageBackGroundFillPlaneMission3.sprite = spriteBackGroundFillMissionIncomplete;
+        imageBackGroundFillPlaneMission4.sprite = spriteBackGroundFillMissionIncomplete;
+        imageBackGroundFillPlaneMission5.sprite = spriteBackGroundFillMissionIncomplete;
+
+        // Reset fillAmount của tất cả progress bars
+        imageFillPlaneMission1.fillAmount = 0f;
+        imageFillPlaneMission2.fillAmount = 0f;
+        imageFillPlaneMission3.fillAmount = 0f;
+        imageFillPlaneMission4.fillAmount = 0f;
+        imageFillPlaneMission5.fillAmount = 0f;
 
         UpdatePlaneMission();
+        Save();
     }
 
     public void buttonMission1ClaimReward()
     {
-        if (isPlaneMission1Completed)
+        if (isPlaneMission1Completed && !isFalseButton1Clicked)
         {
             Debug.Log("Plane Mission 1 Reward Claimed!");
+            
+            buttonPlaneMission1.image.sprite = spriteButtonClaimed;
             isPlaneMission1Completed = false;
-            planeMission1Progress = 0;
-            buttonPlaneMission1.interactable = false;
-            imagePlaneMission1.color = Color.gray;
-            buttonPlaneMission1.image.color = Color.gray;
+            isFalseButton1Clicked = true;
+            imagePlaneMission1.sprite = spriteMissionClaimed;
+            imageFillPlaneMission1.sprite = spriteFillMissionCompleted;
             isReceivedPlane1Reward = true;
             textPlaneMission1.text = "Claimed";
+            imageBackGroundFillPlaneMission1.sprite = spriteBackGroundFillMissionCompleted;
 
             if(isReceivedPlane1Reward)
             {
@@ -324,22 +342,23 @@ public class MissionPlane : MonoBehaviour
                     MissionManager.instance.notificationImage.gameObject.SetActive(false);
                 }
             }
-            UpdatePlaneMission();
             Save();
         }
     }
     public void buttonMission2ClaimReward()
     {
-        if (isPlaneMission2Completed)
+        if (isPlaneMission2Completed && !isFalseButton2Clicked)
         {
             Debug.Log("Plane Mission 2 Reward Claimed!");
+            
+            buttonPlaneMission2.image.sprite = spriteButtonClaimed;
             isPlaneMission2Completed = false;
-            planeMission2Progress = 0;
-            buttonPlaneMission2.interactable = false;
-            imagePlaneMission2.color = Color.gray;
-            buttonPlaneMission2.image.color = Color.gray;
+            isFalseButton2Clicked = true;
+            imagePlaneMission2.sprite = spriteMissionClaimed;
+            imageFillPlaneMission2.sprite = spriteFillMissionCompleted;
             isReceivedPlane2Reward = true;
             textPlaneMission2.text = "Claimed";
+            imageBackGroundFillPlaneMission2.sprite = spriteBackGroundFillMissionCompleted;
 
             if(isReceivedPlane2Reward)
             {
@@ -350,22 +369,23 @@ public class MissionPlane : MonoBehaviour
                     MissionManager.instance.notificationImage.gameObject.SetActive(false);
                 }
             }
-            UpdatePlaneMission();
             Save();
         }
     }
     public void buttonMission3ClaimReward()
     {
-        if (isPlaneMission3Completed)
+        if (isPlaneMission3Completed && !isFalseButton3Clicked)
         {
             Debug.Log("Plane Mission 3 Reward Claimed!");
+            
+            buttonPlaneMission3.image.sprite = spriteButtonClaimed;
             isPlaneMission3Completed = false;
-            planeMission3Progress = 0;
-            buttonPlaneMission3.interactable = false;
-            imagePlaneMission3.color = Color.gray;
-            buttonPlaneMission3.image.color = Color.gray;
+            isFalseButton3Clicked = true;
+            imagePlaneMission3.sprite = spriteMissionClaimed;
+            imageFillPlaneMission3.sprite = spriteFillMissionCompleted;
             isReceivedPlane3Reward = true;
             textPlaneMission3.text = "Claimed";
+            imageBackGroundFillPlaneMission3.sprite = spriteBackGroundFillMissionCompleted;
 
             if(isReceivedPlane3Reward)
             {
@@ -376,22 +396,23 @@ public class MissionPlane : MonoBehaviour
                     MissionManager.instance.notificationImage.gameObject.SetActive(false);
                 }
             }
-            UpdatePlaneMission();
             Save();
         }
     }
     public void buttonMission4ClaimReward()
     {
-        if (isPlaneMission4Completed)
+        if (isPlaneMission4Completed && !isFalseButton4Clicked)
         {
             Debug.Log("Plane Mission 4 Reward Claimed!");
+            
+            buttonPlaneMission4.image.sprite = spriteButtonClaimed;
             isPlaneMission4Completed = false;
-            planeMission4Progress = 0;
-            buttonPlaneMission4.interactable = false;
-            imagePlaneMission4.color = Color.gray;
-            buttonPlaneMission4.image.color = Color.gray;
+            isFalseButton4Clicked = true;
+            imagePlaneMission4.sprite = spriteMissionClaimed;
+            imageFillPlaneMission4.sprite = spriteFillMissionCompleted;
             isReceivedPlane4Reward = true;
             textPlaneMission4.text = "Claimed";
+            imageBackGroundFillPlaneMission4.sprite = spriteBackGroundFillMissionCompleted;
 
             if(isReceivedPlane4Reward)
             {
@@ -402,22 +423,23 @@ public class MissionPlane : MonoBehaviour
                     MissionManager.instance.notificationImage.gameObject.SetActive(false);
                 }
             }
-            UpdatePlaneMission();
             Save();
         }
     }
     public void buttonMission5ClaimReward()
     {
-        if (isPlaneMission5Completed)
+        if (isPlaneMission5Completed && !isFalseButton5Clicked)
         {
             Debug.Log("Plane Mission 5 Reward Claimed!");
+            
+            buttonPlaneMission5.image.sprite = spriteButtonClaimed;
             isPlaneMission5Completed = false;
-            planeMission5Progress = 0;
-            buttonPlaneMission5.interactable = false;
-            imagePlaneMission5.color = Color.gray;
-            buttonPlaneMission5.image.color = Color.gray;
+            isFalseButton5Clicked = true;
+            imagePlaneMission5.sprite = spriteMissionClaimed;
+            imageFillPlaneMission5.sprite = spriteFillMissionCompleted;
             isReceivedPlane5Reward = true;
             textPlaneMission5.text = "Claimed";
+            imageBackGroundFillPlaneMission5.sprite = spriteBackGroundFillMissionCompleted;
 
             if(isReceivedPlane5Reward)
             {
@@ -428,40 +450,54 @@ public class MissionPlane : MonoBehaviour
                     MissionManager.instance.notificationImage.gameObject.SetActive(false);
                 }
             }
-            UpdatePlaneMission();
             Save();
         }
     }
 
     public void completeRewardCollection(){
         if(isReceivedPlane1Reward){
-            buttonPlaneMission1.interactable = false;
-            imagePlaneMission1.color = Color.gray;
-            buttonPlaneMission1.image.color = Color.gray;
+            // buttonPlaneMission1.interactable = false;
+            isFalseButton1Clicked = true;
+            imagePlaneMission1.sprite = spriteMissionClaimed;
+            imageFillPlaneMission1.sprite = spriteFillMissionCompleted;
+            buttonPlaneMission1.image.sprite = spriteButtonClaimed;
+            imageBackGroundFillPlaneMission1.sprite = spriteBackGroundFillMissionCompleted;
             textPlaneMission1.text = "Claimed";
         }
         if(isReceivedPlane2Reward){
-            buttonPlaneMission2.interactable = false;
-            imagePlaneMission2.color = Color.gray;
-            buttonPlaneMission2.image.color = Color.gray;
+            // buttonPlaneMission2.interactable = false;
+            isFalseButton2Clicked = true;
+            imagePlaneMission2.sprite = spriteMissionClaimed;
+            imageFillPlaneMission2.sprite = spriteFillMissionCompleted;
+            buttonPlaneMission2.image.sprite = spriteButtonClaimed;
+            imageBackGroundFillPlaneMission2.sprite = spriteBackGroundFillMissionCompleted;
             textPlaneMission2.text = "Claimed";
         }
         if(isReceivedPlane3Reward){
-            buttonPlaneMission3.interactable = false;
-            imagePlaneMission3.color = Color.gray;
-            buttonPlaneMission3.image.color = Color.gray;
+            // buttonPlaneMission3.interactable = false;
+            isFalseButton3Clicked = true;
+            imagePlaneMission3.sprite = spriteMissionClaimed;
+            imageFillPlaneMission3.sprite = spriteFillMissionCompleted;
+            buttonPlaneMission3.image.sprite = spriteButtonClaimed;
+            imageBackGroundFillPlaneMission3.sprite = spriteBackGroundFillMissionCompleted;
             textPlaneMission3.text = "Claimed";
         }
         if(isReceivedPlane4Reward){
-            buttonPlaneMission4.interactable = false;
-            imagePlaneMission4.color = Color.gray;
-            buttonPlaneMission4.image.color = Color.gray;
+            // buttonPlaneMission4.interactable = false;
+            isFalseButton4Clicked = true;
+            imagePlaneMission4.sprite = spriteMissionClaimed;
+            imageFillPlaneMission4.sprite = spriteFillMissionCompleted;
+            buttonPlaneMission4.image.sprite = spriteButtonClaimed;
+            imageBackGroundFillPlaneMission4.sprite = spriteBackGroundFillMissionCompleted;
             textPlaneMission4.text = "Claimed";
         }
         if(isReceivedPlane5Reward){
-            buttonPlaneMission5.interactable = false;
-            imagePlaneMission5.color = Color.gray;
-            buttonPlaneMission5.image.color = Color.gray;
+            // buttonPlaneMission5.interactable = false;
+            isFalseButton5Clicked = true;
+            imagePlaneMission5.sprite = spriteMissionClaimed;
+            imageFillPlaneMission5.sprite = spriteFillMissionCompleted;
+            buttonPlaneMission5.image.sprite = spriteButtonClaimed;
+            imageBackGroundFillPlaneMission5.sprite = spriteBackGroundFillMissionCompleted;
             textPlaneMission5.text = "Claimed";
         }
     }

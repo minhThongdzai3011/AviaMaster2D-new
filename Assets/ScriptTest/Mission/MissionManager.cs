@@ -10,9 +10,17 @@ public class MissionManager : MonoBehaviour
     public static MissionManager instance;
 
     [Header("Title")]
-    public TextMeshProUGUI titleDailyText;
-    public TextMeshProUGUI titlePlaneText;
-    public TextMeshProUGUI titleAchievementsText;
+    public TextMeshProUGUI titleMissionText;
+
+    [Header("Title Button")]
+    public Button titleDailyButton; 
+    public Button titlePlaneButton;
+    public Button titleAchievementsButton;
+    public Sprite spriteChoose;
+    public Sprite spriteUnchoose;
+    
+    
+    private int currentPage = 1;
 
     [Header("Content")]
     public GameObject gameObjectDailyText;
@@ -20,7 +28,6 @@ public class MissionManager : MonoBehaviour
     public GameObject gameObjectAchievementsText;
 
     [Header("Page Text")]
-    public TextMeshProUGUI textPage;
     public TextMeshProUGUI textQuantityReward;
 
     [Header(" Imange Mission")]
@@ -36,8 +43,6 @@ public class MissionManager : MonoBehaviour
 
     public int textQuantityRewardValue = 0;
 
-    private int currentPage = 1;
-    private const int maxPage = 3;
     private bool isTransitioning = false;
 
     private const float moveOffsetX = 70f;
@@ -55,136 +60,136 @@ public class MissionManager : MonoBehaviour
     private void Start()
     {
         ShowPage(1);
+        UpdateButtonSprites();
+    }
+    
+    void UpdateButtonSprites()
+    {
+        // Reset tất cả button về trạng thái không chọn
+        titleDailyButton.GetComponent<Image>().sprite = spriteUnchoose;
+        titlePlaneButton.GetComponent<Image>().sprite = spriteUnchoose;
+        titleAchievementsButton.GetComponent<Image>().sprite = spriteUnchoose;
+        
+        // Set sprite cho button hiện tại
+        switch (currentPage)
+        {
+            case 1:
+                titleDailyButton.GetComponent<Image>().sprite = spriteChoose;
+                break;
+            case 2:
+                titlePlaneButton.GetComponent<Image>().sprite = spriteChoose;
+                break;
+            case 3:
+                titleAchievementsButton.GetComponent<Image>().sprite = spriteChoose;
+                break;
+        }
     }
     
 
     
-    public void OnLeftButtonClick()
+    public void OnDailyButtonClick()
     {
-        if (isTransitioning) return;
-
-        int nextPage = currentPage - 1;
-        if (nextPage < 1) nextPage = maxPage;
-
-        ChangePage(nextPage, -1);
+        if (isTransitioning || currentPage == 1) return;
+        
+        SwitchToPage(1);
         AudioManager.instance.PlaySound(AudioManager.instance.leftRightShopSoundClip);
     }
 
-    public void OnRightButtonClick()
+    public void OnPlaneButtonClick()
     {
-        if (isTransitioning) return;
-
-        int nextPage = currentPage + 1;
-        if (nextPage > maxPage) nextPage = 1;
-
-        ChangePage(nextPage, 1);
+        if (isTransitioning || currentPage == 2) return;
+        
+        SwitchToPage(2);
         AudioManager.instance.PlaySound(AudioManager.instance.leftRightShopSoundClip);
+    }
+    
+    public void OnAchievementButtonClick()
+    {
+        if (isTransitioning || currentPage == 3) return;
+        
+        SwitchToPage(3);
+        AudioManager.instance.PlaySound(AudioManager.instance.leftRightShopSoundClip);
+    }
+    
+    void SwitchToPage(int newPage)
+    {
+        if (newPage == currentPage) return;
+        
+        // Xác định hướng chuyển trang
+        int direction = newPage > currentPage ? 1 : -1;
+        
+        // Chuyển trang với hiệu ứng
+        StartCoroutine(SimplePageTransition(currentPage, newPage, direction));
     }
     
 
     
-    void ChangePage(int newPage, int direction)
+    IEnumerator SimplePageTransition(int oldPage, int newPage, int direction)
     {
-        StartCoroutine(PageTransition(
-            GetTitleByPage(currentPage),
-            GetTitleByPage(newPage),
-            GetContentByPage(currentPage),
-            GetContentByPage(newPage),
-            direction
-        ));
-
+        isTransitioning = true;
+        
+        GameObject oldContent = GetContentByPage(oldPage);
+        GameObject newContent = GetContentByPage(newPage);
+        
+        CanvasGroup oldContentCg = GetCanvasGroup(oldContent);
+        CanvasGroup newContentCg = GetCanvasGroup(newContent);
+        
+        RectTransform oldContentRect = oldContent.GetComponent<RectTransform>();
+        RectTransform newContentRect = newContent.GetComponent<RectTransform>();
+        
+        // Lưu vị trí gốc thực tế (y = -67)
+        Vector3 originalPosition = oldContentRect.localPosition;
+        float originalY = originalPosition.y;
+        
+        Vector3 oldContentEnd = new Vector3(-moveOffsetX * direction, originalY, 0);
+        Vector3 newContentStart = new Vector3(moveOffsetX * direction, originalY, 0);
+        Vector3 targetPosition = new Vector3(0, originalY, 0);
+        
+        // Kích hoạt content mới
+        newContent.SetActive(true);
+        newContentCg.alpha = 0;
+        newContentRect.localPosition = newContentStart;
+        
+        float time = 0f;
+        
+        while (time < duration)
+        {
+            time += Time.deltaTime;
+            float t = time / duration;
+            
+            // Fade out old content
+            oldContentCg.alpha = Mathf.Lerp(1, 0, t);
+            oldContentRect.localPosition = Vector3.Lerp(originalPosition, oldContentEnd, t);
+            
+            // Fade in new content
+            newContentCg.alpha = Mathf.Lerp(0, 1, t);
+            newContentRect.localPosition = Vector3.Lerp(newContentStart, targetPosition, t);
+            
+            yield return null;
+        }
+        
+        // Tắt content cũ
+        oldContent.SetActive(false);
+        
+        // Reset vị trí content mới về vị trí gốc
+        newContentRect.localPosition = targetPosition;
+        newContentCg.alpha = 1;
+        
+        // Cập nhật trang hiện tại và sprite
         currentPage = newPage;
-        UpdatePageText();
+        UpdateButtonSprites();
+        
+        isTransitioning = false;
     }
 
     void ShowPage(int page)
     {
-        titleDailyText.gameObject.SetActive(page == 1);
-        titlePlaneText.gameObject.SetActive(page == 2);
-        titleAchievementsText.gameObject.SetActive(page == 3);
-
         gameObjectDailyText.SetActive(page == 1);
         gameObjectPlaneText.SetActive(page == 2);
         gameObjectAchievementsText.SetActive(page == 3);
 
         currentPage = page;
         UpdatePageText();
-    }
-    
-
-    
-    IEnumerator PageTransition(
-        TextMeshProUGUI oldTitle,
-        TextMeshProUGUI newTitle,
-        GameObject oldContent,
-        GameObject newContent,
-        int direction)
-    {
-        isTransitioning = true;
-
-        CanvasGroup oldTitleCg = GetCanvasGroup(oldTitle.gameObject);
-        CanvasGroup newTitleCg = GetCanvasGroup(newTitle.gameObject);
-        CanvasGroup oldContentCg = GetCanvasGroup(oldContent);
-        CanvasGroup newContentCg = GetCanvasGroup(newContent);
-
-        RectTransform oldTitleRect = oldTitle.GetComponent<RectTransform>();
-        RectTransform newTitleRect = newTitle.GetComponent<RectTransform>();
-        RectTransform oldContentRect = oldContent.GetComponent<RectTransform>();
-        RectTransform newContentRect = newContent.GetComponent<RectTransform>();
-
-        float titleY = oldTitleRect.localPosition.y;
-
-        Vector3 oldTitleStart = new Vector3(0, titleY, 0);
-        Vector3 oldTitleEnd   = new Vector3(-moveOffsetX * direction, titleY, 0);
-        Vector3 newTitleStart = new Vector3(moveOffsetX * direction, titleY, 0);
-        Vector3 newTitleEnd   = new Vector3(0, titleY, 0);
-
-        Vector3 oldContentEnd = new Vector3(-moveOffsetX * direction, 0, 0);
-        Vector3 newContentStart = new Vector3(moveOffsetX * direction, 0, 0);
-
-        newTitle.gameObject.SetActive(true);
-        newContent.gameObject.SetActive(true);
-
-        newTitleCg.alpha = 0;
-        newContentCg.alpha = 0;
-
-        newTitleRect.localPosition = newTitleStart;
-        newContentRect.localPosition = newContentStart;
-
-        float time = 0f;
-
-        while (time < duration)
-        {
-            time += Time.deltaTime;
-            float t = time / duration;
-
-            // OLD
-            oldTitleCg.alpha = Mathf.Lerp(1, 0, t);
-            oldContentCg.alpha = Mathf.Lerp(1, 0, t);
-
-            oldTitleRect.localPosition = Vector3.Lerp(oldTitleStart, oldTitleEnd, t);
-            oldContentRect.localPosition = Vector3.Lerp(Vector3.zero, oldContentEnd, t);
-
-            // NEW
-            newTitleCg.alpha = Mathf.Lerp(0, 1, t);
-            newContentCg.alpha = Mathf.Lerp(0, 1, t);
-
-            newTitleRect.localPosition = Vector3.Lerp(newTitleStart, newTitleEnd, t);
-            newContentRect.localPosition = Vector3.Lerp(newContentStart, Vector3.zero, t);
-
-            yield return null;
-        }
-
-        oldTitle.gameObject.SetActive(false);
-        oldContent.gameObject.SetActive(false);
-
-        // Reset trạng thái an toàn
-        newTitleRect.localPosition = newTitleEnd;
-        newContentRect.localPosition = Vector3.zero;
-        newTitleCg.alpha = 1;
-        newContentCg.alpha = 1;
-
-        isTransitioning = false;
     }
 
     CanvasGroup GetCanvasGroup(GameObject obj)
@@ -197,18 +202,18 @@ public class MissionManager : MonoBehaviour
     
     void UpdatePageText()
     {
-        textPage.text = currentPage.ToString();
-    }
-
-    TextMeshProUGUI GetTitleByPage(int page)
-    {
-        switch (page)
+        switch (currentPage)
         {
-            case 1: return titleDailyText;
-            case 2: return titlePlaneText;
-            case 3: return titleAchievementsText;
+            case 1:
+                titleMissionText.text = "Mission";
+                break;
+            case 2:
+                titleMissionText.text = "Mission";
+                break;
+            case 3:
+                titleMissionText.text = "Mission";
+                break;
         }
-        return null;
     }
 
     GameObject GetContentByPage(int page)
