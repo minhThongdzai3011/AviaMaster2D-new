@@ -198,7 +198,6 @@ public class MissionAchievements : MonoBehaviour
                     buttonAchievementMission1.interactable = true;
                     textAchievementMission1.text = "Mission Completed";
                     buttonAchievementMission1.image.sprite = spriteButtonCompleted;
-                    imageFillAchievementMission1.sprite = spriteFillMissionCompleted;
                     
                     MissionManager.instance.textQuantityRewardValue++;
                     MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
@@ -231,7 +230,6 @@ public class MissionAchievements : MonoBehaviour
                     buttonAchievementMission2.interactable = true;
                     textAchievementMission2.text = "Mission Completed";
                     buttonAchievementMission2.image.sprite = spriteButtonCompleted;
-                    imageFillAchievementMission2.sprite = spriteFillMissionCompleted;
                     
                     MissionManager.instance.textQuantityRewardValue++;
                     MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
@@ -263,7 +261,6 @@ public class MissionAchievements : MonoBehaviour
                     buttonAchievementMission3.interactable = true;
                     textAchievementMission3.text = "Mission Completed";
                     buttonAchievementMission3.image.sprite = spriteButtonCompleted;
-                    imageFillAchievementMission3.sprite = spriteFillMissionCompleted;
                     
                     MissionManager.instance.textQuantityRewardValue++;
                     MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
@@ -295,7 +292,6 @@ public class MissionAchievements : MonoBehaviour
                     buttonAchievementMission4.interactable = true;
                     textAchievementMission4.text = "Mission Completed";
                     buttonAchievementMission4.image.sprite = spriteButtonCompleted;
-                    imageFillAchievementMission4.sprite = spriteFillMissionCompleted;
                     
                     MissionManager.instance.textQuantityRewardValue++;
                     MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
@@ -327,7 +323,6 @@ public class MissionAchievements : MonoBehaviour
                     buttonAchievementMission5.interactable = true;
                     textAchievementMission5.text = "Mission Completed";
                     buttonAchievementMission5.image.sprite = spriteButtonCompleted;
-                    imageFillAchievementMission5.sprite = spriteFillMissionCompleted;
                     
                     MissionManager.instance.textQuantityRewardValue++;
                     MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
@@ -480,10 +475,19 @@ public class MissionAchievements : MonoBehaviour
         {
             Debug.Log("Achievement Mission 1 Reward Claimed! Level: " + (achievementMission1CurrentLevel + 1));
             
-            buttonAchievementMission1.image.sprite = spriteButtonClaimed;
-            imageAchievementMission1.sprite = spriteMissionClaimed;
-            imageFillAchievementMission1.sprite = spriteFillMissionCompleted;
-            imageBackGroundFillPlaneMission1.sprite = spriteBackGroundFillMissionCompleted;
+            // Trao thưởng tiền cho người chơi
+            GManager.instance.totalMoney += prizeRewardAchievement1[achievementMission1CurrentLevel];
+            PlayerPrefs.SetFloat("TotalMoney", GManager.instance.totalMoney);
+            PlayerPrefs.Save();
+            GManager.instance.SaveTotalMoney();
+            
+            // Giảm notification counter
+            MissionManager.instance.textQuantityRewardValue--;
+            MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
+            if (MissionManager.instance.textQuantityRewardValue <= 0)
+            {
+                MissionManager.instance.notificationImage.gameObject.SetActive(false);
+            }
             
             // Tăng level (index) lên 1
             achievementMission1CurrentLevel++;
@@ -491,21 +495,31 @@ public class MissionAchievements : MonoBehaviour
             // Reset cho level mới
             isAchievementMission1Completed = false;
             achievementMission1Progress = 0;
-            isFalseButton1ClickedAchie = true;
-            isReceivedAchievement1Reward = true;
-            textAchievementMission1.text = "Claimed";
+            isReceivedAchievement1Reward = false;
+            isFalseButton1ClickedAchie = false;
             
-            if(isReceivedAchievement1Reward)
+            // Chỉ đổi sprite sang completed nếu đã hoàn thành TẤT CẢ level
+            if (achievementMission1CurrentLevel >= achievementMission1Target.Length)
             {
-                MissionManager.instance.textQuantityRewardValue--;
-                MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
-                if (MissionManager.instance.textQuantityRewardValue <= 0)
-                {
-                    MissionManager.instance.notificationImage.gameObject.SetActive(false);
-                }
+                imageAchievementMission1.sprite = spriteMissionClaimed;
+                imageFillAchievementMission1.sprite = spriteFillMissionCompleted;
+                buttonAchievementMission1.image.sprite = spriteButtonClaimed;
+                imageBackGroundFillPlaneMission1.sprite = spriteBackGroundFillMissionCompleted;
+                textAchievementMission1.text = "MAX LEVEL";
+                buttonAchievementMission1.interactable = false;
+            }
+            else
+            {
+                // Reset lại sprite về trạng thái incomplete cho level mới
+                imageAchievementMission1.sprite = spriteMissionIncomplete;
+                imageFillAchievementMission1.sprite = spriteFillMissionIncomplete;
+                buttonAchievementMission1.image.sprite = spriteButtonIncomplete;
+                imageBackGroundFillPlaneMission1.sprite = spriteBackGroundFillMissionIncomplete;
+                imageFillAchievementMission1.fillAmount = 0f;
             }
             
             Save();
+            UpdateAchievementMission(); // Cập nhật UI với mốc mới
         }
     }
     public void buttonMission2ClaimReward()
@@ -514,29 +528,45 @@ public class MissionAchievements : MonoBehaviour
         {
             Debug.Log("Achievement Mission 2 Reward Claimed! Level: " + (achievementMission2CurrentLevel + 1));
             
-            buttonAchievementMission2.image.sprite = spriteButtonClaimed;
-            imageAchievementMission2.sprite = spriteMissionClaimed;
-            imageFillAchievementMission2.sprite = spriteFillMissionCompleted;
-            imageBackGroundFillPlaneMission2.sprite = spriteBackGroundFillMissionCompleted;
+            // Trao thưởng tiền
+            GManager.instance.totalMoney += prizeRewardAchievement2[achievementMission2CurrentLevel];
+            PlayerPrefs.SetFloat("TotalMoney", GManager.instance.totalMoney);
+            PlayerPrefs.Save();
+            GManager.instance.SaveTotalMoney();
+            
+            MissionManager.instance.textQuantityRewardValue--;
+            MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
+            if (MissionManager.instance.textQuantityRewardValue <= 0)
+            {
+                MissionManager.instance.notificationImage.gameObject.SetActive(false);
+            }
             
             achievementMission2CurrentLevel++;
             isAchievementMission2Completed = false;
             achievementMission2Progress = 0;
-            isFalseButton2ClickedAchie = true;
-            isReceivedAchievement2Reward = true;
-            textAchievementMission2.text = "Claimed";
+            isReceivedAchievement2Reward = false;
+            isFalseButton2ClickedAchie = false;
             
-            if(isReceivedAchievement2Reward)
+            if (achievementMission2CurrentLevel >= achievementMission2Target.Length)
             {
-                MissionManager.instance.textQuantityRewardValue--;
-                MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
-                if (MissionManager.instance.textQuantityRewardValue <= 0)
-                {
-                    MissionManager.instance.notificationImage.gameObject.SetActive(false);
-                }
+                imageAchievementMission2.sprite = spriteMissionClaimed;
+                imageFillAchievementMission2.sprite = spriteFillMissionCompleted;
+                buttonAchievementMission2.image.sprite = spriteButtonClaimed;
+                imageBackGroundFillPlaneMission2.sprite = spriteBackGroundFillMissionCompleted;
+                textAchievementMission2.text = "MAX LEVEL";
+                buttonAchievementMission2.interactable = false;
+            }
+            else
+            {
+                imageAchievementMission2.sprite = spriteMissionIncomplete;
+                imageFillAchievementMission2.sprite = spriteFillMissionIncomplete;
+                buttonAchievementMission2.image.sprite = spriteButtonIncomplete;
+                imageBackGroundFillPlaneMission2.sprite = spriteBackGroundFillMissionIncomplete;
+                imageFillAchievementMission2.fillAmount = 0f;
             }
             
             Save();
+            UpdateAchievementMission();
         }
     }
     public void buttonMission3ClaimReward()
@@ -545,29 +575,45 @@ public class MissionAchievements : MonoBehaviour
         {
             Debug.Log("Achievement Mission 3 Reward Claimed! Level: " + (achievementMission3CurrentLevel + 1));
             
-            buttonAchievementMission3.image.sprite = spriteButtonClaimed;
-            imageAchievementMission3.sprite = spriteMissionClaimed;
-            imageFillAchievementMission3.sprite = spriteFillMissionCompleted;
-            imageBackGroundFillPlaneMission3.sprite = spriteBackGroundFillMissionCompleted;
+            // Trao thưởng tiền
+            GManager.instance.totalMoney += prizeRewardAchievement3[achievementMission3CurrentLevel];
+            PlayerPrefs.SetFloat("TotalMoney", GManager.instance.totalMoney);
+            PlayerPrefs.Save();
+            GManager.instance.SaveTotalMoney();
+            
+            MissionManager.instance.textQuantityRewardValue--;
+            MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
+            if (MissionManager.instance.textQuantityRewardValue <= 0)
+            {
+                MissionManager.instance.notificationImage.gameObject.SetActive(false);
+            }
             
             achievementMission3CurrentLevel++;
             isAchievementMission3Completed = false;
             achievementMission3Progress = 0;
-            isFalseButton3ClickedAchie = true;
-            isReceivedAchievement3Reward = true;
-            textAchievementMission3.text = "Claimed";
+            isReceivedAchievement3Reward = false;
+            isFalseButton3ClickedAchie = false;
             
-            if(isReceivedAchievement3Reward)
+            if (achievementMission3CurrentLevel >= achievementMission3Target.Length)
             {
-                MissionManager.instance.textQuantityRewardValue--;
-                MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
-                if (MissionManager.instance.textQuantityRewardValue <= 0)
-                {
-                    MissionManager.instance.notificationImage.gameObject.SetActive(false);
-                }
+                imageAchievementMission3.sprite = spriteMissionClaimed;
+                imageFillAchievementMission3.sprite = spriteFillMissionCompleted;
+                buttonAchievementMission3.image.sprite = spriteButtonClaimed;
+                imageBackGroundFillPlaneMission3.sprite = spriteBackGroundFillMissionCompleted;
+                textAchievementMission3.text = "MAX LEVEL";
+                buttonAchievementMission3.interactable = false;
+            }
+            else
+            {
+                imageAchievementMission3.sprite = spriteMissionIncomplete;
+                imageFillAchievementMission3.sprite = spriteFillMissionIncomplete;
+                buttonAchievementMission3.image.sprite = spriteButtonIncomplete;
+                imageBackGroundFillPlaneMission3.sprite = spriteBackGroundFillMissionIncomplete;
+                imageFillAchievementMission3.fillAmount = 0f;
             }
             
             Save();
+            UpdateAchievementMission();
         }
     }
     public void buttonMission4ClaimReward()
@@ -576,29 +622,45 @@ public class MissionAchievements : MonoBehaviour
         {
             Debug.Log("Achievement Mission 4 Reward Claimed! Level: " + (achievementMission4CurrentLevel + 1));
             
-            buttonAchievementMission4.image.sprite = spriteButtonClaimed;
-            imageAchievementMission4.sprite = spriteMissionClaimed;
-            imageFillAchievementMission4.sprite = spriteFillMissionCompleted;
-            imageBackGroundFillPlaneMission4.sprite = spriteBackGroundFillMissionCompleted;
+            // Trao thưởng tiền
+            GManager.instance.totalMoney += prizeRewardAchievement4[achievementMission4CurrentLevel];
+            PlayerPrefs.SetFloat("TotalMoney", GManager.instance.totalMoney);
+            PlayerPrefs.Save();
+            GManager.instance.SaveTotalMoney();
+            
+            MissionManager.instance.textQuantityRewardValue--;
+            MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
+            if (MissionManager.instance.textQuantityRewardValue <= 0)
+            {
+                MissionManager.instance.notificationImage.gameObject.SetActive(false);
+            }
             
             achievementMission4CurrentLevel++;
             isAchievementMission4Completed = false;
             achievementMission4Progress = 0;
-            isFalseButton4ClickedAchie = true;
-            isReceivedAchievement4Reward = true;
-            textAchievementMission4.text = "Claimed";
+            isReceivedAchievement4Reward = false;
+            isFalseButton4ClickedAchie = false;
             
-            if(isReceivedAchievement4Reward)
+            if (achievementMission4CurrentLevel >= achievementMission4Target.Length)
             {
-                MissionManager.instance.textQuantityRewardValue--;
-                MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
-                if (MissionManager.instance.textQuantityRewardValue <= 0)
-                {
-                    MissionManager.instance.notificationImage.gameObject.SetActive(false);
-                }
+                imageAchievementMission4.sprite = spriteMissionClaimed;
+                imageFillAchievementMission4.sprite = spriteFillMissionCompleted;
+                buttonAchievementMission4.image.sprite = spriteButtonClaimed;
+                imageBackGroundFillPlaneMission4.sprite = spriteBackGroundFillMissionCompleted;
+                textAchievementMission4.text = "MAX LEVEL";
+                buttonAchievementMission4.interactable = false;
+            }
+            else
+            {
+                imageAchievementMission4.sprite = spriteMissionIncomplete;
+                imageFillAchievementMission4.sprite = spriteFillMissionIncomplete;
+                buttonAchievementMission4.image.sprite = spriteButtonIncomplete;
+                imageBackGroundFillPlaneMission4.sprite = spriteBackGroundFillMissionIncomplete;
+                imageFillAchievementMission4.fillAmount = 0f;
             }
             
             Save();
+            UpdateAchievementMission();
         }
     }
     public void buttonMission5ClaimReward()
@@ -607,29 +669,45 @@ public class MissionAchievements : MonoBehaviour
         {
             Debug.Log("Achievement Mission 5 Reward Claimed! Level: " + (achievementMission5CurrentLevel + 1));
             
-            buttonAchievementMission5.image.sprite = spriteButtonClaimed;
-            imageAchievementMission5.sprite = spriteMissionClaimed;
-            imageFillAchievementMission5.sprite = spriteFillMissionCompleted;
-            imageBackGroundFillPlaneMission5.sprite = spriteBackGroundFillMissionCompleted;
+            // Trao thưởng tiền
+            GManager.instance.totalMoney += prizeRewardAchievement5[achievementMission5CurrentLevel];
+            PlayerPrefs.SetFloat("TotalMoney", GManager.instance.totalMoney);
+            PlayerPrefs.Save();
+            GManager.instance.SaveTotalMoney();
+            
+            MissionManager.instance.textQuantityRewardValue--;
+            MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
+            if (MissionManager.instance.textQuantityRewardValue <= 0)
+            {
+                MissionManager.instance.notificationImage.gameObject.SetActive(false);
+            }
             
             achievementMission5CurrentLevel++;
             isAchievementMission5Completed = false;
             achievementMission5Progress = 0;
-            isFalseButton5ClickedAchie = true;
-            isReceivedAchievement5Reward = true;
-            textAchievementMission5.text = "Claimed";
+            isReceivedAchievement5Reward = false;
+            isFalseButton5ClickedAchie = false;
             
-            if(isReceivedAchievement5Reward)
+            if (achievementMission5CurrentLevel >= achievementMission5Target.Length)
             {
-                MissionManager.instance.textQuantityRewardValue--;
-                MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
-                if (MissionManager.instance.textQuantityRewardValue <= 0)
-                {
-                    MissionManager.instance.notificationImage.gameObject.SetActive(false);
-                }
+                imageAchievementMission5.sprite = spriteMissionClaimed;
+                imageFillAchievementMission5.sprite = spriteFillMissionCompleted;
+                buttonAchievementMission5.image.sprite = spriteButtonClaimed;
+                imageBackGroundFillPlaneMission5.sprite = spriteBackGroundFillMissionCompleted;
+                textAchievementMission5.text = "MAX LEVEL";
+                buttonAchievementMission5.interactable = false;
+            }
+            else
+            {
+                imageAchievementMission5.sprite = spriteMissionIncomplete;
+                imageFillAchievementMission5.sprite = spriteFillMissionIncomplete;
+                buttonAchievementMission5.image.sprite = spriteButtonIncomplete;
+                imageBackGroundFillPlaneMission5.sprite = spriteBackGroundFillMissionIncomplete;
+                imageFillAchievementMission5.fillAmount = 0f;
             }
             
             Save();
+            UpdateAchievementMission();
         }
     }
 

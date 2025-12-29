@@ -57,6 +57,8 @@ public class Shop : MonoBehaviour
     public GameObject defaultPlane;
     public int isCheckedPlaneIndex = 13; // Mặc định chọn máy bay thứ 15
 
+
+
     public void Awake()
     {
         isCheckedPlaneIndex = PlayerPrefs.GetInt("isCheckedPlaneIndex", isCheckedPlaneIndex);
@@ -848,7 +850,7 @@ public class Shop : MonoBehaviour
         PlayerPrefs.SetInt("isCheckedPlaneIndex", isCheckedPlaneIndex);
         PlayerPrefs.Save();
     }
-    public void buyPlane3(){
+    public void buyPlane3(){  // Siêu máy bay
         StartCoroutine(PlayButtonEffect(2));
         if(!isBuyPlane3Done){
             if(GManager.instance.totalDiamond >= 1000)
@@ -904,6 +906,10 @@ public class Shop : MonoBehaviour
             CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[2].transform;
             CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[2].transform;
             gameObjectsPlanes[2].SetActive(true);
+
+            // gọi chỉ số siêu máy bay 20 power và boost
+            SuperPlaneManager.instance.isSuperPlane1 = true;
+
             for (int i=0; i<gameObjectsPlanes.Length; i++){
                 if(i != 2){
                     gameObjectsPlanes[i].SetActive(false);
@@ -1098,6 +1104,10 @@ public class Shop : MonoBehaviour
             isRotaryFrontZDone = false;
             CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[5].transform;
             CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[5].transform;
+
+            // gọi chỉ số siêu máy bay bắn ra đạn
+            SuperPlaneManager.instance.isSuperPlane2 = true;
+
             gameObjectsPlanes[5].SetActive(true);
             for (int i=0; i<gameObjectsPlanes.Length; i++){
                 if(i != 5){
@@ -1228,6 +1238,10 @@ public class Shop : MonoBehaviour
             isRotaryFrontZDone = false;
             CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[7].transform;
             CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[7].transform;
+
+            // gọi chỉ số siêu máy bay tăng 50% tiền
+            SuperPlaneManager.instance.isSuperPlane3 = true;
+
             gameObjectsPlanes[7].SetActive(true);
             for (int i=0; i<gameObjectsPlanes.Length; i++){
                 if(i != 7){
@@ -1489,6 +1503,10 @@ public class Shop : MonoBehaviour
             isRotaryFrontZDone = false;
             CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[11].transform;
             CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[11].transform;
+
+            // gọi chỉ số siêu máy bay tăng 20 fuel
+            SuperPlaneManager.instance.isSuperPlane4 = true;
+
             gameObjectsPlanes[11].SetActive(true);
             for (int i=0; i<gameObjectsPlanes.Length; i++){
                 if(i != 11){
@@ -1758,6 +1776,10 @@ public class Shop : MonoBehaviour
             // Step 6: Setup camera
             CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[15].transform;
             CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[15].transform;
+
+            // siêu máy bay có 2 máu
+            SuperPlaneManager.instance.isSuperPlane5 = true;
+
             EnsureCameraSetup();
         }
         PlayerPrefs.SetInt("isCheckedPlaneIndex", isCheckedPlaneIndex);
@@ -2079,4 +2101,5 @@ public class Shop : MonoBehaviour
             Debug.Log($"✅ Camera setup hoàn tất cho {rb.name}");
         }
     }
+
 }
