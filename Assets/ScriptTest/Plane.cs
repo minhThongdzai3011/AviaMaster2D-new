@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using Leaderboard;
+using System.Linq;
 
 
 public class Plane : MonoBehaviour
@@ -51,6 +52,9 @@ public class Plane : MonoBehaviour
     {
         smokeEffect.Stop();
         explosionEffect.Stop();
+        
+        // Load SuperPlane status when game starts
+        LoadSuperPlaneStatus();
     }
     public bool isStopSmokeEffect = true;
     public bool isStopExplosionEffect = true;
@@ -77,6 +81,16 @@ public class Plane : MonoBehaviour
             isGrounded = true;
 
             Debug.Log("Máy bay đã chạm đất.");
+            
+            // Stop flight timer and update mission achievement 4
+            if (MissionAchievements.instance != null)
+            {
+                MissionAchievements.instance.StopFlightTimerAndUpdateMission();
+            }
+            else
+            {
+                Debug.LogWarning("[LANDING] MissionAchievements.instance is null - cannot stop flight timer");
+            }
             
             // *** CHỈ KIỂM TRA ANGLE, KHÔNG SET SUPER BONUS Ở ĐÂY ***
             float initialAngleZ = GetCurrentRotationZ(GManager.instance.airplaneRigidbody2D);
@@ -125,6 +139,8 @@ public class Plane : MonoBehaviour
                 moneyCollect += 20;
                 MissionDaily.instance.dailyMission2Progress += 20;
                 MissionDaily.instance.UpdateDailyMission();
+                MissionPlane.instance.planeMission2Progress += 20;
+                MissionPlane.instance.UpdatePlaneMission();
 
                 // anim.collected = true;
                 // anim.Collect();
@@ -135,6 +151,8 @@ public class Plane : MonoBehaviour
                 moneyCollect += 10;
                 MissionDaily.instance.dailyMission2Progress += 10;
                 MissionDaily.instance.UpdateDailyMission();
+                MissionPlane.instance.planeMission2Progress += 10;
+                MissionPlane.instance.UpdatePlaneMission();
                 Destroy(other.gameObject);
             }
         }
@@ -157,7 +175,8 @@ public class Plane : MonoBehaviour
                 EffectExplosionBonus ef = other.GetComponent<EffectExplosionBonus>();
                 ef.ExplosionEffect();
                 ef.ExplosionEffect1();
-
+                MissionPlane.instance.planeMission5Progress++;
+                MissionPlane.instance.UpdatePlaneMission();
                 //EffectExplosionBonus.instance.ExplosionEffect();
                 // EffectExplosionBonus.instance.ExplosionEffect1();
                 // Destroy(other.gameObject);
@@ -165,23 +184,40 @@ public class Plane : MonoBehaviour
             }
             else
             {
-                AudioManager.instance.PlaySound(AudioManager.instance.explosionSoundClip);
-            
-                if (CameraManager.instance != null)
+                if (SuperPlaneManager.instance != null && SuperPlaneManager.instance.isSuperPlane5 && SuperPlaneManager.instance.skillPlane5)
                 {
-                    CameraManager.instance.FreezeCamera();
+                    SuperPlaneManager.instance.skillPlane5 = false;
+                    SuperPlaneManager.instance.imageSkillSuperPlane5.gameObject.SetActive(false);
+                    AudioManager.instance.PlaySound(AudioManager.instance.obstacleCollisionSoundClip);
+                    EffectExplosionBonus ef = other.GetComponent<EffectExplosionBonus>();
+                    ef.ExplosionEffect();
+                    ef.ExplosionEffect1();
+
+                    //EffectExplosionBonus.instance.ExplosionEffect();
+                    // EffectExplosionBonus.instance.ExplosionEffect1();
+                    // Destroy(other.gameObject);
+                    other.gameObject.GetComponent<SpriteRenderer>().enabled = false;
                 }
-                GManager.instance.stopDisplayDistance = true;
-                string tempDistant = GManager.instance.distanceTraveled.ToString("F0");
-                GManager.instance.distanceText.text = tempDistant + " ft";
-                GManager.instance.upAircraftImage.gameObject.SetActive(false);
-                GManager.instance.downFuelImage.gameObject.SetActive(false);
-                MakePlaneBlackAndExplode();
-                TextIntro.instance.GetRandomTextWinMessage(0); 
-                GManager.instance.newMapText.text = "Space isn’t empty enough for this pilot!";
-                GManager.instance.airplaneRigidbody2D.velocity = Vector2.zero;
-                Settings.instance.isAltitudeImageActive = false;
-                Settings.instance. altitudeImage.gameObject.SetActive(false);
+                else
+                {
+                    AudioManager.instance.PlaySound(AudioManager.instance.explosionSoundClip);
+            
+                    if (CameraManager.instance != null)
+                    {
+                        CameraManager.instance.FreezeCamera();
+                    }
+                    GManager.instance.stopDisplayDistance = true;
+                    string tempDistant = GManager.instance.distanceTraveled.ToString("F0");
+                    GManager.instance.distanceText.text = tempDistant + " ft";
+                    GManager.instance.upAircraftImage.gameObject.SetActive(false);
+                    GManager.instance.downFuelImage.gameObject.SetActive(false);
+                    MakePlaneBlackAndExplode();
+                    TextIntro.instance.GetRandomTextWinMessage(0); 
+                    GManager.instance.newMapText.text = "Space isn’t empty enough for this pilot!";
+                    GManager.instance.airplaneRigidbody2D.velocity = Vector2.zero;
+                    Settings.instance.isAltitudeImageActive = false;
+                    Settings.instance. altitudeImage.gameObject.SetActive(false);
+                }
                 // StartCoroutine(DelayOneSecond(2f));
             }
             
@@ -191,13 +227,15 @@ public class Plane : MonoBehaviour
             AudioManager.instance.PlaySound(AudioManager.instance.crashBonusSoundClip);
            RandomPrizeBird();
            Destroy(other.gameObject);
+
         }
         if (other.CompareTag("Bonus4"))
         {
             AudioManager.instance.PlaySound(AudioManager.instance.obstacleCollisionSoundClip);
             Destroy(other.gameObject);
             StartCoroutine(FadeFogImage());
-            
+            MissionPlane.instance.planeMission5Progress++;
+            MissionPlane.instance.UpdatePlaneMission();
         }
         if (other.CompareTag("Bonus2"))
         {
@@ -205,20 +243,31 @@ public class Plane : MonoBehaviour
             EffectExplosionBonus ef = other.GetComponent<EffectExplosionBonus>();
             ef.ExplosionEffect();
             ef.ExplosionEffect1();
-
+            MissionPlane.instance.planeMission5Progress++;
+            MissionPlane.instance.UpdatePlaneMission();
             //EffectExplosionBonus.instance.ExplosionEffect();
            // EffectExplosionBonus.instance.ExplosionEffect1();
             // Destroy(other.gameObject);
             other.gameObject.GetComponent<SpriteRenderer>().enabled = false;
-            if(TrailRendererRight.instance != null ) TrailRendererRight.instance.StopTrail();
-            if(TrailRendererLeft.instance != null ) TrailRendererLeft.instance.StopTrail();
+
             Debug.Log("Bonus2 collected - Fuel to 0" + PositionX.instance.isMaxPower);
             if (!PositionX.instance.isMaxPower)
             {
-                GManager.instance.durationFuel = 0f;
-                Debug.Log("Bonus2 collected - Ending game soon");
-                GManager.instance.newMapText.text = "Fastest balloon pop ever… and you lost!";
-                StartCoroutine(FadeInText(1f));
+                if (SuperPlaneManager.instance != null && SuperPlaneManager.instance.isSuperPlane5 && SuperPlaneManager.instance.skillPlane5)
+                {
+                    SuperPlaneManager.instance.skillPlane5 = false;
+                    Debug.Log("Bonus2 collected - Super Plane 5 Active - No Fuel Lost");
+                    SuperPlaneManager.instance.imageSkillSuperPlane5.gameObject.SetActive(false);
+                }
+                else
+                {
+                    GManager.instance.durationFuel = 0f;
+                    Debug.Log("Bonus2 collected - Ending game soon");
+                    GManager.instance.newMapText.text = "Fastest balloon pop ever… and you lost!";
+                    StartCoroutine(FadeInText(1f));
+                    if(TrailRendererRight.instance != null ) TrailRendererRight.instance.StopTrail();
+                    if(TrailRendererLeft.instance != null ) TrailRendererLeft.instance.StopTrail();
+                }
             }
         }
         if (other.CompareTag("MaxPower"))
@@ -246,8 +295,29 @@ public class Plane : MonoBehaviour
         if (other.CompareTag("MapStartCity") && !isBoom)
         {
             AudioManager.instance.PlaySound(AudioManager.instance.unlockMapSoundClip);
+            
+            // Check if this is a new unlock
+            bool wasAlreadyUnlocked = MapSpawner.instance.isMapCityUnlocked;
             MapSpawner.instance.isMapCityUnlocked = true;
-            PlayerPrefs.SetInt("IsMapCityUnlocked", 1); // Lưu trạng thái mở khóa
+            PlayerPrefs.SetInt("IsMapCityUnlocked", 1);
+            
+            // City map is default, don't count it for achievement progress
+            // Only count the 5 additional maps: Beach, Desert, Field, Ice, Lava
+            int unlockedMapsCount = 0;
+            if (MapSpawner.instance.isMapBeachUnlocked) unlockedMapsCount++;
+            if (MapSpawner.instance.isMapDesertUnlocked) unlockedMapsCount++;
+            if (MapSpawner.instance.isMapFieldUnlocked) unlockedMapsCount++;
+            if (MapSpawner.instance.isMapIceUnlocked) unlockedMapsCount++;
+            if (MapSpawner.instance.isMapLavaUnlocked) unlockedMapsCount++;
+            
+            // Only update if progress increased
+            if (unlockedMapsCount > MissionAchievements.instance.achievementMission5Progress)
+            {
+                MissionAchievements.instance.achievementMission5Progress = unlockedMapsCount;
+                MissionAchievements.instance.UpdateAchievementMission();
+                Debug.Log($"[MAP UNLOCK] City unlocked. Total progress: {unlockedMapsCount}/5");
+            }
+
             BonusSpawner.instance.rocketPrefabs = ChangeBonusMap.instance.bonusMapCity;
             PlayerPrefs.Save();
             
@@ -259,8 +329,28 @@ public class Plane : MonoBehaviour
         if (other.CompareTag("MapStartBeach") && !isBoom)
         {
             AudioManager.instance.PlaySound(AudioManager.instance.unlockMapSoundClip);
+            
+            // Check if this is a new unlock
+            bool wasAlreadyUnlocked = MapSpawner.instance.isMapBeachUnlocked;
             MapSpawner.instance.isMapBeachUnlocked = true;
-            PlayerPrefs.SetInt("IsMapBeachUnlocked", 1); // Lưu trạng thái mở khóa
+            PlayerPrefs.SetInt("IsMapBeachUnlocked", 1);
+
+            // Only count the 5 additional maps: Beach, Desert, Field, Ice, Lava (not City)
+            int unlockedMapsCount = 0;
+            if (MapSpawner.instance.isMapBeachUnlocked) unlockedMapsCount++;
+            if (MapSpawner.instance.isMapDesertUnlocked) unlockedMapsCount++;
+            if (MapSpawner.instance.isMapFieldUnlocked) unlockedMapsCount++;
+            if (MapSpawner.instance.isMapIceUnlocked) unlockedMapsCount++;
+            if (MapSpawner.instance.isMapLavaUnlocked) unlockedMapsCount++;
+            
+            // Only update if progress increased
+            if (unlockedMapsCount > MissionAchievements.instance.achievementMission5Progress)
+            {
+                MissionAchievements.instance.achievementMission5Progress = unlockedMapsCount;
+                MissionAchievements.instance.UpdateAchievementMission();
+                Debug.Log($"[MAP UNLOCK] Beach unlocked. Total progress: {unlockedMapsCount}/5");
+            }
+
             BonusSpawner.instance.rocketPrefabs = ChangeBonusMap.instance.bonusMapBeach;
             PlayerPrefs.Save();
             
@@ -272,8 +362,28 @@ public class Plane : MonoBehaviour
         if (other.CompareTag("MapStartDesert") && !isBoom)
         {
             AudioManager.instance.PlaySound(AudioManager.instance.unlockMapSoundClip);
+            
+            // Check if this is a new unlock
+            bool wasAlreadyUnlocked = MapSpawner.instance.isMapDesertUnlocked;
             MapSpawner.instance.isMapDesertUnlocked = true;
-            PlayerPrefs.SetInt("IsMapDesertUnlocked", 1); // Lưu trạng thái mở khóa
+            PlayerPrefs.SetInt("IsMapDesertUnlocked", 1);
+
+            // Only count the 5 additional maps: Beach, Desert, Field, Ice, Lava (not City)
+            int unlockedMapsCount = 0;
+            if (MapSpawner.instance.isMapBeachUnlocked) unlockedMapsCount++;
+            if (MapSpawner.instance.isMapDesertUnlocked) unlockedMapsCount++;
+            if (MapSpawner.instance.isMapFieldUnlocked) unlockedMapsCount++;
+            if (MapSpawner.instance.isMapIceUnlocked) unlockedMapsCount++;
+            if (MapSpawner.instance.isMapLavaUnlocked) unlockedMapsCount++;
+            
+            // Only update if progress increased
+            if (unlockedMapsCount > MissionAchievements.instance.achievementMission5Progress)
+            {
+                MissionAchievements.instance.achievementMission5Progress = unlockedMapsCount;
+                MissionAchievements.instance.UpdateAchievementMission();
+                Debug.Log($"[MAP UNLOCK] Desert unlocked. Total progress: {unlockedMapsCount}/5");
+            }
+
             BonusSpawner.instance.rocketPrefabs = ChangeBonusMap.instance.bonusMapDesert;
             PlayerPrefs.Save();
             
@@ -285,8 +395,28 @@ public class Plane : MonoBehaviour
         if (other.CompareTag("MapStartField") && !isBoom)
         {
             AudioManager.instance.PlaySound(AudioManager.instance.unlockMapSoundClip);
+            
+            // Check if this is a new unlock
+            bool wasAlreadyUnlocked = MapSpawner.instance.isMapFieldUnlocked;
             MapSpawner.instance.isMapFieldUnlocked = true;
-            PlayerPrefs.SetInt("IsMapFieldUnlocked", 1); // Lưu trạng thái mở khóa
+            PlayerPrefs.SetInt("IsMapFieldUnlocked", 1);
+
+            // Only count the 5 additional maps: Beach, Desert, Field, Ice, Lava (not City)
+            int unlockedMapsCount = 0;
+            if (MapSpawner.instance.isMapBeachUnlocked) unlockedMapsCount++;
+            if (MapSpawner.instance.isMapDesertUnlocked) unlockedMapsCount++;
+            if (MapSpawner.instance.isMapFieldUnlocked) unlockedMapsCount++;
+            if (MapSpawner.instance.isMapIceUnlocked) unlockedMapsCount++;
+            if (MapSpawner.instance.isMapLavaUnlocked) unlockedMapsCount++;
+            
+            // Only update if progress increased
+            if (unlockedMapsCount > MissionAchievements.instance.achievementMission5Progress)
+            {
+                MissionAchievements.instance.achievementMission5Progress = unlockedMapsCount;
+                MissionAchievements.instance.UpdateAchievementMission();
+                Debug.Log($"[MAP UNLOCK] Field unlocked. Total progress: {unlockedMapsCount}/5");
+            }
+
             BonusSpawner.instance.rocketPrefabs = ChangeBonusMap.instance.bonusMapField;
             PlayerPrefs.Save();
             
@@ -298,8 +428,28 @@ public class Plane : MonoBehaviour
         if (other.CompareTag("MapStartIce") && !isBoom)
         {
             AudioManager.instance.PlaySound(AudioManager.instance.unlockMapSoundClip);
+            
+            // Check if this is a new unlock
+            bool wasAlreadyUnlocked = MapSpawner.instance.isMapIceUnlocked;
             MapSpawner.instance.isMapIceUnlocked = true;
-            PlayerPrefs.SetInt("IsMapIceUnlocked", 1); // Lưu trạng thái mở khóa
+            PlayerPrefs.SetInt("IsMapIceUnlocked", 1);
+
+            // Only count the 5 additional maps: Beach, Desert, Field, Ice, Lava (not City)
+            int unlockedMapsCount = 0;
+            if (MapSpawner.instance.isMapBeachUnlocked) unlockedMapsCount++;
+            if (MapSpawner.instance.isMapDesertUnlocked) unlockedMapsCount++;
+            if (MapSpawner.instance.isMapFieldUnlocked) unlockedMapsCount++;
+            if (MapSpawner.instance.isMapIceUnlocked) unlockedMapsCount++;
+            if (MapSpawner.instance.isMapLavaUnlocked) unlockedMapsCount++;
+            
+            // Only update if progress increased
+            if (unlockedMapsCount > MissionAchievements.instance.achievementMission5Progress)
+            {
+                MissionAchievements.instance.achievementMission5Progress = unlockedMapsCount;
+                MissionAchievements.instance.UpdateAchievementMission();
+                Debug.Log($"[MAP UNLOCK] Ice unlocked. Total progress: {unlockedMapsCount}/5");
+            }
+
             BonusSpawner.instance.rocketPrefabs = ChangeBonusMap.instance.bonusMapIce;
             PlayerPrefs.Save();
             
@@ -311,8 +461,28 @@ public class Plane : MonoBehaviour
         if (other.CompareTag("MapStartLava") && !isBoom)
         {
             AudioManager.instance.PlaySound(AudioManager.instance.unlockMapSoundClip);
+            
+            // Check if this is a new unlock
+            bool wasAlreadyUnlocked = MapSpawner.instance.isMapLavaUnlocked;
             MapSpawner.instance.isMapLavaUnlocked = true;
-            PlayerPrefs.SetInt("IsMapLavaUnlocked", 1); // Lưu trạng thái mở khóa
+            PlayerPrefs.SetInt("IsMapLavaUnlocked", 1);
+            
+            // Only count the 5 additional maps: Beach, Desert, Field, Ice, Lava (not City)
+            int unlockedMapsCount = 0;
+            if (MapSpawner.instance.isMapBeachUnlocked) unlockedMapsCount++;
+            if (MapSpawner.instance.isMapDesertUnlocked) unlockedMapsCount++;
+            if (MapSpawner.instance.isMapFieldUnlocked) unlockedMapsCount++;
+            if (MapSpawner.instance.isMapIceUnlocked) unlockedMapsCount++;
+            if (MapSpawner.instance.isMapLavaUnlocked) unlockedMapsCount++;
+            
+            // Only update if progress increased
+            if (unlockedMapsCount > MissionAchievements.instance.achievementMission5Progress)
+            {
+                MissionAchievements.instance.achievementMission5Progress = unlockedMapsCount;
+                MissionAchievements.instance.UpdateAchievementMission();
+                Debug.Log($"[MAP UNLOCK] Lava unlocked. Total progress: {unlockedMapsCount}/5");
+            }
+            
             BonusSpawner.instance.rocketPrefabs = ChangeBonusMap.instance.bonusMapLava;
             PlayerPrefs.Save();
             
@@ -441,6 +611,14 @@ public class Plane : MonoBehaviour
             Debug.LogWarning("Airplane Rigidbody2D not found!");
             yield break;
         }
+        if(SuperPlaneManager.instance != null)
+        {
+            SuperPlaneManager.instance.ResetBuffBoostandFuelSuperPlane1();
+            SuperPlaneManager.instance.ResetBuffBoostandFuelSuperPlane2();
+            SuperPlaneManager.instance.ResetBuffBoostandFuelSuperPlane3();
+            SuperPlaneManager.instance.ResetBuffBoostandFuelSuperPlane4();
+            SuperPlaneManager.instance.ResetBuffBoostandFuelSuperPlane5();
+        }
         GManager.instance.downFuelImage.gameObject.SetActive(false);
         GManager.instance.upAircraftImage.gameObject.SetActive(false);
         MissionDaily.instance.dailyMission3Progress++;
@@ -496,6 +674,7 @@ public class Plane : MonoBehaviour
             airplaneRb.transform.eulerAngles = finalRotation;
             airplaneRb.velocity = Vector2.zero;
             isInAirPort = true;
+            
             GManager.instance.isBonus = true;   
             
             // *** KIỂM TRA VÀ SET SUPER BONUS SAU KHI MÁY BAY DỪNG HOÀN TOÀN ***
@@ -921,5 +1100,68 @@ public class Plane : MonoBehaviour
         Rigidbody2D airplaneRb = GManager.instance.airplaneRigidbody2D;
         airplaneRb.gameObject.SetActive(false);
         Debug.Log("Airplane deactivated after delay");
+    }
+
+    // Load SuperPlane status when game starts
+    void LoadSuperPlaneStatus()
+    {
+        if (SuperPlaneManager.instance == null)
+        {
+            Debug.LogWarning("[PLANE] SuperPlaneManager instance is null");
+            return;
+        }
+
+        int currentPlaneIndex = PlayerPrefs.GetInt("isCheckedPlaneIndex", 13);
+        Debug.Log($"[PLANE] Loading SuperPlane status for plane index: {currentPlaneIndex}");
+        
+        CheckSuperPlaneByIndex(currentPlaneIndex);
+    }
+
+    // Check and set SuperPlane status by plane index  
+    void CheckSuperPlaneByIndex(int planeIndex)
+    {
+        if (SuperPlaneManager.instance == null) 
+        {
+            Debug.LogWarning("[PLANE] SuperPlaneManager instance is null in CheckSuperPlaneByIndex");
+            return;
+        }
+        
+        // Reset all SuperPlane flags first
+        SuperPlaneManager.instance.isSuperPlane1 = false;
+        SuperPlaneManager.instance.isSuperPlane2 = false;
+        SuperPlaneManager.instance.isSuperPlane3 = false;
+        SuperPlaneManager.instance.isSuperPlane4 = false;
+        SuperPlaneManager.instance.isSuperPlane5 = false;
+        
+        // Set SuperPlane based on plane index
+        switch (planeIndex)
+        {
+            case 2: // Plane 3 = SuperPlane1 
+                SuperPlaneManager.instance.isSuperPlane1 = true;
+                Debug.Log("[PLANE] SuperPlane1 activated for Plane 3");
+                break;
+            case 5: // Plane 6 = SuperPlane2
+                SuperPlaneManager.instance.isSuperPlane2 = true;
+                Debug.Log("[PLANE] SuperPlane2 activated for Plane 6");
+                break;
+            case 7: // Plane 8 = SuperPlane3
+                SuperPlaneManager.instance.isSuperPlane3 = true;
+                Debug.Log("[PLANE] SuperPlane3 activated for Plane 8");
+                break;
+            case 11: // Plane 12 = SuperPlane4
+                SuperPlaneManager.instance.isSuperPlane4 = true;
+                Debug.Log("[PLANE] SuperPlane4 activated for Plane 12");
+                break;
+            case 14: // Plane 15 = SuperPlane5
+                SuperPlaneManager.instance.isSuperPlane5 = true;
+                Debug.Log("[PLANE] SuperPlane5 activated for Plane 15");
+                break;
+            default:
+                Debug.Log($"[PLANE] No SuperPlane for plane index: {planeIndex}");
+                break;
+        }
+        
+        // Verify the SuperPlane status was set correctly
+        Debug.Log($"[PLANE] SuperPlane Status - SP1: {SuperPlaneManager.instance.isSuperPlane1}, SP2: {SuperPlaneManager.instance.isSuperPlane2}, SP3: {SuperPlaneManager.instance.isSuperPlane3}, SP4: {SuperPlaneManager.instance.isSuperPlane4}, SP5: {SuperPlaneManager.instance.isSuperPlane5}");
     }
 }

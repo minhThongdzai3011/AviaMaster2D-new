@@ -97,7 +97,7 @@ public class MissionAchievements : MonoBehaviour
     public int[] achievementMission3Target = {10, 50, 120, 300, 500};
     public int achievementMission4Progress = 0;
     public int[] achievementMission4Target = {10, 30, 120, 360, 1000};
-    public int achievementMission5Progress = 0;
+    public int achievementMission5Progress = 1;
     public int[] achievementMission5Target = {2, 3, 4, 5, 6};
 
     public bool isReceivedAchievement1Reward = false;
@@ -110,12 +110,33 @@ public class MissionAchievements : MonoBehaviour
     public bool isFalseButton3ClickedAchie = false;
     public bool isFalseButton4ClickedAchie = false;
     public bool isFalseButton5ClickedAchie = false;
+    
+    [Header("Flight Time Tracking")]
+    public float flightStartTime;
+    public float flightEndTime;
+    public bool isFlightTimeActive = false;
+    public float cumulativeFlightTimeSeconds = 0f; // Tích lũy thời gian bay tổng
+    
     // Start is called before the first frame update
+    void Awake()
+    {
+        // Ensure instance is set early to prevent null reference errors
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else if (instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+    }
+    
     void Start()
     {
         Load();
-        UpdateAchievementMission();
         completeRewardCollection();
+        UpdateAchievementMission();
     }
 
     // Helper method to format numbers (1000 -> 1k, 1000000 -> 1M)
@@ -282,11 +303,15 @@ public class MissionAchievements : MonoBehaviour
         {
             if (!isAchievementMission4Completed && !isReceivedAchievement4Reward)
             {
-                imageFillAchievementMission4.fillAmount = (float)achievementMission4Progress / achievementMission4Target[achievementMission4CurrentLevel];
+                // Convert progress back to decimal minutes for display
+                float currentMinutes = achievementMission4Progress / 100f;
+                int targetMinutes = achievementMission4Target[achievementMission4CurrentLevel];
+                
+                imageFillAchievementMission4.fillAmount = currentMinutes / targetMinutes;
                 Debug.Log("Achievement Mission 4 Progress: " + imageFillAchievementMission4.fillAmount);
-                textAchievementMission4.text = achievementMission4Progress + "/" + achievementMission4Target[achievementMission4CurrentLevel];
+                textAchievementMission4.text = currentMinutes.ToString("F2") + "/" + targetMinutes;
 
-                if (achievementMission4Progress >= achievementMission4Target[achievementMission4CurrentLevel])
+                if (currentMinutes >= targetMinutes)
                 {
                     isAchievementMission4Completed = true;
                     buttonAchievementMission4.interactable = true;
@@ -350,6 +375,9 @@ public class MissionAchievements : MonoBehaviour
         PlayerPrefs.SetInt("AchievementMission4Progress", achievementMission4Progress);
         PlayerPrefs.SetInt("AchievementMission5Progress", achievementMission5Progress);
         
+        // Save cumulative flight time
+        PlayerPrefs.SetFloat("CumulativeFlightTimeSeconds", cumulativeFlightTimeSeconds);
+        
         PlayerPrefs.SetInt("AchievementMission1Completed", isAchievementMission1Completed ? 1 : 0);
         PlayerPrefs.SetInt("AchievementMission2Completed", isAchievementMission2Completed ? 1 : 0);
         PlayerPrefs.SetInt("AchievementMission3Completed", isAchievementMission3Completed ? 1 : 0);
@@ -375,7 +403,10 @@ public class MissionAchievements : MonoBehaviour
         achievementMission2Progress = PlayerPrefs.GetInt("AchievementMission2Progress", 0);
         achievementMission3Progress = PlayerPrefs.GetInt("AchievementMission3Progress", 0);
         achievementMission4Progress = PlayerPrefs.GetInt("AchievementMission4Progress", 0);
-        achievementMission5Progress = PlayerPrefs.GetInt("AchievementMission5Progress", 0);
+        achievementMission5Progress = PlayerPrefs.GetInt("AchievementMission5Progress", 1); // Default is 1 because City map is unlocked by default
+        
+        // Load cumulative flight time
+        cumulativeFlightTimeSeconds = PlayerPrefs.GetFloat("CumulativeFlightTimeSeconds", 0f);
         
         isAchievementMission1Completed = PlayerPrefs.GetInt("AchievementMission1Completed", 0) == 1;
         isAchievementMission2Completed = PlayerPrefs.GetInt("AchievementMission2Completed", 0) == 1;
@@ -403,6 +434,9 @@ public class MissionAchievements : MonoBehaviour
         achievementMission3Progress = 0;
         achievementMission4Progress = 0;
         achievementMission5Progress = 0;
+        
+        // Reset cumulative flight time
+        cumulativeFlightTimeSeconds = 0f;
 
         isAchievementMission1Completed = false;
         isAchievementMission2Completed = false;
@@ -475,11 +509,12 @@ public class MissionAchievements : MonoBehaviour
         {
             Debug.Log("Achievement Mission 1 Reward Claimed! Level: " + (achievementMission1CurrentLevel + 1));
             
-            // Trao thưởng tiền cho người chơi
-            GManager.instance.totalMoney += prizeRewardAchievement1[achievementMission1CurrentLevel];
-            PlayerPrefs.SetFloat("TotalMoney", GManager.instance.totalMoney);
+            // Trao thưởng kim cương cho người chơi
+            GManager.instance.totalDiamond += prizeRewardAchievement1[achievementMission1CurrentLevel];
+            GManager.instance.totalDiamondText.text = GManager.instance.totalDiamond.ToString();
+            PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
             PlayerPrefs.Save();
-            GManager.instance.SaveTotalMoney();
+            GManager.instance.SaveTotalDiamond();
             
             // Giảm notification counter
             MissionManager.instance.textQuantityRewardValue--;
@@ -491,6 +526,8 @@ public class MissionAchievements : MonoBehaviour
             
             // Tăng level (index) lên 1
             achievementMission1CurrentLevel++;
+            MissionPlane.instance.planeMission3Progress++;
+            MissionPlane.instance.UpdatePlaneMission();
             
             // Reset cho level mới
             isAchievementMission1Completed = false;
@@ -528,11 +565,12 @@ public class MissionAchievements : MonoBehaviour
         {
             Debug.Log("Achievement Mission 2 Reward Claimed! Level: " + (achievementMission2CurrentLevel + 1));
             
-            // Trao thưởng tiền
-            GManager.instance.totalMoney += prizeRewardAchievement2[achievementMission2CurrentLevel];
-            PlayerPrefs.SetFloat("TotalMoney", GManager.instance.totalMoney);
+            // Trao thưởng kim cương
+            GManager.instance.totalDiamond += prizeRewardAchievement2[achievementMission2CurrentLevel];
+            PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
+            GManager.instance.totalDiamondText.text = GManager.instance.totalDiamond.ToString();
             PlayerPrefs.Save();
-            GManager.instance.SaveTotalMoney();
+            GManager.instance.SaveTotalDiamond();
             
             MissionManager.instance.textQuantityRewardValue--;
             MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
@@ -542,6 +580,9 @@ public class MissionAchievements : MonoBehaviour
             }
             
             achievementMission2CurrentLevel++;
+            MissionPlane.instance.planeMission3Progress++;
+            MissionPlane.instance.UpdatePlaneMission();
+            
             isAchievementMission2Completed = false;
             achievementMission2Progress = 0;
             isReceivedAchievement2Reward = false;
@@ -589,6 +630,9 @@ public class MissionAchievements : MonoBehaviour
             }
             
             achievementMission3CurrentLevel++;
+            MissionPlane.instance.planeMission3Progress++;
+            MissionPlane.instance.UpdatePlaneMission();
+            
             isAchievementMission3Completed = false;
             achievementMission3Progress = 0;
             isReceivedAchievement3Reward = false;
@@ -636,6 +680,9 @@ public class MissionAchievements : MonoBehaviour
             }
             
             achievementMission4CurrentLevel++;
+            MissionPlane.instance.planeMission3Progress++;
+            MissionPlane.instance.UpdatePlaneMission();
+            
             isAchievementMission4Completed = false;
             achievementMission4Progress = 0;
             isReceivedAchievement4Reward = false;
@@ -683,6 +730,9 @@ public class MissionAchievements : MonoBehaviour
             }
             
             achievementMission5CurrentLevel++;
+            MissionPlane.instance.planeMission3Progress++;
+            MissionPlane.instance.UpdatePlaneMission();
+            
             isAchievementMission5Completed = false;
             achievementMission5Progress = 0;
             isReceivedAchievement5Reward = false;
@@ -712,46 +762,144 @@ public class MissionAchievements : MonoBehaviour
     }
 
     public void completeRewardCollection(){
-        if(isReceivedAchievement1Reward){
+        // Mission 1 - Only show claimed status when ALL 5 levels are completed
+        if(achievementMission1CurrentLevel >= achievementMission1Target.Length){
             buttonAchievementMission1.interactable = false;
             imageAchievementMission1.sprite = spriteMissionClaimed;
             imageFillAchievementMission1.sprite = spriteFillMissionCompleted;
             buttonAchievementMission1.image.sprite = spriteButtonClaimed;
             imageBackGroundFillPlaneMission1.sprite = spriteBackGroundFillMissionCompleted;
-            textAchievementMission1.text = "Claimed";
+            textAchievementMission1.text = "MAX LEVEL";
+            imageFillAchievementMission1.fillAmount = 1f;
         }
-        if(isReceivedAchievement2Reward){
+        else if(isAchievementMission1Completed){
+            buttonAchievementMission1.interactable = true;
+            buttonAchievementMission1.image.sprite = spriteButtonCompleted;
+            textAchievementMission1.text = "Mission Completed";
+        }
+        
+        // Mission 2
+        if(achievementMission2CurrentLevel >= achievementMission2Target.Length){
             buttonAchievementMission2.interactable = false;
             imageAchievementMission2.sprite = spriteMissionClaimed;
             imageFillAchievementMission2.sprite = spriteFillMissionCompleted;
             buttonAchievementMission2.image.sprite = spriteButtonClaimed;
             imageBackGroundFillPlaneMission2.sprite = spriteBackGroundFillMissionCompleted;
-            textAchievementMission2.text = "Claimed";
+            textAchievementMission2.text = "MAX LEVEL";
+            imageFillAchievementMission2.fillAmount = 1f;
         }
-        if(isReceivedAchievement3Reward){
+        else if(isAchievementMission2Completed){
+            buttonAchievementMission2.interactable = true;
+            buttonAchievementMission2.image.sprite = spriteButtonCompleted;
+            textAchievementMission2.text = "Mission Completed";
+        }
+        
+        // Mission 3
+        if(achievementMission3CurrentLevel >= achievementMission3Target.Length){
             buttonAchievementMission3.interactable = false;
             imageAchievementMission3.sprite = spriteMissionClaimed;
             imageFillAchievementMission3.sprite = spriteFillMissionCompleted;
             buttonAchievementMission3.image.sprite = spriteButtonClaimed;
             imageBackGroundFillPlaneMission3.sprite = spriteBackGroundFillMissionCompleted;
-            textAchievementMission3.text = "Claimed";
+            textAchievementMission3.text = "MAX LEVEL";
+            imageFillAchievementMission3.fillAmount = 1f;
         }
-        if(isReceivedAchievement4Reward){
+        else if(isAchievementMission3Completed){
+            buttonAchievementMission3.interactable = true;
+            buttonAchievementMission3.image.sprite = spriteButtonCompleted;
+            textAchievementMission3.text = "Mission Completed";
+        }
+        
+        // Mission 4
+        if(achievementMission4CurrentLevel >= achievementMission4Target.Length){
             buttonAchievementMission4.interactable = false;
             imageAchievementMission4.sprite = spriteMissionClaimed;
             imageFillAchievementMission4.sprite = spriteFillMissionCompleted;
             buttonAchievementMission4.image.sprite = spriteButtonClaimed;
             imageBackGroundFillPlaneMission4.sprite = spriteBackGroundFillMissionCompleted;
-            textAchievementMission4.text = "Claimed";
+            textAchievementMission4.text = "MAX LEVEL";
+            imageFillAchievementMission4.fillAmount = 1f;
         }
-        if(isReceivedAchievement5Reward){
+        else if(isAchievementMission4Completed){
+            buttonAchievementMission4.interactable = true;
+            buttonAchievementMission4.image.sprite = spriteButtonCompleted;
+            textAchievementMission4.text = "Mission Completed";
+        }
+        
+        // Mission 5
+        if(achievementMission5CurrentLevel >= achievementMission5Target.Length){
             buttonAchievementMission5.interactable = false;
             imageAchievementMission5.sprite = spriteMissionClaimed;
             imageFillAchievementMission5.sprite = spriteFillMissionCompleted;
             buttonAchievementMission5.image.sprite = spriteButtonClaimed;
             imageBackGroundFillPlaneMission5.sprite = spriteBackGroundFillMissionCompleted;
-            textAchievementMission5.text = "Claimed";
+            textAchievementMission5.text = "MAX LEVEL";
+            imageFillAchievementMission5.fillAmount = 1f;
         }
+        else if(isAchievementMission5Completed){
+            buttonAchievementMission5.interactable = true;
+            buttonAchievementMission5.image.sprite = spriteButtonCompleted;
+            textAchievementMission5.text = "Mission Completed";
+        }
+    }
+
+    // Flight Time Tracking Methods
+    public void StartFlightTimer()
+    {
+        flightStartTime = Time.time;
+        isFlightTimeActive = true;
+        Debug.Log("[MISSION] Flight timer started at: " + flightStartTime);
+    }
+    
+    public void StopFlightTimerAndUpdateMission()
+    {
+        if (isFlightTimeActive)
+        {
+            flightEndTime = Time.time;
+            float thisFlightTime = flightEndTime - flightStartTime;
+            isFlightTimeActive = false;
+            
+            // Cộng dồn thời gian bay tổng (theo giây)
+            cumulativeFlightTimeSeconds += thisFlightTime;
+            
+            // Convert tổng thời gian sang phút với 2 chữ số thập phân
+            float totalMinutes = cumulativeFlightTimeSeconds / 60f;
+            
+            // Cập nhật progress với số phút có thập phân (nhân 100 để làm việc với int)
+            int progressValue = Mathf.FloorToInt(totalMinutes * 100f);
+            achievementMission4Progress = progressValue;
+            
+            Debug.Log($"[MISSION] Flight completed! This flight: {thisFlightTime:F1}s");
+            Debug.Log($"[MISSION] Total cumulative time: {cumulativeFlightTimeSeconds:F1}s ({totalMinutes:F2} minutes)");
+            Debug.Log($"[MISSION] Achievement Mission 4 Progress: {(progressValue/100f):F2}/{(achievementMission4CurrentLevel < achievementMission4Target.Length ? achievementMission4Target[achievementMission4CurrentLevel] : "MAX")}");
+            
+            // Update mission UI
+            UpdateAchievementMission();
+            Save();
+        }
+        else
+        {
+            Debug.LogWarning("[MISSION] StopFlightTimer called but flight timer was not active");
+        }
+    }
+    
+    public string FormatFlightTime(float timeInSeconds)
+    {
+        int minutes = Mathf.FloorToInt(timeInSeconds / 60f);
+        int seconds = Mathf.FloorToInt(timeInSeconds % 60f);
+        
+        if (minutes > 0)
+            return string.Format("{0}:{1:00}", minutes, seconds);
+        else
+            return string.Format("{0}s", seconds);
+    }
+    
+    public float GetCurrentFlightTime()
+    {
+        if (isFlightTimeActive)
+            return Time.time - flightStartTime;
+        else
+            return 0f;
     }
 
 }

@@ -675,6 +675,15 @@ public class Settings : MonoBehaviour
     {
         float distanceValue = Plane.instance.moneyDistance;
         float collectValue  = Plane.instance.moneyCollect;
+        MissionPlane.instance.planeMission1Progress += ((int)distanceValue);
+        MissionPlane.instance.UpdatePlaneMission();
+
+        if(SuperPlaneManager.instance != null && SuperPlaneManager.instance.isSuperPlane3 )
+        {
+            distanceValue *= 1.5f;
+            collectValue *= 1.5f;
+            Debug.Log("Kích hoạt Super Plane 5: Tiền thưởng gấp đôi!");
+        }
 
         float bonusDuration = 1f;
 
@@ -694,30 +703,64 @@ public class Settings : MonoBehaviour
             bonusText.text = "Super Bonus : x5";
             GManager.instance.isSuperBonus = false;
             GManager.instance.isBonus = false;
+            MissionAchievements.instance.achievementMission3Progress++;
+            MissionAchievements.instance.UpdateAchievementMission();
         }
 
         else bonusText.text = "No Bonus";
 
         Sequence seq = DOTween.Sequence();
         AudioManager.instance.PlaySound(AudioManager.instance.countMoneySoundClip);
-        // 1. count distance
-        seq.Append(DOVirtual.Float(0, distanceValue, 2f, v =>
-        {
-            distanceMoneyText.text = ((int)v).ToString();
-        }));
 
-        // 2. count collect
-        seq.Join(DOVirtual.Float(0, collectValue, 2f, v =>
+        if (SuperPlaneManager.instance != null && SuperPlaneManager.instance.isSuperPlane3)
         {
-            collectMoneyText.text = ((int)v).ToString();
-        }));
-        AudioManager.instance.StopPlayerSound();
-        AudioManager.instance.PlaySound(AudioManager.instance.countMoneySoundClip);
-        // 3. count total
-        seq.Join(DOVirtual.Float(0, totalValue, bonusDuration, v =>
+            distanceMoneyText.color = new Color32(156, 147, 0, 255);
+            collectMoneyText.color = new Color32(156, 147, 0, 255);
+            totalMoneyPlayText.color = new Color32(156, 147, 0, 255);
+            // 1. count distance
+            seq.Append(DOVirtual.Float(0, distanceValue, 2f, v =>
+            {
+                distanceMoneyText.text = ((int)v).ToString();
+            }));
+
+            // 2. count collect
+            seq.Join(DOVirtual.Float(0, collectValue, 2f, v =>
+            {
+                collectMoneyText.text = ((int)v).ToString();
+            }));
+
+            AudioManager.instance.StopPlayerSound();
+            AudioManager.instance.PlaySound(AudioManager.instance.countMoneySoundClip);
+            // 3. count total
+            seq.Join(DOVirtual.Float(0, totalValue, bonusDuration, v =>
+            {
+                totalMoneyPlayText.text = ((int)v).ToString();
+            }));
+        }
+        else
         {
-            totalMoneyPlayText.text = ((int)v).ToString();
-        }));
+            // 1. count distance
+            seq.Append(DOVirtual.Float(0, distanceValue, 2f, v =>
+            {
+                distanceMoneyText.text = ((int)v).ToString();
+            }));
+
+            // 2. count collect
+            seq.Join(DOVirtual.Float(0, collectValue, 2f, v =>
+            {
+                collectMoneyText.text = ((int)v).ToString();
+            }));
+
+            AudioManager.instance.StopPlayerSound();
+            AudioManager.instance.PlaySound(AudioManager.instance.countMoneySoundClip);
+            // 3. count total
+            seq.Join(DOVirtual.Float(0, totalValue, bonusDuration, v =>
+            {
+                totalMoneyPlayText.text = ((int)v).ToString();
+            }));
+        }
+
+
         Debug.Log("Total Value: " + totalValue);
         isPrizeCoin = true;
 
@@ -919,7 +962,7 @@ public class Settings : MonoBehaviour
         {
             GManager.instance.ResetAchievementSlider();
             GManager.instance.tempDistanceTraveled -= 300f;
-            GManager.instance.sliderAchievement.value = 0f;
+            GManager.instance.sliderAchievement.fillAmount = 0f;
             Debug.Log("Slider reset xong.");
             GManager.instance.milestoneDistance = GManager.instance.milestoneDistance2;
         });

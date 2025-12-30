@@ -109,7 +109,7 @@ public class GManager : MonoBehaviour
     public TextMeshProUGUI newMapText;
 
     [Header("Thành tích")]
-    public Slider sliderAchievement;
+    public Image sliderAchievement;
 
     [Header("Người chơi")]
     public bool isControllable = false;
@@ -149,7 +149,7 @@ public class GManager : MonoBehaviour
         buttonUpImage.color = Color.gray;
         buttonBoosterPlaneImage.color = Color.gray;
 
-        sliderAchievement.value = 0f;
+        sliderAchievement.fillAmount = 0f;
         startZ = airplaneRigidbody2D.transform.rotation.eulerAngles.z;
 
         // THÊM: Load dữ liệu nâng cấp TRƯỚC khi tính toán
@@ -234,6 +234,17 @@ public class GManager : MonoBehaviour
                 Debug.LogError("Rigidbody2D chưa được gán!");
                 return;
             }
+            
+            // Start flight timer for mission achievement 4
+            if (MissionAchievements.instance != null)
+            {
+                MissionAchievements.instance.StartFlightTimer();
+            }
+            else
+            {
+                Debug.LogWarning("[LAUNCH] MissionAchievements.instance is null - cannot start flight timer");
+            }
+            
             AudioManager.instance.StopSoundBackground();
             Settings.instance.imageHighScore.enabled = false;
             if (PositionX.instance.isMaxPower){
@@ -286,6 +297,8 @@ public class GManager : MonoBehaviour
     public bool isPlayBolide = false;
     IEnumerator LaunchSequence()
     {
+        if(SuperPlaneManager.instance != null && SuperPlaneManager.instance.isSuperPlane5) SuperPlaneManager.instance.imageSkillSuperPlane5.gameObject.SetActive(true);
+        if(SuperPlaneManager.instance != null && SuperPlaneManager.instance.isSuperPlane2) SuperPlaneManager.instance.gameObjectBulletPlane.gameObject.SetActive(true); SuperPlaneManager.instance.imageSkillSuperPlane2.gameObject.SetActive(true);
         yield return new WaitForSeconds(0.5f);
         arrowAngleZ.SetActive(false);
         rotationXObject.SetActive(false);
@@ -409,7 +422,6 @@ public class GManager : MonoBehaviour
         float angleRad = Mathf.Deg2Rad * climbAngle;
         Vector2 launchDirection = new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad)).normalized;
 
-        // ✅ Không reset velocity để giữ momentum từ Bước 1 (bay ngang)
         // airplaneRigidbody2D.velocity = Vector2.zero;
         airplaneRigidbody2D.AddForce(launchDirection * climbForce, ForceMode2D.Impulse);
 
@@ -423,6 +435,67 @@ public class GManager : MonoBehaviour
         if(PositionX.instance != null && PositionX.instance.isMaxPower)
         {
             targetAltitude += boostedAltitude * 0.5f; // Tăng thêm 50% nếu max power
+            if (SuperPlaneManager.instance != null && SuperPlaneManager.instance.isSuperPlane1)
+            {
+                targetAltitude += boostedAltitude * 0.2f; // Tăng thêm 20% nếu Super Plane active
+                Debug.Log("Max Power and Super Plane 1 Active in Launch Sequence" );
+            }
+            if (SuperPlaneManager.instance != null && SuperPlaneManager.instance.isSuperPlane2)
+            {
+                targetAltitude += boostedAltitude * 0.05f; // Tăng thêm 5% nếu Super Plane 2 active
+                Debug.Log("Max Power and Super Plane 2 Active in Launch Sequence" );
+            }
+            if (SuperPlaneManager.instance != null && SuperPlaneManager.instance.isSuperPlane3)
+            {
+                targetAltitude += boostedAltitude * 0.05f; // Tăng thêm 5% nếu Super Plane 3 active
+                Debug.Log("Max Power and Super Plane 3 Active in Launch Sequence" );
+            }
+            if (SuperPlaneManager.instance != null && SuperPlaneManager.instance.isSuperPlane4)
+            {
+                targetAltitude += boostedAltitude * 0.05f; // Tăng thêm 5% nếu Super Plane 4 active
+                Debug.Log("Max Power and Super Plane 4 Active in Launch Sequence" );
+            }
+            if (SuperPlaneManager.instance != null && SuperPlaneManager.instance.isSuperPlane5)
+            {
+                targetAltitude += boostedAltitude * 0.05f; // Tăng thêm 5% nếu Super Plane 5 active
+                Debug.Log("Max Power and Super Plane 5 Active in Launch Sequence" );
+            }
+        }
+        else
+        {
+            if (SuperPlaneManager.instance != null && SuperPlaneManager.instance.isSuperPlane1)
+            {
+                targetAltitude += boostedAltitude * 0.2f; // Tăng thêm 20% nếu Super Plane active
+                Debug.Log("Max Power and Super Plane 1 Active in Launch Sequence" );
+            }
+            if (SuperPlaneManager.instance != null && SuperPlaneManager.instance.isSuperPlane2)
+            {
+                targetAltitude += boostedAltitude * 0.05f; // Tăng thêm 5% nếu Super Plane 2 active
+                Debug.Log("Max Power and Super Plane 2 Active in Launch Sequence" );
+            }
+            if (SuperPlaneManager.instance != null && SuperPlaneManager.instance.isSuperPlane3)
+            {
+                targetAltitude += boostedAltitude * 0.05f; // Tăng thêm 5% nếu Super Plane 3 active
+                Debug.Log("Max Power and Super Plane 3 Active in Launch Sequence" );
+            }
+            if (SuperPlaneManager.instance != null && SuperPlaneManager.instance.isSuperPlane4)
+            {
+                targetAltitude += boostedAltitude * 0.05f; // Tăng thêm 5% nếu Super Plane 4 active
+                Debug.Log("Max Power and Super Plane 4 Active in Launch Sequence" );
+            }
+            if (SuperPlaneManager.instance != null && SuperPlaneManager.instance.isSuperPlane5)
+            {
+                targetAltitude += boostedAltitude * 0.05f; // Tăng thêm 5% nếu Super Plane 5 active
+                Debug.Log("Max Power and Super Plane 5 Active in Launch Sequence" );
+            }
+        }
+        if (SuperPlaneManager.instance != null)
+        {
+            SuperPlaneManager.instance.BuffBoostandFuelSuperPlane1();
+            SuperPlaneManager.instance.BuffBoostandFuelSuperPlane2();
+            SuperPlaneManager.instance.BuffBoostandFuelSuperPlane3();
+            SuperPlaneManager.instance.BuffBoostandFuelSuperPlane4();
+            SuperPlaneManager.instance.BuffBoostandFuelSuperPlane5();
         }
         float startAltitude = airplaneRigidbody2D.position.y;
         
@@ -1818,6 +1891,8 @@ public class GManager : MonoBehaviour
             levelFuel += 1;
             rateFuel += 5;
             totalMoney -= moneyFuel;
+            MissionAchievements.instance.achievementMission1Progress += ((int)moneyFuel);
+            MissionAchievements.instance.UpdateAchievementMission();
             moneyFuel = moneyFuel * 1.25f;
             totalMoney = (int)Math.Round(totalMoney, 0);
             totalMoneyText.text = totalMoney.ToString("F0");
@@ -1882,6 +1957,8 @@ public class GManager : MonoBehaviour
             levelBoost += 1;
             rateBoost += 5;
             totalMoney -= moneyBoost;
+            MissionAchievements.instance.achievementMission1Progress += ((int)moneyBoost);
+            MissionAchievements.instance.UpdateAchievementMission();
             moneyBoost = moneyBoost * 1.25f;
             totalMoney = (int)Math.Round(totalMoney, 0);
             totalMoneyText.text = totalMoney.ToString("F0");
@@ -1936,6 +2013,8 @@ public class GManager : MonoBehaviour
             levelPower += 1;
             ratePower += 5;
             totalMoney -= moneyPower;
+            MissionAchievements.instance.achievementMission1Progress += ((int)moneyPower);
+            MissionAchievements.instance.UpdateAchievementMission();
             moneyPower = moneyPower * 1.25f;
             totalMoney = (int)Math.Round(totalMoney, 0);
             totalMoneyText.text = totalMoney.ToString("F0");
@@ -2038,10 +2117,10 @@ public class GManager : MonoBehaviour
             float targetValue = Mathf.Clamp01(distanceInCurrentMilestone / milestoneDistance);
 
             float smoothSpeed = 2f;
-            sliderAchievement.value = Mathf.Lerp(sliderAchievement.value, targetValue, smoothSpeed * Time.deltaTime);
-            if(sliderAchievement.value >= 0.75f)
+            sliderAchievement.fillAmount = Mathf.Lerp(sliderAchievement.fillAmount, targetValue, smoothSpeed * Time.deltaTime);
+            if(sliderAchievement.fillAmount >= 0.75f)
             {
-                sliderAchievement.value = 0.75f;
+                sliderAchievement.fillAmount = 0.75f;
             }
         }
 
@@ -2060,7 +2139,7 @@ public class GManager : MonoBehaviour
     public void ResetAchievementSlider()
     {
         achievementStartDistance = distanceTraveled; 
-        sliderAchievement.value = 0f; 
+        sliderAchievement.fillAmount = 0f; 
         Debug.Log($"Achievement slider reset at distance: {achievementStartDistance:F0}m");
     }
 
@@ -2272,6 +2351,8 @@ public class GManager : MonoBehaviour
     }
     public IEnumerator AircraftPlayUp()
     {
+        
+            yield return new WaitForSeconds(2f);
         if (isAircraftUp)
             yield return new WaitForSeconds(1f);
         {

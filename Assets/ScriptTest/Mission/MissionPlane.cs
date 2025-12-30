@@ -83,6 +83,13 @@ public class MissionPlane : MonoBehaviour
     public bool isFalseButton3Clicked = false;
     public bool isFalseButton4Clicked = false;
     public bool isFalseButton5Clicked = false;
+
+    public bool isUnlockSuperPlane1 = false;
+    public bool isUnlockSuperPlane2 = false;
+    public bool isUnlockSuperPlane3 = false;
+    public bool isUnlockSuperPlane4 = false;
+    public bool isUnlockSuperPlane5 = false;
+
     [Header("Information Super Plane")]
     public Image superPlaneInfoImage;
     public GameObject superPlaneInfoPlane1; 
@@ -323,7 +330,7 @@ public class MissionPlane : MonoBehaviour
         if (isPlaneMission1Completed && !isFalseButton1Clicked)
         {
             Debug.Log("Plane Mission 1 Reward Claimed!");
-            
+            isUnlockSuperPlane1 = true;
             buttonPlaneMission1.image.sprite = spriteButtonClaimed;
             isPlaneMission1Completed = false;
             isFalseButton1Clicked = true;
@@ -332,7 +339,9 @@ public class MissionPlane : MonoBehaviour
             isReceivedPlane1Reward = true;
             textPlaneMission1.text = "Claimed";
             imageBackGroundFillPlaneMission1.sprite = spriteBackGroundFillMissionCompleted;
-
+            Shop.instance.listTextPriceSuperlane[0].text = "Select";
+            MissionAchievements.instance.achievementMission2Progress++;
+            MissionAchievements.instance.UpdateAchievementMission();
             if(isReceivedPlane1Reward)
             {
                 MissionManager.instance.textQuantityRewardValue--;
@@ -350,7 +359,7 @@ public class MissionPlane : MonoBehaviour
         if (isPlaneMission2Completed && !isFalseButton2Clicked)
         {
             Debug.Log("Plane Mission 2 Reward Claimed!");
-            
+            isUnlockSuperPlane2 = true;
             buttonPlaneMission2.image.sprite = spriteButtonClaimed;
             isPlaneMission2Completed = false;
             isFalseButton2Clicked = true;
@@ -359,7 +368,9 @@ public class MissionPlane : MonoBehaviour
             isReceivedPlane2Reward = true;
             textPlaneMission2.text = "Claimed";
             imageBackGroundFillPlaneMission2.sprite = spriteBackGroundFillMissionCompleted;
-
+            Shop.instance.listTextPriceSuperlane[1].text = "Select";
+            MissionAchievements.instance.achievementMission2Progress++;
+            MissionAchievements.instance.UpdateAchievementMission();
             if(isReceivedPlane2Reward)
             {
                 MissionManager.instance.textQuantityRewardValue--;
@@ -377,7 +388,7 @@ public class MissionPlane : MonoBehaviour
         if (isPlaneMission3Completed && !isFalseButton3Clicked)
         {
             Debug.Log("Plane Mission 3 Reward Claimed!");
-            
+            isUnlockSuperPlane3 = true;
             buttonPlaneMission3.image.sprite = spriteButtonClaimed;
             isPlaneMission3Completed = false;
             isFalseButton3Clicked = true;
@@ -386,7 +397,9 @@ public class MissionPlane : MonoBehaviour
             isReceivedPlane3Reward = true;
             textPlaneMission3.text = "Claimed";
             imageBackGroundFillPlaneMission3.sprite = spriteBackGroundFillMissionCompleted;
-
+            Shop.instance.listTextPriceSuperlane[2].text = "Select";
+            MissionAchievements.instance.achievementMission2Progress++;
+            MissionAchievements.instance.UpdateAchievementMission();
             if(isReceivedPlane3Reward)
             {
                 MissionManager.instance.textQuantityRewardValue--;
@@ -404,7 +417,7 @@ public class MissionPlane : MonoBehaviour
         if (isPlaneMission4Completed && !isFalseButton4Clicked)
         {
             Debug.Log("Plane Mission 4 Reward Claimed!");
-            
+                isUnlockSuperPlane4 = true;
             buttonPlaneMission4.image.sprite = spriteButtonClaimed;
             isPlaneMission4Completed = false;
             isFalseButton4Clicked = true;
@@ -413,7 +426,9 @@ public class MissionPlane : MonoBehaviour
             isReceivedPlane4Reward = true;
             textPlaneMission4.text = "Claimed";
             imageBackGroundFillPlaneMission4.sprite = spriteBackGroundFillMissionCompleted;
-
+            Shop.instance.listTextPriceSuperlane[3].text = "Select";
+            MissionAchievements.instance.achievementMission2Progress++;
+            MissionAchievements.instance.UpdateAchievementMission();
             if(isReceivedPlane4Reward)
             {
                 MissionManager.instance.textQuantityRewardValue--;
@@ -431,7 +446,7 @@ public class MissionPlane : MonoBehaviour
         if (isPlaneMission5Completed && !isFalseButton5Clicked)
         {
             Debug.Log("Plane Mission 5 Reward Claimed!");
-            
+                isUnlockSuperPlane5 = true;
             buttonPlaneMission5.image.sprite = spriteButtonClaimed;
             isPlaneMission5Completed = false;
             isFalseButton5Clicked = true;
@@ -440,7 +455,9 @@ public class MissionPlane : MonoBehaviour
             isReceivedPlane5Reward = true;
             textPlaneMission5.text = "Claimed";
             imageBackGroundFillPlaneMission5.sprite = spriteBackGroundFillMissionCompleted;
-
+            Shop.instance.listTextPriceSuperlane[4].text = "Select";
+            MissionAchievements.instance.achievementMission2Progress++;
+            MissionAchievements.instance.UpdateAchievementMission();
             if(isReceivedPlane5Reward)
             {
                 MissionManager.instance.textQuantityRewardValue--;

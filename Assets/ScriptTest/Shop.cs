@@ -46,6 +46,8 @@ public class Shop : MonoBehaviour
     private Vector2[] originalPositions;
     private int[] currentOrder;
     private bool isAnimating = false;
+
+    public TextMeshProUGUI[] listTextPriceSuperlane;
     
     // Tính toán centerIndex động dựa trên số lượng máy bay
     private int CenterIndex => planeImages.Length / 2;
@@ -76,6 +78,9 @@ public class Shop : MonoBehaviour
         
         // *** SỬA: Setup plane theo index được lưu ***
         SetupPlaneByIndex(isCheckedPlaneIndex);
+        
+        // *** THÊM: Load trạng thái SuperPlane ***
+        LoadSuperPlaneStatus();
         
         // *** SỬA: Update UI dựa vào trạng thái bought và selected ***
         UpdateAllButtonsDisplay();
@@ -589,6 +594,9 @@ public class Shop : MonoBehaviour
             GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[targetIndex];
         }
         
+        // Check và set super plane status
+        CheckAndSetSuperPlane(targetIndex);
+        
         Debug.Log($"Đã khôi phục máy bay: {airplaneName} (Index: {targetIndex})");
     }
     
@@ -740,6 +748,8 @@ public class Shop : MonoBehaviour
                 }
                 planePriceText[0].gameObject.SetActive(false);
                 isBuyPlane1Done = true;
+                MissionAchievements.instance.achievementMission2Progress++;
+                MissionAchievements.instance.UpdateAchievementMission();
             }
             else {
                 return;
@@ -771,6 +781,9 @@ public class Shop : MonoBehaviour
             defaultPlane = gameObjectsPlanes[0];
             GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[0];
             isRotaryFrontZDone = false;
+            
+            ResetAllSuperPlaneFlags();
+            
             CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[0].transform;
             CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[0].transform;
             gameObjectsPlanes[0].SetActive(true);
@@ -806,6 +819,8 @@ public class Shop : MonoBehaviour
                 }
                 planePriceText[1].gameObject.SetActive(false);
                 isBuyPlane2Done = true;
+                MissionAchievements.instance.achievementMission2Progress++;
+                MissionAchievements.instance.UpdateAchievementMission();
             }
             else {
                 return;
@@ -836,6 +851,9 @@ public class Shop : MonoBehaviour
         if(gameObjectsPlanes != null && gameObjectsPlanes.Length > 1){
             defaultPlane = gameObjectsPlanes[1];
             isRotaryFrontZDone = false;
+            
+            ResetAllSuperPlaneFlags();
+            
             CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[1].transform;
             CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[1].transform;
             GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[1];
@@ -853,9 +871,8 @@ public class Shop : MonoBehaviour
     public void buyPlane3(){  // Siêu máy bay
         StartCoroutine(PlayButtonEffect(2));
         if(!isBuyPlane3Done){
-            if(GManager.instance.totalDiamond >= 1000)
+            if(MissionPlane.instance != null && MissionPlane.instance.isUnlockSuperPlane1 )
             {
-                GManager.instance.totalDiamond -= 1000;
                 AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
                 PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
                 PlayerPrefs.Save();
@@ -907,7 +924,6 @@ public class Shop : MonoBehaviour
             CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[2].transform;
             gameObjectsPlanes[2].SetActive(true);
 
-            // gọi chỉ số siêu máy bay 20 power và boost
             SuperPlaneManager.instance.isSuperPlane1 = true;
 
             for (int i=0; i<gameObjectsPlanes.Length; i++){
@@ -942,6 +958,8 @@ public class Shop : MonoBehaviour
                 }
                 planePriceText[3].gameObject.SetActive(false);
                 isBuyPlane4Done = true;
+                MissionAchievements.instance.achievementMission2Progress++;
+                MissionAchievements.instance.UpdateAchievementMission();
             }
             else {
                 return;
@@ -972,6 +990,9 @@ public class Shop : MonoBehaviour
             defaultPlane = gameObjectsPlanes[3];
             GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[3];
             isRotaryFrontZDone = false;
+            
+            ResetAllSuperPlaneFlags();
+            
             CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[3].transform;
             CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[3].transform;
             gameObjectsPlanes[3].SetActive(true);
@@ -1007,6 +1028,8 @@ public class Shop : MonoBehaviour
                 }
                 planePriceText[4].gameObject.SetActive(false);
                 isBuyPlane5Done = true;
+                MissionAchievements.instance.achievementMission2Progress++;
+                MissionAchievements.instance.UpdateAchievementMission();
             }
             else {
                 return;
@@ -1037,6 +1060,9 @@ public class Shop : MonoBehaviour
             defaultPlane = gameObjectsPlanes[4];
             GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[4];
             isRotaryFrontZDone = false;
+            
+            ResetAllSuperPlaneFlags();
+            
             CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[4].transform;
             CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[4].transform;
             gameObjectsPlanes[4].SetActive(true);
@@ -1053,9 +1079,8 @@ public class Shop : MonoBehaviour
     public void buyPlane6(){
         StartCoroutine(PlayButtonEffect(5));
         if(!isBuyPlane6Done){
-            if(GManager.instance.totalDiamond >= 2000)
+            if(MissionPlane.instance != null && MissionPlane.instance.isUnlockSuperPlane2 )
             {
-                GManager.instance.totalDiamond -= 2000;
                 AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
                 PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
                 PlayerPrefs.Save();
@@ -1105,8 +1130,17 @@ public class Shop : MonoBehaviour
             CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[5].transform;
             CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[5].transform;
 
-            // gọi chỉ số siêu máy bay bắn ra đạn
-            SuperPlaneManager.instance.isSuperPlane2 = true;
+            if (SuperPlaneManager.instance != null)
+            {
+                SuperPlaneManager.instance.isSuperPlane1 = false;
+                SuperPlaneManager.instance.isSuperPlane2 = false;
+                SuperPlaneManager.instance.isSuperPlane3 = false;
+                SuperPlaneManager.instance.isSuperPlane4 = false;
+                SuperPlaneManager.instance.isSuperPlane5 = false;
+                
+                // gọi chỉ số siêu máy bay bắn ra đạn
+                SuperPlaneManager.instance.isSuperPlane2 = true;
+            }
 
             gameObjectsPlanes[5].SetActive(true);
             for (int i=0; i<gameObjectsPlanes.Length; i++){
@@ -1141,6 +1175,8 @@ public class Shop : MonoBehaviour
                 }
                 planePriceText[6].gameObject.SetActive(false);
                 isBuyPlane7Done = true;
+                MissionAchievements.instance.achievementMission2Progress++;
+                MissionAchievements.instance.UpdateAchievementMission();
             }
             else {
                 return;
@@ -1170,6 +1206,9 @@ public class Shop : MonoBehaviour
         if(gameObjectsPlanes != null && gameObjectsPlanes.Length > 6){
             defaultPlane = gameObjectsPlanes[6];
             GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[6];
+            
+            ResetAllSuperPlaneFlags();
+            
             CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[6].transform;
             CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[6].transform;
             isRotaryFrontZDone = true;
@@ -1187,9 +1226,8 @@ public class Shop : MonoBehaviour
     public void buyPlane8(){
         StartCoroutine(PlayButtonEffect(7));
         if(!isBuyPlane8Done){
-            if(GManager.instance.totalDiamond >= 2000)
+            if(MissionPlane.instance != null && MissionPlane.instance.isUnlockSuperPlane3 )
             {
-                GManager.instance.totalDiamond -= 2000;
                 AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
                 PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
                 PlayerPrefs.Save();
@@ -1239,8 +1277,17 @@ public class Shop : MonoBehaviour
             CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[7].transform;
             CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[7].transform;
 
-            // gọi chỉ số siêu máy bay tăng 50% tiền
-            SuperPlaneManager.instance.isSuperPlane3 = true;
+            if (SuperPlaneManager.instance != null)
+            {
+                SuperPlaneManager.instance.isSuperPlane1 = false;
+                SuperPlaneManager.instance.isSuperPlane2 = false;
+                SuperPlaneManager.instance.isSuperPlane3 = false;
+                SuperPlaneManager.instance.isSuperPlane4 = false;
+                SuperPlaneManager.instance.isSuperPlane5 = false;
+                
+                // gọi chỉ số siêu máy bay tăng 50% tiền
+                SuperPlaneManager.instance.isSuperPlane3 = true;
+            }
 
             gameObjectsPlanes[7].SetActive(true);
             for (int i=0; i<gameObjectsPlanes.Length; i++){
@@ -1275,6 +1322,8 @@ public class Shop : MonoBehaviour
                 }
                 planePriceText[8].gameObject.SetActive(false);
                 isBuyPlane9Done = true;
+                MissionAchievements.instance.achievementMission2Progress++;
+                MissionAchievements.instance.UpdateAchievementMission();
             }
             else {
                 return;
@@ -1305,6 +1354,9 @@ public class Shop : MonoBehaviour
             defaultPlane = gameObjectsPlanes[8];
             GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[8];
             isRotaryFrontZDone = false;
+            
+            ResetAllSuperPlaneFlags();
+            
             CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[8].transform;
             CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[8].transform;
             gameObjectsPlanes[8].SetActive(true);
@@ -1340,6 +1392,8 @@ public class Shop : MonoBehaviour
                 }
                 planePriceText[9].gameObject.SetActive(false);
                 isBuyPlane10Done = true;
+                MissionAchievements.instance.achievementMission2Progress++;
+                MissionAchievements.instance.UpdateAchievementMission();
             }
             else {
                 return;
@@ -1370,6 +1424,9 @@ public class Shop : MonoBehaviour
             defaultPlane = gameObjectsPlanes[9];
             GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[9];
             isRotaryFrontZDone = false;
+            
+            ResetAllSuperPlaneFlags();
+            
             CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[9].transform;
             CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[9].transform;
             gameObjectsPlanes[9].SetActive(true);
@@ -1405,6 +1462,8 @@ public class Shop : MonoBehaviour
                 }
                 planePriceText[10].gameObject.SetActive(false);
                 isBuyPlane11Done = true;
+                MissionAchievements.instance.achievementMission2Progress++;
+                MissionAchievements.instance.UpdateAchievementMission();
             }
             else {
                 return;
@@ -1436,6 +1495,9 @@ public class Shop : MonoBehaviour
             defaultPlane = gameObjectsPlanes[10];
             GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[10];
             isRotaryFrontZDone = false;
+            
+            ResetAllSuperPlaneFlags();
+            
             CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[10].transform;
             CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[10].transform;
             gameObjectsPlanes[10].SetActive(true);
@@ -1452,9 +1514,8 @@ public class Shop : MonoBehaviour
     public void buyPlane12(){
         StartCoroutine(PlayButtonEffect(11));
         if(!isBuyPlane12Done){
-            if(GManager.instance.totalDiamond >= 2500)
+            if(MissionPlane.instance != null && MissionPlane.instance.isUnlockSuperPlane4 )
             {
-                GManager.instance.totalDiamond -= 2500;
                 AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
                 PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
                 PlayerPrefs.Save();
@@ -1504,8 +1565,17 @@ public class Shop : MonoBehaviour
             CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[11].transform;
             CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[11].transform;
 
-            // gọi chỉ số siêu máy bay tăng 20 fuel
-            SuperPlaneManager.instance.isSuperPlane4 = true;
+            if (SuperPlaneManager.instance != null)
+            {
+                SuperPlaneManager.instance.isSuperPlane1 = false;
+                SuperPlaneManager.instance.isSuperPlane2 = false;
+                SuperPlaneManager.instance.isSuperPlane3 = false;
+                SuperPlaneManager.instance.isSuperPlane4 = false;
+                SuperPlaneManager.instance.isSuperPlane5 = false;
+                
+                // gọi chỉ số siêu máy bay tăng 20 fuel
+                SuperPlaneManager.instance.isSuperPlane4 = true;
+            }
 
             gameObjectsPlanes[11].SetActive(true);
             for (int i=0; i<gameObjectsPlanes.Length; i++){
@@ -1540,6 +1610,8 @@ public class Shop : MonoBehaviour
                 }
                 planePriceText[12].gameObject.SetActive(false);
                 isBuyPlane13Done = true;
+                MissionAchievements.instance.achievementMission2Progress++;
+                MissionAchievements.instance.UpdateAchievementMission();
             }
             else {
                 return;
@@ -1570,6 +1642,10 @@ public class Shop : MonoBehaviour
             defaultPlane = gameObjectsPlanes[12];
             GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[12];
             isRotaryFrontZDone = false;
+            
+            // Reset tất cả SuperPlane vì đây không phải SuperPlane
+            ResetAllSuperPlaneFlags();
+            
             CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[12].transform;
             CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[12].transform;
             gameObjectsPlanes[12].SetActive(true);
@@ -1605,6 +1681,10 @@ public class Shop : MonoBehaviour
             defaultPlane = gameObjectsPlanes[13];
             // GManager.instance.airplaneRigidbody2D.velocity = Vector2.zero;
             GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[13];
+            
+            // Reset tất cả SuperPlane vì đây không phải SuperPlane
+            ResetAllSuperPlaneFlags();
+            
             CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[13].transform;
             CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[13].transform;
             gameObjectsPlanes[13].SetActive(true);
@@ -1629,9 +1709,8 @@ public class Shop : MonoBehaviour
     public void buyPlane15(){
         StartCoroutine(PlayButtonEffect(14));
         if(!isBuyPlane15Done){
-            if(GManager.instance.totalDiamond >= 3000)
+            if(MissionPlane.instance != null && MissionPlane.instance.isUnlockSuperPlane5)
             {
-                GManager.instance.totalDiamond -= 3000;
                 AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
                 PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
                 PlayerPrefs.Save();
@@ -1691,6 +1770,19 @@ public class Shop : MonoBehaviour
             // Step 4: Enable the selected plane
             gameObjectsPlanes[14].SetActive(true);
             
+            // Reset tất cả SuperPlane trước khi set SuperPlane mới
+            if (SuperPlaneManager.instance != null)
+            {
+                SuperPlaneManager.instance.isSuperPlane1 = false;
+                SuperPlaneManager.instance.isSuperPlane2 = false;
+                SuperPlaneManager.instance.isSuperPlane3 = false;
+                SuperPlaneManager.instance.isSuperPlane4 = false;
+                SuperPlaneManager.instance.isSuperPlane5 = false;
+                
+                // siêu máy bay có 2 máu
+                SuperPlaneManager.instance.isSuperPlane5 = true;
+            }
+            
             // Step 5: Reset physics after enabling (important!)
             airplanesRigidbody2D[14].velocity = Vector2.zero;
             airplanesRigidbody2D[14].angularVelocity = 0f;
@@ -1704,170 +1796,117 @@ public class Shop : MonoBehaviour
         PlayerPrefs.Save();
     }
     
-    public void buyPlane16(){
-        StartCoroutine(PlayButtonEffect(15));
-        if(!isBuyPlane16Done){
-            if(GManager.instance.totalDiamond >= 3500)
-            {
-                GManager.instance.totalDiamond -= 3500;
-                AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
-                PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
-                PlayerPrefs.Save();
-                GManager.instance.SaveTotalDiamond();
-                planeBuyText[15].gameObject.SetActive(true);
-                planeBuyText[15].text = "Play";
-                imagePlayPlanes[15].gameObject.SetActive(true);
-                isCheckedPlaneIndex = 15;
-                for(int i=0; i<planeBuyText.Length; i++){
-                    if(i != 15){
-                        planeBuyText[i].text = "Select";
-                        imagePlayPlanes[i].gameObject.SetActive(false);
-                    }
-                }
-                planePriceText[15].gameObject.SetActive(false);
-                isBuyPlane16Done = true;
-            }
-            else {
-                return;
-            }
-        }
-        else {
-            if(planeBuyText[15].text == "Play"){
-                AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
-                return;
-            }
-            else{
-                planeBuyText[15].text = "Play";
-                isCheckedPlaneIndex = 15;
-                AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
-                imagePlayPlanes[15].gameObject.SetActive(true);
-                for(int i=0; i<planeBuyText.Length; i++){
-                    if(i != 15){
-                        planeBuyText[i].text = "Select";
-                        imagePlayPlanes[i].gameObject.SetActive(false);
-                    }
-                }
-            }
-        }
-        SaveTextPlane();
-        
-        // Thay đổi defaultPlane
-        if(gameObjectsPlanes != null && gameObjectsPlanes.Length > 15){
-            // Step 1: Disable all planes
-            for (int i=0; i<gameObjectsPlanes.Length; i++){
-                gameObjectsPlanes[i].SetActive(false);
-            }
-            
-            // Step 2: Disable all ChangePlane scripts to prevent velocity reset conflicts
-            DisableAllChangePlanes();
-            
-            // Step 3: Setup references
-            defaultPlane = gameObjectsPlanes[15];
-            GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[15];
-            isRotaryFrontZDone = false;
-            
-            // Step 4: Enable the selected plane
-            gameObjectsPlanes[15].SetActive(true);
-            
-            // Step 5: Reset physics after enabling (important!)
-            airplanesRigidbody2D[15].velocity = Vector2.zero;
-            airplanesRigidbody2D[15].angularVelocity = 0f;
-            
-            // Step 6: Setup camera
-            CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[15].transform;
-            CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[15].transform;
-
-            // siêu máy bay có 2 máu
-            SuperPlaneManager.instance.isSuperPlane5 = true;
-
-            EnsureCameraSetup();
-        }
-        PlayerPrefs.SetInt("isCheckedPlaneIndex", isCheckedPlaneIndex);
-        PlayerPrefs.Save();
-    }
-    
-    public void buyPlane17(){
-        StartCoroutine(PlayButtonEffect(16));
-        if(!isBuyPlane17Done){
-            if(GManager.instance.totalDiamond >= 4000)
-            {
-                GManager.instance.totalDiamond -= 4000;
-                AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
-                PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
-                PlayerPrefs.Save();
-                GManager.instance.SaveTotalDiamond();
-                planeBuyText[16].gameObject.SetActive(true);
-                planeBuyText[16].text = "Play";
-                imagePlayPlanes[16].gameObject.SetActive(true);
-                isCheckedPlaneIndex = 16;
-                for(int i=0; i<planeBuyText.Length; i++){
-                    if(i != 16){
-                        planeBuyText[i].text = "Select";
-                        imagePlayPlanes[i].gameObject.SetActive(false);
-                    }
-                }
-                planePriceText[16].gameObject.SetActive(false);
-                isBuyPlane17Done = true;
-            }
-            else {
-                return;
-            }
-        }
-        else {
-            if(planeBuyText[16].text == "Play"){
-                AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
-                return;
-            }
-            else{
-                planeBuyText[16].text = "Play";
-                isCheckedPlaneIndex = 16;
-                AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
-                imagePlayPlanes[16].gameObject.SetActive(true);
-                for(int i=0; i<planeBuyText.Length; i++){
-                    if(i != 16){
-                        planeBuyText[i].text = "Select";
-                        imagePlayPlanes[i].gameObject.SetActive(false);
-                    }
-                }
-            }
-        }
-        SaveTextPlane();
-        
-        // Thay đổi defaultPlane
-        if(gameObjectsPlanes != null && gameObjectsPlanes.Length > 16){
-            // Step 1: Disable all planes
-            for (int i=0; i<gameObjectsPlanes.Length; i++){
-                gameObjectsPlanes[i].SetActive(false);
-            }
-            
-            // Step 2: Disable all ChangePlane scripts to prevent velocity reset conflicts
-            DisableAllChangePlanes();
-            
-            // Step 3: Setup references
-            defaultPlane = gameObjectsPlanes[16];
-            GManager.instance.airplaneRigidbody2D = airplanesRigidbody2D[16];
-            isRotaryFrontZDone = false;
-            
-            // Step 4: Enable the selected plane
-            gameObjectsPlanes[16].SetActive(true);
-            
-            // Step 5: Reset physics after enabling (important!)
-            airplanesRigidbody2D[16].velocity = Vector2.zero;
-            airplanesRigidbody2D[16].angularVelocity = 0f;
-            
-            // Step 6: Setup camera
-            CameraManager.instance.virtualCamera.Follow = airplanesRigidbody2D[16].transform;
-            CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[16].transform;
-            EnsureCameraSetup();
-        }
-        PlayerPrefs.SetInt("isCheckedPlaneIndex", isCheckedPlaneIndex);
-        PlayerPrefs.Save();
-    }
-    
     public void saveIndexPlane()
     {
         PlayerPrefs.SetInt("SavedPlaneIndex", isCheckedPlaneIndex);
         PlayerPrefs.Save();
+    }
+
+    // Thêm method để reset tất cả SuperPlane flags
+    void ResetAllSuperPlaneFlags()
+    {
+        if (SuperPlaneManager.instance != null)
+        {
+            SuperPlaneManager.instance.isSuperPlane1 = false;
+            SuperPlaneManager.instance.isSuperPlane2 = false;
+            SuperPlaneManager.instance.isSuperPlane3 = false;
+            SuperPlaneManager.instance.isSuperPlane4 = false;
+            SuperPlaneManager.instance.isSuperPlane5 = false;
+            Debug.Log("Reset all SuperPlane flags to false");
+        }
+    }
+
+    // Thêm method để check và set super plane status
+    void CheckAndSetSuperPlane(int planeIndex)
+    {
+        if (SuperPlaneManager.instance != null)
+        {
+            // Reset tất cả super plane flags
+            SuperPlaneManager.instance.isSuperPlane1 = false;
+            SuperPlaneManager.instance.isSuperPlane2 = false;
+            SuperPlaneManager.instance.isSuperPlane3 = false;
+            SuperPlaneManager.instance.isSuperPlane4 = false;
+            SuperPlaneManager.instance.isSuperPlane5 = false;
+            
+            // Set super plane flag tương ứng với plane index
+            switch (planeIndex)
+            {
+                case 2: // Plane 3 là Super Plane 1
+                    SuperPlaneManager.instance.isSuperPlane1 = true;
+                    Debug.Log("Super Plane 1 activated!");
+                    break;
+                case 5: // Plane 6 là Super Plane 2
+                    SuperPlaneManager.instance.isSuperPlane2 = true;
+                    Debug.Log("Super Plane 2 activated!");
+                    break;
+                case 7: // Plane 8 là Super Plane 3
+                    SuperPlaneManager.instance.isSuperPlane3 = true;
+                    Debug.Log("Super Plane 3 activated!");
+                    break;
+                case 11: // Plane 12 là Super Plane 4
+                    SuperPlaneManager.instance.isSuperPlane4 = true;
+                    Debug.Log("Super Plane 4 activated!");
+                    break;
+                case 14: // Plane 15 là Super Plane 5
+                    SuperPlaneManager.instance.isSuperPlane5 = true;
+                    Debug.Log("Super Plane 5 activated!");
+                    break;
+                default:
+                    Debug.Log($"Plane {planeIndex + 1} is not a super plane");
+                    break;
+            }
+            
+            // Lưu trạng thái SuperPlane hiện tại
+            SaveSuperPlaneStatus(planeIndex);
+        }
+        else
+        {
+            Debug.LogWarning("SuperPlaneManager instance not found!");
+        }
+    }
+    
+    // Lưu trạng thái SuperPlane vào PlayerPrefs
+    void SaveSuperPlaneStatus(int currentPlaneIndex)
+    {
+        // Lưu plane index hiện tại
+        PlayerPrefs.SetInt("CurrentSuperPlane", currentPlaneIndex);
+        
+        // Lưu trạng thái của từng SuperPlane
+        PlayerPrefs.SetInt("isSuperPlane1", SuperPlaneManager.instance.isSuperPlane1 ? 1 : 0);
+        PlayerPrefs.SetInt("isSuperPlane2", SuperPlaneManager.instance.isSuperPlane2 ? 1 : 0);
+        PlayerPrefs.SetInt("isSuperPlane3", SuperPlaneManager.instance.isSuperPlane3 ? 1 : 0);
+        PlayerPrefs.SetInt("isSuperPlane4", SuperPlaneManager.instance.isSuperPlane4 ? 1 : 0);
+        PlayerPrefs.SetInt("isSuperPlane5", SuperPlaneManager.instance.isSuperPlane5 ? 1 : 0);
+        
+        PlayerPrefs.Save();
+        Debug.Log($"Saved SuperPlane status for plane index: {currentPlaneIndex}");
+    }
+    
+    // Load trạng thái SuperPlane từ PlayerPrefs
+    void LoadSuperPlaneStatus()
+    {
+        if (SuperPlaneManager.instance != null)
+        {
+            int currentPlane = PlayerPrefs.GetInt("CurrentSuperPlane", -1);
+            
+            // Nếu có SuperPlane được lưu
+            if (currentPlane != -1 && currentPlane == isCheckedPlaneIndex)
+            {
+                // Load trạng thái từ PlayerPrefs
+                SuperPlaneManager.instance.isSuperPlane1 = PlayerPrefs.GetInt("isSuperPlane1", 0) == 1;
+                SuperPlaneManager.instance.isSuperPlane2 = PlayerPrefs.GetInt("isSuperPlane2", 0) == 1;
+                SuperPlaneManager.instance.isSuperPlane3 = PlayerPrefs.GetInt("isSuperPlane3", 0) == 1;
+                SuperPlaneManager.instance.isSuperPlane4 = PlayerPrefs.GetInt("isSuperPlane4", 0) == 1;
+                SuperPlaneManager.instance.isSuperPlane5 = PlayerPrefs.GetInt("isSuperPlane5", 0) == 1;
+                
+                Debug.Log($"Loaded SuperPlane status for plane index: {currentPlane}");
+            }
+            else
+            {
+                // Nếu không có hoặc plane khác, check theo logic thường
+                CheckAndSetSuperPlane(isCheckedPlaneIndex);
+            }
+        }
     }
 
     void SetupPlaneByIndex(int planeIndex)
@@ -1904,6 +1943,9 @@ public class Shop : MonoBehaviour
         {
             Debug.LogWarning("GManager.instance is null khi setup máy bay!");
         }
+        
+        // Check và set super plane status
+        CheckAndSetSuperPlane(planeIndex);
     }
 
     IEnumerator SetupCameraDelayed(int planeIndex)
@@ -1951,12 +1993,8 @@ public class Shop : MonoBehaviour
         PlayerPrefs.Save();
         Debug.Log($"Đã lưu trạng thái: máy bay {indexPlane} được chọn");
     }
-    // THÊM: Hàm khôi phục text và trạng thái button
-    
-    // SỬA: Hàm LoadTextPlaySelect() với logic đúng
     public void LoadTextPlaySelect()
     {
-        // Khôi phục trạng thái mua của từng máy bay
         isBuyPlane1Done = PlayerPrefs.GetInt("isBuyPlane1Done", 0) == 1;
         isBuyPlane2Done = PlayerPrefs.GetInt("isBuyPlane2Done", 0) == 1;
         isBuyPlane3Done = PlayerPrefs.GetInt("isBuyPlane3Done", 0) == 1;
@@ -1976,10 +2014,8 @@ public class Shop : MonoBehaviour
         isBuyPlane17Done = PlayerPrefs.GetInt("isBuyPlane17Done", 0) == 1;
         isRotaryFrontZDone = PlayerPrefs.GetInt("isRotaryFrontZDone", 0) == 1;
         
-        // Lấy index máy bay hiện tại đang được chọn (có text "Play")
         int currentSelectedIndex = PlayerPrefs.GetInt("isCheckedPlaneIndex", 14);
         
-        // Khôi phục text của từng button với logic đúng
         for (int i = 0; i < planeBuyText.Length && i < 17; i++)
         {
             if (planeBuyText[i] != null)
@@ -1989,24 +2025,19 @@ public class Shop : MonoBehaviour
                 
                 if (!isPlaneBought)
                 {
-                    // Máy bay chưa mua → text = "Select"
                     correctText = "Select";
                 }
                 else if (i == currentSelectedIndex)
                 {
-                    // Máy bay đã mua VÀ đang được chọn → text = "Play"  
                     correctText = "Play";
                 }
                 else
                 {
-                    // Máy bay đã mua NHƯNG không được chọn → text = "Select"
                     correctText = "Select";
                 }
                 
-                // Set text đúng
                 planeBuyText[i].text = correctText;
                 
-                //Hiển thị/ẩn price text tùy theo trạng thái mua
                 if (planePriceText[i] != null)
                 {
                     planePriceText[i].gameObject.SetActive(!isPlaneBought);
@@ -2020,19 +2051,15 @@ public class Shop : MonoBehaviour
     }
 
 
-    // THÊM: Coroutine để delay load text
     IEnumerator LoadTextPlaySelectDelayed()
     {
-        yield return new WaitForSeconds(0.1f); // Đợi UI sẵn sàng
+        yield return new WaitForSeconds(0.1f);
         LoadTextPlaySelect();
     }
 
     // ...existing code...
 
-// THÊM: Hàm reset trạng thái game khi chọn máy bay mới
-   
    public void SaveTextPlane(){
-       // *** LƯU TRẠNG THÁI MUA, KHÔNG LƯU TEXT CONTENT ***
        PlayerPrefs.SetInt("isBuyPlane1Done", isBuyPlane1Done ? 1 : 0);
        PlayerPrefs.SetInt("isBuyPlane2Done", isBuyPlane2Done ? 1 : 0);
        PlayerPrefs.SetInt("isBuyPlane3Done", isBuyPlane3Done ? 1 : 0);
@@ -2056,10 +2083,9 @@ public class Shop : MonoBehaviour
        PlayerPrefs.Save();
    }
 
-   // Helper method to disable all ChangePlane scripts to prevent velocity conflicts
     private void DisableAllChangePlanes()
     {
-        ChangePlane[] allChangePlanes = FindObjectsOfType<ChangePlane>(true); // Include inactive objects
+        ChangePlane[] allChangePlanes = FindObjectsOfType<ChangePlane>(true);
         foreach(ChangePlane cp in allChangePlanes)
         {
             cp.isRotationChangePlane = false;
@@ -2067,7 +2093,6 @@ public class Shop : MonoBehaviour
         Debug.Log($"Disabled {allChangePlanes.Length} ChangePlane scripts to prevent velocity conflicts");
     }
 
-   // THÊM: Method để đảm bảo camera luôn được gắn đúng
     public void EnsureCameraSetup()
     {
         if (defaultPlane == null)
@@ -2076,7 +2101,6 @@ public class Shop : MonoBehaviour
             return;
         }
         
-        // Tìm Rigidbody2D
         Rigidbody2D rb = defaultPlane.GetComponent<Rigidbody2D>();
         if (rb == null)
         {
@@ -2084,21 +2108,17 @@ public class Shop : MonoBehaviour
             return;
         }
         
-        // Cập nhật GManager
         if (GManager.instance != null)
         {
             GManager.instance.airplaneRigidbody2D = rb;
-            Debug.Log($"✅ GManager.airplaneRigidbody2D = {rb.name}");
         }
         
-        // Cập nhật Camera
         if (CameraManager.instance != null)
         {
             CameraManager.instance.UpdateAircraftTarget(rb.transform);
             CameraManager.instance.UpdateCinemachineFollow(rb.transform);
             CameraManager.instance.virtualCamera.Follow = rb.transform;
             CameraManager.instance.virtualCamera.LookAt = rb.transform;
-            Debug.Log($"✅ Camera setup hoàn tất cho {rb.name}");
         }
     }
 

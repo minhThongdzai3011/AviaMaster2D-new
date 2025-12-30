@@ -347,9 +347,13 @@ public class MissionDaily : MonoBehaviour
             isReceivedDaily1Reward = true;
             textDailyMission1.text = "Claimed";
             imageBackGroundFillDailyMission1.sprite = spriteBackGroundFillMissionCompleted;
-            MissionPlane.instance.planeMission1Progress += 10;
+            MissionPlane.instance.planeMission4Progress++;
             MissionPlane.instance.UpdatePlaneMission();
             MissionPlane.instance.Save();
+            // thưởng kim cương
+            GManager.instance.totalDiamond += 200;
+            PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
+            PlayerPrefs.Save();
             if(isReceivedDaily1Reward)
             {
                 MissionManager.instance.textQuantityRewardValue--;

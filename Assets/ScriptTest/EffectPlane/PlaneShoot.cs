@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+
 
 public class PlaneShoot : MonoBehaviour
 {
@@ -15,6 +17,9 @@ public class PlaneShoot : MonoBehaviour
     
     private int currentBullets; // Số đạn hiện tại
     private float nextFireTime = 0f;
+
+    [Header("Image Bullet")]
+    public Image[] imageBullets; // Mảng hình ảnh đạn để hiển thị số đạn còn lại
     
     // Start is called before the first frame update
     void Start()
@@ -26,12 +31,24 @@ public class PlaneShoot : MonoBehaviour
             firePoint = transform;
         }
         
+        // Đảm bảo tất cả image bullets hiển thị ban đầu
+        if (imageBullets != null)
+        {
+            for (int i = 0; i < imageBullets.Length; i++)
+            {
+                if (imageBullets[i] != null)
+                {
+                    imageBullets[i].gameObject.SetActive(true);
+                }
+            }
+        }
+        
         Debug.Log($"Plane 13 khởi tạo với {currentBullets} viên đạn");
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.O) && Time.time >= nextFireTime && currentBullets > 0)
+        if (Input.GetKeyDown(KeyCode.O) && Time.time >= nextFireTime && currentBullets > 0 && GManager.instance.isBoosted)
         {
             Shoot();
             nextFireTime = Time.time + fireRate;
@@ -48,6 +65,12 @@ public class PlaneShoot : MonoBehaviour
         
         currentBullets--;
         Debug.Log($"Bắn! Còn lại {currentBullets} viên đạn");
+        
+        // Set active false cho image bullet tương ứng
+        if (imageBullets != null && currentBullets >= 0 && currentBullets < imageBullets.Length)
+        {
+            imageBullets[currentBullets].gameObject.SetActive(false);
+        }
         
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
         
@@ -73,6 +96,19 @@ public class PlaneShoot : MonoBehaviour
     public void ReloadBullets()
     {
         currentBullets = maxBullets;
+        
+        // Set active true cho tất cả image bullets khi reload
+        if (imageBullets != null)
+        {
+            for (int i = 0; i < imageBullets.Length; i++)
+            {
+                if (imageBullets[i] != null)
+                {
+                    imageBullets[i].gameObject.SetActive(true);
+                }
+            }
+        }
+        
         Debug.Log($"Đã reload! Có {currentBullets} viên đạn");
     }
 }
