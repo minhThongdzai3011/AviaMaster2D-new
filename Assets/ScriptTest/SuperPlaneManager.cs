@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class SuperPlaneManager : MonoBehaviour
 {
@@ -13,10 +14,10 @@ public class SuperPlaneManager : MonoBehaviour
     public bool isSuperPlane5 = false;
 
     public Image imageSkillSuperPlane2;
-    public GameObject gameObjectBulletPlane;
+    public TextMeshProUGUI textBulletPlane;
     public Image imageSkillSuperPlane5;
 
-
+    public Image imageSkillSuperPlane3;
 
     public bool skillPlane5 = true;
     

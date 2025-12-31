@@ -105,14 +105,14 @@ public class Settings : MonoBehaviour
             AdsLuckyWheelButton.gameObject.SetActive(false);
         }
         
-        currentTime = PlayerPrefs.GetInt("SaveTime", 10);
+        currentTime = PlayerPrefs.GetInt("SaveTime", 600);
         
         // Load chest tier (giới hạn tối đa là 4)
         chestTier = PlayerPrefs.GetInt("ChestTier", 1);
         if (chestTier > 4) chestTier = 4;
         Debug.Log($"Loaded ChestTier: {chestTier} - Requirement: {GetCurrentRequirement()}coin -> Reward: {GetCurrentReward()}coin");
 
-        if (currentTime < 10 && currentTime > 0) 
+        if (currentTime < 600 && currentTime > 0) 
         {
             resultText.text = "Waiting...";
             isSpinning = false;
@@ -576,8 +576,8 @@ public class Settings : MonoBehaviour
     
     [Header("Chest Tier System")]
     public int chestTier = 1; 
-    public float[] chestRequirements = { 500f, 1000f, 2000f, 2000f };
-    public int[] chestRewards = { 2000, 5000, 12000, 15000 };     
+    public float[] chestRequirements = { 800f, 1200f, 2000f, 2000f };
+    public int[] chestRewards = { 1500, 5000, 12000, 15000 };     
     void UpdateSliderPrizeCoin()
     {
         if (prizeSlider != null)
@@ -682,6 +682,7 @@ public class Settings : MonoBehaviour
         {
             distanceValue *= 1.5f;
             collectValue *= 1.5f;
+            SuperPlaneManager.instance.imageSkillSuperPlane3.gameObject.SetActive(true);
             Debug.Log("Kích hoạt Super Plane 5: Tiền thưởng gấp đôi!");
         }
 

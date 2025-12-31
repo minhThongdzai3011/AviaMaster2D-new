@@ -298,7 +298,7 @@ public class GManager : MonoBehaviour
     IEnumerator LaunchSequence()
     {
         if(SuperPlaneManager.instance != null && SuperPlaneManager.instance.isSuperPlane5) SuperPlaneManager.instance.imageSkillSuperPlane5.gameObject.SetActive(true);
-        if(SuperPlaneManager.instance != null && SuperPlaneManager.instance.isSuperPlane2) SuperPlaneManager.instance.gameObjectBulletPlane.gameObject.SetActive(true); SuperPlaneManager.instance.imageSkillSuperPlane2.gameObject.SetActive(true);
+        if(SuperPlaneManager.instance != null && SuperPlaneManager.instance.isSuperPlane2)  SuperPlaneManager.instance.imageSkillSuperPlane2.gameObject.SetActive(true);
         yield return new WaitForSeconds(0.5f);
         arrowAngleZ.SetActive(false);
         rotationXObject.SetActive(false);
@@ -1876,12 +1876,15 @@ public class GManager : MonoBehaviour
     public int ratePower = 0;
     public int rateFuel = 0;
     public int rateBoost = 0;
-    public float moneyPower = 20f;
-    public float moneyFuel = 20f;
-    public float moneyBoost = 20f;
+    public float moneyPower = 50f;
+    public float moneyFuel = 50f;
+    public float moneyBoost = 50f;
     public bool isFuelMax = false;
     public bool isPowerMax = false;
     public bool isBoostMax = false;
+    public float upgradeMultiplierPower = 1.25f;
+    public float upgradeMultiplierFuel = 1.25f;
+    public float upgradeMultiplierBoost = 1.25f;
 
     public void UpgradeFuel()
     {
@@ -1893,12 +1896,15 @@ public class GManager : MonoBehaviour
             totalMoney -= moneyFuel;
             MissionAchievements.instance.achievementMission1Progress += ((int)moneyFuel);
             MissionAchievements.instance.UpdateAchievementMission();
-            moneyFuel = moneyFuel * 1.25f;
+            moneyFuel = moneyFuel * upgradeMultiplierFuel;
             totalMoney = (int)Math.Round(totalMoney, 0);
             totalMoneyText.text = totalMoney.ToString("F0");
             PlayerPrefs.SetFloat("TotalMoney", totalMoney);
             PlayerPrefs.Save();
-            
+
+            if(moneyFuel > 100000 && moneyFuel <= 1000000) upgradeMultiplierFuel = 1.15f;
+             else if(moneyFuel > 1000000) upgradeMultiplierFuel = 1.05f;
+
             moneyFuel = (int)Math.Round(moneyFuel, 1);
             if (moneyFuel > 999)
             {
@@ -1959,12 +1965,16 @@ public class GManager : MonoBehaviour
             totalMoney -= moneyBoost;
             MissionAchievements.instance.achievementMission1Progress += ((int)moneyBoost);
             MissionAchievements.instance.UpdateAchievementMission();
-            moneyBoost = moneyBoost * 1.25f;
+            moneyBoost = moneyBoost * upgradeMultiplierBoost;
             totalMoney = (int)Math.Round(totalMoney, 0);
             totalMoneyText.text = totalMoney.ToString("F0");
             totalBoostMaxPower = totalBoost;
             PlayerPrefs.SetFloat("TotalMoney", totalMoney);
             PlayerPrefs.Save();
+
+            if(moneyBoost > 100000 && moneyBoost <= 1000000) upgradeMultiplierBoost = 1.15f;
+             else if(moneyBoost > 1000000) upgradeMultiplierBoost = 1.05f;
+
             moneyBoost = (int)Math.Round(moneyBoost, 1);
             if (moneyBoost > 999)
             {
@@ -2015,11 +2025,15 @@ public class GManager : MonoBehaviour
             totalMoney -= moneyPower;
             MissionAchievements.instance.achievementMission1Progress += ((int)moneyPower);
             MissionAchievements.instance.UpdateAchievementMission();
-            moneyPower = moneyPower * 1.25f;
+            moneyPower = moneyPower * upgradeMultiplierPower;
             totalMoney = (int)Math.Round(totalMoney, 0);
             totalMoneyText.text = totalMoney.ToString("F0");
             PlayerPrefs.SetFloat("TotalMoney", totalMoney);
             PlayerPrefs.Save();
+
+            if(moneyPower > 100000 && moneyPower <= 1000000) upgradeMultiplierPower = 1.15f;
+             else if(moneyPower > 1000000) upgradeMultiplierPower = 1.05f;
+
             moneyPower = (int)Math.Round(moneyPower, 1);
             if (moneyPower > 999)
             {
@@ -2202,9 +2216,9 @@ public class GManager : MonoBehaviour
         rateFuel = PlayerPrefs.GetInt("RateFuel", 0);
         rateBoost = PlayerPrefs.GetInt("RateBoost", 0);
 
-        moneyPower = PlayerPrefs.GetFloat("MoneyPower", 20f);
-        moneyFuel = PlayerPrefs.GetFloat("MoneyFuel", 20f);
-        moneyBoost = PlayerPrefs.GetFloat("MoneyBoost", 20f);
+        moneyPower = PlayerPrefs.GetFloat("MoneyPower", 50f);
+        moneyFuel = PlayerPrefs.GetFloat("MoneyFuel", 50f);
+        moneyBoost = PlayerPrefs.GetFloat("MoneyBoost", 50f);
 
         isPowerMax = PlayerPrefs.GetInt("IsPowerMax", 0) == 1;
         isFuelMax = PlayerPrefs.GetInt("IsFuelMax", 0) == 1;
@@ -2477,6 +2491,7 @@ public class GManager : MonoBehaviour
         
         Debug.Log("Max Power Ended - Restored all materials to original");
     }
+
 
 
     

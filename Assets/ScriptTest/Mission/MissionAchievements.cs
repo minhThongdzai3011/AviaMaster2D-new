@@ -508,7 +508,7 @@ public class MissionAchievements : MonoBehaviour
         if (isAchievementMission1Completed && achievementMission1CurrentLevel < achievementMission1Target.Length && !isFalseButton1ClickedAchie)
         {
             Debug.Log("Achievement Mission 1 Reward Claimed! Level: " + (achievementMission1CurrentLevel + 1));
-            
+            AudioManager.instance.PlaySound(AudioManager.instance.rewardMissionSoundClip);
             // Trao thưởng kim cương cho người chơi
             GManager.instance.totalDiamond += prizeRewardAchievement1[achievementMission1CurrentLevel];
             GManager.instance.totalDiamondText.text = GManager.instance.totalDiamond.ToString();
@@ -564,7 +564,7 @@ public class MissionAchievements : MonoBehaviour
         if (isAchievementMission2Completed && achievementMission2CurrentLevel < achievementMission2Target.Length && !isFalseButton2ClickedAchie)
         {
             Debug.Log("Achievement Mission 2 Reward Claimed! Level: " + (achievementMission2CurrentLevel + 1));
-            
+            AudioManager.instance.PlaySound(AudioManager.instance.rewardMissionSoundClip);
             // Trao thưởng kim cương
             GManager.instance.totalDiamond += prizeRewardAchievement2[achievementMission2CurrentLevel];
             PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
@@ -615,7 +615,7 @@ public class MissionAchievements : MonoBehaviour
         if (isAchievementMission3Completed && achievementMission3CurrentLevel < achievementMission3Target.Length && !isFalseButton3ClickedAchie)
         {
             Debug.Log("Achievement Mission 3 Reward Claimed! Level: " + (achievementMission3CurrentLevel + 1));
-            
+            AudioManager.instance.PlaySound(AudioManager.instance.rewardMissionSoundClip);
             // Trao thưởng tiền
             GManager.instance.totalMoney += prizeRewardAchievement3[achievementMission3CurrentLevel];
             PlayerPrefs.SetFloat("TotalMoney", GManager.instance.totalMoney);
@@ -665,7 +665,7 @@ public class MissionAchievements : MonoBehaviour
         if (isAchievementMission4Completed && achievementMission4CurrentLevel < achievementMission4Target.Length && !isFalseButton4ClickedAchie)
         {
             Debug.Log("Achievement Mission 4 Reward Claimed! Level: " + (achievementMission4CurrentLevel + 1));
-            
+            AudioManager.instance.PlaySound(AudioManager.instance.rewardMissionSoundClip);
             // Trao thưởng tiền
             GManager.instance.totalMoney += prizeRewardAchievement4[achievementMission4CurrentLevel];
             PlayerPrefs.SetFloat("TotalMoney", GManager.instance.totalMoney);
@@ -715,7 +715,7 @@ public class MissionAchievements : MonoBehaviour
         if (isAchievementMission5Completed && achievementMission5CurrentLevel < achievementMission5Target.Length && !isFalseButton5ClickedAchie)
         {
             Debug.Log("Achievement Mission 5 Reward Claimed! Level: " + (achievementMission5CurrentLevel + 1));
-            
+            AudioManager.instance.PlaySound(AudioManager.instance.rewardMissionSoundClip);
             // Trao thưởng tiền
             GManager.instance.totalMoney += prizeRewardAchievement5[achievementMission5CurrentLevel];
             PlayerPrefs.SetFloat("TotalMoney", GManager.instance.totalMoney);

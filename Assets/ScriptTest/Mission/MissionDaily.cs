@@ -336,7 +336,7 @@ public class MissionDaily : MonoBehaviour
         if (isDailyMission1Completed && !isFasleButton1Clicked)
         {
             Debug.Log("Daily Mission 1 Reward Claimed!");
-            
+            AudioManager.instance.PlaySound(AudioManager.instance.rewardMissionSoundClip);
             Debug.Log("Setting button sprite to claimed...");
             buttonDailyMission1.image.sprite = spriteButtonClaimed;
             Debug.Log("Button sprite set successfully: " + (buttonDailyMission1.image.sprite == spriteButtonClaimed));
@@ -354,6 +354,7 @@ public class MissionDaily : MonoBehaviour
             GManager.instance.totalDiamond += 200;
             PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
             PlayerPrefs.Save();
+            
             if(isReceivedDaily1Reward)
             {
                 MissionManager.instance.textQuantityRewardValue--;
@@ -371,7 +372,7 @@ public class MissionDaily : MonoBehaviour
         if (isDailyMission2Completed && !isFasleButton2Clicked)
         {
             Debug.Log("Daily Mission 2 Reward Claimed!");
-            
+            AudioManager.instance.PlaySound(AudioManager.instance.rewardMissionSoundClip);
             
             buttonDailyMission2.image.sprite = spriteButtonClaimed;
             isDailyMission2Completed = false;
@@ -403,7 +404,7 @@ public class MissionDaily : MonoBehaviour
         if (isDailyMission3Completed && !isFasleButton3Clicked)
         {
             Debug.Log("Daily Mission 3 Reward Claimed!");
-            
+            AudioManager.instance.PlaySound(AudioManager.instance.rewardMissionSoundClip);
             buttonDailyMission3.image.sprite = spriteButtonClaimed;
             isDailyMission3Completed = false;
             isFasleButton3Clicked = true;
@@ -412,7 +413,7 @@ public class MissionDaily : MonoBehaviour
             isReceivedDaily3Reward = true;
             textDailyMission3.text = "Claimed";
             imageBackGroundFillDailyMission3.sprite = spriteBackGroundFillMissionCompleted;
-            GManager.instance.totalMoney += 3000f;
+            GManager.instance.totalMoney += 1500f;
             PlayerPrefs.SetFloat("TotalMoney", GManager.instance.totalMoney);
             PlayerPrefs.Save();
             GManager.instance.SaveTotalMoney();
@@ -434,6 +435,7 @@ public class MissionDaily : MonoBehaviour
         if (isDailyMission4Completed && !isFasleButton4Clicked)
         {
             Debug.Log("Daily Mission 4 Reward Claimed!");
+            AudioManager.instance.PlaySound(AudioManager.instance.rewardMissionSoundClip);
             buttonDailyMission4.image.sprite = spriteButtonClaimed;
             isDailyMission4Completed = false;
             isFasleButton4Clicked = true;
@@ -465,7 +467,7 @@ public class MissionDaily : MonoBehaviour
         if (isDailyMission5Completed && !isFasleButton5Clicked)
         {
             Debug.Log("Daily Mission 5 Reward Claimed!");
-            
+            AudioManager.instance.PlaySound(AudioManager.instance.rewardMissionSoundClip);
             buttonDailyMission5.image.sprite = spriteButtonClaimed;
             Debug.Log("Button sprite set successfully: " + (buttonDailyMission5.image.sprite == spriteButtonClaimed));
             isDailyMission5Completed = false;
@@ -476,7 +478,7 @@ public class MissionDaily : MonoBehaviour
             isReceivedDaily5Reward = true;
             textDailyMission5.text = "Claimed";
             imageBackGroundFillDailyMission5 .sprite = spriteBackGroundFillMissionCompleted;
-            GManager.instance.totalMoney += 5000f;
+            GManager.instance.totalMoney += 2000f;
             PlayerPrefs.SetFloat("TotalMoney", GManager.instance.totalMoney);
             PlayerPrefs.Save();
             GManager.instance.SaveTotalMoney();

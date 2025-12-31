@@ -727,7 +727,7 @@ public class Shop : MonoBehaviour
     public bool isBuyPlane17Done = false;
     public bool isRotaryFrontZDone = false;
     public void buyPlane1(){
-        StartCoroutine(PlayButtonEffect(0));
+        StartCoroutine(PlayButtonEffect(5));
         if(!isBuyPlane1Done){
             if(GManager.instance.totalDiamond >= 500)
             {
@@ -798,7 +798,7 @@ public class Shop : MonoBehaviour
         PlayerPrefs.Save();
     }
     public void buyPlane2(){
-        StartCoroutine(PlayButtonEffect(1));
+        StartCoroutine(PlayButtonEffect(6));
         if(!isBuyPlane2Done){
             if(GManager.instance.totalDiamond >= 750)
             {
@@ -869,7 +869,7 @@ public class Shop : MonoBehaviour
         PlayerPrefs.Save();
     }
     public void buyPlane3(){  // Siêu máy bay
-        StartCoroutine(PlayButtonEffect(2));
+        StartCoroutine(PlayButtonEffect(3));
         if(!isBuyPlane3Done){
             if(MissionPlane.instance != null && MissionPlane.instance.isUnlockSuperPlane1 )
             {
@@ -937,7 +937,7 @@ public class Shop : MonoBehaviour
         PlayerPrefs.Save();
     }
     public void buyPlane4(){
-        StartCoroutine(PlayButtonEffect(3));
+        StartCoroutine(PlayButtonEffect(7));
         if(!isBuyPlane4Done){
             if(GManager.instance.totalDiamond >= 1500)
             {
@@ -1007,7 +1007,7 @@ public class Shop : MonoBehaviour
         PlayerPrefs.Save();
     }
     public void buyPlane5(){
-        StartCoroutine(PlayButtonEffect(4));
+        StartCoroutine(PlayButtonEffect(8));
         if(!isBuyPlane5Done){
             if(GManager.instance.totalDiamond >= 1700)
             {
@@ -1077,7 +1077,7 @@ public class Shop : MonoBehaviour
         PlayerPrefs.Save();
     }
     public void buyPlane6(){
-        StartCoroutine(PlayButtonEffect(5));
+        StartCoroutine(PlayButtonEffect(4));
         if(!isBuyPlane6Done){
             if(MissionPlane.instance != null && MissionPlane.instance.isUnlockSuperPlane2 )
             {
@@ -1154,7 +1154,7 @@ public class Shop : MonoBehaviour
         PlayerPrefs.Save();
     }
     public void buyPlane7(){
-        StartCoroutine(PlayButtonEffect(6));
+        StartCoroutine(PlayButtonEffect(9));
         if(!isBuyPlane7Done){
             if(GManager.instance.totalDiamond >= 2000)
             {
@@ -1224,7 +1224,7 @@ public class Shop : MonoBehaviour
         PlayerPrefs.Save();
     }
     public void buyPlane8(){
-        StartCoroutine(PlayButtonEffect(7));
+        StartCoroutine(PlayButtonEffect(0));
         if(!isBuyPlane8Done){
             if(MissionPlane.instance != null && MissionPlane.instance.isUnlockSuperPlane3 )
             {
@@ -1301,7 +1301,7 @@ public class Shop : MonoBehaviour
         PlayerPrefs.Save();
     }
     public void buyPlane9(){
-        StartCoroutine(PlayButtonEffect(8));
+        StartCoroutine(PlayButtonEffect(10));
         if(!isBuyPlane9Done){
             if(GManager.instance.totalDiamond >= 2200)
             {
@@ -1371,7 +1371,7 @@ public class Shop : MonoBehaviour
         PlayerPrefs.Save();
     }
     public void buyPlane10(){
-        StartCoroutine(PlayButtonEffect(9));
+        StartCoroutine(PlayButtonEffect(11));
         if(!isBuyPlane10Done){
             if(GManager.instance.totalDiamond >= 2200)
             {
@@ -1441,7 +1441,7 @@ public class Shop : MonoBehaviour
         PlayerPrefs.Save();
     }
     public void buyPlane11(){
-        StartCoroutine(PlayButtonEffect(10));
+        StartCoroutine(PlayButtonEffect(12));
         if(!isBuyPlane11Done){
             if(GManager.instance.totalDiamond >= 2200)
             {
@@ -1512,7 +1512,7 @@ public class Shop : MonoBehaviour
         PlayerPrefs.Save();
     }
     public void buyPlane12(){
-        StartCoroutine(PlayButtonEffect(11));
+        StartCoroutine(PlayButtonEffect(1));
         if(!isBuyPlane12Done){
             if(MissionPlane.instance != null && MissionPlane.instance.isUnlockSuperPlane4 )
             {
@@ -1589,7 +1589,7 @@ public class Shop : MonoBehaviour
         PlayerPrefs.Save();
     }
     public void buyPlane13(){
-        StartCoroutine(PlayButtonEffect(12));
+        StartCoroutine(PlayButtonEffect(13));
         if(!isBuyPlane13Done){
             if(GManager.instance.totalDiamond >= 2500)
             {
@@ -1660,13 +1660,14 @@ public class Shop : MonoBehaviour
         PlayerPrefs.Save();
     }
     public void buyPlane14(){
-        StartCoroutine(PlayButtonEffect(13));
+        StartCoroutine(PlayButtonEffect(14));
         isBuyPlane14Done = true;
         isRotaryFrontZDone = false;
         if (planePriceText != null && planePriceText.Length > 13)
             planePriceText[13].gameObject.SetActive(false);
 
         planeBuyText[13].text = "Play";
+        AudioManager.instance.PlaySound(AudioManager.instance.unlockPlaneSoundClip);
         imagePlayPlanes[13].gameObject.SetActive(true);
         isCheckedPlaneIndex = 13;
         for(int i=0; i<planeBuyText.Length; i++){
@@ -1707,7 +1708,7 @@ public class Shop : MonoBehaviour
     }
     
     public void buyPlane15(){
-        StartCoroutine(PlayButtonEffect(14));
+        StartCoroutine(PlayButtonEffect(2));
         if(!isBuyPlane15Done){
             if(MissionPlane.instance != null && MissionPlane.instance.isUnlockSuperPlane5)
             {

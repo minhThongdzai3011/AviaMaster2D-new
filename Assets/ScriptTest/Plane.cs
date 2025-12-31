@@ -1049,11 +1049,27 @@ public class Plane : MonoBehaviour
 
     public bool isAddFuel = false;
     public void RandomPrizeBird(){
-        int[] coinPrize = {1000, 2000, 5000};
+        int[] coinPrize1 = {100, 200, 500};
+        int[] coinPrize2 = {1000, 2000, 5000};
+        int[] coinPrize3 = {5000, 10000, 20000};
         int count = Random.Range(0, 3); 
         if(count == 0){
-            int randomIndex = Random.Range(0, coinPrize.Length);
-            int prize = coinPrize[randomIndex];
+            int prize = 0;
+            if ( GManager.instance.moneyPower > 10000 || GManager.instance.moneyFuel > 10000 || GManager.instance.moneyBoost > 10000)
+            {
+                int randomIndex = Random.Range(0, coinPrize3.Length);
+                prize = coinPrize3[randomIndex];
+            }
+            else if ( GManager.instance.moneyPower > 3000 || GManager.instance.moneyFuel > 3000 || GManager.instance.moneyBoost > 3000)
+            {
+                int randomIndex = Random.Range(0, coinPrize2.Length);
+                prize = coinPrize2[randomIndex];
+            }
+            else
+            {
+                int randomIndex = Random.Range(0, coinPrize1.Length);
+                prize = coinPrize1[randomIndex];
+            }
             Debug.Log("Money collected +" + prize + " | Total Money: " + GManager.instance.totalMoney);
             GManager.instance.totalMoney += prize;
             Debug.Log("Money collected +" + prize + " | Total Money: " + GManager.instance.totalMoney);

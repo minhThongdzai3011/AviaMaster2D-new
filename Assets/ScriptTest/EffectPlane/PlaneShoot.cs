@@ -48,7 +48,7 @@ public class PlaneShoot : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.O) && Time.time >= nextFireTime && currentBullets > 0 && GManager.instance.isBoosted)
+        if (Input.GetKeyDown(KeyCode.F) && Time.time >= nextFireTime && currentBullets > 0 && GManager.instance.isBoosted)
         {
             Shoot();
             nextFireTime = Time.time + fireRate;
@@ -64,6 +64,7 @@ public class PlaneShoot : MonoBehaviour
         }
         
         currentBullets--;
+        SuperPlaneManager.instance.textBulletPlane.text = "x" + currentBullets.ToString();
         Debug.Log($"Bắn! Còn lại {currentBullets} viên đạn");
         
         // Set active false cho image bullet tương ứng

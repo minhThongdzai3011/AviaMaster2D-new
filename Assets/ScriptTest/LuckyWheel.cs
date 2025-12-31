@@ -13,7 +13,7 @@ public class LuckyWheel : MonoBehaviour
     public float maxRotatePower = 1800f;
     public float minStopPower = 200f;
     public float maxStopPower = 400f;
-    public int[] normalLuckValues = { 12500, 17500, 5000, 7500 };
+    public int[] normalLuckValues = { 10000, 7500, 3000, 5000 };
     public int[] superLuckValues = { 25000, 35000, 15000, 20000 };
     public int[] ultraLuckValues = { 50000, 75000, 30000, 40000 };
     private Rigidbody2D rbody;
@@ -250,14 +250,14 @@ public class LuckyWheel : MonoBehaviour
     {
         print("You Win " + Score);
         
-        Settings.instance.currentTime = 10;
+        Settings.instance.currentTime = 600;
         PlayerPrefs.SetInt("SaveTime", Settings.instance.currentTime);
         PlayerPrefs.Save();
         
         Settings.instance.isSpinning = false;
         Settings.instance.StartCountdown(); 
         StartCoroutine(DelayTwoSeconds(2f));
-        Debug.Log("Win - Countdown started with 10 seconds");
+        Debug.Log("Win - Countdown started with 600 seconds");
     }
 
     IEnumerator WaitAndPrint(float waitTime, float rot , int a , string b)

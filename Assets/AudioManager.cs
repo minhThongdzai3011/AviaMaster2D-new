@@ -67,6 +67,9 @@ public class AudioManager : MonoBehaviour
     public AudioClip leftRightShopSoundClip;
     [Header("Âm thanh khi đâm vào Bonus")]
     public AudioClip crashBonusSoundClip;
+
+    [Header("Âm thanh nhận thưởng mission")]
+    public AudioClip rewardMissionSoundClip;
     public bool isMusicOn = true;
     public bool isSoundOn = true;
 
