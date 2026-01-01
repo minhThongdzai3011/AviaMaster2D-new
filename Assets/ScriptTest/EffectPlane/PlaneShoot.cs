@@ -73,16 +73,44 @@ public class PlaneShoot : MonoBehaviour
             imageBullets[currentBullets].gameObject.SetActive(false);
         }
         
-        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
-        
+        GameObject bullet = Instantiate(
+            bulletPrefab,
+            firePoint.position,
+            Quaternion.identity
+        );
+
         Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-        
+
         if (rb != null)
         {
-            Vector2 shootDirection = firePoint.right;
-            
-            rb.velocity = shootDirection * bulletSpeed;
+            float angleZ = firePoint.eulerAngles.z;
+
+            // 1. Set rotation cho đạn (để sprite nhìn đúng)
+            bullet.transform.rotation = Quaternion.Euler(0f, 0f, angleZ);
+
+            // 2. Tính hướng bay theo rotation
+            Vector2 direction = new Vector2(
+                Mathf.Cos(angleZ * Mathf.Deg2Rad),
+                Mathf.Sin(angleZ * Mathf.Deg2Rad)
+            );
+
+            // 3. Set velocity
+            rb.velocity = direction.normalized * bulletSpeed;
+
+            // Gửi góc bay cho Bullet để smooth
+            Bullet bulletScript = bullet.GetComponent<Bullet>();
+            if (bulletScript != null)
+            {
+                bulletScript.SetTargetAngle(angleZ);
+            }
+
+
+            // 4. Khóa rotation – KHÔNG cho xoáy
+            rb.freezeRotation = true;
+            rb.angularVelocity = 0f;
         }
+
+
         else
         {
             Debug.LogWarning("Bullet không có Rigidbody2D component!");

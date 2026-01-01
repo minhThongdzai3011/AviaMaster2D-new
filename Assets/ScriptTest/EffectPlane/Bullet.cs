@@ -1,25 +1,42 @@
-
 using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    public float speed = 40f;   
-    public float lifeTime = 10f; 
+    public float lifeTime = 10f;
+    public float rotateSmooth = 15f;
+
+    private float targetAngle;
+    private Rigidbody2D rb;
+
+    void Awake()
+    {
+        rb = GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            rb.freezeRotation = true;
+            rb.angularVelocity = 0f;
+        }
+    }
 
     void Start()
     {
         Destroy(gameObject, lifeTime);
     }
 
-    void Update()
+    // Được gọi từ PlaneShoot
+    public void SetTargetAngle(float angle)
     {
-        transform.Translate(Vector3.right * speed * Time.deltaTime);
+        targetAngle = angle;
+        transform.rotation = Quaternion.Euler(0, 0, angle);
     }
 
-    // void OnCollisionEnter2D(Collision2D collision)
-    // {
-    //     Destroy(gameObject);
-    // }
+    void Update()
+    {
+        // Smooth rotation cho đẹp (KHÔNG ảnh hưởng hướng bay)
+        float currentZ = transform.eulerAngles.z;
+        float z = Mathf.LerpAngle(currentZ, targetAngle, Time.deltaTime * rotateSmooth);
+        transform.rotation = Quaternion.Euler(0, 0, z);
+    }
 
     void OnTriggerEnter2D(Collider2D collision)
     {
@@ -30,13 +47,13 @@ public class Bullet : MonoBehaviour
             Destroy(collision.gameObject);
             Destroy(gameObject);
         }
-        if (collision.gameObject.CompareTag("Bonus4"))
+        else if (collision.gameObject.CompareTag("Bonus4"))
         {
             AudioManager.instance.PlaySound(AudioManager.instance.obstacleCollisionSoundClip);
             Destroy(collision.gameObject);
             Destroy(gameObject);
         }
-        if (collision.gameObject.CompareTag("Bonus2"))
+        else if (collision.gameObject.CompareTag("Bonus2"))
         {
             AudioManager.instance.PlaySound(AudioManager.instance.obstacleCollisionSoundClip);
             EffectExplosionBonus ef = collision.GetComponent<EffectExplosionBonus>();
@@ -45,6 +62,5 @@ public class Bullet : MonoBehaviour
             collision.gameObject.GetComponent<SpriteRenderer>().enabled = false;
             Destroy(gameObject);
         }
-
     }
 }
