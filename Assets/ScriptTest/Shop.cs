@@ -20,6 +20,7 @@ public class Shop : MonoBehaviour
     public Image[] planeImages; 
     public Image[] planeBackgrounds;
     public Button[] planeButtons;
+    public Image[] planeGuideImages;
 
     
     [Header("Visual Settings")]
@@ -84,6 +85,13 @@ public class Shop : MonoBehaviour
         
         // *** SỬA: Update UI dựa vào trạng thái bought và selected ***
         UpdateAllButtonsDisplay();
+        Color specialColor = new Color(30/255f, 75/255f, 86/255f);
+
+        planeImages[0].color = specialColor;
+        planeImages[1].color = specialColor;
+        planeImages[2].color = specialColor;
+        planeImages[3].color = specialColor;
+        planeImages[4].color = specialColor;
 
     }
     void Update()
@@ -290,6 +298,7 @@ public class Shop : MonoBehaviour
             Image plane = planeImages[i];
             Button button = planeButtons[i];
             Image background = planeBackgrounds[i];
+            Image guideImage = planeGuideImages[i];
             Vector2 currentPos = plane.rectTransform.anchoredPosition;
             Vector2 fadeOutPos = currentPos + new Vector2(moveDirection * fadeOffset, 0);
             
@@ -303,6 +312,8 @@ public class Shop : MonoBehaviour
                 .SetEase(Ease.InQuad));
             fadeOutSeq.Join(button.image.DOFade(0f, moveDuration * 0.5f)
                 .SetEase(Ease.InQuad));
+            fadeOutSeq.Join(guideImage.DOFade(0f, moveDuration * 0.5f)
+                .SetEase(Ease.InQuad));
         }
         
         yield return fadeOutSeq.WaitForCompletion();
@@ -314,6 +325,7 @@ public class Shop : MonoBehaviour
             Image plane = planeImages[i];
             Button button = planeButtons[i];
             Image background = planeBackgrounds[i];
+            Image guideImage = planeGuideImages[i];
             CarouselState targetState = CalculateCarouselState(i);
             
             // Vị trí bắt đầu fade in: từ phía ngược lại + 100px
@@ -338,6 +350,7 @@ public class Shop : MonoBehaviour
             Image plane = planeImages[i];
             Button button = planeButtons[i];
             Image background = planeBackgrounds[i];
+            Image guideImage = planeGuideImages[i];
             CarouselState targetState = CalculateCarouselState(i);
             
             // Tất cả ảnh di chuyển về vị trí đích và fade in đồng thời
@@ -348,6 +361,8 @@ public class Shop : MonoBehaviour
             fadeInSeq.Join(background.DOFade(targetState.alpha, moveDuration * 0.5f)
                 .SetEase(Ease.OutQuad));
             fadeInSeq.Join(button.image.DOFade(targetState.alpha, moveDuration * 0.5f)
+                .SetEase(Ease.OutQuad));
+            fadeInSeq.Join(guideImage.DOFade(targetState.alpha, moveDuration * 0.5f)
                 .SetEase(Ease.OutQuad));
         }
         

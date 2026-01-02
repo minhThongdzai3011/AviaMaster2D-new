@@ -24,6 +24,9 @@ public class RotaryFront : MonoBehaviour
     Coroutine rotRoutine;
     Quaternion initialLocalRotation;
     bool isRunning;
+    
+    // Thêm biến để theo dõi rotation hiện tại
+    private float currentRotationX = 0f;
 
     void Awake()
     {
@@ -34,6 +37,8 @@ public class RotaryFront : MonoBehaviour
         }
 
         initialLocalRotation = transform.localRotation;
+        // Lưu rotation X ban đầu
+        currentRotationX = transform.localRotation.eulerAngles.x;
     }
 
     void OnEnable()
@@ -49,6 +54,18 @@ public class RotaryFront : MonoBehaviour
     void OnDestroy()
     {
         instances.Remove(this);
+    }
+
+    void Update()
+    {
+        if (useLocal)
+        {
+            transform.localRotation = Quaternion.Euler(currentRotationX, 0f, -90f);
+        }
+        else
+        {
+            transform.rotation = Quaternion.Euler(currentRotationX, 0f, 90f);
+        }
     }
 
     // Bắt đầu quay nếu chưa chạy
@@ -77,6 +94,7 @@ public class RotaryFront : MonoBehaviour
         if (resetOnStop)
         {
             transform.localRotation = initialLocalRotation;
+            currentRotationX = initialLocalRotation.eulerAngles.x;
         }
     }
 
@@ -102,10 +120,20 @@ public class RotaryFront : MonoBehaviour
             float eased = Mathf.SmoothStep(1f, 0f, t);
             float currentSpeed = startSpeed * eased;
 
-            // áp dụng một bước quay với currentSpeed
+            // Cập nhật rotation X và giữ nguyên Y, Z
             float delta = currentSpeed * Time.deltaTime;
-            if (useLocal) transform.Rotate(delta, 0f, 0f, Space.Self);
-            else transform.Rotate(delta, 0f, 0f, Space.World);
+            currentRotationX += delta;
+            
+            if (useLocal)
+            {
+                Vector3 currentEuler = transform.localRotation.eulerAngles;
+                transform.localRotation = Quaternion.Euler(currentRotationX, currentEuler.y, currentEuler.z);
+            }
+            else
+            {
+                Vector3 currentEuler = transform.rotation.eulerAngles;
+                transform.rotation = Quaternion.Euler(currentRotationX, currentEuler.y, currentEuler.z);
+            }
 
             yield return null;
         }
@@ -119,8 +147,20 @@ public class RotaryFront : MonoBehaviour
         while (true)
         {
             float delta = speedDegreesPerSec * Time.deltaTime;
-            if (useLocal) transform.Rotate(delta, 0f, 0f, Space.Self);
-            else transform.Rotate(delta, 0f, 0f, Space.World);
+            currentRotationX += delta;
+            
+            if (useLocal)
+            {
+                // Chỉ thay đổi rotation X, giữ nguyên Y và Z
+                Vector3 currentEuler = transform.localRotation.eulerAngles;
+                transform.localRotation = Quaternion.Euler(currentRotationX, currentEuler.y, currentEuler.z);
+            }
+            else
+            {
+                Vector3 currentEuler = transform.rotation.eulerAngles;
+                transform.rotation = Quaternion.Euler(currentRotationX, currentEuler.y, currentEuler.z);
+            }
+            
             yield return null;
         }
     }

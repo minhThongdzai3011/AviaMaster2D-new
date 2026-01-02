@@ -47,6 +47,8 @@ public class Settings : MonoBehaviour
     public Image prizeChestImage;
     public Image altitudeImage;
     public Image iamgeBlackScreen;
+    public Image imageWhiteScreen;
+    public Image imageWhite1Screen;
     public RectTransform NotificationNewMapImage;
     public Image settingImage;
     public Image ImageErrorAngleZ;
@@ -154,7 +156,7 @@ public class Settings : MonoBehaviour
             UpdateSliderPrizeCoin();
         }
         altitudeText.text = "" + (int)GManager.instance.currentAltitude + " m";
-        if (GManager.instance.currentAltitude >= 30 && isAltitudeImageActive)
+        if (GManager.instance.currentAltitude >= 50 && isAltitudeImageActive)
         {
             altitudeImage.gameObject.SetActive(true);
         }
@@ -593,23 +595,36 @@ public class Settings : MonoBehaviour
 
             if (isCheckAddTargetValue)
             {
-                targetValue = temp + Mathf.Clamp01(totalValue / maxDistanceCoin);
+                float progressValue = totalValue / maxDistanceCoin;
+                targetValue = temp + progressValue;
+                
+                if (targetValue >= 1f)
+                {
+                    targetValue = 1f;
+                }
+                
+                Debug.Log($"Progress: {progressValue}, Target: {targetValue}, Total: {totalValue}, Required: {maxDistanceCoin}");
                 isCheckAddTargetValue = false;
             }
 
             PlayerPrefs.SetFloat("PrizeSliderValue", targetValue);
             PlayerPrefs.Save();
-            // Cập nhật slider với hiệu ứng mượt mà
+            
             float smoothSpeed = 2f; 
             prizeSlider.fillAmount = Mathf.Lerp(prizeSlider.fillAmount, targetValue, smoothSpeed * Time.deltaTime);
-            if (prizeSlider. fillAmount >= 1f)
+            
+            if (prizeSlider.fillAmount >= 0.99f || targetValue >= 1f)
             {
-                isShakeZ = true;
-                ShakeZ();
-                if (isPrizeCoinDone)
+                prizeSlider.fillAmount = 1f;
+                if (!isShakeZ && isShake)
                 {
-                    isButtonChestClickeds = true;
-                    isPrizeCoinDone = false;
+                    isShakeZ = true;
+                    ShakeZ();
+                    if (isPrizeCoinDone)
+                    {
+                        isButtonChestClickeds = true;
+                        isPrizeCoinDone = false;
+                    }
                 }
             }
         }

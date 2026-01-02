@@ -159,12 +159,16 @@ public class MissionDaily : MonoBehaviour
             {
                 isDailyMission1Completed = true;
                 buttonDailyMission1.interactable = true;
-                textDailyMission1.text = "Mission Completed";
+                textDailyMission1.text = "Mission Completed"; 
                 buttonDailyMission1.image.sprite = spriteButtonCompleted;
                 
                 MissionManager.instance.textQuantityRewardValue++;
                 MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
                 MissionManager.instance.notificationImage.gameObject.SetActive(true);
+
+                MissionManager.instance.textNotificationDailyValue++;
+                MissionManager.instance.textNotificationDaily.text = MissionManager.instance.textNotificationDailyValue.ToString();
+                MissionManager.instance.notificationImageDaily.gameObject.SetActive(true);
             }
         }
         if (!isDailyMission2Completed && !isReceivedDaily2Reward)
@@ -184,6 +188,10 @@ public class MissionDaily : MonoBehaviour
                 MissionManager.instance.textQuantityRewardValue++;
                 MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
                 MissionManager.instance.notificationImage.gameObject.SetActive(true);
+
+                MissionManager.instance.textNotificationDailyValue++;
+                MissionManager.instance.textNotificationDaily.text = MissionManager.instance.textNotificationDailyValue.ToString();
+                MissionManager.instance.notificationImageDaily.gameObject.SetActive(true);
             }
         }
         if (!isDailyMission3Completed && !isReceivedDaily3Reward)
@@ -205,6 +213,10 @@ public class MissionDaily : MonoBehaviour
                 MissionManager.instance.textQuantityRewardValue++;
                 MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
                 MissionManager.instance.notificationImage.gameObject.SetActive(true);
+
+                MissionManager.instance.textNotificationDailyValue++;
+                MissionManager.instance.textNotificationDaily.text = MissionManager.instance.textNotificationDailyValue.ToString();
+                MissionManager.instance.notificationImageDaily.gameObject.SetActive(true);
             }
         }
         if (!isDailyMission4Completed && !isReceivedDaily4Reward)
@@ -224,6 +236,10 @@ public class MissionDaily : MonoBehaviour
                 MissionManager.instance.textQuantityRewardValue++;
                 MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
                 MissionManager.instance.notificationImage.gameObject.SetActive(true);
+
+                MissionManager.instance.textNotificationDailyValue++;
+                MissionManager.instance.textNotificationDaily.text = MissionManager.instance.textNotificationDailyValue.ToString();
+                MissionManager.instance.notificationImageDaily.gameObject.SetActive(true);
             }
         }
         if (!isDailyMission5Completed && !isReceivedDaily5Reward)
@@ -243,6 +259,10 @@ public class MissionDaily : MonoBehaviour
                 MissionManager.instance.textQuantityRewardValue++;
                 MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
                 MissionManager.instance.notificationImage.gameObject.SetActive(true);
+
+                MissionManager.instance.textNotificationDailyValue++;
+                MissionManager.instance.textNotificationDaily.text = MissionManager.instance.textNotificationDailyValue.ToString();
+                MissionManager.instance.notificationImageDaily.gameObject.SetActive(true);
             }
         }
         Save();
@@ -363,6 +383,13 @@ public class MissionDaily : MonoBehaviour
                 {
                     MissionManager.instance.notificationImage.gameObject.SetActive(false);
                 }
+
+                MissionManager.instance.textNotificationDailyValue--;
+                MissionManager.instance.textNotificationDaily.text = MissionManager.instance.textNotificationDailyValue.ToString();
+                if (MissionManager.instance.textNotificationDailyValue <= 0)
+                {
+                    MissionManager.instance.notificationImageDaily.gameObject.SetActive(false);
+                }
             }
             Save();
         }
@@ -395,6 +422,13 @@ public class MissionDaily : MonoBehaviour
                 {
                     MissionManager.instance.notificationImage.gameObject.SetActive(false);
                 }
+
+                MissionManager.instance.textNotificationDailyValue--;
+                MissionManager.instance.textNotificationDaily.text = MissionManager.instance.textNotificationDailyValue.ToString();
+                if (MissionManager.instance.textNotificationDailyValue <= 0)
+                {
+                    MissionManager.instance.notificationImageDaily.gameObject.SetActive(false);
+                }
             }
             Save();
         }
@@ -425,6 +459,13 @@ public class MissionDaily : MonoBehaviour
                 if (MissionManager.instance.textQuantityRewardValue <= 0)
                 {
                     MissionManager.instance.notificationImage.gameObject.SetActive(false);
+                }
+
+                MissionManager.instance.textNotificationDailyValue--;
+                MissionManager.instance.textNotificationDaily.text = MissionManager.instance.textNotificationDailyValue.ToString();
+                if (MissionManager.instance.textNotificationDailyValue <= 0)
+                {
+                    MissionManager.instance.notificationImageDaily.gameObject.SetActive(false);
                 }
             }
             Save();
@@ -458,6 +499,13 @@ public class MissionDaily : MonoBehaviour
                 {
                     MissionManager.instance.notificationImage.gameObject.SetActive(false);
                 }
+
+                MissionManager.instance.textNotificationDailyValue--;
+                MissionManager.instance.textNotificationDaily.text = MissionManager.instance.textNotificationDailyValue.ToString();
+                if (MissionManager.instance.textNotificationDailyValue <= 0)
+                {
+                    MissionManager.instance.notificationImageDaily.gameObject.SetActive(false);
+                }
             }
             Save();
         }
@@ -489,6 +537,13 @@ public class MissionDaily : MonoBehaviour
                 if (MissionManager.instance.textQuantityRewardValue <= 0)
                 {
                     MissionManager.instance.notificationImage.gameObject.SetActive(false);
+                }
+
+                MissionManager.instance.textNotificationDailyValue--;
+                MissionManager.instance.textNotificationDaily.text = MissionManager.instance.textNotificationDailyValue.ToString();
+                if (MissionManager.instance.textNotificationDailyValue <= 0)
+                {
+                    MissionManager.instance.notificationImageDaily.gameObject.SetActive(false);
                 }
             }
             UpdateDailyMission();

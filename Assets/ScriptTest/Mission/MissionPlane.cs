@@ -159,6 +159,10 @@ public class MissionPlane : MonoBehaviour
                 MissionManager.instance.textQuantityRewardValue++;
                 MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
                 MissionManager.instance.notificationImage.gameObject.SetActive(true);
+
+                MissionManager.instance.textNotificationPlaneValue++;
+                MissionManager.instance.textNotificationPlane.text = MissionManager.instance.textNotificationPlaneValue.ToString();
+                MissionManager.instance.notificationImageDaily.gameObject.SetActive(true);
             }
         }
         if (!isPlaneMission2Completed && !isReceivedPlane2Reward)
@@ -178,6 +182,10 @@ public class MissionPlane : MonoBehaviour
                 MissionManager.instance.textQuantityRewardValue++;
                 MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
                 MissionManager.instance.notificationImage.gameObject.SetActive(true);
+
+                MissionManager.instance.textNotificationPlaneValue++;
+                MissionManager.instance.textNotificationPlane.text = MissionManager.instance.textNotificationPlaneValue.ToString();
+                MissionManager.instance.notificationImageDaily.gameObject.SetActive(true);
             }
         }
         if (!isPlaneMission3Completed && !isReceivedPlane3Reward)
@@ -198,6 +206,10 @@ public class MissionPlane : MonoBehaviour
                 MissionManager.instance.textQuantityRewardValue++;
                 MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
                 MissionManager.instance.notificationImage.gameObject.SetActive(true);
+
+                MissionManager.instance.textNotificationPlaneValue++;
+                MissionManager.instance.textNotificationPlane.text = MissionManager.instance.textNotificationPlaneValue.ToString();
+                MissionManager.instance.notificationImageDaily.gameObject.SetActive(true);
             }
         }
         if (!isPlaneMission4Completed && !isReceivedPlane4Reward)
@@ -217,6 +229,10 @@ public class MissionPlane : MonoBehaviour
                 MissionManager.instance.textQuantityRewardValue++;
                 MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
                 MissionManager.instance.notificationImage.gameObject.SetActive(true);
+                MissionManager.instance.textNotificationPlaneValue++;
+                MissionManager.instance.textNotificationPlane.text = MissionManager.instance.textNotificationPlaneValue.ToString();
+                MissionManager.instance.notificationImageDaily.gameObject.SetActive(true);
+
             }
         }
         if (!isPlaneMission5Completed && !isReceivedPlane5Reward)
@@ -236,6 +252,10 @@ public class MissionPlane : MonoBehaviour
                 MissionManager.instance.textQuantityRewardValue++;
                 MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
                 MissionManager.instance.notificationImage.gameObject.SetActive(true);
+
+                MissionManager.instance.textNotificationPlaneValue++;
+                MissionManager.instance.textNotificationPlane.text = MissionManager.instance.textNotificationPlaneValue.ToString();
+                MissionManager.instance.notificationImageDaily.gameObject.SetActive(true);
             }
         }
         Save();
@@ -359,6 +379,13 @@ public class MissionPlane : MonoBehaviour
                 {
                     MissionManager.instance.notificationImage.gameObject.SetActive(false);
                 }
+
+                MissionManager.instance.textNotificationPlaneValue--;
+                MissionManager.instance.textNotificationPlane.text = MissionManager.instance.textNotificationPlaneValue.ToString();
+                if (MissionManager.instance.textNotificationPlaneValue <= 0)
+                {
+                    MissionManager.instance.notificationImageDaily.gameObject.SetActive(false);
+                }
             }
             Save();
         }
@@ -389,6 +416,13 @@ public class MissionPlane : MonoBehaviour
                 if (MissionManager.instance.textQuantityRewardValue <= 0)
                 {
                     MissionManager.instance.notificationImage.gameObject.SetActive(false);
+                }
+
+                MissionManager.instance.textNotificationPlaneValue--;
+                MissionManager.instance.textNotificationPlane.text = MissionManager.instance.textNotificationPlaneValue.ToString();
+                if (MissionManager.instance.textNotificationPlaneValue <= 0)
+                {
+                    MissionManager.instance.notificationImageDaily.gameObject.SetActive(false);
                 }
             }
             Save();
@@ -421,6 +455,13 @@ public class MissionPlane : MonoBehaviour
                 {
                     MissionManager.instance.notificationImage.gameObject.SetActive(false);
                 }
+
+                MissionManager.instance.textNotificationPlaneValue--;
+                MissionManager.instance.textNotificationPlane.text = MissionManager.instance.textNotificationPlaneValue.ToString();
+                if (MissionManager.instance.textNotificationPlaneValue <= 0)
+                {
+                    MissionManager.instance.notificationImageDaily.gameObject.SetActive(false);
+                }
             }
             Save();
         }
@@ -452,6 +493,13 @@ public class MissionPlane : MonoBehaviour
                 {
                     MissionManager.instance.notificationImage.gameObject.SetActive(false);
                 }
+
+                MissionManager.instance.textNotificationPlaneValue--;
+                MissionManager.instance.textNotificationPlane.text = MissionManager.instance.textNotificationPlaneValue.ToString();
+                if (MissionManager.instance.textNotificationPlaneValue <= 0)
+                {
+                    MissionManager.instance.notificationImageDaily.gameObject.SetActive(false);
+                }
             }
             Save();
         }
@@ -482,6 +530,13 @@ public class MissionPlane : MonoBehaviour
                 if (MissionManager.instance.textQuantityRewardValue <= 0)
                 {
                     MissionManager.instance.notificationImage.gameObject.SetActive(false);
+                }
+
+                MissionManager.instance.textNotificationPlaneValue--;
+                MissionManager.instance.textNotificationPlane.text = MissionManager.instance.textNotificationPlaneValue.ToString();
+                if (MissionManager.instance.textNotificationPlaneValue <= 0)
+                {
+                    MissionManager.instance.notificationImageDaily.gameObject.SetActive(false);
                 }
             }
             Save();

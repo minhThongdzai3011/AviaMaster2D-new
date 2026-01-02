@@ -30,6 +30,18 @@ public class MissionManager : MonoBehaviour
     [Header("Page Text")]
     public TextMeshProUGUI textQuantityReward;
 
+    [Header("Notification Reward Daily")]
+    public Image notificationImageDaily;
+    public TextMeshProUGUI textNotificationDaily;
+
+    [Header("Notification Reward Plane")]
+    public Image notificationImagePlane;
+    public TextMeshProUGUI textNotificationPlane;
+
+    [Header("Notification Reward Achievements")]
+    public Image notificationImageAchievements;
+    public TextMeshProUGUI textNotificationAchievements;
+    
     [Header(" Imange Mission")]
     public Image misssionImage;
     public Image notificationImage;
@@ -42,6 +54,9 @@ public class MissionManager : MonoBehaviour
     public EventTrigger moreGameButton;
 
     public int textQuantityRewardValue = 0;
+    public int textNotificationDailyValue = 0;
+    public int textNotificationPlaneValue = 0;
+    public int textNotificationAchievementsValue = 0;
 
     private bool isTransitioning = false;
 
@@ -61,6 +76,7 @@ public class MissionManager : MonoBehaviour
     {
         ShowPage(1);
         UpdateButtonSprites();
+        Debug.Log("Mission Manager Started : " + textQuantityRewardValue); 
     }
     
     void UpdateButtonSprites()

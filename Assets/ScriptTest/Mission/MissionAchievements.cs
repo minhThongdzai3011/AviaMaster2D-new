@@ -170,6 +170,21 @@ public class MissionAchievements : MonoBehaviour
             UpdateAchievementMission();
         }
     }
+    //phan thuong thuong khi hoan thanh mission 1
+    public bool isN = true;
+    public bool isN1 = true;
+    //phan thuong thuong khi hoan thanh mission 2
+    public bool isM = true;
+    public bool isM1 = true;
+    //phan thuong thuong khi hoan thanh mission 3
+    public bool isL = true;
+    public bool isL1 = true;
+    //phan thuong thuong khi hoan thanh mission 4
+    public bool isK = true;
+    public bool isK1 = true;
+    //phan thuong thuong khi hoan thanh mission 5
+    public bool isJ = true;
+    public bool isJ1 = true;
 
     public void UpdateAchievementMission()
     {
@@ -203,8 +218,24 @@ public class MissionAchievements : MonoBehaviour
             textMissionGuideAchievement5.text = "Unlock " + achievementMission5Target[achievementMission5CurrentLevel] + " maps";
             textPrizeRewardAchievement5.text = FormatNumber(prizeRewardAchievement5[achievementMission5CurrentLevel]);
         }
-        
+
         // Achievement Mission 1
+        if(isRewardCollectionCompleteAchievement1 && isN){
+                isN = false;
+                if (isN1)
+                {
+                    MissionManager.instance.textQuantityRewardValue++;
+                    MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
+                    MissionManager.instance.notificationImage.gameObject.SetActive(true);
+
+                    MissionManager.instance.textNotificationAchievementsValue++;
+                    MissionManager.instance.textNotificationAchievements.text = MissionManager.instance.textNotificationAchievementsValue.ToString();
+                    MissionManager.instance.notificationImageAchievements.gameObject.SetActive(true);
+                }
+                
+                // UpdateAchievementMission();
+                Debug.Log("Achievement Mission 1 Reward Collection Completed");
+        }
         if (achievementMission1CurrentLevel < achievementMission1Target.Length)
         {
             if (!isAchievementMission1Completed && !isReceivedAchievement1Reward)
@@ -215,14 +246,23 @@ public class MissionAchievements : MonoBehaviour
 
                 if (achievementMission1Progress >= achievementMission1Target[achievementMission1CurrentLevel])
                 {
+
                     isAchievementMission1Completed = true;
                     buttonAchievementMission1.interactable = true;
+                    isRewardCollectionCompleteAchievement1 = true;
+                    PlayerPrefs.SetInt("IsRewardCollectionCompleteAchievement1", 1);
                     textAchievementMission1.text = "Mission Completed";
                     buttonAchievementMission1.image.sprite = spriteButtonCompleted;
                     
                     MissionManager.instance.textQuantityRewardValue++;
                     MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
                     MissionManager.instance.notificationImage.gameObject.SetActive(true);
+
+                    MissionManager.instance.textNotificationAchievementsValue++;
+                    MissionManager.instance.textNotificationAchievements.text = MissionManager.instance.textNotificationAchievementsValue.ToString();
+                    MissionManager.instance.notificationImageAchievements.gameObject.SetActive(true);
+                    isN1 = false;
+                    // UpdateAchievementMission();
                 }
             }
         }
@@ -237,6 +277,22 @@ public class MissionAchievements : MonoBehaviour
         }
 
         // Achievement Mission 2
+        if(isRewardCollectionCompleteAchievement2 && isM){
+            isM = false;
+            if (isM1)
+            {
+                MissionManager.instance.textQuantityRewardValue++;
+                MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
+                MissionManager.instance.notificationImage.gameObject.SetActive(true);
+
+                MissionManager.instance.textNotificationAchievementsValue++;
+                MissionManager.instance.textNotificationAchievements.text = MissionManager.instance.textNotificationAchievementsValue.ToString();
+                MissionManager.instance.notificationImageAchievements.gameObject.SetActive(true);
+            }
+            
+            // UpdateAchievementMission();
+            Debug.Log("Achievement Mission 1 Reward Collection Completed");
+        }
         if (achievementMission2CurrentLevel < achievementMission2Target.Length)
         {
             if (!isAchievementMission2Completed && !isReceivedAchievement2Reward)
@@ -249,12 +305,21 @@ public class MissionAchievements : MonoBehaviour
                 {
                     isAchievementMission2Completed = true;
                     buttonAchievementMission2.interactable = true;
+                    isRewardCollectionCompleteAchievement2 = true;
+                    PlayerPrefs.SetInt("IsRewardCollectionCompleteAchievement2", 1);
                     textAchievementMission2.text = "Mission Completed";
                     buttonAchievementMission2.image.sprite = spriteButtonCompleted;
                     
                     MissionManager.instance.textQuantityRewardValue++;
                     MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
                     MissionManager.instance.notificationImage.gameObject.SetActive(true);
+
+                    MissionManager.instance.textNotificationAchievementsValue++;
+                    MissionManager.instance.textNotificationAchievements.text = MissionManager.instance.textNotificationAchievementsValue.ToString();
+                    MissionManager.instance.notificationImageAchievements.gameObject.SetActive(true);
+                    isM1 = false;
+                    
+                    // UpdateAchievementMission();
                 }
             }
         }
@@ -268,6 +333,22 @@ public class MissionAchievements : MonoBehaviour
         }
 
         // Achievement Mission 3
+        if(isRewardCollectionCompleteAchievement3 && isL){
+                isL = false;
+                if (isL1)
+                {
+                    MissionManager.instance.textQuantityRewardValue++;
+                    MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
+                    MissionManager.instance.notificationImage.gameObject.SetActive(true);
+
+                    MissionManager.instance.textNotificationAchievementsValue++;
+                    MissionManager.instance.textNotificationAchievements.text = MissionManager.instance.textNotificationAchievementsValue.ToString();
+                    MissionManager.instance.notificationImageAchievements.gameObject.SetActive(true);
+                }
+                
+                // UpdateAchievementMission();
+                Debug.Log("Achievement Mission 1 Reward Collection Completed");
+        }
         if (achievementMission3CurrentLevel < achievementMission3Target.Length)
         {
             if (!isAchievementMission3Completed && !isReceivedAchievement3Reward)
@@ -280,12 +361,20 @@ public class MissionAchievements : MonoBehaviour
                 {
                     isAchievementMission3Completed = true;
                     buttonAchievementMission3.interactable = true;
+                    isRewardCollectionCompleteAchievement3 = true;
+                    PlayerPrefs.SetInt("IsRewardCollectionCompleteAchievement3", 1);
                     textAchievementMission3.text = "Mission Completed";
                     buttonAchievementMission3.image.sprite = spriteButtonCompleted;
                     
                     MissionManager.instance.textQuantityRewardValue++;
                     MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
                     MissionManager.instance.notificationImage.gameObject.SetActive(true);
+
+                    MissionManager.instance.textNotificationAchievementsValue++;
+                    MissionManager.instance.textNotificationAchievements.text = MissionManager.instance.textNotificationAchievementsValue.ToString();
+                    MissionManager.instance.notificationImageAchievements.gameObject.SetActive(true);
+                    isL1 = false;
+                    // UpdateAchievementMission();
                 }
             }
         }
@@ -299,6 +388,22 @@ public class MissionAchievements : MonoBehaviour
         }
 
         // Achievement Mission 4
+        if(isRewardCollectionCompleteAchievement4 && isK){
+                isK = false;
+                if (isK1)
+                {
+                    MissionManager.instance.textQuantityRewardValue++;
+                    MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
+                    MissionManager.instance.notificationImage.gameObject.SetActive(true);
+
+                    MissionManager.instance.textNotificationAchievementsValue++;
+                    MissionManager.instance.textNotificationAchievements.text = MissionManager.instance.textNotificationAchievementsValue.ToString();
+                    MissionManager.instance.notificationImageAchievements.gameObject.SetActive(true);
+                }
+                
+                // UpdateAchievementMission();
+                Debug.Log("Achievement Mission 1 Reward Collection Completed");
+        }
         if (achievementMission4CurrentLevel < achievementMission4Target.Length)
         {
             if (!isAchievementMission4Completed && !isReceivedAchievement4Reward)
@@ -315,12 +420,20 @@ public class MissionAchievements : MonoBehaviour
                 {
                     isAchievementMission4Completed = true;
                     buttonAchievementMission4.interactable = true;
+                    isRewardCollectionCompleteAchievement4 = true;
+                    PlayerPrefs.SetInt("IsRewardCollectionCompleteAchievement4", 1);
                     textAchievementMission4.text = "Mission Completed";
                     buttonAchievementMission4.image.sprite = spriteButtonCompleted;
                     
                     MissionManager.instance.textQuantityRewardValue++;
                     MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
                     MissionManager.instance.notificationImage.gameObject.SetActive(true);
+
+                    MissionManager.instance.textNotificationAchievementsValue++;
+                    MissionManager.instance.textNotificationAchievements.text = MissionManager.instance.textNotificationAchievementsValue.ToString();
+                    MissionManager.instance.notificationImageAchievements.gameObject.SetActive(true);
+                    isK1 = false;
+                    // UpdateAchievementMission();
                 }
             }
         }
@@ -334,6 +447,22 @@ public class MissionAchievements : MonoBehaviour
         }
 
         // Achievement Mission 5
+        if(isRewardCollectionCompleteAchievement5 && isJ){
+                isJ = false;
+                if (isJ1)
+                {
+                    MissionManager.instance.textQuantityRewardValue++;
+                    MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
+                    MissionManager.instance.notificationImage.gameObject.SetActive(true);
+
+                    MissionManager.instance.textNotificationAchievementsValue++;
+                    MissionManager.instance.textNotificationAchievements.text = MissionManager.instance.textNotificationAchievementsValue.ToString();
+                    MissionManager.instance.notificationImageAchievements.gameObject.SetActive(true);
+                }
+                
+                // UpdateAchievementMission();
+                Debug.Log("Achievement Mission 1 Reward Collection Completed");
+        }
         if (achievementMission5CurrentLevel < achievementMission5Target.Length)
         {
             if (!isAchievementMission5Completed && !isReceivedAchievement5Reward)
@@ -346,12 +475,20 @@ public class MissionAchievements : MonoBehaviour
                 {
                     isAchievementMission5Completed = true;
                     buttonAchievementMission5.interactable = true;
+                    isRewardCollectionCompleteAchievement5 = true;
+                    PlayerPrefs.SetInt("IsRewardCollectionCompleteAchievement5", 1);
                     textAchievementMission5.text = "Mission Completed";
                     buttonAchievementMission5.image.sprite = spriteButtonCompleted;
                     
                     MissionManager.instance.textQuantityRewardValue++;
                     MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
                     MissionManager.instance.notificationImage.gameObject.SetActive(true);
+
+                    MissionManager.instance.textNotificationAchievementsValue++;
+                    MissionManager.instance.textNotificationAchievements.text = MissionManager.instance.textNotificationAchievementsValue.ToString();
+                    MissionManager.instance.notificationImageAchievements.gameObject.SetActive(true);
+                    isJ1 = false;
+                    // UpdateAchievementMission();
                 }
             }
         }
@@ -425,6 +562,12 @@ public class MissionAchievements : MonoBehaviour
         isReceivedAchievement3Reward = PlayerPrefs.GetInt("IsReceivedAchievement3Reward", 0) == 1;
         isReceivedAchievement4Reward = PlayerPrefs.GetInt("IsReceivedAchievement4Reward", 0) == 1;
         isReceivedAchievement5Reward = PlayerPrefs.GetInt("IsReceivedAchievement5Reward", 0) == 1;
+
+        isRewardCollectionCompleteAchievement1 = PlayerPrefs.GetInt("IsRewardCollectionCompleteAchievement1", 0) == 1;
+        isRewardCollectionCompleteAchievement2 = PlayerPrefs.GetInt("IsRewardCollectionCompleteAchievement2", 0) == 1;
+        isRewardCollectionCompleteAchievement3 = PlayerPrefs.GetInt("IsRewardCollectionCompleteAchievement3", 0) == 1;
+        isRewardCollectionCompleteAchievement4 = PlayerPrefs.GetInt("IsRewardCollectionCompleteAchievement4", 0) == 1;
+        isRewardCollectionCompleteAchievement5 = PlayerPrefs.GetInt("IsRewardCollectionCompleteAchievement5", 0) == 1;
     }
 
     public void ResetAchievementMissions()
@@ -503,6 +646,13 @@ public class MissionAchievements : MonoBehaviour
         Save();
     }
 
+    public bool isRewardCollectionCompleteAchievement1 = false;
+    public bool isRewardCollectionCompleteAchievement2 = false;
+    public bool isRewardCollectionCompleteAchievement3 = false;
+    public bool isRewardCollectionCompleteAchievement4 = false;
+    public bool isRewardCollectionCompleteAchievement5 = false;
+
+
     public void buttonMission1ClaimReward()
     {
         if (isAchievementMission1Completed && achievementMission1CurrentLevel < achievementMission1Target.Length && !isFalseButton1ClickedAchie)
@@ -523,11 +673,23 @@ public class MissionAchievements : MonoBehaviour
             {
                 MissionManager.instance.notificationImage.gameObject.SetActive(false);
             }
+
+            MissionManager.instance.textNotificationAchievementsValue--;
+            MissionManager.instance.textNotificationAchievements.text = MissionManager.instance.textNotificationAchievementsValue.ToString();
+            if (MissionManager.instance.textNotificationAchievementsValue <= 0)
+            {
+                MissionManager.instance.notificationImageAchievements.gameObject.SetActive(false);
+            }
             
             // Tăng level (index) lên 1
             achievementMission1CurrentLevel++;
+
+            // Đánh dấu hoàn thành để tăng tiến độ plane mission
+            
             MissionPlane.instance.planeMission3Progress++;
             MissionPlane.instance.UpdatePlaneMission();
+            isRewardCollectionCompleteAchievement1 = false;
+            PlayerPrefs.SetInt("IsRewardCollectionCompleteAchievement1", 0);
             
             // Reset cho level mới
             isAchievementMission1Completed = false;
@@ -578,13 +740,22 @@ public class MissionAchievements : MonoBehaviour
             {
                 MissionManager.instance.notificationImage.gameObject.SetActive(false);
             }
+
+            MissionManager.instance.textNotificationAchievementsValue--;
+            MissionManager.instance.textNotificationAchievements.text = MissionManager.instance.textNotificationAchievementsValue.ToString();
+            if (MissionManager.instance.textNotificationAchievementsValue <= 0)
+            {
+                MissionManager.instance.notificationImageAchievements.gameObject.SetActive(false);
+            }
             
             achievementMission2CurrentLevel++;
             MissionPlane.instance.planeMission3Progress++;
             MissionPlane.instance.UpdatePlaneMission();
+            isRewardCollectionCompleteAchievement2 = false;
+            PlayerPrefs.SetInt("IsRewardCollectionCompleteAchievement2", 0);
             
             isAchievementMission2Completed = false;
-            achievementMission2Progress = 0;
+            // achievementMission2Progress = 0;
             isReceivedAchievement2Reward = false;
             isFalseButton2ClickedAchie = false;
             
@@ -628,10 +799,19 @@ public class MissionAchievements : MonoBehaviour
             {
                 MissionManager.instance.notificationImage.gameObject.SetActive(false);
             }
+
+            MissionManager.instance.textNotificationAchievementsValue--;
+            MissionManager.instance.textNotificationAchievements.text = MissionManager.instance.textNotificationAchievementsValue.ToString();
+            if (MissionManager.instance.textNotificationAchievementsValue <= 0)
+            {
+                MissionManager.instance.notificationImageAchievements.gameObject.SetActive(false);
+            }
             
             achievementMission3CurrentLevel++;
             MissionPlane.instance.planeMission3Progress++;
             MissionPlane.instance.UpdatePlaneMission();
+            isRewardCollectionCompleteAchievement3 = false; 
+            PlayerPrefs.SetInt("IsRewardCollectionCompleteAchievement3", 0);
             
             isAchievementMission3Completed = false;
             achievementMission3Progress = 0;
@@ -678,10 +858,19 @@ public class MissionAchievements : MonoBehaviour
             {
                 MissionManager.instance.notificationImage.gameObject.SetActive(false);
             }
+
+            MissionManager.instance.textNotificationAchievementsValue--;
+            MissionManager.instance.textNotificationAchievements.text = MissionManager.instance.textNotificationAchievementsValue.ToString();
+            if (MissionManager.instance.textNotificationAchievementsValue <= 0)
+            {
+                MissionManager.instance.notificationImageAchievements.gameObject.SetActive(false);
+            }
             
             achievementMission4CurrentLevel++;
             MissionPlane.instance.planeMission3Progress++;
             MissionPlane.instance.UpdatePlaneMission();
+            isRewardCollectionCompleteAchievement4 = false;
+            PlayerPrefs.SetInt("IsRewardCollectionCompleteAchievement4", 0);
             
             isAchievementMission4Completed = false;
             achievementMission4Progress = 0;
@@ -728,13 +917,22 @@ public class MissionAchievements : MonoBehaviour
             {
                 MissionManager.instance.notificationImage.gameObject.SetActive(false);
             }
+
+            MissionManager.instance.textNotificationAchievementsValue--;
+            MissionManager.instance.textNotificationAchievements.text = MissionManager.instance.textNotificationAchievementsValue.ToString();
+            if (MissionManager.instance.textNotificationAchievementsValue <= 0)
+            {
+                MissionManager.instance.notificationImageAchievements.gameObject.SetActive(false);
+            }
             
             achievementMission5CurrentLevel++;
             MissionPlane.instance.planeMission3Progress++;
             MissionPlane.instance.UpdatePlaneMission();
+            isRewardCollectionCompleteAchievement5 = false;
+            PlayerPrefs.SetInt("IsRewardCollectionCompleteAchievement5", 0);
             
             isAchievementMission5Completed = false;
-            achievementMission5Progress = 0;
+            // achievementMission5Progress = 0;
             isReceivedAchievement5Reward = false;
             isFalseButton5ClickedAchie = false;
             

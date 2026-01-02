@@ -1018,6 +1018,8 @@ public class Plane : MonoBehaviour
     IEnumerator FadeFogImage()
     {
         float elapsed = 0f;
+        Settings.instance.imageWhiteScreen.gameObject.SetActive(true);
+        Settings.instance.imageWhite1Screen.gameObject.SetActive(true);
         Settings.instance.iamgeBlackScreen.gameObject.SetActive(true);
         Color startColor = Settings.instance.iamgeBlackScreen.color;
         startColor.a = 0f;
@@ -1027,24 +1029,43 @@ public class Plane : MonoBehaviour
         {
             elapsed += Time.deltaTime;
             Color c = Settings.instance.iamgeBlackScreen.color;
+            Color b = Settings.instance.imageWhite1Screen.color;
             c.a = Mathf.Clamp01(elapsed / 1f);
+            b.a = Mathf.Clamp01(elapsed / 1f);
+            Settings.instance.imageWhite1Screen.color = b;
             Settings.instance.iamgeBlackScreen.color = c;
             yield return null;
         }
 
-        yield return new WaitForSeconds(6f);
+        float moveDuration = 6f;
+        float moveElapsed = 0f;
+        Vector3 startPos = Settings.instance.iamgeBlackScreen.transform.position;
+        Vector3 targetPos = startPos + new Vector3(-1000f, 0f, 0f);
+
+        while (moveElapsed < moveDuration)
+        {
+            moveElapsed += Time.deltaTime;
+            float t = moveElapsed / moveDuration;
+            Settings.instance.iamgeBlackScreen.transform.position = Vector3.Lerp(startPos, targetPos, t);
+            yield return null;
+        }
+
 
         elapsed = 0f;
         while (elapsed < 1f)
         {
             elapsed += Time.deltaTime;
             Color c = Settings.instance.iamgeBlackScreen.color;
+            Color b = Settings.instance.imageWhite1Screen.color;
+            b.a = 1f - Mathf.Clamp01(elapsed / 1f);
             c.a = 1f - Mathf.Clamp01(elapsed / 1f); 
             Settings.instance.iamgeBlackScreen.color = c;
+            Settings.instance.imageWhite1Screen.color = b;
             yield return null;
         }
-
+        Settings.instance.imageWhiteScreen.gameObject.SetActive(false);
         Settings.instance.iamgeBlackScreen.gameObject.SetActive(false);
+        Settings.instance.imageWhite1Screen.gameObject.SetActive(false);
     }
 
     public bool isAddFuel = false;

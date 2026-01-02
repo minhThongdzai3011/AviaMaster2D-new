@@ -26,7 +26,7 @@ public class PositionX : MonoBehaviour
         Sequence seq = DOTween.Sequence();
 
         seq.Append(transform.DOMoveX(transform.position.x + 1.3f * 0.8f, 0.4f).SetEase(Ease.Linear));
-        seq.Append(transform.DOMoveX(transform.position.x + 1.5f * 0.8f, 0.05f).SetEase(Ease.Linear)); 
+        seq.Append(transform.DOMoveX(transform.position.x + 1.5f * 0.8f, 0.1f).SetEase(Ease.Linear)); 
         seq.Append(transform.DOMoveX(transform.position.x + 3.2f * 0.8f, 0.3f).SetEase(Ease.Linear));
 
         seq.SetLoops(-1, LoopType.Yoyo);     
@@ -52,7 +52,7 @@ public class PositionX : MonoBehaviour
             Debug.Log($"Temp Value: {temp}%");
             
             
-            if ( 41f <= temp && temp <= 58f)
+            if ( 44f <= temp && temp <= 56f)
             {
                 isMaxPower = true;
 
