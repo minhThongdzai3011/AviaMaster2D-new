@@ -22,6 +22,7 @@ public class MissionManager : MonoBehaviour
     
     private int currentPage = 1;
 
+
     [Header("Content")]
     public GameObject gameObjectDailyText;
     public GameObject gameObjectPlaneText;

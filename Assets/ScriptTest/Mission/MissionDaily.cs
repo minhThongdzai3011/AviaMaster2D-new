@@ -84,6 +84,13 @@ public class MissionDaily : MonoBehaviour
     public bool isFasleButton4Clicked = false;
     public bool isFasleButton5Clicked = false;
 
+    [Header("List Prize Daily Mission")]
+    public int[] prizeDailyMissions3 = {1500, 5000, 10000};
+    public int[] prizeDailyMissions5 = {2000, 7000, 15000};
+
+    public TextMeshProUGUI prizeDailyMission3Text;
+    public TextMeshProUGUI prizeDailyMission5Text;
+
 
 
     // Start is called before the first frame update
@@ -134,6 +141,21 @@ public class MissionDaily : MonoBehaviour
             dailyMission4Progress = dailyMission4Target;
             dailyMission5Progress = dailyMission5Target;
             UpdateDailyMission();
+        }
+        if (GManager.instance.moneyFuel > 50000 || GManager.instance.moneyBoost > 50000 || GManager.instance.moneyPower > 50000)
+        {
+            prizeDailyMission3Text.text = prizeDailyMissions3[2].ToString();
+            prizeDailyMission5Text.text = prizeDailyMissions5[2].ToString();
+        }
+        else if (GManager.instance.moneyFuel > 20000 || GManager.instance.moneyBoost > 20000 || GManager.instance.moneyPower > 20000)
+        {
+            prizeDailyMission3Text.text = prizeDailyMissions3[1].ToString();
+            prizeDailyMission5Text.text = prizeDailyMissions5[1].ToString();
+        }
+        else
+        {
+            prizeDailyMission3Text.text = prizeDailyMissions3[0].ToString();
+            prizeDailyMission5Text.text = prizeDailyMissions5[0].ToString();
         }
 
     }
@@ -447,7 +469,18 @@ public class MissionDaily : MonoBehaviour
             isReceivedDaily3Reward = true;
             textDailyMission3.text = "Claimed";
             imageBackGroundFillDailyMission3.sprite = spriteBackGroundFillMissionCompleted;
-            GManager.instance.totalMoney += 1500f;
+            if (GManager.instance.moneyFuel > 50000 || GManager.instance.moneyBoost > 50000 || GManager.instance.moneyPower > 50000)
+            {
+                GManager.instance.totalMoney += prizeDailyMissions3[2];
+            }
+            else if (GManager.instance.moneyFuel > 20000 || GManager.instance.moneyBoost > 20000 || GManager.instance.moneyPower > 20000)
+            {
+                GManager.instance.totalMoney += prizeDailyMissions3[1];
+            }
+            else
+            {
+                GManager.instance.totalMoney += prizeDailyMissions3[0];
+            }
             PlayerPrefs.SetFloat("TotalMoney", GManager.instance.totalMoney);
             PlayerPrefs.Save();
             GManager.instance.SaveTotalMoney();
@@ -526,7 +559,18 @@ public class MissionDaily : MonoBehaviour
             isReceivedDaily5Reward = true;
             textDailyMission5.text = "Claimed";
             imageBackGroundFillDailyMission5 .sprite = spriteBackGroundFillMissionCompleted;
-            GManager.instance.totalMoney += 2000f;
+            if (GManager.instance.moneyFuel > 50000 || GManager.instance.moneyBoost > 50000 || GManager.instance.moneyPower > 50000)
+            {
+                GManager.instance.totalMoney += prizeDailyMissions5[2];
+            }
+            else if (GManager.instance.moneyFuel > 20000 || GManager.instance.moneyBoost > 20000 || GManager.instance.moneyPower > 20000)
+            {
+                GManager.instance.totalMoney += prizeDailyMissions5[1];
+            }
+            else
+            {
+                GManager.instance.totalMoney += prizeDailyMissions5[0];
+            }
             PlayerPrefs.SetFloat("TotalMoney", GManager.instance.totalMoney);
             PlayerPrefs.Save();
             GManager.instance.SaveTotalMoney();

@@ -1240,8 +1240,18 @@ public class GManager : MonoBehaviour
             if (isBoosterActive)
             {
                 float angleRad = targetRotation * Mathf.Deg2Rad;
-                Vector2 forceDirection = new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad));
-                airplaneRigidbody2D.AddForce(forceDirection * controlForce * 0.4f, ForceMode2D.Force);
+                if (isBoosterActive)
+                {
+                    float angleRad1 = targetRotation * Mathf.Deg2Rad;
+                    Vector2 dir = new Vector2(Mathf.Cos(angleRad1), Mathf.Sin(angleRad1));
+
+                    // Ép thành phần X luôn >= 1
+                    dir.x = Mathf.Max(dir.x, 1f);
+                    dir.Normalize();
+
+                    airplaneRigidbody2D.AddForce(dir * controlForce * 0.4f, ForceMode2D.Force);
+                }
+
             }
         }
 
@@ -1260,8 +1270,18 @@ public class GManager : MonoBehaviour
             if (isBoosterActive)
             {
                 float angleRad = targetRotation * Mathf.Deg2Rad;
-                Vector2 forceDirection = new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad));
-                airplaneRigidbody2D.AddForce(forceDirection * controlForce * 0.3f, ForceMode2D.Force);
+                if (isBoosterActive)
+                {
+                    float angleRad1 = targetRotation * Mathf.Deg2Rad;
+                    Vector2 dir = new Vector2(Mathf.Cos(angleRad1), Mathf.Sin(angleRad1));
+
+                    // Ép thành phần X luôn >= 1
+                    dir.x = Mathf.Max(dir.x, 1f);
+                    dir.Normalize();
+
+                    airplaneRigidbody2D.AddForce(dir * controlForce * 0.4f, ForceMode2D.Force);
+                }
+
             }
         }
     }

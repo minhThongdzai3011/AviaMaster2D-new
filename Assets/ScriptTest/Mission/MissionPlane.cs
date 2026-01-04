@@ -115,6 +115,32 @@ public class MissionPlane : MonoBehaviour
         Load();
         UpdatePlaneMission();
         completeRewardCollection();
+        if(isUnlockSuperPlane1)
+        {
+            guidePlane1Image.gameObject.SetActive(false);
+            Shop.instance.listTextPriceSuperlane[0].text = "Select";
+        }
+        if(isUnlockSuperPlane2)
+        {
+            guidePlane2Image.gameObject.SetActive(false);
+            Shop.instance.listTextPriceSuperlane[1].text = "Select";
+        }
+        if(isUnlockSuperPlane3)
+        {
+            guidePlane3Image.gameObject.SetActive(false);
+            Shop.instance.listTextPriceSuperlane[2].text = "Select";
+        }
+        if(isUnlockSuperPlane4)
+        {
+            guidePlane4Image.gameObject.SetActive(false);
+            Shop.instance.listTextPriceSuperlane[3].text = "Select";
+        }
+        if(isUnlockSuperPlane5)
+        {
+            guidePlane5Image.gameObject.SetActive(false);
+            Shop.instance.listTextPriceSuperlane[4].text = "Select";
+        }
+
 
         
 
@@ -162,7 +188,7 @@ public class MissionPlane : MonoBehaviour
 
                 MissionManager.instance.textNotificationPlaneValue++;
                 MissionManager.instance.textNotificationPlane.text = MissionManager.instance.textNotificationPlaneValue.ToString();
-                MissionManager.instance.notificationImageDaily.gameObject.SetActive(true);
+                MissionManager.instance.notificationImagePlane.gameObject.SetActive(true);
             }
         }
         if (!isPlaneMission2Completed && !isReceivedPlane2Reward)
@@ -185,7 +211,7 @@ public class MissionPlane : MonoBehaviour
 
                 MissionManager.instance.textNotificationPlaneValue++;
                 MissionManager.instance.textNotificationPlane.text = MissionManager.instance.textNotificationPlaneValue.ToString();
-                MissionManager.instance.notificationImageDaily.gameObject.SetActive(true);
+                MissionManager.instance.notificationImagePlane.gameObject.SetActive(true);
             }
         }
         if (!isPlaneMission3Completed && !isReceivedPlane3Reward)
@@ -209,7 +235,7 @@ public class MissionPlane : MonoBehaviour
 
                 MissionManager.instance.textNotificationPlaneValue++;
                 MissionManager.instance.textNotificationPlane.text = MissionManager.instance.textNotificationPlaneValue.ToString();
-                MissionManager.instance.notificationImageDaily.gameObject.SetActive(true);
+                MissionManager.instance.notificationImagePlane.gameObject.SetActive(true);
             }
         }
         if (!isPlaneMission4Completed && !isReceivedPlane4Reward)
@@ -231,7 +257,7 @@ public class MissionPlane : MonoBehaviour
                 MissionManager.instance.notificationImage.gameObject.SetActive(true);
                 MissionManager.instance.textNotificationPlaneValue++;
                 MissionManager.instance.textNotificationPlane.text = MissionManager.instance.textNotificationPlaneValue.ToString();
-                MissionManager.instance.notificationImageDaily.gameObject.SetActive(true);
+                MissionManager.instance.notificationImagePlane.gameObject.SetActive(true);
 
             }
         }
@@ -255,7 +281,7 @@ public class MissionPlane : MonoBehaviour
 
                 MissionManager.instance.textNotificationPlaneValue++;
                 MissionManager.instance.textNotificationPlane.text = MissionManager.instance.textNotificationPlaneValue.ToString();
-                MissionManager.instance.notificationImageDaily.gameObject.SetActive(true);
+                MissionManager.instance.notificationImagePlane.gameObject.SetActive(true);
             }
         }
         Save();
@@ -289,6 +315,13 @@ public class MissionPlane : MonoBehaviour
         isReceivedPlane3Reward = PlayerPrefs.GetInt("IsReceivedPlane3Reward", 0) == 1;
         isReceivedPlane4Reward = PlayerPrefs.GetInt("IsReceivedPlane4Reward", 0) == 1;
         isReceivedPlane5Reward = PlayerPrefs.GetInt("IsReceivedPlane5Reward", 0) == 1;
+
+        isUnlockSuperPlane1 = PlayerPrefs.GetInt("IsUnlockSuperPlane1", 0) == 1;
+        isUnlockSuperPlane2 = PlayerPrefs.GetInt("IsUnlockSuperPlane2", 0) == 1;
+        isUnlockSuperPlane3 = PlayerPrefs.GetInt("IsUnlockSuperPlane3", 0) == 1;
+        isUnlockSuperPlane4 = PlayerPrefs.GetInt("IsUnlockSuperPlane4", 0) == 1;
+        isUnlockSuperPlane5 = PlayerPrefs.GetInt("IsUnlockSuperPlane5", 0) == 1;
+
     }
 
     public void ResetPlaneMissions()
@@ -359,6 +392,7 @@ public class MissionPlane : MonoBehaviour
             Debug.Log("Plane Mission 1 Reward Claimed!");
             AudioManager.instance.PlaySound(AudioManager.instance.rewardMissionSoundClip);
             isUnlockSuperPlane1 = true;
+            PlayerPrefs.SetInt("IsUnlockSuperPlane1", 1);
             buttonPlaneMission1.image.sprite = spriteButtonClaimed;
             isPlaneMission1Completed = false;
             isFalseButton1Clicked = true;
@@ -369,6 +403,7 @@ public class MissionPlane : MonoBehaviour
             imageBackGroundFillPlaneMission1.sprite = spriteBackGroundFillMissionCompleted;
             Shop.instance.listTextPriceSuperlane[0].text = "Select";
             guidePlane1Image.gameObject.SetActive(false);
+
             MissionAchievements.instance.achievementMission2Progress++;
             MissionAchievements.instance.UpdateAchievementMission();
             if(isReceivedPlane1Reward)
@@ -384,7 +419,7 @@ public class MissionPlane : MonoBehaviour
                 MissionManager.instance.textNotificationPlane.text = MissionManager.instance.textNotificationPlaneValue.ToString();
                 if (MissionManager.instance.textNotificationPlaneValue <= 0)
                 {
-                    MissionManager.instance.notificationImageDaily.gameObject.SetActive(false);
+                    MissionManager.instance.notificationImagePlane.gameObject.SetActive(false);
                 }
             }
             Save();
@@ -397,6 +432,7 @@ public class MissionPlane : MonoBehaviour
             Debug.Log("Plane Mission 2 Reward Claimed!");
             AudioManager.instance.PlaySound(AudioManager.instance.rewardMissionSoundClip);
             isUnlockSuperPlane2 = true;
+            PlayerPrefs.SetInt("IsUnlockSuperPlane2", 1);   
             buttonPlaneMission2.image.sprite = spriteButtonClaimed;
             isPlaneMission2Completed = false;
             isFalseButton2Clicked = true;
@@ -422,7 +458,7 @@ public class MissionPlane : MonoBehaviour
                 MissionManager.instance.textNotificationPlane.text = MissionManager.instance.textNotificationPlaneValue.ToString();
                 if (MissionManager.instance.textNotificationPlaneValue <= 0)
                 {
-                    MissionManager.instance.notificationImageDaily.gameObject.SetActive(false);
+                    MissionManager.instance.notificationImagePlane.gameObject.SetActive(false);
                 }
             }
             Save();
@@ -435,6 +471,7 @@ public class MissionPlane : MonoBehaviour
             Debug.Log("Plane Mission 3 Reward Claimed!");
             AudioManager.instance.PlaySound(AudioManager.instance.rewardMissionSoundClip);
             isUnlockSuperPlane3 = true;
+            PlayerPrefs.SetInt("IsUnlockSuperPlane3", 1);
             buttonPlaneMission3.image.sprite = spriteButtonClaimed;
             isPlaneMission3Completed = false;
             isFalseButton3Clicked = true;
@@ -460,7 +497,7 @@ public class MissionPlane : MonoBehaviour
                 MissionManager.instance.textNotificationPlane.text = MissionManager.instance.textNotificationPlaneValue.ToString();
                 if (MissionManager.instance.textNotificationPlaneValue <= 0)
                 {
-                    MissionManager.instance.notificationImageDaily.gameObject.SetActive(false);
+                    MissionManager.instance.notificationImagePlane.gameObject.SetActive(false);
                 }
             }
             Save();
@@ -472,7 +509,8 @@ public class MissionPlane : MonoBehaviour
         {
             Debug.Log("Plane Mission 4 Reward Claimed!");
             AudioManager.instance.PlaySound(AudioManager.instance.rewardMissionSoundClip);
-                isUnlockSuperPlane4 = true;
+            isUnlockSuperPlane4 = true;
+            PlayerPrefs.SetInt("IsUnlockSuperPlane4", 1);
             buttonPlaneMission4.image.sprite = spriteButtonClaimed;
             isPlaneMission4Completed = false;
             isFalseButton4Clicked = true;
@@ -498,7 +536,7 @@ public class MissionPlane : MonoBehaviour
                 MissionManager.instance.textNotificationPlane.text = MissionManager.instance.textNotificationPlaneValue.ToString();
                 if (MissionManager.instance.textNotificationPlaneValue <= 0)
                 {
-                    MissionManager.instance.notificationImageDaily.gameObject.SetActive(false);
+                    MissionManager.instance.notificationImagePlane.gameObject.SetActive(false);
                 }
             }
             Save();
@@ -510,7 +548,8 @@ public class MissionPlane : MonoBehaviour
         {
             Debug.Log("Plane Mission 5 Reward Claimed!");
             AudioManager.instance.PlaySound(AudioManager.instance.rewardMissionSoundClip);
-                isUnlockSuperPlane5 = true;
+            isUnlockSuperPlane5 = true;
+            PlayerPrefs.SetInt("IsUnlockSuperPlane5", 1);
             buttonPlaneMission5.image.sprite = spriteButtonClaimed;
             isPlaneMission5Completed = false;
             isFalseButton5Clicked = true;
@@ -536,7 +575,7 @@ public class MissionPlane : MonoBehaviour
                 MissionManager.instance.textNotificationPlane.text = MissionManager.instance.textNotificationPlaneValue.ToString();
                 if (MissionManager.instance.textNotificationPlaneValue <= 0)
                 {
-                    MissionManager.instance.notificationImageDaily.gameObject.SetActive(false);
+                    MissionManager.instance.notificationImagePlane.gameObject.SetActive(false);
                 }
             }
             Save();
