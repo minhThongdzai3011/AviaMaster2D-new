@@ -58,13 +58,17 @@ public class RotaryFront : MonoBehaviour
 
     void Update()
     {
-        if (useLocal)
+        if (useLocal && Shop.instance.isCheckedPlaneIndex == 7)
         {
             transform.localRotation = Quaternion.Euler(currentRotationX, 0f, -90f);
         }
         else
         {
+            if(Shop.instance.isCheckedPlaneIndex == 7)
+            {
+                
             transform.rotation = Quaternion.Euler(currentRotationX, 0f, 90f);
+            }
         }
     }
 
