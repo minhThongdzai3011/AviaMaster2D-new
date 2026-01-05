@@ -64,6 +64,7 @@ public class PositionX : MonoBehaviour
                 AudioManager.instance.PlaySound(AudioManager.instance.perfectAngleSoundClip);
                 Settings.instance.imageDiamondCoinText.gameObject.SetActive(false);
                 GManager.instance.newMapText.text = "Max Power Activated!";
+                Settings.instance.imageIconFuel.color = new Color32(217,98,4, 255); // Thay đổi màu icon nhiên liệu thành vàng
                 StartCoroutine(FadeOutText(2f));
                 if(ExplosionScale.instance != null) ExplosionScale.instance.Explosion();
                 if (EffectAirplane.instance != null) EffectAirplane.instance.MakePlaneGold();

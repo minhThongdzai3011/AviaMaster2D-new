@@ -378,6 +378,22 @@ public class TrailRendererLeft : MonoBehaviour
                     );
                     trailRenderer.colorGradient = g13;
                     break;
+                case 14:
+                    Gradient g14 = new Gradient();
+                    g14.SetKeys(
+                        new GradientColorKey[] {
+                            new GradientColorKey(new Color(0f, 0.1f, 0.4f), 0f),
+                            new GradientColorKey(new Color(0f, 0.5f, 1f), 0.5f),
+                            new GradientColorKey(new Color(0f, 0.2f, 0.6f), 1f)
+                        },
+                        new GradientAlphaKey[] {
+                            new GradientAlphaKey(1f, 0f),
+                            new GradientAlphaKey(0.7f, 0.5f),
+                            new GradientAlphaKey(0f, 1f)
+                        }
+                    );
+                    trailRenderer.colorGradient = g14;
+                    break;
 
                 default:
                     Debug.Log("Invalid trail index");

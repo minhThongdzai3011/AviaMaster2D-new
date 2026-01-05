@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class PlaneShoot : MonoBehaviour
 {
+    public static PlaneShoot instance;
     [Header("Shooting Settings")]
     public GameObject bulletPrefab; // Prefab của viên đạn - gắn vào Inspector
     public Transform firePoint; // Vị trí bắn đạn (nếu có)
@@ -20,6 +21,8 @@ public class PlaneShoot : MonoBehaviour
 
     [Header("Image Bullet")]
     public Image[] imageBullets; // Mảng hình ảnh đạn để hiển thị số đạn còn lại
+
+     // Hiệu ứng bắn đạn (nếu có)
     
     // Start is called before the first frame update
     void Start()
@@ -64,7 +67,6 @@ public class PlaneShoot : MonoBehaviour
         }
         
         currentBullets--;
-        SuperPlaneManager.instance.textBulletPlane.text = "x" + currentBullets.ToString();
         Debug.Log($"Bắn! Còn lại {currentBullets} viên đạn");
         
         // Set active false cho image bullet tương ứng

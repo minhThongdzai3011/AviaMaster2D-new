@@ -17,6 +17,8 @@ public class SuperPlaneManager : MonoBehaviour
     public TextMeshProUGUI textBulletPlane;
     public Image imageSkillSuperPlane5;
 
+    public GameObject skillEffectSuperPlane2;
+
     public Image imageSkillSuperPlane3;
 
     public bool skillPlane5 = true;

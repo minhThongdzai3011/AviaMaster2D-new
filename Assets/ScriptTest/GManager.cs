@@ -585,6 +585,10 @@ public class GManager : MonoBehaviour
 
         isCheckErrorAngleZ = true;  
         isBoosted = true;
+        if(Shop.instance != null && Shop.instance.isCheckedPlaneIndex == 14)
+        {
+            SuperPlaneManager.instance.skillEffectSuperPlane2.SetActive(true);
+        }
         if (Plane.instance != null)
         {
             if(TrailRendererLeft.instance != null && TrailRendererRight.instance != null && isBoost )
@@ -2380,6 +2384,14 @@ public class GManager : MonoBehaviour
                 .SetEase(Ease.OutCubic).OnComplete(() =>
                 {
                     isFuelDown = false;
+                    if(Shop.instance.isCheckedPlaneIndex == 5)
+                    {
+                        Shop.instance.bullets.gameObject.SetActive(true);
+                    }
+                    else
+                    {
+                        Shop.instance.bullets.gameObject.SetActive(false);
+                    }
                 });
         }
     }

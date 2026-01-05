@@ -122,7 +122,10 @@ public class Plane : MonoBehaviour
             }
             
             smokeEffect.Stop();
-            
+            if (Shop.instance != null && Shop.instance.isCheckedPlaneIndex == 14)
+            {
+                SuperPlaneManager.instance.skillEffectSuperPlane2.SetActive(false);
+            }
             StartCoroutine(UpMass());
         }
     }
@@ -192,7 +195,7 @@ public class Plane : MonoBehaviour
                     EffectExplosionBonus ef = other.GetComponent<EffectExplosionBonus>();
                     ef.ExplosionEffect();
                     ef.ExplosionEffect1();
-
+                    SuperPlaneManager.instance.skillEffectSuperPlane2.SetActive(false);
                     //EffectExplosionBonus.instance.ExplosionEffect();
                     // EffectExplosionBonus.instance.ExplosionEffect1();
                     // Destroy(other.gameObject);
@@ -258,6 +261,7 @@ public class Plane : MonoBehaviour
                     SuperPlaneManager.instance.skillPlane5 = false;
                     Debug.Log("Bonus2 collected - Super Plane 5 Active - No Fuel Lost");
                     SuperPlaneManager.instance.imageSkillSuperPlane5.gameObject.SetActive(false);
+                    SuperPlaneManager.instance.skillEffectSuperPlane2.SetActive(false);
                 }
                 else
                 {

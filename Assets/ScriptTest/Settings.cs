@@ -60,6 +60,7 @@ public class Settings : MonoBehaviour
     public Image imageDiamondCoinText;
     public Image imageHighScore;
     public Image imageGuide;
+    public Image imageIconFuel;
 
     [Header("Button Settings")]
     public Button AdsButton;

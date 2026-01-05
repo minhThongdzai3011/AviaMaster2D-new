@@ -62,5 +62,29 @@ public class Bullet : MonoBehaviour
             collision.gameObject.GetComponent<SpriteRenderer>().enabled = false;
             Destroy(gameObject);
         }
+        else if (collision.gameObject.CompareTag("Boom"))
+        {
+            AudioManager.instance.PlaySound(AudioManager.instance.obstacleCollisionSoundClip);
+            EffectExplosionBonus ef = collision.GetComponent<EffectExplosionBonus>();
+            ef.ExplosionEffect();
+            ef.ExplosionEffect1();
+            MissionPlane.instance.planeMission5Progress++;
+            MissionPlane.instance.UpdatePlaneMission();
+            //EffectExplosionBonus.instance.ExplosionEffect();
+            // EffectExplosionBonus.instance.ExplosionEffect1();
+            // Destroy(other.gameObject);
+            collision.gameObject.GetComponent<SpriteRenderer>().enabled = false;
+            Destroy(gameObject);
+        }
+
+    }
+
+    void OllisionEnter2D(Collision2D collision)
+    {
+        // Xử lý va chạm với các đối tượng khác nếu cần ở đây
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            Destroy(gameObject);
+        }       
     }
 }

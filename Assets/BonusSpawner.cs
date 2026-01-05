@@ -100,7 +100,7 @@ public class BonusSpawner : MonoBehaviour
     int GetControlledRandomIndex()
     {
         // Tỉ lệ % 
-        float bonusRate = 0.5f;   // 60%
+        float bonusRate = 0.4f;   // 60%
         float fogRate = 0.25f;    // 25%
         //float bombRate = 0.15f;   // 15%
 

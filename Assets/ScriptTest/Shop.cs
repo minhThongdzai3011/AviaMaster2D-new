@@ -21,6 +21,7 @@ public class Shop : MonoBehaviour
     public Image[] planeBackgrounds;
     public Button[] planeButtons;
     public Image[] planeGuideImages;
+    public TextMeshProUGUI[] listTextGuidePlane;
 
     
     [Header("Visual Settings")]
@@ -60,7 +61,7 @@ public class Shop : MonoBehaviour
     public GameObject defaultPlane;
     public int isCheckedPlaneIndex = 13; // Mặc định chọn máy bay thứ 15
 
-
+    public GameObject bullets;
 
     public void Awake()
     {
@@ -299,6 +300,7 @@ public class Shop : MonoBehaviour
             Button button = planeButtons[i];
             Image background = planeBackgrounds[i];
             Image guideImage = planeGuideImages[i];
+            TextMeshProUGUI guideText = listTextGuidePlane[i];
             Vector2 currentPos = plane.rectTransform.anchoredPosition;
             Vector2 fadeOutPos = currentPos + new Vector2(moveDirection * fadeOffset, 0);
             
@@ -326,6 +328,7 @@ public class Shop : MonoBehaviour
             Button button = planeButtons[i];
             Image background = planeBackgrounds[i];
             Image guideImage = planeGuideImages[i];
+            TextMeshProUGUI guideText = listTextGuidePlane[i];
             CarouselState targetState = CalculateCarouselState(i);
             
             // Vị trí bắt đầu fade in: từ phía ngược lại + 100px
@@ -351,6 +354,7 @@ public class Shop : MonoBehaviour
             Button button = planeButtons[i];
             Image background = planeBackgrounds[i];
             Image guideImage = planeGuideImages[i];
+            TextMeshProUGUI guideText = listTextGuidePlane[i];
             CarouselState targetState = CalculateCarouselState(i);
             
             // Tất cả ảnh di chuyển về vị trí đích và fade in đồng thời
@@ -363,6 +367,8 @@ public class Shop : MonoBehaviour
             fadeInSeq.Join(button.image.DOFade(targetState.alpha, moveDuration * 0.5f)
                 .SetEase(Ease.OutQuad));
             fadeInSeq.Join(guideImage.DOFade(targetState.alpha, moveDuration * 0.5f)
+                .SetEase(Ease.OutQuad));
+            fadeInSeq.Join(guideText.DOFade(targetState.alpha, moveDuration * 0.5f)
                 .SetEase(Ease.OutQuad));
         }
         
@@ -811,6 +817,7 @@ public class Shop : MonoBehaviour
         }
         PlayerPrefs.SetInt("isCheckedPlaneIndex", isCheckedPlaneIndex);
         PlayerPrefs.Save();
+        
     }
     public void buyPlane2(){
         StartCoroutine(PlayButtonEffect(6));
@@ -882,6 +889,7 @@ public class Shop : MonoBehaviour
         }
         PlayerPrefs.SetInt("isCheckedPlaneIndex", isCheckedPlaneIndex);
         PlayerPrefs.Save();
+
     }
     public void buyPlane3(){  // Siêu máy bay
         StartCoroutine(PlayButtonEffect(3));
@@ -1673,6 +1681,7 @@ public class Shop : MonoBehaviour
         }
         PlayerPrefs.SetInt("isCheckedPlaneIndex", isCheckedPlaneIndex);
         PlayerPrefs.Save();
+        
     }
     public void buyPlane14(){
         StartCoroutine(PlayButtonEffect(14));

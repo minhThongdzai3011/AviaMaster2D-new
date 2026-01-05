@@ -156,11 +156,11 @@ public class MissionAchievements : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            ResetAchievementMissions();
-        }
-        if (Input.GetKeyDown(KeyCode.A))
+        // if (Input.GetKeyDown(KeyCode.Q))
+        // {
+        //     ResetAchievementMissions();
+        // }
+        if (Input.GetKeyDown(KeyCode.B))
         {
             achievementMission1Progress = achievementMission1Target[achievementMission1CurrentLevel];
             achievementMission2Progress = achievementMission2Target[achievementMission2CurrentLevel];
@@ -693,7 +693,7 @@ public class MissionAchievements : MonoBehaviour
             
             // Reset cho level mới
             isAchievementMission1Completed = false;
-            achievementMission1Progress = 0;
+            // achievementMission1Progress = 0;
             isReceivedAchievement1Reward = false;
             isFalseButton1ClickedAchie = false;
             

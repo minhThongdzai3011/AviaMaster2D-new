@@ -14,6 +14,7 @@ public class CheckPlane : MonoBehaviour
     public Button luckyWheelButton;
     public Button leaderBoardButton;
     public Button moreGameButton;
+    public Button missionButton;
 
     public Image shopPlaneImage;
     public Image planeImage;
@@ -350,6 +351,15 @@ public class CheckPlane : MonoBehaviour
         moreGameButton.transform.DOScale(originalScale, 0.2f).SetEase(Ease.OutQuad);
     }
 
+    public void OnPointerEnterMission()
+    {
+        missionButton.transform.DOScale(originalScale * 0.9f, 0.2f).SetEase(Ease.OutQuad);
+    }
+
+    public void OnPointerExitMission()
+    {
+        missionButton.transform.DOScale(originalScale, 0.2f).SetEase(Ease.OutQuad);
+    }
 
     public void SetActiveShopPlane()
     {

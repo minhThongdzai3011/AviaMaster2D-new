@@ -150,10 +150,10 @@ public class MissionPlane : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
-            ResetPlaneMissions();
-        }
+        // if (Input.GetKeyDown(KeyCode.Z))
+        // {
+        //     ResetPlaneMissions();
+        // }
         if (Input.GetKeyDown(KeyCode.X))
         {
             planeMission1Progress = planeMission1Target;

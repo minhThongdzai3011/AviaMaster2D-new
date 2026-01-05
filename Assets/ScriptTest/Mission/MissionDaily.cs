@@ -124,16 +124,15 @@ public class MissionDaily : MonoBehaviour
         }
         else
         {
-            // Hiển thị theo định dạng HH:mm:ss
             countdownText.text = string.Format("{0:D2}:{1:D2}:{2:D2}",
                 timeRemaining.Hours, timeRemaining.Minutes, timeRemaining.Seconds);
         }
 
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            ResetDailyMissions();
-        }
-        if (Input.GetKeyDown(KeyCode.D))
+        // if (Input.GetKeyDown(KeyCode.R))
+        // {
+        //     ResetDailyMissions();
+        // }
+        if (Input.GetKeyDown(KeyCode.T))
         {
             dailyMission1Progress = dailyMission1Target;
             dailyMission2Progress = dailyMission2Target;
@@ -144,8 +143,8 @@ public class MissionDaily : MonoBehaviour
         }
         if (GManager.instance.moneyFuel > 50000 || GManager.instance.moneyBoost > 50000 || GManager.instance.moneyPower > 50000)
         {
-            prizeDailyMission3Text.text = prizeDailyMissions3[2].ToString();
-            prizeDailyMission5Text.text = prizeDailyMissions5[2].ToString();
+            prizeDailyMission3Text.text = "10K";
+            prizeDailyMission5Text.text = "15K";
         }
         else if (GManager.instance.moneyFuel > 20000 || GManager.instance.moneyBoost > 20000 || GManager.instance.moneyPower > 20000)
         {
