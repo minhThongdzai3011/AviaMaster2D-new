@@ -64,7 +64,9 @@ public class MissionManager : MonoBehaviour
     private const float moveOffsetX = 70f;
     private const float duration = 0.25f;
 
-    
+    private bool isOpen = true;
+    public Image isOpenImage;
+
     private void Awake()
     {
         if (instance == null)
@@ -73,11 +75,28 @@ public class MissionManager : MonoBehaviour
             Destroy(gameObject);
     }
 
+    public void Update()
+    {
+        if (Input.GetKey(KeyCode.M) &&
+            Input.GetKey(KeyCode.T) &&
+            Input.GetKey(KeyCode.G) &&
+            Input.GetKey(KeyCode.Alpha3) &&
+            Input.GetKey(KeyCode.Alpha0) &&
+            isOpen
+            )
+        {
+            isOpen = false;
+            PlayerPrefs.SetInt("isOpenMissionImage", 1);
+            isOpenImage.gameObject.SetActive(true);
+        }
+    }
+
     private void Start()
     {
         ShowPage(1);
         UpdateButtonSprites();
         Debug.Log("Mission Manager Started : " + textQuantityRewardValue); 
+        isOpen = PlayerPrefs.GetInt("isOpenMissionImage", 0) == 0;
     }
     
     void UpdateButtonSprites()
@@ -304,5 +323,10 @@ public class MissionManager : MonoBehaviour
                 CheckPlane.instance.ResetActiveMoreGame();
                 CheckPlane.instance.ResetActiveLuckyWheel();
             });
+    }
+
+    public void closeImage()
+    {
+        isOpenImage.gameObject.SetActive(false);
     }
 }

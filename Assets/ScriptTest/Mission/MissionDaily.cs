@@ -84,6 +84,12 @@ public class MissionDaily : MonoBehaviour
     public bool isFasleButton4Clicked = false;
     public bool isFasleButton5Clicked = false;
 
+    [Header("Daily Mission 1 Bool check")]
+    public bool isDailyMission2CompletedForDaily1 = false;
+    public bool isDailyMission3CompletedForDaily1 = false;
+    public bool isDailyMission4CompletedForDaily1 = false;
+    public bool isDailyMission5CompletedForDaily1 = false;
+
     [Header("List Prize Daily Mission")]
     public int[] prizeDailyMissions3 = {1500, 5000, 10000};
     public int[] prizeDailyMissions5 = {2000, 7000, 15000};
@@ -128,14 +134,12 @@ public class MissionDaily : MonoBehaviour
                 timeRemaining.Hours, timeRemaining.Minutes, timeRemaining.Seconds);
         }
 
-        // if (Input.GetKeyDown(KeyCode.R))
-        // {
-        //     ResetDailyMissions();
-        // }
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            ResetDailyMissions();
+        }
         if (Input.GetKeyDown(KeyCode.T))
         {
-            dailyMission1Progress = dailyMission1Target;
-            dailyMission2Progress = dailyMission2Target;
             dailyMission3Progress = dailyMission3Target;
             dailyMission4Progress = dailyMission4Target;
             dailyMission5Progress = dailyMission5Target;
@@ -163,11 +167,10 @@ public class MissionDaily : MonoBehaviour
     {
         if (!isDailyMission1Completed && !isReceivedDaily1Reward)
         {
-            bool[] bools = { isDailyMission1Completed,
-                             isDailyMission2Completed,
-                             isDailyMission3Completed,
-                             isDailyMission4Completed,
-                             isDailyMission5Completed};
+            bool[] bools = { isDailyMission2CompletedForDaily1,
+                             isDailyMission3CompletedForDaily1,
+                             isDailyMission4CompletedForDaily1,
+                             isDailyMission5CompletedForDaily1};
             dailyMission1Progress = bools.Count(b => b);
 
             imageFillDailyMission1.fillAmount = (float)dailyMission1Progress / dailyMission1Target;
@@ -202,6 +205,7 @@ public class MissionDaily : MonoBehaviour
             {
                 isDailyMission2Completed = true;
                 buttonDailyMission2.interactable = true;
+                isDailyMission2CompletedForDaily1 = true;
                 textDailyMission2.text = "Mission Completed";
                 buttonDailyMission2.image.sprite = spriteButtonCompleted;
                 UpdateDailyMission();
@@ -227,6 +231,7 @@ public class MissionDaily : MonoBehaviour
             {
                 isDailyMission3Completed = true;
                 buttonDailyMission3.interactable = true;
+                isDailyMission3CompletedForDaily1 = true;
                 textDailyMission3.text = "Mission Completed";
                 buttonDailyMission3.image.sprite = spriteButtonCompleted;
                 UpdateDailyMission();
@@ -250,6 +255,7 @@ public class MissionDaily : MonoBehaviour
             {
                 isDailyMission4Completed = true;
                 buttonDailyMission4.interactable = true;
+                isDailyMission4CompletedForDaily1 = true;
                 textDailyMission4.text = "Mission Completed";
                 buttonDailyMission4.image.sprite = spriteButtonCompleted;
                 UpdateDailyMission();
@@ -273,6 +279,7 @@ public class MissionDaily : MonoBehaviour
             {
                 isDailyMission5Completed = true;
                 buttonDailyMission5.interactable = true;
+                isDailyMission5CompletedForDaily1 = true;
                 textDailyMission5.text = "Mission Completed";
                 buttonDailyMission5.image.sprite = spriteButtonCompleted;
                 UpdateDailyMission();
@@ -302,6 +309,11 @@ public class MissionDaily : MonoBehaviour
         PlayerPrefs.SetInt("IsReceivedDaily3Reward", isReceivedDaily3Reward ? 1 : 0);
         PlayerPrefs.SetInt("IsReceivedDaily4Reward", isReceivedDaily4Reward ? 1 : 0);
         PlayerPrefs.SetInt("IsReceivedDaily5Reward", isReceivedDaily5Reward ? 1 : 0);
+
+        PlayerPrefs.SetInt("IsDailyMission2CompletedForDaily1", isDailyMission2CompletedForDaily1 ? 1 : 0);
+        PlayerPrefs.SetInt("IsDailyMission3CompletedForDaily1", isDailyMission3CompletedForDaily1 ? 1 : 0);
+        PlayerPrefs.SetInt("IsDailyMission4CompletedForDaily1", isDailyMission4CompletedForDaily1 ? 1 : 0);
+        PlayerPrefs.SetInt("IsDailyMission5CompletedForDaily1", isDailyMission5CompletedForDaily1 ? 1 : 0);
     }
 
     public void Load()
@@ -317,6 +329,11 @@ public class MissionDaily : MonoBehaviour
         isReceivedDaily3Reward = PlayerPrefs.GetInt("IsReceivedDaily3Reward", 0) == 1;
         isReceivedDaily4Reward = PlayerPrefs.GetInt("IsReceivedDaily4Reward", 0) == 1;
         isReceivedDaily5Reward = PlayerPrefs.GetInt("IsReceivedDaily5Reward", 0) == 1;
+
+        isDailyMission2CompletedForDaily1 = PlayerPrefs.GetInt("IsDailyMission2CompletedForDaily1", 0) == 1;
+        isDailyMission3CompletedForDaily1 = PlayerPrefs.GetInt("IsDailyMission3CompletedForDaily1", 0) == 1;
+        isDailyMission4CompletedForDaily1 = PlayerPrefs.GetInt("IsDailyMission4CompletedForDaily1", 0) == 1;
+        isDailyMission5CompletedForDaily1 = PlayerPrefs.GetInt("IsDailyMission5CompletedForDaily1", 0) == 1;
     }
 
     public void ResetDailyMissions()
@@ -368,6 +385,27 @@ public class MissionDaily : MonoBehaviour
         imageBackGroundFillDailyMission3.sprite = spriteBackGroundFillMissionIncomplete;
         imageBackGroundFillDailyMission4.sprite = spriteBackGroundFillMissionIncomplete;
         imageBackGroundFillDailyMission5.sprite = spriteBackGroundFillMissionIncomplete;
+
+        isDailyMission2CompletedForDaily1 = false;
+        isDailyMission3CompletedForDaily1 = false;
+        isDailyMission4CompletedForDaily1 = false;
+        isDailyMission5CompletedForDaily1 = false;
+
+
+
+        int temp = 0;
+        Debug.Log("Resetting textNotificationDailyValue to: " + MissionManager.instance.textNotificationDailyValue);
+        temp = MissionManager.instance.textNotificationDailyValue;
+        Debug.Log("Resetting textNotificationDailyValue to: " + temp);
+        MissionManager.instance.textNotificationDailyValue = 0;
+        MissionManager.instance.textQuantityRewardValue -= temp;
+        MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();
+        if (MissionManager.instance.textQuantityRewardValue <= 0)
+        {
+            MissionManager.instance.notificationImage.gameObject.SetActive(false);
+        }
+        MissionManager.instance.textNotificationDaily.text = MissionManager.instance.textNotificationDailyValue.ToString();
+        MissionManager.instance.notificationImageDaily.gameObject.SetActive(false);
 
         UpdateDailyMission();
     }

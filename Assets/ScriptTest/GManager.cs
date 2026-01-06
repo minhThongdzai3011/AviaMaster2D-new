@@ -125,9 +125,10 @@ public class GManager : MonoBehaviour
     public Image buttonBoosterPlaneImage;
 
     [Header("Wheel Settings")]
-    public float rotationForce = 100f;        // tốc độ xoay ban đầu
+    public float rotationForce = 100f;        // tốc độ xoay ban đầus
     public float angularFriction = 5f;        // hệ số ma sát góc
     public float currentRotationSpeed = 0f;  // tốc độ xoay hiện tại
+    public float targetAltitude = 0f;
 
     [Header("Camera Management")]
     public CameraManager cameraManager; // Reference tới CameraManager
@@ -361,12 +362,16 @@ public class GManager : MonoBehaviour
         
 
         airplaneRigidbody2D.gravityScale = 0f;
-        airplaneRigidbody2D.velocity = new Vector2(horizontalSpeed, 0f);
+        
+        // THAY ĐỔI: Lưu velocity ban đầu để tăng tốc từ từ
+        Vector2 initialVelocity = airplaneRigidbody2D.velocity;
+        float currentSpeed = initialVelocity.magnitude;
+        float accelerationRate = 15f; // Tốc độ tăng tốc (m/s²)
 
         // Giữ góc 0 khi bay ngang
         airplaneRigidbody2D.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
 
-        Debug.Log($"Bắt đầu bay ngang - Target: {targetX}, Current: {airplaneRigidbody2D.position.x}");
+        Debug.Log($"Bắt đầu bay ngang - Target: {targetX}, Current: {airplaneRigidbody2D.position.x}, Initial Speed: {currentSpeed:F2}");
 
         float riseHeight = 1.0f;
         float maxTiltAngle = 20f;
@@ -404,8 +409,18 @@ public class GManager : MonoBehaviour
                 startY + smoothHeight
             );
 
-            // --- 3. Giữ vận tốc ngang ---
-            airplaneRigidbody2D.velocity = new Vector2(horizontalSpeed, 0f);
+            // --- 3. THAY ĐỔI: Tăng tốc độ từ từ thay vì fix cứng ---
+            currentSpeed += accelerationRate * Time.deltaTime;
+            currentSpeed = Mathf.Min(currentSpeed, horizontalSpeed); // Giới hạn tốc độ tối đa
+            
+            // Áp dụng velocity mới với tốc độ tăng dần
+            airplaneRigidbody2D.velocity = new Vector2(currentSpeed, 0f);
+            
+            // Debug tốc độ mỗi 10 frame
+            if (Time.frameCount % 10 == 0)
+            {
+                Debug.Log($"Acceleration Phase - Current Speed: {currentSpeed:F2} m/s, Target: {horizontalSpeed} m/s");
+            }
 
             yield return null;
         }
@@ -416,22 +431,21 @@ public class GManager : MonoBehaviour
         // SỬA: Set false SAU KHI hoàn thành bay ngang
         isHorizontalFlying = false;
 
-        // Bước 2: Bay lên với rotation dần dần
+        // Bước 2: Bay lên với tăng tốc mượt mà
         AudioManager.instance.PlayPlayerSound(AudioManager.instance.gameplaySoundClip);
-        float climbForce = launchForce;
-        float angleRad = Mathf.Deg2Rad * climbAngle;
-        Vector2 launchDirection = new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad)).normalized;
-
-        // airplaneRigidbody2D.velocity = Vector2.zero;
-        airplaneRigidbody2D.AddForce(launchDirection * climbForce, ForceMode2D.Impulse);
-
-        // KHÔNG xoay ngay lập tức - sẽ xoay dần dần trong bước 3
-        // airplaneRigidbody2D.transform.rotation = Quaternion.Euler(0f, 0f, climbAngle);
+        float targetClimbSpeed = launchForce; // Tốc độ mục tiêu (60)
+        float currentHorizontalSpeed = airplaneRigidbody2D.velocity.x; // Tốc độ hiện tại (~10)
+        float climbAcceleration = 30f; // Gia tốc bay lên (m/s²)
+        
+        // Không dùng AddForce nữa - thay bằng tăng tốc từ từ
+        // airplaneRigidbody2D.AddForce(launchDirection * climbForce, ForceMode2D.Impulse);
 
         boostedAltitude = launchForce / 2.5f;
 
         // Bước 3: Chờ đến khi đạt độ cao và xoay dần dần
-        float targetAltitude = startPosition.y + boostedAltitude;
+        targetAltitude = startPosition.y + boostedAltitude;
+        
+        Debug.Log($"Chuẩn bị bay lên - Target Altitude: {targetAltitude:F1}");
         if(PositionX.instance != null && PositionX.instance.isMaxPower)
         {
             targetAltitude += boostedAltitude * 0.5f; // Tăng thêm 50% nếu max power
@@ -506,6 +520,7 @@ public class GManager : MonoBehaviour
         float targetRotation = climbAngle; // Mục tiêu là climbAngle (30°)
 
         Debug.Log($"Bắt đầu bay lên - Start: {startAltitude:F1}, Target: {targetAltitude:F1}, Rotation: {startRotation:F1}° → {targetRotation}°");
+        Debug.Log($"Tăng tốc từ {currentHorizontalSpeed:F1} m/s → {targetClimbSpeed:F1} m/s");
 
         while (airplaneRigidbody2D.position.y < targetAltitude)
         {
@@ -514,14 +529,33 @@ public class GManager : MonoBehaviour
             float altitudeProgress = (currentAltitude - startAltitude) / (targetAltitude - startAltitude);
             altitudeProgress = Mathf.Clamp01(altitudeProgress);
 
-            // Xoay dần dần theo tiến độ bay lên
+            // --- THAY ĐỔI: Tăng tốc mượt mà từ 10 → 60 ---
+            Vector2 currentVel = airplaneRigidbody2D.velocity;
+            
+            // Tăng tốc ngang dần dần
+            if (currentVel.x < targetClimbSpeed)
+            {
+                currentVel.x += climbAcceleration * Time.deltaTime;
+                currentVel.x = Mathf.Min(currentVel.x, targetClimbSpeed); // Giới hạn tốc độ tối đa
+            }
+            
+            // Thêm velocity.y để máy bay bay lên (dựa trên góc climbAngle)
+            float targetVerticalSpeed = currentVel.x * Mathf.Tan(climbAngle * Mathf.Deg2Rad);
+            currentVel.y = Mathf.Lerp(currentVel.y, targetVerticalSpeed, Time.deltaTime * 2f);
+            
+            // Áp dụng velocity mới
+            airplaneRigidbody2D.velocity = currentVel;
 
+            // Xoay dần dần theo tiến độ bay lên
             float easedProgress = Mathf.SmoothStep(0f, 2f, altitudeProgress);
             float currentRotation = Mathf.Lerp(startRotation, targetRotation, easedProgress);
-            // float currentRotation = Mathf.Lerp(startRotation, targetRotation, altitudeProgress);
             airplaneRigidbody2D.transform.rotation = Quaternion.Euler(0f, 0f, currentRotation);
 
-            
+            // Debug tốc độ mỗi 20 frame
+            if (Time.frameCount % 20 == 0)
+            {
+                Debug.Log($"Climb Phase - Speed: {currentVel.x:F1} m/s, Altitude: {currentAltitude:F1}, Progress: {altitudeProgress:F2}");
+            }
 
             yield return null;
         }
@@ -585,6 +619,7 @@ public class GManager : MonoBehaviour
 
         isCheckErrorAngleZ = true;  
         isBoosted = true;
+        RandomBonusStart.instance.SpawnRandomBonusAtLaunch();
         if(Shop.instance != null && Shop.instance.isCheckedPlaneIndex == 14)
         {
             SuperPlaneManager.instance.skillEffectSuperPlane2.SetActive(true);
@@ -627,8 +662,10 @@ public class GManager : MonoBehaviour
         Debug.Log($"Máy bay bắt đầu điều khiển với durationFuel = {durationFuel}s (rateFuel = {PositionX.instance.timePerfect})");
         if (PositionX.instance.isMaxPower)
         {
-            durationFuel += 5f;
-            Debug.Log($"Max Power active! durationFuel increased by 5s to {durationFuel}s");
+            int temp = (int)(durationFuel * 0.2f);
+            if (temp > 5) temp = 5;
+            durationFuel += temp;
+            Debug.Log($"Max Power active! durationFuel increased by {temp}s to {durationFuel}s");
         }
         StartCoroutine(DecreaseSliderFuel(durationFuel));
         buttonDownImage.color = Color.white;
@@ -701,7 +738,7 @@ public class GManager : MonoBehaviour
         // Plane.instance.trailRenderer.enabled = false;
         Debug.Log("Bắt đầu giai đoạn rơi - Tính toán vật lý chân thực được kích hoạt");
 
-        Vector2 initialVelocity = airplaneRigidbody2D.velocity;
+        // Vector2 initialVelocity = airplaneRigidbody2D.velocity;
         Debug.Log($"Initial Velocity trước khi tính toán vật lý thực tế: {initialVelocity}");
         if (initialVelocity.x < 10f && !Plane.instance.isGrounded)
         {
@@ -1809,27 +1846,45 @@ public class GManager : MonoBehaviour
         float startValue = sliderFuel.value;
         float endValue = 0f;
         
-        float originalDuration = durationFuel;
+        // THÊM: Biến để track duration thực tế (có thể thay đổi khi ăn fuel)
+        float currentDuration = durationFuel;
         
-        while (timer < durationFuel)
+        while (timer < currentDuration)
         {
             timer += Time.deltaTime;
 
+            // SỬA: Xử lý khi có thêm fuel - RESET TIMER để có cảm giác 20% thực sự
             if (Plane.instance.isAddFuel)
             {
-                float remainingTime = durationFuel - timer;
-                float totalTime = durationFuel;
+                // Lấy lượng fuel được thêm
+                float addedFuel = Plane.instance.addedFuelAmount;
                 
-                float newSliderValue = remainingTime / totalTime;
-                sliderFuel.value = Mathf.Min(1f, newSliderValue);
+                // Cập nhật duration mới
+                currentDuration = this.durationFuel;
                 
+                // QUAN TRỌNG: Giảm timer để tăng thời gian còn lại
+                timer -= addedFuel * 0.8f; // Giảm timer để có cảm giác fuel tăng thật sự
+                if (timer < 0) timer = 0; // Đảm bảo timer không âm
+                
+                // Tính slider value mới
+                float remainingTime = currentDuration - timer;
+                float newSliderValue = remainingTime / currentDuration;
+                sliderFuel.value = newSliderValue;
+                
+                Debug.Log($"Fuel added! Timer reduced by {addedFuel * 0.8f:F1}s, New timer: {timer:F1}s, Slider: {sliderFuel.value:F2}");
+                
+                // Reset flags
                 Plane.instance.isAddFuel = false;
-                
-                Debug.Log($"Fuel added during flight - New duration: {durationFuel}s, Slider updated to: {sliderFuel.value}");
+                Plane.instance.addedFuelAmount = 0f;
             }
             
-            float currentProgress = timer / durationFuel;
-            sliderFuel.value = Mathf.Lerp(startValue, endValue, currentProgress);
+            // SỬA: Chỉ cập nhật slider khi KHÔNG có fuel mới được thêm
+            else
+            {
+                // Tính progress dựa trên timer và currentDuration
+                float currentProgress = timer / currentDuration;
+                sliderFuel.value = Mathf.Lerp(startValue, endValue, currentProgress);
+            }
 
             yield return null;
         }

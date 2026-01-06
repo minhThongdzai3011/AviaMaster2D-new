@@ -234,6 +234,16 @@ public class Plane : MonoBehaviour
         }
         if (other.CompareTag("Bonus4"))
         {
+            // Kiểm tra xem hiệu ứng có đang chạy không
+            if (isFogEffectPlaying)
+            {
+                Debug.Log("FadeFogImage đang chạy, bỏ qua va chạm Bonus4 này");
+                Destroy(other.gameObject); // Vẫn phá hủy object
+                MissionPlane.instance.planeMission5Progress++;
+                MissionPlane.instance.UpdatePlaneMission();
+                return;
+            }
+            
             AudioManager.instance.PlaySound(AudioManager.instance.obstacleCollisionSoundClip);
             Destroy(other.gameObject);
             StartCoroutine(FadeFogImage());
@@ -1021,9 +1031,13 @@ public class Plane : MonoBehaviour
 
     IEnumerator FadeFogImage()
     {
+        // Đánh dấu hiệu ứng bắt đầu
+        isFogEffectPlaying = true;
+        Debug.Log("FadeFogImage started");
+        
         float elapsed = 0f;
         Settings.instance.imageWhiteScreen.gameObject.SetActive(true);
-        Settings.instance.imageWhite1Screen.gameObject.SetActive(true);
+        // Settings.instance.imageWhite1Screen.gameObject.SetActive(true);
         Settings.instance.iamgeBlackScreen.gameObject.SetActive(true);
         Color startColor = Settings.instance.iamgeBlackScreen.color;
         startColor.a = 0f;
@@ -1033,24 +1047,27 @@ public class Plane : MonoBehaviour
         {
             elapsed += Time.deltaTime;
             Color c = Settings.instance.iamgeBlackScreen.color;
-            Color b = Settings.instance.imageWhite1Screen.color;
+            Color b = Settings.instance.imageWhiteScreen.color;
             c.a = Mathf.Clamp01(elapsed / 1f);
             b.a = Mathf.Clamp01(elapsed / 1f);
-            Settings.instance.imageWhite1Screen.color = b;
+            // Settings.instance.imageWhiteScreen.color = b;
             Settings.instance.iamgeBlackScreen.color = c;
             yield return null;
         }
 
-        float moveDuration = 6f;
+        float moveDuration = 5f;
         float moveElapsed = 0f;
         Vector3 startPos = Settings.instance.iamgeBlackScreen.transform.position;
-        Vector3 targetPos = startPos + new Vector3(-1000f, 0f, 0f);
+        Vector3 startPosWhite = Settings.instance.imageWhiteScreen.transform.position;  
+        Vector3 targetPos = startPos + new Vector3(-800f, 0f, 0f);
+        Vector3 targetPosWhite = startPosWhite + new Vector3(-800f, 0f, 0f);
 
         while (moveElapsed < moveDuration)
         {
             moveElapsed += Time.deltaTime;
             float t = moveElapsed / moveDuration;
             Settings.instance.iamgeBlackScreen.transform.position = Vector3.Lerp(startPos, targetPos, t);
+            Settings.instance.imageWhiteScreen.transform.position = Vector3.Lerp(startPosWhite, targetPosWhite, t);
             yield return null;
         }
 
@@ -1060,24 +1077,54 @@ public class Plane : MonoBehaviour
         {
             elapsed += Time.deltaTime;
             Color c = Settings.instance.iamgeBlackScreen.color;
-            Color b = Settings.instance.imageWhite1Screen.color;
+            Color b = Settings.instance.imageWhiteScreen.color;
             b.a = 1f - Mathf.Clamp01(elapsed / 1f);
             c.a = 1f - Mathf.Clamp01(elapsed / 1f); 
             Settings.instance.iamgeBlackScreen.color = c;
-            Settings.instance.imageWhite1Screen.color = b;
+            // Settings.instance.imageWhiteScreen.color = b;
             yield return null;
         }
+
+        // Quay trở lại vị trí ban đầu
+        float returnDuration = 2f;
+        float returnElapsed = 0f;
+        Vector3 currentPos = Settings.instance.iamgeBlackScreen.transform.position;
+        
+        while (returnElapsed < returnDuration)
+        {
+            returnElapsed += Time.deltaTime;
+            float t = returnElapsed / returnDuration;
+            Settings.instance.iamgeBlackScreen.transform.position = Vector3.Lerp(currentPos, startPos, t);
+            Settings.instance.imageWhiteScreen.transform.position = Vector3.Lerp(currentPos, startPosWhite, t);
+            yield return null;
+        }
+        
+        // Đảm bảo vị trí chính xác
+        Settings.instance.iamgeBlackScreen.transform.position = startPos;
+        Settings.instance.imageWhiteScreen.transform.position = startPosWhite;
+        
         Settings.instance.imageWhiteScreen.gameObject.SetActive(false);
         Settings.instance.iamgeBlackScreen.gameObject.SetActive(false);
-        Settings.instance.imageWhite1Screen.gameObject.SetActive(false);
+        
+        // Đánh dấu hiệu ứng kết thúc
+        isFogEffectPlaying = false;
+        Debug.Log("FadeFogImage completed");
+        // Settings.instance.imageWhiteScreen.gameObject.SetActive(false);
     }
 
     public bool isAddFuel = false;
+    public float addedFuelAmount = 0f; // Lượng fuel được thêm vào
+    private bool isFogEffectPlaying = false; // Flag kiểm tra hiệu ứng FadeFogImage
+    
     public void RandomPrizeBird(){
         int[] coinPrize1 = {100, 200, 500};
         int[] coinPrize2 = {1000, 2000, 5000};
         int[] coinPrize3 = {5000, 10000, 20000};
         int count = Random.Range(0, 3); 
+        // int count = Random.Range(1, 1); // Chỉ chọn phần thưởng nhiên liệu để kiểm tra hiệu ứng 
+        if(GManager.instance.isFallingInSequence && count == 1){
+            count = 2; // Chọn phần thưởng "không có gì" nếu đang trong chuỗi rơi 
+        }
         if(count == 0){
             int prize = 0;
             if ( GManager.instance.moneyPower > 10000 || GManager.instance.moneyFuel > 10000 || GManager.instance.moneyBoost > 10000)
@@ -1111,16 +1158,18 @@ public class Plane : MonoBehaviour
             
         }
         else if(count == 1){
-            float addedFuelTime = 5f;
+            float addedFuelTime = GManager.instance.durationFuel * 0.15f;
             GManager.instance.durationFuel += addedFuelTime;
-            float fuelRatio = addedFuelTime / GManager.instance.durationFuel;
-            GManager.instance.sliderFuel.value = Mathf.Min(1f, GManager.instance.sliderFuel.value + fuelRatio);
             
-            Debug.Log($"Bird collected - +{addedFuelTime}s fuel, new durationFuel: {GManager.instance.durationFuel}s, slider value: {GManager.instance.sliderFuel.value}");
+            // Set flag kèm theo lượng fuel thêm vào
             isAddFuel = true;
-            GManager.instance.newMapText.text = "Bonus +5s fuel";
+            addedFuelAmount = addedFuelTime;
+            
+            Debug.Log($"Bird collected - +{addedFuelTime}s fuel, new durationFuel: {GManager.instance.durationFuel}s");
+            GManager.instance.newMapText.text = "Bonus +15% fuel";
             StartCoroutine(FadeInText(1f));
         }
+        
         else{
             GManager.instance.newMapText.text = "Congrats… you just unlocked absolutely nothing!";
             StartCoroutine(FadeInText(1f));
