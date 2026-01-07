@@ -305,16 +305,58 @@ public class GManager : MonoBehaviour
         rotationXObject.SetActive(false);
         yield return new WaitForSeconds(1.5f);
         
+        // ==================== BƯỚC 0: DI CHUYỂN NGANG 5PX VỚI VẬN TỐC TĂNG DẦN ====================
+        Debug.Log("=== BẮT ĐẦU BƯỚC 0: Di chuyển ngang 5px với vận tốc tăng dần ===");
+        
+        float step0Distance = 5f; // Khoảng cách di chuyển trong Bước 0
+        float step0MaxSpeed = 8f; // Tốc độ tối đa trong Bước 0
+        float step0Acceleration = 15f; // Gia tốc trong Bước 0 (m/s²)
+        
+        float step0TargetX = airplaneRigidbody2D.position.x + step0Distance;
+        float step0StartX = airplaneRigidbody2D.position.x;
+        
+        // Giữ máy bay ở mặt đất (rotation = 0)
+        airplaneRigidbody2D.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+        airplaneRigidbody2D.gravityScale = 0f;
+        
+        // Bắt đầu với vận tốc = 0, tăng dần
+        float currentSpeed0 = 0f;
+        
+        Debug.Log($"Bước 0 - Start: {step0StartX:F2}, Target: {step0TargetX:F2}, Distance: {step0Distance}px");
+        
+        while (airplaneRigidbody2D.position.x < step0TargetX)
+        {
+            // Tăng tốc độ dần dần
+            currentSpeed0 += step0Acceleration * Time.deltaTime;
+            currentSpeed0 = Mathf.Min(currentSpeed0, step0MaxSpeed);
+            
+            // Áp dụng vận tốc (chỉ di chuyển ngang, không bay lên)
+            airplaneRigidbody2D.velocity = new Vector2(currentSpeed0, 0f);
+            
+            // Giữ rotation = 0
+            airplaneRigidbody2D.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+            
+            yield return null;
+        }
+        
+        Debug.Log($"Hoàn thành Bước 0 - Final Speed: {currentSpeed0:F2} m/s, Distance: {airplaneRigidbody2D.position.x - step0StartX:F2}px");
+        Debug.Log("=== KẾT THÚC BƯỚC 0 ===\n");
+        
+        // ==================== BƯỚC 1: DI CHUYỂN NGANG VỪA BAY LÊN ====================
+        Debug.Log("=== BẮT ĐẦU BƯỚC 1: Di chuyển ngang vừa bay lên ===");
+        
         // THÊM: Set flag bay ngang
         isHorizontalFlying = true;
         isPlayBolide = true;
-        // Bước 1: Di chuyển ngang một đoạn r
+        
         float r = 10f;
-        float horizontalSpeed = 10f;
+        float horizontalSpeed = 20f;
         float targetX = airplaneRigidbody2D.position.x + r;
 
-        // Thay thế đoạn code trong LaunchSequence():
-        Debug.Log("Preparing to start horizontal flight..." + airplaneRigidbody2D.name);
+        // Bắt đầu từ vận tốc hiện tại của Bước 0
+        float initialSpeed = airplaneRigidbody2D.velocity.x; // Kế thừa vận tốc từ Bước 0 (~8 m/s)
+        Debug.Log($"Bước 1 - Kế thừa vận tốc từ Bước 0: {initialSpeed:F2} m/s");
+        
         if(airplaneRigidbody2D.name == "Forest" || airplaneRigidbody2D.name == "Avocado" || airplaneRigidbody2D.name == "BeeGee" || airplaneRigidbody2D.name == "Pancake" || airplaneRigidbody2D.name == "Scruffy" || airplaneRigidbody2D.name == "Jungle") 
         {
             Debug.Log("Start Rotation Front" + airplaneRigidbody2D.name +" isRotary " + Shop.instance.isRotaryFrontZDone);
@@ -363,15 +405,14 @@ public class GManager : MonoBehaviour
 
         airplaneRigidbody2D.gravityScale = 0f;
         
-        // THAY ĐỔI: Lưu velocity ban đầu để tăng tốc từ từ
-        Vector2 initialVelocity = airplaneRigidbody2D.velocity;
-        float currentSpeed = initialVelocity.magnitude;
+        // Kế thừa vận tốc từ Bước 0 và tiếp tục tăng tốc
+        float currentSpeed = initialSpeed; // Bắt đầu từ vận tốc cuối Bước 0
         float accelerationRate = 15f; // Tốc độ tăng tốc (m/s²)
 
         // Giữ góc 0 khi bay ngang
         airplaneRigidbody2D.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
 
-        Debug.Log($"Bắt đầu bay ngang - Target: {targetX}, Current: {airplaneRigidbody2D.position.x}, Initial Speed: {currentSpeed:F2}");
+        Debug.Log($"Bắt đầu Bước 1 - Target: {targetX:F2}, Current: {airplaneRigidbody2D.position.x:F2}, Initial Speed: {currentSpeed:F2}");
 
         float riseHeight = 1.0f;
         float maxTiltAngle = 20f;
@@ -419,19 +460,21 @@ public class GManager : MonoBehaviour
             // Debug tốc độ mỗi 10 frame
             if (Time.frameCount % 10 == 0)
             {
-                Debug.Log($"Acceleration Phase - Current Speed: {currentSpeed:F2} m/s, Target: {horizontalSpeed} m/s");
+                Debug.Log($"Bước 1 - Current Speed: {currentSpeed:F2} m/s, Target: {horizontalSpeed} m/s, Progress: {progress:F2}");
             }
 
             yield return null;
         }
 
         
-        Debug.Log($"Hoàn thành bay ngang - Distance: {airplaneRigidbody2D.position.x - (targetX - r):F1}f");
+        Debug.Log($"Hoàn thành Bước 1 - Final Speed: {currentSpeed:F2} m/s, Distance: {airplaneRigidbody2D.position.x - (targetX - r):F1}px");
+        Debug.Log("=== KẾT THÚC BƯỚC 1 ===\n");
         
         // SỬA: Set false SAU KHI hoàn thành bay ngang
         isHorizontalFlying = false;
 
-        // Bước 2: Bay lên với tăng tốc mượt mà
+        // ==================== BƯỚC 2: BAY LÊN VỚI TĂNG TỐC MƯỢT MÀ ====================
+        Debug.Log("=== BẮT ĐẦU BƯỚC 2: Bay lên với tăng tốc ===");
         AudioManager.instance.PlayPlayerSound(AudioManager.instance.gameplaySoundClip);
         float targetClimbSpeed = launchForce; // Tốc độ mục tiêu (60)
         float currentHorizontalSpeed = airplaneRigidbody2D.velocity.x; // Tốc độ hiện tại (~10)
@@ -738,7 +781,7 @@ public class GManager : MonoBehaviour
         // Plane.instance.trailRenderer.enabled = false;
         Debug.Log("Bắt đầu giai đoạn rơi - Tính toán vật lý chân thực được kích hoạt");
 
-        // Vector2 initialVelocity = airplaneRigidbody2D.velocity;
+        Vector2 initialVelocity = airplaneRigidbody2D.velocity;
         Debug.Log($"Initial Velocity trước khi tính toán vật lý thực tế: {initialVelocity}");
         if (initialVelocity.x < 10f && !Plane.instance.isGrounded)
         {
