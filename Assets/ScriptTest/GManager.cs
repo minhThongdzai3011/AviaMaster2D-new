@@ -58,6 +58,10 @@ public class GManager : MonoBehaviour
     public int levelPower;
     public int levelFuel;
     public int levelBoost;
+    
+    [Header("Fuel Control Sync")]
+    public float currentControlTimer = 0f; // Timer được chia sẻ giữa control loop và slider
+    public float currentControlDuration = 0f; // Duration được chia sẻ
 
     [Header("Tính toán nâng cấp")]
     public float baseDurationFuel = 2f; // Thời gian cơ bản không thay đổi
@@ -716,19 +720,49 @@ public class GManager : MonoBehaviour
             durationFuel += temp;
             Debug.Log($"Max Power active! durationFuel increased by {temp}s to {durationFuel}s");
         }
-        StartCoroutine(DecreaseSliderFuel(durationFuel));
+        // Khởi tạo biến chia sẻ
+        currentControlTimer = 0f;
+        currentControlDuration = durationFuel;
+        
+        StartCoroutine(DecreaseSliderFuel());
         buttonDownImage.color = Color.white;
         buttonUpImage.color = Color.white;
         // Trong giai đoạn này, rotation được điều khiển bởi HandleAircraftControl()
-        float timer = 0f;
-        while (timer < durationFuel)
+        
+        while (currentControlTimer < currentControlDuration)
         {
             buttonDownImage.color = Color.white;
             buttonUpImage.color = Color.white;
-            timer += Time.deltaTime;
-            if (Mathf.FloorToInt(timer) != Mathf.FloorToInt(timer - Time.deltaTime))
+            currentControlTimer += Time.deltaTime;
+            
+            // ✅ SỬA: Xử lý thêm fuel AN TOÀN - giữ tỷ lệ progress
+            if (Plane.instance != null && Plane.instance.isAddFuel)
             {
-                Debug.Log($"Thời gian điều khiển: {Mathf.FloorToInt(timer)}s / {durationFuel}s");
+                float addedFuel = Plane.instance.addedFuelAmount;
+                float oldDuration = currentControlDuration;
+                
+                // Cập nhật duration mới từ durationFuel (đã được Plane.cs cập nhật)
+                currentControlDuration = this.durationFuel;
+                
+                // ✅ QUAN TRỌNG: Giữ tỷ lệ tiến độ, KHÔNG giảm timer trực tiếp
+                // Công thức: newTimer = (oldTimer / oldDuration) * newDuration
+                float progressRatio = currentControlTimer / oldDuration;
+                currentControlTimer = progressRatio * currentControlDuration;
+                
+                // ✅ ĐẢM BẢO timer không bị âm hoặc vượt quá duration
+                currentControlTimer = Mathf.Clamp(currentControlTimer, 0f, currentControlDuration * 0.99f);
+                
+                Debug.Log($"[CONTROL] Fuel added! OldDuration: {oldDuration:F1}s → NewDuration: {currentControlDuration:F1}s");
+                Debug.Log($"[CONTROL] Timer: {currentControlTimer:F1}s (Progress: {progressRatio:P0})");
+                
+                // RESET FLAG NGAY LẬP TỨC
+                Plane.instance.isAddFuel = false;
+                Plane.instance.addedFuelAmount = 0f;
+            }
+            
+            if (Mathf.FloorToInt(currentControlTimer) != Mathf.FloorToInt(currentControlTimer - Time.deltaTime))
+            {
+                Debug.Log($"Thời gian điều khiển: {Mathf.FloorToInt(currentControlTimer)}s / {currentControlDuration}s");
             }
 
             if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
@@ -1985,56 +2019,32 @@ public class GManager : MonoBehaviour
         Debug.Log("Reset Game");
     }
 
-    public IEnumerator DecreaseSliderFuel(float durationFuel)
+    public IEnumerator DecreaseSliderFuel()
     {
-        float timer = 0f;
         float startValue = sliderFuel.value;
         float endValue = 0f;
         
-        // THÊM: Biến để track duration thực tế (có thể thay đổi khi ăn fuel)
-        float currentDuration = durationFuel;
-        
-        while (timer < currentDuration)
+        while (currentControlTimer < currentControlDuration)
         {
-            timer += Time.deltaTime;
-
-            // SỬA: Xử lý khi có thêm fuel - RESET TIMER để có cảm giác 20% thực sự
-            if (Plane.instance.isAddFuel)
+            // ✅ CHỈ ĐỌC giá trị từ biến chia sẻ với kiểm tra an toàn
+            if (currentControlDuration > 0)
             {
-                // Lấy lượng fuel được thêm
-                float addedFuel = Plane.instance.addedFuelAmount;
-                
-                // Cập nhật duration mới
-                currentDuration = this.durationFuel;
-                
-                // QUAN TRỌNG: Giảm timer để tăng thời gian còn lại
-                timer -= addedFuel * 0.85f; // Giảm timer để có cảm giác fuel tăng thật sự
-                if (timer < 0) timer = 0; // Đảm bảo timer không âm
-                
-                // Tính slider value mới
-                float remainingTime = currentDuration - timer;
-                float newSliderValue = remainingTime / currentDuration;
-                sliderFuel.value = newSliderValue;
-                
-                Debug.Log($"Fuel added! Timer reduced by {addedFuel * 0.85f:F1}s, New timer: {timer:F1}s, Slider: {sliderFuel.value:F2}");
-                
-                // Reset flags
-                Plane.instance.isAddFuel = false;
-                Plane.instance.addedFuelAmount = 0f;
-            }
-            
-            // SỬA: Chỉ cập nhật slider khi KHÔNG có fuel mới được thêm
-            else
-            {
-                // Tính progress dựa trên timer và currentDuration
-                float currentProgress = timer / currentDuration;
+                // ✅ Clamp01 đảm bảo progress LUÔN trong [0, 1]
+                float currentProgress = Mathf.Clamp01(currentControlTimer / currentControlDuration);
                 sliderFuel.value = Mathf.Lerp(startValue, endValue, currentProgress);
+                
+                // Debug mỗi giây
+                if (Time.frameCount % 60 == 0)
+                {
+                    Debug.Log($"[SLIDER] Progress: {currentProgress:P0} ({currentControlTimer:F1}s / {currentControlDuration:F1}s), SliderValue: {sliderFuel.value:F2}");
+                }
             }
 
             yield return null;
         }
 
         sliderFuel.value = endValue;
+        Debug.Log("[SLIDER] Fuel depleted - slider = 0");
     }
     public float totalBoostMaxPower ;
     // Giảm boost theo thời gian
