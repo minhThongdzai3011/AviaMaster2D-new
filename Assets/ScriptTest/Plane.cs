@@ -618,6 +618,8 @@ public class Plane : MonoBehaviour
     
     IEnumerator UpMass()
     {
+        // AudioManager.instance.PlaySound(AudioManager.instance.landingSoundClip);
+        AudioManager.instance.StopPlayerSound();
         Rigidbody2D airplaneRb = GManager.instance.airplaneRigidbody2D;
         
         if (airplaneRb == null)
@@ -1120,8 +1122,8 @@ public class Plane : MonoBehaviour
         int[] coinPrize1 = {100, 200, 500};
         int[] coinPrize2 = {1000, 2000, 5000};
         int[] coinPrize3 = {5000, 10000, 20000};
-        int count = Random.Range(0, 3); 
-        // int count = Random.Range(1, 1); // Chỉ chọn phần thưởng nhiên liệu để kiểm tra hiệu ứng 
+        // int count = Random.Range(0, 3); 
+        int count = Random.Range(1, 1); // Chỉ chọn phần thưởng nhiên liệu để kiểm tra hiệu ứng 
         if(GManager.instance.isFallingInSequence && count == 1){
             count = 2; // Chọn phần thưởng "không có gì" nếu đang trong chuỗi rơi 
         }

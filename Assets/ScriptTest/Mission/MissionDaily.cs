@@ -127,6 +127,10 @@ public class MissionDaily : MonoBehaviour
         {
             countdownText.text = "00:00:00";
             ResetDailyMissions();
+            
+            // Cập nhật endOfDay cho ngày tiếp theo để tránh reset liên tục
+            DateTime tomorrow = now.AddDays(1);
+            endOfDay = new DateTime(tomorrow.Year, tomorrow.Month, tomorrow.Day, 23, 59, 59);
         }
         else
         {

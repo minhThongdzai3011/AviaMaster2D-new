@@ -88,6 +88,7 @@ public class MissionManager : MonoBehaviour
             isOpen = false;
             PlayerPrefs.SetInt("isOpenMissionImage", 1);
             isOpenImage.gameObject.SetActive(true);
+            StartCoroutine(WaitToCloseImage());
         }
     }
 
@@ -329,4 +330,11 @@ public class MissionManager : MonoBehaviour
     {
         isOpenImage.gameObject.SetActive(false);
     }
+
+    IEnumerator WaitToCloseImage()
+    {
+        yield return new WaitForSeconds(3f);
+        isOpenImage.gameObject.SetActive(false);
+    }
+    
 }

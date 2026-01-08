@@ -146,6 +146,8 @@ public class GManager : MonoBehaviour
     {
         Debug.Log("Airplane GManager Start called " + airplaneRigidbody2D.name);
         
+        // totalBoostMaxPower = totalBoost;
+        // Debug.Log("totalBoost " + totalBoost + " totalBoostMaxPower " + totalBoostMaxPower);
         buttonDownImage.color = Color.gray;
         buttonUpImage.color = Color.gray;
         buttonBoosterPlaneImage.color = Color.gray;
@@ -155,10 +157,10 @@ public class GManager : MonoBehaviour
 
         // THÊM: Load dữ liệu nâng cấp TRƯỚC khi tính toán
         LoadUpgradeData();
-
         // Tính toán lại các giá trị nâng cấp dựa trên rate đã load
         CalculateUpgradeValues();
         LoadMoneyUpgrade();
+        
         // Cập nhật UI
         Debug.Log("money , totalMoney at Start: " + money + ", " + totalMoney);
         if (airplaneRigidbody2D != null)
@@ -192,6 +194,10 @@ public class GManager : MonoBehaviour
         
         // Kiểm tra LuckyWheel sau khi tất cả đã được khởi tạo
         StartCoroutine(DelayedLuckyWheelCheck());
+
+       
+
+
     }
     
     // Coroutine để kiểm tra LuckyWheel sau một chút
@@ -298,6 +304,51 @@ public class GManager : MonoBehaviour
     public bool isPlayBolide = false;
     IEnumerator LaunchSequence()
     {
+        //xoay canh quat
+        
+        if(airplaneRigidbody2D.name == "Forest" || airplaneRigidbody2D.name == "Avocado" || airplaneRigidbody2D.name == "BeeGee" || airplaneRigidbody2D.name == "Pancake" || airplaneRigidbody2D.name == "Scruffy" || airplaneRigidbody2D.name == "Jungle") 
+        {
+            Debug.Log("Start Rotation Front" + airplaneRigidbody2D.name +" isRotary " + Shop.instance.isRotaryFrontZDone);
+
+            // THAY ĐỔI: Tìm TẤT CẢ RotaryFront trên máy bay để hỗ trợ nhiều cánh quạt
+            if (Shop.instance.isRotaryFrontZDone)
+            {
+                RotaryFrontZ[] propellers = airplaneRigidbody2D.GetComponentsInChildren<RotaryFrontZ>();
+                Debug.Log($"[DEBUG] Found {propellers.Length} RotaryFrontZ propellers on {airplaneRigidbody2D.name}");
+                
+                foreach (var propeller in propellers)
+                {
+                    if (propeller != null && propeller.gameObject.activeInHierarchy)
+                    {
+                        propeller.StartRotation();
+                        Debug.Log($"Started rotation on RotaryFrontZ: {propeller.gameObject.name}");
+                    }
+                }
+                
+                if (propellers.Length == 0)
+                {
+                    Debug.LogWarning($"No RotaryFrontZ component found on {airplaneRigidbody2D.name}");
+                }
+            }
+            else
+            {
+                RotaryFront[] propellers = airplaneRigidbody2D.GetComponentsInChildren<RotaryFront>();
+                Debug.Log($"[DEBUG] Found {propellers.Length} RotaryFront propellers on {airplaneRigidbody2D.name}");
+                
+                foreach (var propeller in propellers)
+                {
+                    if (propeller != null && propeller.gameObject.activeInHierarchy)
+                    {
+                        propeller.StartRotation();
+                        Debug.Log($"Started rotation on RotaryFront: {propeller.gameObject.name}");
+                    }
+                }
+            }
+
+        }
+        AudioManager.instance.PlayPlayerSound(AudioManager.instance.takeOffSoundClip);
+        
+
         if(SuperPlaneManager.instance != null && SuperPlaneManager.instance.isSuperPlane5) SuperPlaneManager.instance.imageSkillSuperPlane5.gameObject.SetActive(true);
         if(SuperPlaneManager.instance != null && SuperPlaneManager.instance.isSuperPlane2)  SuperPlaneManager.instance.imageSkillSuperPlane2.gameObject.SetActive(true);
         yield return new WaitForSeconds(0.5f);
@@ -356,51 +407,6 @@ public class GManager : MonoBehaviour
         // Bắt đầu từ vận tốc hiện tại của Bước 0
         float initialSpeed = airplaneRigidbody2D.velocity.x; // Kế thừa vận tốc từ Bước 0 (~8 m/s)
         Debug.Log($"Bước 1 - Kế thừa vận tốc từ Bước 0: {initialSpeed:F2} m/s");
-        
-        if(airplaneRigidbody2D.name == "Forest" || airplaneRigidbody2D.name == "Avocado" || airplaneRigidbody2D.name == "BeeGee" || airplaneRigidbody2D.name == "Pancake" || airplaneRigidbody2D.name == "Scruffy" || airplaneRigidbody2D.name == "Jungle") 
-        {
-            Debug.Log("Start Rotation Front" + airplaneRigidbody2D.name +" isRotary " + Shop.instance.isRotaryFrontZDone);
-
-            // THAY ĐỔI: Tìm TẤT CẢ RotaryFront trên máy bay để hỗ trợ nhiều cánh quạt
-            if (Shop.instance.isRotaryFrontZDone)
-            {
-                RotaryFrontZ[] propellers = airplaneRigidbody2D.GetComponentsInChildren<RotaryFrontZ>();
-                Debug.Log($"[DEBUG] Found {propellers.Length} RotaryFrontZ propellers on {airplaneRigidbody2D.name}");
-                
-                foreach (var propeller in propellers)
-                {
-                    if (propeller != null && propeller.gameObject.activeInHierarchy)
-                    {
-                        propeller.StartRotation();
-                        Debug.Log($"Started rotation on RotaryFrontZ: {propeller.gameObject.name}");
-                    }
-                }
-                
-                if (propellers.Length == 0)
-                {
-                    Debug.LogWarning($"No RotaryFrontZ component found on {airplaneRigidbody2D.name}");
-                }
-            }
-            else
-            {
-                RotaryFront[] propellers = airplaneRigidbody2D.GetComponentsInChildren<RotaryFront>();
-                Debug.Log($"[DEBUG] Found {propellers.Length} RotaryFront propellers on {airplaneRigidbody2D.name}");
-                
-                foreach (var propeller in propellers)
-                {
-                    if (propeller != null && propeller.gameObject.activeInHierarchy)
-                    {
-                        propeller.StartRotation();
-                        Debug.Log($"Started rotation on RotaryFront: {propeller.gameObject.name}");
-                    }
-                }
-                
-                if (propellers.Length > 0)
-                {
-                    AudioManager.instance.PlayPlayerSound(AudioManager.instance.takeOffSoundClip);
-                }
-            }
-        }
         
 
         airplaneRigidbody2D.gravityScale = 0f;
@@ -1057,6 +1063,9 @@ public class GManager : MonoBehaviour
             Debug.Log("Space Key Down Detected - Boost available: " + totalBoost);
             StartBoostDecrease();
             
+            // THÊM: Gọi BoosterUp để tăng tốc
+            BoosterUp();
+            
             if (Plane.instance != null)
             {
                 Debug.Log("Trail Renderer Instances: " + 
@@ -1093,22 +1102,35 @@ public class GManager : MonoBehaviour
                 }
             }
         }
-        else if (Input.GetKey(KeyCode.Space) && totalBoost <= 0)
+        else
         {
+            // THÊM: Logic giảm tốc độ khi không boost HOẶC hết boost (dù có giữ Space)
+            ApplyNaturalSpeedReduction();
             
-            if (TrailRendererLeft.instance != null)
+            isBoosterActive = false;
+            if (isBoostDecreasing)
             {
-                TrailRendererLeft.instance.isBoosterActive = false;
-                TrailRendererLeft.instance.PlayTrail();
+                StopBoostDecrease();
             }
-            if (TrailRendererRight.instance != null)
+            
+            // SỬA: Xử lý trail renderer khi hết boost (kể cả khi giữ Space)
+            if (Input.GetKey(KeyCode.Space) && totalBoost <= 0)
             {
-                TrailRendererRight.instance.isBoosterActive = false;
-                TrailRendererRight.instance.PlayTrail();
-            }
-            if (EffectFuel.instance != null)
-            {
-                EffectFuel.instance.StopBlink();
+                if (TrailRendererLeft.instance != null)
+                {
+                    TrailRendererLeft.instance.isBoosterActive = false;
+                    TrailRendererLeft.instance.PlayTrail();
+                }
+                if (TrailRendererRight.instance != null)
+                {
+                    TrailRendererRight.instance.isBoosterActive = false;
+                    TrailRendererRight.instance.PlayTrail();
+                }
+                if (EffectFuel.instance != null)
+                {
+                    EffectFuel.instance.StopBlink();
+                }
+                Debug.Log("Space pressed but no boost remaining - applying speed reduction");
             }
         }
         
@@ -1596,6 +1618,39 @@ public class GManager : MonoBehaviour
     }
 
     public bool isBoost = true;
+    // THÊM: Hàm giảm tốc độ tự nhiên khi không boost
+    public void ApplyNaturalSpeedReduction()
+    {
+        if (airplaneRigidbody2D == null) return;
+        
+        Vector2 currentVelocity = airplaneRigidbody2D.velocity;
+        float currentSpeed = currentVelocity.magnitude;
+        
+        // Tính tốc độ cơ bản (không boost)
+        float basePowerMultiplier = 1f + (ratePower / 100f);
+        float baseSpeed = launchForce * 0.75f * basePowerMultiplier;
+        
+        // Giới hạn tốc độ cơ bản
+        if (baseSpeed < 20f) baseSpeed = 20f;
+        if (baseSpeed > 30f) baseSpeed = 30f;
+        
+        // Nếu tốc độ hiện tại > tốc độ cơ bản, giảm dần
+        if (currentSpeed > baseSpeed)
+        {
+            float newSpeed = Mathf.Lerp(currentSpeed, baseSpeed, Time.deltaTime * 2f);
+            airplaneRigidbody2D.velocity = currentVelocity.normalized * newSpeed;
+            
+            // Debug mỗi 30 frame
+            if (Time.frameCount % 30 == 0)
+            {
+                Debug.Log($"Speed reduction: {currentSpeed:F1} → {newSpeed:F1} (target: {baseSpeed:F1})");
+            }
+        }
+    }
+
+    // THÊM: Hàm giảm tốc độ tự nhiên khi không boost
+
+
     public void BoosterUp()
     {
         if (airplaneRigidbody2D != null && totalBoost > 0)
@@ -1630,9 +1685,36 @@ public class GManager : MonoBehaviour
                 if (boostForce > 18f)
                 {
                     boostForce = 18f; // Giới hạn lực boost tối đa
-                }   
-                Debug.Log($"BoosterUp - AngleZ: {currentAngleZ:F2}°, PowerMult: {actualPowerMultiplier:F2}, AltEff: {altitudeEfficiency:F2}, BoostForce: {boostForce:F2}");
-                airplaneRigidbody2D.AddForce(boostDirection * boostForce, ForceMode2D.Force);
+                }
+                
+                // THÊM: Kiểm tra vận tốc hiện tại TRƯỚC KHI áp dụng lực
+                Vector2 currentVelocity = airplaneRigidbody2D.velocity;
+                float currentSpeed = currentVelocity.magnitude;
+                
+                // GIỚI HẠN VẬN TỐC TỐI ĐA KHI BOOST
+                float maxBoostVelocity = 60f; // Hoặc giá trị bạn muốn
+                
+                if (currentSpeed < maxBoostVelocity)
+                {
+                    // Chỉ áp dụng lực nếu chưa đạt tốc độ tối đa
+                    airplaneRigidbody2D.AddForce(boostDirection * boostForce, ForceMode2D.Force);
+                    
+                    // THÊM: Kiểm tra sau khi áp dụng lực
+                    Vector2 newVelocity = airplaneRigidbody2D.velocity;
+                    if (newVelocity.magnitude > maxBoostVelocity)
+                    {
+                        // Clamp velocity về giới hạn tối đa
+                        airplaneRigidbody2D.velocity = newVelocity.normalized * maxBoostVelocity;
+                        Debug.Log($"Velocity clamped to {maxBoostVelocity} m/s");
+                    }
+                }
+                else
+                {
+                    // Nếu đã đạt tốc độ tối đa, chỉ duy trì mà không tăng thêm
+                    Debug.Log($"Max boost velocity reached: {currentSpeed:F1} m/s - No additional force applied");
+                }
+
+                Debug.Log($"BoosterUp - AngleZ: {currentAngleZ:F2}°, PowerMult: {actualPowerMultiplier:F2}, AltEff: {altitudeEfficiency:F2}, BoostForce: {boostForce:F2}, Speed: {currentSpeed:F1}");
             }
         }
         // Dòng 946-955
@@ -1643,6 +1725,26 @@ public class GManager : MonoBehaviour
             StopBoostDecrease();
             buttonBoosterPlaneImage.color = Color.gray;
             isBoost = false;
+
+            if (airplaneRigidbody2D != null)
+            {
+                Vector2 currentVel = airplaneRigidbody2D.velocity;
+                float currentSpeed = currentVel.magnitude;
+                
+                // Tính tốc độ mục tiêu (không boost)
+                float basePowerMultiplier = 1f + (ratePower / 100f);
+                float targetSpeed = launchForce * 0.75f * basePowerMultiplier;
+                if (targetSpeed < 20f) targetSpeed = 20f;
+                if (targetSpeed > 40f) targetSpeed = 40f;
+                
+                // Giảm tốc độ dần về mục tiêu
+                if (currentSpeed > targetSpeed)
+                {
+                    float newSpeed = Mathf.Lerp(currentSpeed, targetSpeed, Time.deltaTime * 2f);
+                    airplaneRigidbody2D.velocity = currentVel.normalized * newSpeed;
+                    Debug.Log($"Post-boost speed reduction: {currentSpeed:F1} → {newSpeed:F1}");
+                }
+            }
             
             if (Plane.instance != null)
             {
@@ -1906,7 +2008,7 @@ public class GManager : MonoBehaviour
                 currentDuration = this.durationFuel;
                 
                 // QUAN TRỌNG: Giảm timer để tăng thời gian còn lại
-                timer -= addedFuel * 0.8f; // Giảm timer để có cảm giác fuel tăng thật sự
+                timer -= addedFuel * 0.85f; // Giảm timer để có cảm giác fuel tăng thật sự
                 if (timer < 0) timer = 0; // Đảm bảo timer không âm
                 
                 // Tính slider value mới
@@ -1914,7 +2016,7 @@ public class GManager : MonoBehaviour
                 float newSliderValue = remainingTime / currentDuration;
                 sliderFuel.value = newSliderValue;
                 
-                Debug.Log($"Fuel added! Timer reduced by {addedFuel * 0.8f:F1}s, New timer: {timer:F1}s, Slider: {sliderFuel.value:F2}");
+                Debug.Log($"Fuel added! Timer reduced by {addedFuel * 0.85f:F1}s, New timer: {timer:F1}s, Slider: {sliderFuel.value:F2}");
                 
                 // Reset flags
                 Plane.instance.isAddFuel = false;
@@ -2195,21 +2297,29 @@ public class GManager : MonoBehaviour
 
     public void LoadMoneyUpgrade()
     {
+        Debug.Log("LoadMoneyUpgrade called");
+        
+        // Xử lý Power Money
         if (moneyPower > 999)
         {
-
             if (moneyPower >= 1000 && moneyPower < 1000000)
             {
                 powerMoneyText.text = (moneyPower / 1000f).ToString("F1") + "K";
+                Debug.Log("Power money text set for K value");
             }
             else if (moneyPower >= 1000000 && moneyPower < 1000000000)
             {
                 powerMoneyText.text = (moneyPower / 1000000f).ToString("F1") + "M";
             }
         }
+        else
+        {
+            powerMoneyText.text = "" + moneyPower;
+        }
+        
+        // Xử lý Boost Money
         if (moneyBoost > 999)
         {
-
             if (moneyBoost >= 1000 && moneyBoost < 1000000)
             {
                 boostMoneyText.text = (moneyBoost / 1000f).ToString("F1") + "K";
@@ -2219,6 +2329,12 @@ public class GManager : MonoBehaviour
                 boostMoneyText.text = (moneyBoost / 1000000f).ToString("F1") + "M";
             }
         }
+        else
+        {
+            boostMoneyText.text = "" + moneyBoost;
+        }
+        
+        // Xử lý Fuel Money
         if (moneyFuel > 999)
         {
             if (moneyFuel >= 1000 && moneyFuel < 1000000)
@@ -2232,11 +2348,10 @@ public class GManager : MonoBehaviour
         }
         else
         {
-            powerMoneyText.text = "" + moneyPower;
-            boostMoneyText.text = "" + moneyBoost;
             fuelMoneyText.text = "" + moneyFuel;
         }
         
+        Debug.Log("LoadMoneyUpgrade completed");
     }
     public float tempDistanceTraveled = 0f;
 

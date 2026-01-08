@@ -735,13 +735,13 @@ public class Settings : MonoBehaviour
             collectMoneyText.color = new Color32(156, 147, 0, 255);
             totalMoneyPlayText.color = new Color32(156, 147, 0, 255);
             // 1. count distance
-            seq.Append(DOVirtual.Float(0, distanceValue, 2f, v =>
+            seq.Append(DOVirtual.Float(0, distanceValue, 1.2f, v =>
             {
                 distanceMoneyText.text = ((int)v).ToString();
             }));
 
             // 2. count collect
-            seq.Join(DOVirtual.Float(0, collectValue, 2f, v =>
+            seq.Join(DOVirtual.Float(0, collectValue, 1.2f, v =>
             {
                 collectMoneyText.text = ((int)v).ToString();
             }));
@@ -757,13 +757,13 @@ public class Settings : MonoBehaviour
         else
         {
             // 1. count distance
-            seq.Append(DOVirtual.Float(0, distanceValue, 2f, v =>
+            seq.Append(DOVirtual.Float(0, distanceValue, 1.2f, v =>
             {
                 distanceMoneyText.text = ((int)v).ToString();
             }));
 
             // 2. count collect
-            seq.Join(DOVirtual.Float(0, collectValue, 2f, v =>
+            seq.Join(DOVirtual.Float(0, collectValue, 1.2f, v =>
             {
                 collectMoneyText.text = ((int)v).ToString();
             }));
