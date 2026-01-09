@@ -160,15 +160,15 @@ public class MissionAchievements : MonoBehaviour
         // {
         //     ResetAchievementMissions();
         // }
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            achievementMission1Progress = achievementMission1Target[achievementMission1CurrentLevel];
-            achievementMission2Progress = achievementMission2Target[achievementMission2CurrentLevel];
-            achievementMission3Progress = achievementMission3Target[achievementMission3CurrentLevel];
-            achievementMission4Progress = achievementMission4Target[achievementMission4CurrentLevel];
-            achievementMission5Progress = achievementMission5Target[achievementMission5CurrentLevel];
-            UpdateAchievementMission();
-        }
+        // if (Input.GetKeyDown(KeyCode.B))
+        // {
+        //     achievementMission1Progress = achievementMission1Target[achievementMission1CurrentLevel];
+        //     achievementMission2Progress = achievementMission2Target[achievementMission2CurrentLevel];
+        //     achievementMission3Progress = achievementMission3Target[achievementMission3CurrentLevel];
+        //     achievementMission4Progress = achievementMission4Target[achievementMission4CurrentLevel];
+        //     achievementMission5Progress = achievementMission5Target[achievementMission5CurrentLevel];
+        //     UpdateAchievementMission();
+        // }
     }
     //phan thuong thuong khi hoan thanh mission 1
     public bool isN = true;

@@ -138,17 +138,17 @@ public class MissionDaily : MonoBehaviour
                 timeRemaining.Hours, timeRemaining.Minutes, timeRemaining.Seconds);
         }
 
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            ResetDailyMissions();
-        }
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            dailyMission3Progress = dailyMission3Target;
-            dailyMission4Progress = dailyMission4Target;
-            dailyMission5Progress = dailyMission5Target;
-            UpdateDailyMission();
-        }
+        // if (Input.GetKeyDown(KeyCode.R))
+        // {
+        //     ResetDailyMissions();
+        // }
+        // if (Input.GetKeyDown(KeyCode.T))
+        // {
+        //     dailyMission3Progress = dailyMission3Target;
+        //     dailyMission4Progress = dailyMission4Target;
+        //     dailyMission5Progress = dailyMission5Target;
+        //     UpdateDailyMission();
+        // }
         if (GManager.instance.moneyFuel > 50000 || GManager.instance.moneyBoost > 50000 || GManager.instance.moneyPower > 50000)
         {
             prizeDailyMission3Text.text = "10K";

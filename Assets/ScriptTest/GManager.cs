@@ -672,7 +672,7 @@ public class GManager : MonoBehaviour
 
         isCheckErrorAngleZ = true;  
         isBoosted = true;
-        RandomBonusStart.instance.SpawnRandomBonusAtLaunch();
+        // RandomBonusStart.instance.SpawnRandomBonusAtLaunch();
         if(Shop.instance != null && Shop.instance.isCheckedPlaneIndex == 14)
         {
             SuperPlaneManager.instance.skillEffectSuperPlane2.SetActive(true);
@@ -1216,96 +1216,97 @@ public class GManager : MonoBehaviour
         }
     }
 
-        if (Input.GetKeyDown(KeyCode.Keypad1))
-        {
-            PauseGame();
-        }
-        if (Input.GetKeyDown(KeyCode.Keypad0))
-        {
-            AgainGame();
-        }
-        if (Input.GetKey(KeyCode.Keypad2))
-        {
-            totalMoney += 100000;
-            PlayerPrefs.SetFloat("TotalMoney", totalMoney);
-            PlayerPrefs.Save();
-            SaveTotalMoney();
+        // if (Input.GetKeyDown(KeyCode.Keypad1))
+        // {
+        //     PauseGame();
+        // }
+        // if (Input.GetKeyDown(KeyCode.Keypad0))
+        // {
+        //     AgainGame();
+        // }
+        // if (Input.GetKey(KeyCode.Keypad2))
+        // {
+        //     totalMoney += 100000;
+        //     PlayerPrefs.SetFloat("TotalMoney", totalMoney);
+        //     PlayerPrefs.Save();
+        //     SaveTotalMoney();
 
-        }
-        if (Input.GetKeyDown(KeyCode.Keypad3))
-        {
-            MapSpawner.instance.isMapCityUnlocked = true;
-            PlayerPrefs.SetInt("IsMapCityUnlocked", 1);
-            MapSpawner.instance.isMapDesertUnlocked = true;
-            PlayerPrefs.SetInt("IsMapDesertUnlocked", 1);
-            MapSpawner.instance.isMapBeachUnlocked = true;
-            PlayerPrefs.SetInt("IsMapBeachUnlocked", 1);
-            MapSpawner.instance.isMapFieldUnlocked = true;
-            PlayerPrefs.SetInt("IsMapFieldUnlocked", 1);
-            MapSpawner.instance.isMapIceUnlocked = true;
-            PlayerPrefs.SetInt("IsMapIceUnlocked", 1);
-            MapSpawner.instance.isMapLavaUnlocked = true;
-            PlayerPrefs.SetInt("IsMapLavaUnlocked", 1);
-            PlayerPrefs.Save();
-            AgainGame();
-        }
-        if (Input.GetKeyDown(KeyCode.Keypad4)) 
-        {
-            totalDiamond += 1000;
-            totalDiamondText.text = totalDiamond.ToString();
-            PlayerPrefs.SetInt("TotalDiamond", totalDiamond);
-            PlayerPrefs.Save();
-            SaveTotalDiamond();
-        }
+        // }
+        // if (Input.GetKeyDown(KeyCode.Keypad3))
+        // {
+        //     MapSpawner.instance.isMapCityUnlocked = true;
+        //     PlayerPrefs.SetInt("IsMapCityUnlocked", 1);
+        //     MapSpawner.instance.isMapDesertUnlocked = true;
+        //     PlayerPrefs.SetInt("IsMapDesertUnlocked", 1);
+        //     MapSpawner.instance.isMapBeachUnlocked = true;
+        //     PlayerPrefs.SetInt("IsMapBeachUnlocked", 1);
+        //     MapSpawner.instance.isMapFieldUnlocked = true;
+        //     PlayerPrefs.SetInt("IsMapFieldUnlocked", 1);
+        //     MapSpawner.instance.isMapIceUnlocked = true;
+        //     PlayerPrefs.SetInt("IsMapIceUnlocked", 1);
+        //     MapSpawner.instance.isMapLavaUnlocked = true;
+        //     PlayerPrefs.SetInt("IsMapLavaUnlocked", 1);
+        //     PlayerPrefs.Save();
+        //     AgainGame();
+        // }
+        // if (Input.GetKeyDown(KeyCode.Keypad4)) 
+        // {
+        //     totalDiamond += 1000;
+        //     totalDiamondText.text = totalDiamond.ToString();
+        //     PlayerPrefs.SetInt("TotalDiamond", totalDiamond);
+        //     PlayerPrefs.Save();
+        //     SaveTotalDiamond();
+        // }
 
-        if(Plane.instance != null && Input.GetKeyDown(KeyCode.Keypad5))
-        {
-            Plane.instance.isAirPortBeach = true;
-            PlayerPrefs.SetInt("LastSafeLandingAirport", 1);
-            PlayerPrefs.Save();
-            return; 
-        }
-        if(Plane.instance != null && Input.GetKeyDown(KeyCode.Keypad6))
-        {
-            Plane.instance.isAirPortDesert = true;
-            PlayerPrefs.SetInt("LastSafeLandingAirport", 2);
-            PlayerPrefs.Save();
-            Debug.Log("[CHEAT] Set safe landing to Desert (2), use Keypad0 to restart");
-            return; 
-        }
-        if(Plane.instance != null && Input.GetKeyDown(KeyCode.Keypad7))
-        {
-            Plane.instance.isAirPortField = true;
-            PlayerPrefs.SetInt("LastSafeLandingAirport", 3);
-            PlayerPrefs.Save();
-            Debug.Log("[CHEAT] Set safe landing to Field (3), use Keypad0 to restart");
-            return; 
-        }
-        if(Plane.instance != null && Input.GetKeyDown(KeyCode.Keypad8))
-        {
-            Plane.instance.isAirPortIce = true;
-            PlayerPrefs.SetInt("LastSafeLandingAirport", 4);
-            PlayerPrefs.Save();
-            Debug.Log("[CHEAT] Set safe landing to Ice (4), use Keypad0 to restart");
-            return; 
-        }
-        if(Plane.instance != null && Input.GetKeyDown(KeyCode.Keypad9))
-        {
-            Plane.instance.isAirPortLava = true;
-            PlayerPrefs.SetInt("LastSafeLandingAirport", 5);
-            PlayerPrefs.Save();
-            Debug.Log("[CHEAT] Set safe landing to Lava (5), use Keypad0 to restart");
-            return; 
-        }
+        // if(Plane.instance != null && Input.GetKeyDown(KeyCode.Keypad5))
+        // {
+        //     Plane.instance.isAirPortBeach = true;
+        //     PlayerPrefs.SetInt("LastSafeLandingAirport", 1);
+        //     PlayerPrefs.Save();
+        //     return; 
+        // }
+        // if(Plane.instance != null && Input.GetKeyDown(KeyCode.Keypad6))
+        // {
+        //     Plane.instance.isAirPortDesert = true;
+        //     PlayerPrefs.SetInt("LastSafeLandingAirport", 2);
+        //     PlayerPrefs.Save();
+        //     Debug.Log("[CHEAT] Set safe landing to Desert (2), use Keypad0 to restart");
+        //     return; 
+        // }
+        // if(Plane.instance != null && Input.GetKeyDown(KeyCode.Keypad7))
+        // {
+        //     Plane.instance.isAirPortField = true;
+        //     PlayerPrefs.SetInt("LastSafeLandingAirport", 3);
+        //     PlayerPrefs.Save();
+        //     Debug.Log("[CHEAT] Set safe landing to Field (3), use Keypad0 to restart");
+        //     return; 
+        // }
+        // if(Plane.instance != null && Input.GetKeyDown(KeyCode.Keypad8))
+        // {
+        //     Plane.instance.isAirPortIce = true;
+        //     PlayerPrefs.SetInt("LastSafeLandingAirport", 4);
+        //     PlayerPrefs.Save();
+        //     Debug.Log("[CHEAT] Set safe landing to Ice (4), use Keypad0 to restart");
+        //     return; 
+        // }
+        // if(Plane.instance != null && Input.GetKeyDown(KeyCode.Keypad9))
+        // {
+        //     Plane.instance.isAirPortLava = true;
+        //     PlayerPrefs.SetInt("LastSafeLandingAirport", 5);
+        //     PlayerPrefs.Save();
+        //     Debug.Log("[CHEAT] Set safe landing to Lava (5), use Keypad0 to restart");
+        //     return; 
+        // }
         
-        // Keypad0 để restart game với delay
-        if(Input.GetKeyDown(KeyCode.Keypad0))
-        {
-            Debug.Log("[CHEAT] Manual restart requested via Keypad0");
-            AgainGame();
-            return;
-        }
+        // // Keypad0 để restart game với delay
+        // if(Input.GetKeyDown(KeyCode.Keypad0))
+        // {
+        //     Debug.Log("[CHEAT] Manual restart requested via Keypad0");
+        //     AgainGame();
+        //     return;
+        // }
 
+        
         if (distanceText != null && !stopDisplayDistance) distanceText.text = distanceTraveled.ToString("F0") + " ft";
         if (altitudeText != null)
         {

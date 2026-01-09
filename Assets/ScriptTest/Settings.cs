@@ -553,23 +553,26 @@ public class Settings : MonoBehaviour
         }
 
         Debug.Log("Đóng Lucky Wheel Image!");
+        
+        // chạy luôn
+        pannelGray.gameObject.SetActive(false);
+        lastDistanceText.gameObject.SetActive(true);
+        GManager.instance.leaderBoardImage.gameObject.SetActive(false);
+        isAnimating = false;
+        CheckPlane.instance.ResetActiveLeaderBoard();
 
         // Dừng tất cả animation đang chạy
-        DOTween.Kill(GManager.instance.leaderBoardImage.transform);
-        isAnimating = true;
+        // DOTween.Kill(GManager.instance.leaderBoardImage.transform);
+        // isAnimating = true;
 
-        // Animation đóng lucky wheel image
-        GManager.instance.leaderBoardImage.transform.DOScale(Vector3.zero, closeDuration)
-            .SetEase(closeEase)
-            .OnComplete(() =>
-            {
-                lastDistanceText.gameObject.SetActive(true);
-                GManager.instance.leaderBoardImage.gameObject.SetActive(false);
-                isAnimating = false;
-                CheckPlane.instance.ResetActiveLeaderBoard();
-                pannelGray.gameObject.SetActive(false);
-                Debug.Log("Lucky Wheel Image animation đóng hoàn thành!");
-            });
+        // // Animation đóng lucky wheel image
+        // GManager.instance.leaderBoardImage.transform.DOScale(Vector3.zero, closeDuration)
+        //     .SetEase(closeEase)
+        //     .OnComplete(() =>
+        //     {
+                
+        //         Debug.Log("Lucky Wheel Image animation đóng hoàn thành!");
+        //     });
     }
 
 
