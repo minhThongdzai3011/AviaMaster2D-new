@@ -412,7 +412,77 @@ public class MapSpawner : MonoBehaviour
             }
             }
         }
+        int check = 0;
+        if (checkMapStartCitySpawned)
+        {
+            check++;
+            Debug.Log("[START] City mapStart is active");
+        }
+        if (checkMapStartBeachSpawned)
+        {
+            check++;
+        Debug.Log("[START] Beach mapStart is active");
+        }
+        if (checkMapStartDesertSpawned)
+        {
+            check++;
+        Debug.Log("[START] Desert mapStart is active");
+        }   
+        if (checkMapStartFieldSpawned)
+        {
+            check++;
+        Debug.Log("[START] Field mapStart is active");
+        }
+        if (checkMapStartIceSpawned)
+        {
+            check++;
+        Debug.Log("[START] Ice mapStart is active");
+        }
+        if (checkMapStartLavaSpawned)
+        {
+            check++;
+        Debug.Log("[START] Lava mapStart is active");
+        }
         
+        if(check == 0)
+        {
+            // Mặc định nếu không có map nào được spawn
+            mapPrefabs = mapCityPrefabs;
+            isCityMap = true;
+            mapStart[0].SetActive(true);
+            checkMapStartCitySpawned = true;
+        }
+        else if (check > 1)
+        {
+            mapPrefabs = mapCityPrefabs;
+            isCityMap = true;
+            mapStart[0].SetActive(true);
+            checkMapStartCitySpawned = true;
+
+            isMapBeachUnlocked = false;
+            isMapDesertUnlocked = false;
+            isMapFieldUnlocked = false;
+            isMapIceUnlocked = false;
+            isMapLavaUnlocked = false;
+
+            
+
+            checkMapStartBeachSpawned = false;
+            checkMapStartDesertSpawned = false;
+            checkMapStartFieldSpawned = false;
+            checkMapStartIceSpawned = false;
+            checkMapStartLavaSpawned = false;
+
+
+            mapStart[1].SetActive(false);
+            mapStart[2].SetActive(false);
+            mapStart[3].SetActive(false);
+            mapStart[4].SetActive(false);
+            mapStart[5].SetActive(false);
+            
+            Debug.Log("[START] Multiple mapStarts were active, defaulting to City map");
+
+        }
         RandomMap();
         
         // *** KHỞI TẠO lastMapSwitchIndex để tránh switch liên tục ***

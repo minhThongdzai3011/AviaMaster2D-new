@@ -6,6 +6,7 @@ using Leaderboard;
 using System.Linq;
 
 
+
 public class Plane : MonoBehaviour
 {
     public static Plane instance;
@@ -68,6 +69,26 @@ public class Plane : MonoBehaviour
         if(isStopExplosionEffect){
             explosionEffect.Stop();
         }
+
+
+        Vector3 planeRotation = GManager.instance.airplaneRigidbody2D.transform.eulerAngles;
+
+        // Lấy góc Z
+        float angleZ = planeRotation.z;
+
+        // Nếu > 180 thì chuyển về giá trị âm tương ứng
+        if (angleZ > 180f)
+        {
+            angleZ -= 360f;
+            // angleZ += angleZ;
+        }
+
+
+        // Gán rotation cho trailEffect
+         trailEffect.transform.localRotation = Quaternion.Euler(0f, 0f, angleZ);
+
+        // Hiển thị text với định dạng 2 chữ số thập phân
+        GManager.instance.rotationTrailText.text = angleZ.ToString("F2") + "°";
 
     }
 

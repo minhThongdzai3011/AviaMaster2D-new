@@ -111,6 +111,7 @@ public class GManager : MonoBehaviour
     public TextMeshProUGUI fuelMoneyText;
     public TextMeshProUGUI boostMoneyText;
     public TextMeshProUGUI newMapText;
+    public TextMeshProUGUI rotationTrailText;
 
     [Header("Thành tích")]
     public Image sliderAchievement;
@@ -1216,95 +1217,95 @@ public class GManager : MonoBehaviour
         }
     }
 
-        // if (Input.GetKeyDown(KeyCode.Keypad1))
-        // {
-        //     PauseGame();
-        // }
-        // if (Input.GetKeyDown(KeyCode.Keypad0))
-        // {
-        //     AgainGame();
-        // }
-        // if (Input.GetKey(KeyCode.Keypad2))
-        // {
-        //     totalMoney += 100000;
-        //     PlayerPrefs.SetFloat("TotalMoney", totalMoney);
-        //     PlayerPrefs.Save();
-        //     SaveTotalMoney();
+        if (Input.GetKeyDown(KeyCode.Keypad1))
+        {
+            PauseGame();
+        }
+        if (Input.GetKeyDown(KeyCode.Keypad0))
+        {
+            AgainGame();
+        }
+        if (Input.GetKey(KeyCode.Keypad2))
+        {
+            totalMoney += 100000;
+            PlayerPrefs.SetFloat("TotalMoney", totalMoney);
+            PlayerPrefs.Save();
+            SaveTotalMoney();
 
-        // }
-        // if (Input.GetKeyDown(KeyCode.Keypad3))
-        // {
-        //     MapSpawner.instance.isMapCityUnlocked = true;
-        //     PlayerPrefs.SetInt("IsMapCityUnlocked", 1);
-        //     MapSpawner.instance.isMapDesertUnlocked = true;
-        //     PlayerPrefs.SetInt("IsMapDesertUnlocked", 1);
-        //     MapSpawner.instance.isMapBeachUnlocked = true;
-        //     PlayerPrefs.SetInt("IsMapBeachUnlocked", 1);
-        //     MapSpawner.instance.isMapFieldUnlocked = true;
-        //     PlayerPrefs.SetInt("IsMapFieldUnlocked", 1);
-        //     MapSpawner.instance.isMapIceUnlocked = true;
-        //     PlayerPrefs.SetInt("IsMapIceUnlocked", 1);
-        //     MapSpawner.instance.isMapLavaUnlocked = true;
-        //     PlayerPrefs.SetInt("IsMapLavaUnlocked", 1);
-        //     PlayerPrefs.Save();
-        //     AgainGame();
-        // }
-        // if (Input.GetKeyDown(KeyCode.Keypad4)) 
-        // {
-        //     totalDiamond += 1000;
-        //     totalDiamondText.text = totalDiamond.ToString();
-        //     PlayerPrefs.SetInt("TotalDiamond", totalDiamond);
-        //     PlayerPrefs.Save();
-        //     SaveTotalDiamond();
-        // }
+        }
+        if (Input.GetKeyDown(KeyCode.Keypad3))
+        {
+            MapSpawner.instance.isMapCityUnlocked = true;
+            PlayerPrefs.SetInt("IsMapCityUnlocked", 1);
+            MapSpawner.instance.isMapDesertUnlocked = true;
+            PlayerPrefs.SetInt("IsMapDesertUnlocked", 1);
+            MapSpawner.instance.isMapBeachUnlocked = true;
+            PlayerPrefs.SetInt("IsMapBeachUnlocked", 1);
+            MapSpawner.instance.isMapFieldUnlocked = true;
+            PlayerPrefs.SetInt("IsMapFieldUnlocked", 1);
+            MapSpawner.instance.isMapIceUnlocked = true;
+            PlayerPrefs.SetInt("IsMapIceUnlocked", 1);
+            MapSpawner.instance.isMapLavaUnlocked = true;
+            PlayerPrefs.SetInt("IsMapLavaUnlocked", 1);
+            PlayerPrefs.Save();
+            AgainGame();
+        }
+        if (Input.GetKeyDown(KeyCode.Keypad4)) 
+        {
+            totalDiamond += 1000;
+            totalDiamondText.text = totalDiamond.ToString();
+            PlayerPrefs.SetInt("TotalDiamond", totalDiamond);
+            PlayerPrefs.Save();
+            SaveTotalDiamond();
+        }
 
-        // if(Plane.instance != null && Input.GetKeyDown(KeyCode.Keypad5))
-        // {
-        //     Plane.instance.isAirPortBeach = true;
-        //     PlayerPrefs.SetInt("LastSafeLandingAirport", 1);
-        //     PlayerPrefs.Save();
-        //     return; 
-        // }
-        // if(Plane.instance != null && Input.GetKeyDown(KeyCode.Keypad6))
-        // {
-        //     Plane.instance.isAirPortDesert = true;
-        //     PlayerPrefs.SetInt("LastSafeLandingAirport", 2);
-        //     PlayerPrefs.Save();
-        //     Debug.Log("[CHEAT] Set safe landing to Desert (2), use Keypad0 to restart");
-        //     return; 
-        // }
-        // if(Plane.instance != null && Input.GetKeyDown(KeyCode.Keypad7))
-        // {
-        //     Plane.instance.isAirPortField = true;
-        //     PlayerPrefs.SetInt("LastSafeLandingAirport", 3);
-        //     PlayerPrefs.Save();
-        //     Debug.Log("[CHEAT] Set safe landing to Field (3), use Keypad0 to restart");
-        //     return; 
-        // }
-        // if(Plane.instance != null && Input.GetKeyDown(KeyCode.Keypad8))
-        // {
-        //     Plane.instance.isAirPortIce = true;
-        //     PlayerPrefs.SetInt("LastSafeLandingAirport", 4);
-        //     PlayerPrefs.Save();
-        //     Debug.Log("[CHEAT] Set safe landing to Ice (4), use Keypad0 to restart");
-        //     return; 
-        // }
-        // if(Plane.instance != null && Input.GetKeyDown(KeyCode.Keypad9))
-        // {
-        //     Plane.instance.isAirPortLava = true;
-        //     PlayerPrefs.SetInt("LastSafeLandingAirport", 5);
-        //     PlayerPrefs.Save();
-        //     Debug.Log("[CHEAT] Set safe landing to Lava (5), use Keypad0 to restart");
-        //     return; 
-        // }
+        if(Plane.instance != null && Input.GetKeyDown(KeyCode.Keypad5))
+        {
+            Plane.instance.isAirPortBeach = true;
+            PlayerPrefs.SetInt("LastSafeLandingAirport", 1);
+            PlayerPrefs.Save();
+            return; 
+        }
+        if(Plane.instance != null && Input.GetKeyDown(KeyCode.Keypad6))
+        {
+            Plane.instance.isAirPortDesert = true;
+            PlayerPrefs.SetInt("LastSafeLandingAirport", 2);
+            PlayerPrefs.Save();
+            Debug.Log("[CHEAT] Set safe landing to Desert (2), use Keypad0 to restart");
+            return; 
+        }
+        if(Plane.instance != null && Input.GetKeyDown(KeyCode.Keypad7))
+        {
+            Plane.instance.isAirPortField = true;
+            PlayerPrefs.SetInt("LastSafeLandingAirport", 3);
+            PlayerPrefs.Save();
+            Debug.Log("[CHEAT] Set safe landing to Field (3), use Keypad0 to restart");
+            return; 
+        }
+        if(Plane.instance != null && Input.GetKeyDown(KeyCode.Keypad8))
+        {
+            Plane.instance.isAirPortIce = true;
+            PlayerPrefs.SetInt("LastSafeLandingAirport", 4);
+            PlayerPrefs.Save();
+            Debug.Log("[CHEAT] Set safe landing to Ice (4), use Keypad0 to restart");
+            return; 
+        }
+        if(Plane.instance != null && Input.GetKeyDown(KeyCode.Keypad9))
+        {
+            Plane.instance.isAirPortLava = true;
+            PlayerPrefs.SetInt("LastSafeLandingAirport", 5);
+            PlayerPrefs.Save();
+            Debug.Log("[CHEAT] Set safe landing to Lava (5), use Keypad0 to restart");
+            return; 
+        }
         
-        // // Keypad0 để restart game với delay
-        // if(Input.GetKeyDown(KeyCode.Keypad0))
-        // {
-        //     Debug.Log("[CHEAT] Manual restart requested via Keypad0");
-        //     AgainGame();
-        //     return;
-        // }
+        // Keypad0 để restart game với delay
+        if(Input.GetKeyDown(KeyCode.Keypad0))
+        {
+            Debug.Log("[CHEAT] Manual restart requested via Keypad0");
+            AgainGame();
+            return;
+        }
 
         
         if (distanceText != null && !stopDisplayDistance) distanceText.text = distanceTraveled.ToString("F0") + " ft";
@@ -1959,62 +1960,108 @@ public class GManager : MonoBehaviour
     }
 
     public float maxBoostSpeed = 50f; 
-    public void PlainUp()
+public void PlainUp()
+{
+    float currentZ = airplaneRigidbody2D.transform.eulerAngles.z;
+    if (currentZ > 180f) currentZ -= 360f;
+    float newTargetRotation = Mathf.Min(currentZ + Time.deltaTime * 15f, maxUpAngle);
+    
+    Vector3 existingRotation = airplaneRigidbody2D.transform.eulerAngles;
+    airplaneRigidbody2D.transform.rotation = Quaternion.Euler(existingRotation.x, existingRotation.y, newTargetRotation);
+
+    Vector2 currentVelocity = airplaneRigidbody2D.velocity;
+    float currentSpeed = currentVelocity.magnitude; // Lưu tốc độ hiện tại
+    
+    // Tính hướng mới từ rotation
+    float angleRad = newTargetRotation * Mathf.Deg2Rad;
+    Vector2 newDirection = new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad));
+    
+    // ✅ SỬA: GÁN TRỰC TIẾP - KHÔNG LERP
+    airplaneRigidbody2D.velocity = newDirection * currentSpeed;
+    
+    // Giới hạn tốc độ tối đa
+    if (airplaneRigidbody2D.velocity.magnitude > maxBoostSpeed)
     {
-        float currentZ = airplaneRigidbody2D.transform.eulerAngles.z;
-        if (currentZ > 180f) currentZ -= 360f;
-        float newTargetRotation = Mathf.Min(currentZ + Time.deltaTime * 1f, maxUpAngle);
-        
-        Vector3 existingRotation = airplaneRigidbody2D.transform.eulerAngles;
-        airplaneRigidbody2D.transform.rotation = Quaternion.Euler(existingRotation.x, existingRotation.y, newTargetRotation);
-
-        Vector2 currentVelocity = airplaneRigidbody2D.velocity;
-        float currentSpeed = currentVelocity.magnitude;
-        float targetVerticalSpeed = Mathf.Sin(newTargetRotation * Mathf.Deg2Rad) * maxVerticalSpeed;
-
-        currentVelocity.y = Mathf.Lerp(currentVelocity.y, targetVerticalSpeed, Time.deltaTime * 3f);
-
-        if (currentSpeed > maxBoostSpeed)
-        {
-            float targetSpeed = Mathf.Lerp(currentSpeed, maxBoostSpeed, Time.deltaTime * 2f);
-            currentVelocity = currentVelocity.normalized * targetSpeed;
-        }
-        else if (currentVelocity.magnitude > maxVerticalSpeed * 2f)
-        {
-            currentVelocity = currentVelocity.normalized * maxVerticalSpeed * 2f;
-        }
-
-        airplaneRigidbody2D.velocity = currentVelocity;
+        airplaneRigidbody2D.velocity = airplaneRigidbody2D.velocity.normalized * maxBoostSpeed;
     }
+}
 
-    public void PlainDown()
+public void PlainDown()
+{
+    float currentZ = airplaneRigidbody2D.transform.eulerAngles.z;
+    if (currentZ > 180f) currentZ -= 360f;
+    float newTargetRotation = Mathf.Max(currentZ - Time.deltaTime * 15f, maxDownAngle);
+    
+    Vector3 existingRotation = airplaneRigidbody2D.transform.eulerAngles;
+    airplaneRigidbody2D.transform.rotation = Quaternion.Euler(existingRotation.x, existingRotation.y, newTargetRotation);
+
+    Vector2 currentVelocity = airplaneRigidbody2D.velocity;
+    float currentSpeed = currentVelocity.magnitude; // Lưu tốc độ hiện tại
+    
+    // Tính hướng mới từ rotation
+    float angleRad = newTargetRotation * Mathf.Deg2Rad;
+    Vector2 newDirection = new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad));
+    
+    // ✅ SỬA: GÁN TRỰC TIẾP - KHÔNG LERP
+    airplaneRigidbody2D.velocity = newDirection * currentSpeed;
+    
+    // Giới hạn tốc độ tối đa
+    if (airplaneRigidbody2D.velocity.magnitude > maxBoostSpeed)
     {
-        float currentZ = airplaneRigidbody2D.transform.eulerAngles.z;
-        if (currentZ > 180f) currentZ -= 360f;
-        float newTargetRotation = Mathf.Max(currentZ - Time.deltaTime * 1f, maxDownAngle);
-        
-        Vector3 existingRotation = airplaneRigidbody2D.transform.eulerAngles;
-        airplaneRigidbody2D.transform.rotation = Quaternion.Euler(existingRotation.x, existingRotation.y, newTargetRotation);
-
-        Vector2 currentVelocity = airplaneRigidbody2D.velocity;
-        float currentSpeed = currentVelocity.magnitude;
-        float targetVerticalSpeed = Mathf.Sin(newTargetRotation * Mathf.Deg2Rad) * maxVerticalSpeed;
-
-        currentVelocity.y = Mathf.Lerp(currentVelocity.y, targetVerticalSpeed, Time.deltaTime * 3f);
-
-        if (currentSpeed > maxBoostSpeed)
-        {
-            float targetSpeed = Mathf.Lerp(currentSpeed, maxBoostSpeed, Time.deltaTime * 2f);
-            currentVelocity = currentVelocity.normalized * targetSpeed;
-        }
-        else if (currentVelocity.magnitude > maxVerticalSpeed * 2f)
-        {
-            currentVelocity = currentVelocity.normalized * maxVerticalSpeed * 2f;
-        }
-
-        airplaneRigidbody2D.velocity = currentVelocity;
+        airplaneRigidbody2D.velocity = airplaneRigidbody2D.velocity.normalized * maxBoostSpeed;
     }
+}
 
+//    [Header("Flight Speed")]
+// public float minForwardSpeed = 8f;   // tốc độ tối thiểu, tránh treo
+// public float turnLerpSpeed = 3f;     // độ mượt khi xoay hướng bay
+
+// public void PlainUp()
+// {
+//     Rigidbody2D rb = GManager.instance.airplaneRigidbody2D;
+
+//     Vector2 currentVelocity = rb.velocity;
+
+//     // Đảm bảo luôn có tốc độ bay tối thiểu
+//     float totalSpeed = currentVelocity.magnitude;
+//     totalSpeed = Mathf.Max(totalSpeed, minForwardSpeed);
+
+//     // Hướng bay theo rotation hiện tại của máy bay
+//     Vector2 targetVelocity = (Vector2)rb.transform.up * totalSpeed;
+
+//     // Xoay dần velocity, KHÔNG reset
+//     rb.velocity = Vector2.Lerp(
+//         currentVelocity,
+//         targetVelocity,
+//         Time.deltaTime * turnLerpSpeed
+//     );
+// }
+
+
+// public void PlainDown()
+// {
+//     Rigidbody2D rb = GManager.instance.airplaneRigidbody2D;
+
+//     Vector2 currentVelocity = rb.velocity;
+
+//     // Đảm bảo luôn có tốc độ bay tối thiểu
+//     float totalSpeed = currentVelocity.magnitude;
+//     totalSpeed = Mathf.Max(totalSpeed, minForwardSpeed);
+
+//     // Hướng bay theo rotation hiện tại của máy bay
+//     Vector2 targetVelocity = (Vector2)rb.transform.up * totalSpeed;
+
+//     // Xoay dần velocity, KHÔNG reset
+//     rb.velocity = Vector2.Lerp(
+//         currentVelocity,
+//         targetVelocity,
+//         Time.deltaTime * turnLerpSpeed
+//     );
+// }
+
+
+
+   
     public void ResetGame()
     {
         Debug.Log("Reset Game");

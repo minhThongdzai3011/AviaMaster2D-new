@@ -28,13 +28,13 @@ public class TrailRendererLeft : MonoBehaviour
     void Update()
     {
         // Sync rotation Z với máy bay (chỉ xoay trục Z)
-        if (GManager.instance != null && GManager.instance.airplaneRigidbody2D != null)
-        {
-            float airplaneRotZ = GManager.instance.airplaneRigidbody2D.transform.eulerAngles.z;
-            // Normalize góc về -180 đến 180 độ (giống GManager)
-            if (airplaneRotZ > 180f) airplaneRotZ -= 360f;
-            transform.rotation = Quaternion.Euler(0f, 0f, airplaneRotZ);
-        }
+        // if (GManager.instance != null && GManager.instance.airplaneRigidbody2D != null)
+        // {
+        //     float airplaneRotZ = GManager.instance.airplaneRigidbody2D.transform.eulerAngles.z;
+        //     // Normalize góc về -180 đến 180 độ (giống GManager)
+        //     if (airplaneRotZ > 180f) airplaneRotZ -= 360f;
+        //     transform.rotation = Quaternion.Euler(0f, 0f, airplaneRotZ);
+        // }
     }
 
     public void PlayTrail()
