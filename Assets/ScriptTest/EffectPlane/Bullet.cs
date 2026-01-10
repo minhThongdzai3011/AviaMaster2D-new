@@ -61,6 +61,8 @@ public class Bullet : MonoBehaviour
             ef.ExplosionEffect1();
             collision.gameObject.GetComponent<SpriteRenderer>().enabled = false;
             Destroy(gameObject);
+            collision.gameObject.tag = "Untagged";
+
         }
         else if (collision.gameObject.CompareTag("Boom"))
         {
@@ -74,6 +76,7 @@ public class Bullet : MonoBehaviour
             // EffectExplosionBonus.instance.ExplosionEffect1();
             // Destroy(other.gameObject);
             collision.gameObject.GetComponent<SpriteRenderer>().enabled = false;
+            collision.gameObject.tag = "Untagged";
             Destroy(gameObject);
         }
 

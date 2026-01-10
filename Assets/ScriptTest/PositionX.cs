@@ -10,28 +10,48 @@ public class PositionX : MonoBehaviour
     public Vector2 newPositionX;
     public float timePerfect = 0f;
 
+    [Header("Tổng chiều dài và số đoạn")]
+    public float totalDistance = 2.56f;
+    public int segments = 5;
+
+    [Header("Tốc độ cho từng đoạn (units/sec)")]
+    public float speedSlow = 1.0f;
+    public float speedMedium = 2.0f;
+    public float speedFast = 3.0f;
+
+
     private void Awake()
     {
         instance = this;
     }
     // Start is called before the first frame update
-    void Start()
-    
+     void Start()
     {
-        Debug.Log("Time Perfect: " + timePerfect);
-
-
         positionX = transform.position;
-        
+        float startX = transform.position.x;
+        float segLen = totalDistance / segments; 
+
+        float[] speeds = { speedSlow, speedMedium, speedFast, speedMedium, speedSlow };
+
         Sequence seq = DOTween.Sequence();
 
-        seq.Append(transform.DOMoveX(transform.position.x + 1.3f * 0.8f, 0.4f).SetEase(Ease.Linear));
-        seq.Append(transform.DOMoveX(transform.position.x + 1.5f * 0.8f, 0.1f).SetEase(Ease.Linear)); 
-        seq.Append(transform.DOMoveX(transform.position.x + 3.2f * 0.8f, 0.3f).SetEase(Ease.Linear));
+        float currentX = startX;
 
-        seq.SetLoops(-1, LoopType.Yoyo);     
-    
+        for (int i = 0; i < segments; i++)
+        {
+            currentX += segLen; // cộng thêm chiều dài đoạn
+            float duration = segLen / speeds[i]; // thời gian = quãng đường / tốc độ
+
+            seq.Append(
+                transform.DOMoveX(currentX, duration)
+                         .SetEase(Ease.Linear) // giữ tốc độ đều trong đoạn
+            );
+        }
+
+        // Lặp lại vô hạn, đi tới rồi quay ngược lại
+        seq.SetLoops(-1, LoopType.Yoyo);
     }
+
 
     // Update is called once per frame
     void Update()
@@ -45,13 +65,14 @@ public class PositionX : MonoBehaviour
             DOTween.PauseAll();
             newPositionX = transform.position;
             float deltaX = newPositionX.x - positionX.x;
+            // deltaX = -deltaX;
             Debug.Log($"Delta X: {deltaX:F2}");
             
             int temp = Mathf.RoundToInt((deltaX / (3.2f * 0.8f)) * 100);
             temp = Mathf.Clamp(temp, 0, 100);
             Debug.Log($"Temp Value: {temp}%");
             
-            
+            positionX = newPositionX;
             if ( 44f <= temp && temp <= 56f)
             {
                 isMaxPower = true;

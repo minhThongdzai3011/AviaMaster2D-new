@@ -160,15 +160,15 @@ public class MissionAchievements : MonoBehaviour
         // {
         //     ResetAchievementMissions();
         // }
-        // if (Input.GetKeyDown(KeyCode.B))
-        // {
-        //     achievementMission1Progress = achievementMission1Target[achievementMission1CurrentLevel];
-        //     achievementMission2Progress = achievementMission2Target[achievementMission2CurrentLevel];
-        //     achievementMission3Progress = achievementMission3Target[achievementMission3CurrentLevel];
-        //     achievementMission4Progress = achievementMission4Target[achievementMission4CurrentLevel];
-        //     achievementMission5Progress = achievementMission5Target[achievementMission5CurrentLevel];
-        //     UpdateAchievementMission();
-        // }
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            achievementMission1Progress = achievementMission1Target[achievementMission1CurrentLevel];
+            achievementMission2Progress = achievementMission2Target[achievementMission2CurrentLevel];
+            achievementMission3Progress = achievementMission3Target[achievementMission3CurrentLevel];
+            achievementMission4Progress = achievementMission4Target[achievementMission4CurrentLevel];
+            achievementMission5Progress = achievementMission5Target[achievementMission5CurrentLevel];
+            UpdateAchievementMission();
+        }
     }
     //phan thuong thuong khi hoan thanh mission 1
     public bool isN = true;
@@ -728,11 +728,11 @@ public class MissionAchievements : MonoBehaviour
             Debug.Log("Achievement Mission 2 Reward Claimed! Level: " + (achievementMission2CurrentLevel + 1));
             AudioManager.instance.PlaySound(AudioManager.instance.rewardMissionSoundClip);
             // Trao thưởng kim cương
-            GManager.instance.totalDiamond += prizeRewardAchievement2[achievementMission2CurrentLevel];
-            PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
-            GManager.instance.totalDiamondText.text = GManager.instance.totalDiamond.ToString();
+            GManager.instance.totalMoney += prizeRewardAchievement2[achievementMission2CurrentLevel];
+            PlayerPrefs.SetFloat("TotalMoney", GManager.instance.totalMoney);
+            GManager.instance.totalMoneyText.text = GManager.instance.totalMoney.ToString();
             PlayerPrefs.Save();
-            GManager.instance.SaveTotalDiamond();
+            GManager.instance.SaveTotalMoney();
             
             MissionManager.instance.textQuantityRewardValue--;
             MissionManager.instance.textQuantityReward.text = MissionManager.instance.textQuantityRewardValue.ToString();

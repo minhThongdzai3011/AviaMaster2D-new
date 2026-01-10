@@ -108,14 +108,14 @@ public class Settings : MonoBehaviour
             AdsLuckyWheelButton.gameObject.SetActive(false);
         }
         
-        currentTime = PlayerPrefs.GetInt("SaveTime", 600);
+        currentTime = PlayerPrefs.GetInt("SaveTime", 11);
         
         // Load chest tier (giới hạn tối đa là 4)
         chestTier = PlayerPrefs.GetInt("ChestTier", 1);
         if (chestTier > 4) chestTier = 4;
         Debug.Log($"Loaded ChestTier: {chestTier} - Requirement: {GetCurrentRequirement()}coin -> Reward: {GetCurrentReward()}coin");
 
-        if (currentTime < 600 && currentTime > 0) 
+        if (currentTime < 11 && currentTime > 0) 
         {
             resultText.text = "Waiting...";
             isSpinning = false;
@@ -1022,7 +1022,7 @@ public class Settings : MonoBehaviour
 
     public void AdsLuckyWheelColdDownCoin()
     {
-        currentTime -= 600;
+        currentTime -= 11;
         PlayerPrefs.SetInt("SaveTime", currentTime);
         PlayerPrefs.Save();
         if (!isCountingDown)

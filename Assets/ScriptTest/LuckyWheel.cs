@@ -67,6 +67,15 @@ public class LuckyWheel : MonoBehaviour
                 t = 0;
             }
         }
+
+        if(Settings.instance.isSpinning)
+        {
+           CheckPlane.instance.ResetActiveLuckyWheel();
+        }
+        else
+        {
+           CheckPlane.instance.SetActiveLuckyWheel();
+        }
         
     }
     public void checkValueLuckyWheel()
@@ -75,13 +84,13 @@ public class LuckyWheel : MonoBehaviour
         if (superLuckValues == null || superLuckValues.Length < 4)
         {
             superLuckValues = new int[] { 25000, 35000, 15000, 20000 };
-            Debug.LogWarning("superLuckValues was null or invalid, reinitializing...");
+            // Debug.LogWarning("superLuckValues was null or invalid, reinitializing...");
         }
         
         if (ultraLuckValues == null || ultraLuckValues.Length < 4)
         {
             ultraLuckValues = new int[] { 50000, 75000, 30000, 40000 };
-            Debug.LogWarning("ultraLuckValues was null or invalid, reinitializing...");
+            // Debug.LogWarning("ultraLuckValues was null or invalid, reinitializing...");
         }
         
         if (GManager.instance.moneyFuel > 50000 || GManager.instance.moneyBoost > 50000 || GManager.instance.moneyPower > 50000)
@@ -89,7 +98,7 @@ public class LuckyWheel : MonoBehaviour
             normalLuckValues = new int[] { ultraLuckValues[0], ultraLuckValues[1], ultraLuckValues[2], ultraLuckValues[3] };
             PlayerPrefs.SetInt("isLuckyWheel", 2);
             PlayerPrefs.Save();
-            Debug.Log("Lucky Wheel set to ULTRA LUCK: [" + string.Join(", ", normalLuckValues) + "]");
+            // Debug.Log("Lucky Wheel set to ULTRA LUCK: [" + string.Join(", ", normalLuckValues) + "]");
             ChangeTextValueLuckyWheel();
         }
         else if (GManager.instance.moneyFuel > 20000 || GManager.instance.moneyBoost > 20000 || GManager.instance.moneyPower > 20000)
@@ -105,7 +114,7 @@ public class LuckyWheel : MonoBehaviour
             normalLuckValues = new int[] { 12500, 17500, 5000, 7500 };
             PlayerPrefs.SetInt("isLuckyWheel", 0);
             PlayerPrefs.Save();
-            Debug.Log("Lucky Wheel set to NORMAL LUCK: [12500, 17500, 5000, 7500]");
+            // Debug.Log("Lucky Wheel set to NORMAL LUCK: [12500, 17500, 5000, 7500]");
             ChangeTextValueLuckyWheel();
         }
     }
@@ -250,14 +259,14 @@ public class LuckyWheel : MonoBehaviour
     {
         print("You Win " + Score);
         
-        Settings.instance.currentTime = 600;
+        Settings.instance.currentTime = 11;
         PlayerPrefs.SetInt("SaveTime", Settings.instance.currentTime);
         PlayerPrefs.Save();
         
         Settings.instance.isSpinning = false;
         Settings.instance.StartCountdown(); 
         StartCoroutine(DelayTwoSeconds(2f));
-        Debug.Log("Win - Countdown started with 600 seconds");
+        Debug.Log("Win - Countdown started with 11 seconds");
     }
 
     IEnumerator WaitAndPrint(float waitTime, float rot , int a , string b)

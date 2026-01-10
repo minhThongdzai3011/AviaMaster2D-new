@@ -39,6 +39,11 @@ public class Plane : MonoBehaviour
 
     [Header("Kiểm tra máy bay khi dừng lại có ở airport không")]
     public bool isInAirPort = false;
+
+    [Header("Rotation on Plane settings")]
+    public int rotationOnPlane = 0;
+    public float maxUpAngle = 35f;    
+    public float maxDownAngle = -25f; 
     
     // Track airport hiện tại player đang ở trong
     private string currentAirportTag = "";
@@ -59,6 +64,7 @@ public class Plane : MonoBehaviour
     }
     public bool isStopSmokeEffect = true;
     public bool isStopExplosionEffect = true;
+    public bool isStabilizeFuel = true;
 
     // Update is called once per frame
     void Update()
@@ -153,6 +159,10 @@ public class Plane : MonoBehaviour
         
     void OnTriggerEnter2D(Collider2D other)
     {
+        if (other.CompareTag("Reset"))
+        {
+            GManager.instance.AgainGame();
+        }
         if (other.CompareTag("Coin") || other.CompareTag("Respawn"))
         {
             // AnimCoin anim = other.GetComponent<AnimCoin>();
@@ -241,6 +251,11 @@ public class Plane : MonoBehaviour
                     GManager.instance.airplaneRigidbody2D.velocity = Vector2.zero;
                     Settings.instance.isAltitudeImageActive = false;
                     Settings.instance. altitudeImage.gameObject.SetActive(false);
+                    isStabilizeFuel = false;
+
+                    GManager.instance.durationFuel = 0f;
+                    GManager.instance.currentControlDuration = 0f;
+                    GManager.instance.currentControlTimer = GManager.instance.currentControlDuration;
                 }
                 // StartCoroutine(DelayOneSecond(2f));
             }
@@ -297,8 +312,10 @@ public class Plane : MonoBehaviour
                 else
                 {
                     GManager.instance.durationFuel = 0f;
-                    Debug.Log("Bonus2 collected - Ending game soon");
+                    GManager.instance.currentControlDuration = 0f;
+                    Debug.Log("Bonus2 collected - Ending game soon" + GManager.instance.durationFuel);
                     GManager.instance.newMapText.text = "Fastest balloon pop ever… and you lost!";
+                    isStabilizeFuel = false;
                     StartCoroutine(FadeInText(1f));
                     if(TrailRendererRight.instance != null ) TrailRendererRight.instance.StopTrail();
                     if(TrailRendererLeft.instance != null ) TrailRendererLeft.instance.StopTrail();

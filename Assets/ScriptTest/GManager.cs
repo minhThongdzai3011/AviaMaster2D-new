@@ -69,8 +69,7 @@ public class GManager : MonoBehaviour
     public float baseTotalBoost = 100f; // Boost cơ bản không thay đổi
 
     [Header("RotationZ settings")]
-    public float maxUpAngle = 45f;    // giới hạn góc lên
-    public float maxDownAngle = -45f; // giới hạn góc xuống
+
     public float rotationSmooth = 8f; 
     public float minMoveThreshold = 0.5f; 
 
@@ -995,6 +994,11 @@ public class GManager : MonoBehaviour
         
         if (airplaneRigidbody2D == null) return;
 
+        if(airplaneRigidbody2D.velocity.x < 28.5f & isControllable & !isHorizontalFlying & isPlay)
+        {
+            airplaneRigidbody2D.velocity = 29.0f * Vector2.right;
+        }
+
         Vector2 currentPos = airplaneRigidbody2D.transform.position;
         distanceTraveled = Vector2.Distance(startPosition, currentPos);
         currentAltitude = currentPos.y - startPosition.y;
@@ -1372,7 +1376,7 @@ public class GManager : MonoBehaviour
         {
             // Điều chỉnh góc lên từ góc hiện tại
             float adjustment = Time.deltaTime * 360f;
-            float targetRotation = Mathf.Min(currentZ + adjustment, maxUpAngle);
+            float targetRotation = Mathf.Min(currentZ + adjustment, Plane.instance.maxUpAngle);
             
             // GIỮ NGUYÊN rotation.x hiện tại khi set rotation.z
             Vector3 existingRotation = airplaneRigidbody2D.transform.eulerAngles;
@@ -1402,7 +1406,7 @@ public class GManager : MonoBehaviour
         {
             // Điều chỉnh góc xuống từ góc hiện tại
             float adjustment = Time.deltaTime * 180f;
-            float targetRotation = Mathf.Max(currentZ - adjustment, maxDownAngle);
+            float targetRotation = Mathf.Max(currentZ - adjustment, Plane.instance.maxDownAngle);
             
             // GIỮ NGUYÊN rotation.x hiện tại khi set rotation.z
             Vector3 existingRotation = airplaneRigidbody2D.transform.eulerAngles;
@@ -1434,7 +1438,7 @@ public class GManager : MonoBehaviour
         // Bạn có thể điều chỉnh upBias để làm góc lên nhạy hơn so với Atan2 thuần túy
         float upBias = 0.1f; // >1 làm tăng ảnh hưởng của vy
         float velAngle = Mathf.Atan2(velocity.y * upBias, velocity.x) * Mathf.Rad2Deg;
-        return Mathf.Clamp(velAngle, 0f, maxUpAngle);
+        return Mathf.Clamp(velAngle, 0f, Plane.instance.maxUpAngle);
     }
 
     float ComputeDownTargetAngle(Vector2 velocity)
@@ -1443,7 +1447,7 @@ public class GManager : MonoBehaviour
         // downBias có thể >1 để nghiêng xuống mạnh hơn
         float downBias = 1f; // >1 làm tăng ảnh hưởng của vy (âm)
         float velAngle = Mathf.Atan2(velocity.y * downBias, velocity.x) * Mathf.Rad2Deg;
-        return Mathf.Clamp(velAngle, maxDownAngle, 0f);
+        return Mathf.Clamp(velAngle, Plane.instance.maxDownAngle, 0f);
     }
 
     // Hàm tự động xoay theo velocity - LUÔN hoạt động khi bay
@@ -1964,7 +1968,7 @@ public void PlainUp()
 {
     float currentZ = airplaneRigidbody2D.transform.eulerAngles.z;
     if (currentZ > 180f) currentZ -= 360f;
-    float newTargetRotation = Mathf.Min(currentZ + Time.deltaTime * 15f, maxUpAngle);
+    float newTargetRotation = Mathf.Min(currentZ + Time.deltaTime * Plane.instance.rotationOnPlane, Plane.instance.maxUpAngle);
     
     Vector3 existingRotation = airplaneRigidbody2D.transform.eulerAngles;
     airplaneRigidbody2D.transform.rotation = Quaternion.Euler(existingRotation.x, existingRotation.y, newTargetRotation);
@@ -1972,12 +1976,12 @@ public void PlainUp()
     Vector2 currentVelocity = airplaneRigidbody2D.velocity;
     float currentSpeed = currentVelocity.magnitude; // Lưu tốc độ hiện tại
     
-    // Tính hướng mới từ rotation
-    float angleRad = newTargetRotation * Mathf.Deg2Rad;
-    Vector2 newDirection = new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad));
     
-    // ✅ SỬA: GÁN TRỰC TIẾP - KHÔNG LERP
+    Vector2 newDirection = airplaneRigidbody2D.transform.right; // Transform.right luôn có magnitude = 1
+    
+    // Áp dụng velocity mới với tốc độ gốc
     airplaneRigidbody2D.velocity = newDirection * currentSpeed;
+    // Debug.Log("PlainUp - New Direction: " + newDirection + ", Current Speed: " + currentSpeed );
     
     // Giới hạn tốc độ tối đa
     if (airplaneRigidbody2D.velocity.magnitude > maxBoostSpeed)
@@ -1990,7 +1994,7 @@ public void PlainDown()
 {
     float currentZ = airplaneRigidbody2D.transform.eulerAngles.z;
     if (currentZ > 180f) currentZ -= 360f;
-    float newTargetRotation = Mathf.Max(currentZ - Time.deltaTime * 15f, maxDownAngle);
+    float newTargetRotation = Mathf.Max(currentZ - Time.deltaTime * Plane.instance.rotationOnPlane, Plane.instance.maxDownAngle);
     
     Vector3 existingRotation = airplaneRigidbody2D.transform.eulerAngles;
     airplaneRigidbody2D.transform.rotation = Quaternion.Euler(existingRotation.x, existingRotation.y, newTargetRotation);
@@ -1998,12 +2002,11 @@ public void PlainDown()
     Vector2 currentVelocity = airplaneRigidbody2D.velocity;
     float currentSpeed = currentVelocity.magnitude; // Lưu tốc độ hiện tại
     
-    // Tính hướng mới từ rotation
-    float angleRad = newTargetRotation * Mathf.Deg2Rad;
-    Vector2 newDirection = new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad));
+    Vector2 newDirection = airplaneRigidbody2D.transform.right; // Transform.right luôn có magnitude = 1
     
-    // ✅ SỬA: GÁN TRỰC TIẾP - KHÔNG LERP
+    // Áp dụng velocity mới với tốc độ gốc
     airplaneRigidbody2D.velocity = newDirection * currentSpeed;
+    // Debug.Log("PlainDown - New Direction: " + newDirection + ", Current Speed: " + currentSpeed );
     
     // Giới hạn tốc độ tối đa
     if (airplaneRigidbody2D.velocity.magnitude > maxBoostSpeed)
@@ -2012,52 +2015,8 @@ public void PlainDown()
     }
 }
 
-//    [Header("Flight Speed")]
-// public float minForwardSpeed = 8f;   // tốc độ tối thiểu, tránh treo
-// public float turnLerpSpeed = 3f;     // độ mượt khi xoay hướng bay
-
-// public void PlainUp()
-// {
-//     Rigidbody2D rb = GManager.instance.airplaneRigidbody2D;
-
-//     Vector2 currentVelocity = rb.velocity;
-
-//     // Đảm bảo luôn có tốc độ bay tối thiểu
-//     float totalSpeed = currentVelocity.magnitude;
-//     totalSpeed = Mathf.Max(totalSpeed, minForwardSpeed);
-
-//     // Hướng bay theo rotation hiện tại của máy bay
-//     Vector2 targetVelocity = (Vector2)rb.transform.up * totalSpeed;
-
-//     // Xoay dần velocity, KHÔNG reset
-//     rb.velocity = Vector2.Lerp(
-//         currentVelocity,
-//         targetVelocity,
-//         Time.deltaTime * turnLerpSpeed
-//     );
-// }
 
 
-// public void PlainDown()
-// {
-//     Rigidbody2D rb = GManager.instance.airplaneRigidbody2D;
-
-//     Vector2 currentVelocity = rb.velocity;
-
-//     // Đảm bảo luôn có tốc độ bay tối thiểu
-//     float totalSpeed = currentVelocity.magnitude;
-//     totalSpeed = Mathf.Max(totalSpeed, minForwardSpeed);
-
-//     // Hướng bay theo rotation hiện tại của máy bay
-//     Vector2 targetVelocity = (Vector2)rb.transform.up * totalSpeed;
-
-//     // Xoay dần velocity, KHÔNG reset
-//     rb.velocity = Vector2.Lerp(
-//         currentVelocity,
-//         targetVelocity,
-//         Time.deltaTime * turnLerpSpeed
-//     );
-// }
 
 
 

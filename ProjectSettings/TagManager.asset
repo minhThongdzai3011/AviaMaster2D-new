@@ -47,6 +47,7 @@ TagManager:
   - Airport
   - MapTransition
   - Bullet
+  - Reset
   layers:
   - Default
   - TransparentFX

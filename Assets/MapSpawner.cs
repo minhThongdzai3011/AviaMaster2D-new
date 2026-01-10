@@ -620,8 +620,8 @@ void SpawnMapItem()
         int airportIndex = (spawnCountInCurrentMap / 5) - 1; // 5->0, 10->1, 15->2
         float airportY = -4.2f; // Y cố định cho airport
         
-        Debug.Log($"[AIRPORT DEBUG] Count: {spawnCountInCurrentMap}, Index: {airportIndex}");
-        Debug.Log($"[AIRPORT DEBUG] Current biome - City:{isCityMap}, Beach:{isBeachMap}, Desert:{isDesertMap}, Field:{isFieldMap}, Ice:{isIceMap}, Lava:{isLavaMap}");
+        // Debug.Log($"[AIRPORT DEBUG] Count: {spawnCountInCurrentMap}, Index: {airportIndex}");
+        // Debug.Log($"[AIRPORT DEBUG] Current biome - City:{isCityMap}, Beach:{isBeachMap}, Desert:{isDesertMap}, Field:{isFieldMap}, Ice:{isIceMap}, Lava:{isLavaMap}");
         
         // *** SỬA: KIỂM TRA BIOME HIỆN TẠI CHÍNH XÁC ***
         if (isCityMap && mapCityAirportPrefabs != null && mapCityAirportPrefabs.Length > 0)
