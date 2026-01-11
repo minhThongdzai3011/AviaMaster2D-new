@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
+using System.Collections;
 
 public class AudioManager : MonoBehaviour
 {
@@ -53,6 +54,13 @@ public class AudioManager : MonoBehaviour
     public AudioClip takeOffSoundClip;
     [Header("Âm thanh máy bay đang rơi")]
     public AudioClip fallingSoundClip;
+
+    [Header("Âm thanh máy bay rơi - bắt đầu")]
+    public AudioClip fallingStartSoundClip;
+
+    [Header("Âm thanh máy bay rơi - lặp lại")]
+    public AudioClip fallingLoopSoundClip;
+
     [Header("Âm thanh đếm tiền")]
     public AudioClip countMoneySoundClip;
     [Header("Âm thanh LuckyWheel")]
@@ -178,5 +186,31 @@ public class AudioManager : MonoBehaviour
     {
         if (audioMusic.isPlaying)
             audioMusic.Stop();
+    }
+
+
+    public void PlayFallingSound()
+    {
+        AudioManager.instance.PlaySound(fallingStartSoundClip);
+
+        StartCoroutine(PlayLoopAfterStart());
+    }
+
+    private IEnumerator PlayLoopAfterStart()
+    {
+        yield return new WaitForSeconds(fallingStartSoundClip.length);
+        AudioSource source = AudioManager.instance.audioSound;
+        source.clip = fallingLoopSoundClip;
+        source.loop = true;
+        source.Play();
+    }
+
+    public void StopFallingSound()
+    {
+        if (audioSound.isPlaying)
+        {
+            audioSound.loop = false; 
+            audioSound.Stop();       
+        }
     }
 }

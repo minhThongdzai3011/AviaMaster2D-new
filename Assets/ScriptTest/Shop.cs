@@ -771,7 +771,7 @@ public class Shop : MonoBehaviour
     public bool isBuyPlane17Done = false;
     public bool isRotaryFrontZDone = false;
     public void buyPlane1(){
-        StartCoroutine(PlayButtonEffect(5));
+        StartCoroutine(PlayButtonEffect(6));
         if(!isBuyPlane1Done){
             if(GManager.instance.totalDiamond >= 500)
             {
@@ -1707,7 +1707,7 @@ public class Shop : MonoBehaviour
         
     }
     public void buyPlane14(){
-        StartCoroutine(PlayButtonEffect(6));
+        StartCoroutine(PlayButtonEffect(5));
         isBuyPlane14Done = true;
         isRotaryFrontZDone = false;
         if (planePriceText != null && planePriceText.Length > 13)

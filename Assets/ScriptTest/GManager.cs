@@ -807,7 +807,7 @@ public class GManager : MonoBehaviour
         }
         if (Plane.instance != null && !Plane.instance.isGrounded){
             AudioManager.instance.StopPlayerSound();
-            AudioManager.instance.PlaySound(AudioManager.instance.fallingSoundClip);
+            AudioManager.instance.PlayFallingSound();
         }
         
         isControllable = false; // Tắt controllable bình thường

@@ -104,6 +104,7 @@ public class Plane : MonoBehaviour
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Ground") && !isGrounded)
         {
+            AudioManager.instance.StopFallingSound();
             isStopExplosionEffect = false;
             isGrounded = true;
 
