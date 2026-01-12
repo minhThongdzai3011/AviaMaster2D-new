@@ -120,17 +120,21 @@ public class Settings : MonoBehaviour
             resultText.text = "Waiting...";
             isSpinning = false;
             StartCountdown(); 
+            Debug.Log("Continuing countdown from saved time: " + currentTime);
         }
         else if (currentTime <= 0)
         {
             resultText.text = "Spin";
             isSpinning = true;
             AdsLuckyWheelButton.gameObject.SetActive(false);
+
+            Debug.Log("Countdown finished. Ready to spin.");
         }
         else
         {
             resultText.text = "Spin";
             isSpinning = true;
+            Debug.Log("No countdown in progress. Ready to spin.");
         }
         // if (currentTime == 0)
         // {
@@ -166,6 +170,34 @@ public class Settings : MonoBehaviour
             altitudeImage.gameObject.SetActive(false);
         }
         saveNameInputField();
+
+        if (GManager.instance.isNoPlayingGame)
+        {
+            if(Input.GetKeyDown(KeyCode.Space))
+            {
+                GManager.instance.LaunchAirplane();
+                GManager.instance.isNoPlayingGame = false;  
+            }
+        }
+        if (Plane.instance.isImageWinOpen)
+        {
+            if(Input.GetKeyDown(KeyCode.Space))
+            {
+                CloseWinImage();
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
     }
 
     void LoadSettings()
@@ -787,6 +819,7 @@ public class Settings : MonoBehaviour
         seq.OnComplete(() =>
         {
             isCloseWinImage = true;
+            Plane.instance.isImageWinOpen = true;
             butttonExitImageWin.gameObject.SetActive(true);
             
 
@@ -1032,6 +1065,7 @@ public class Settings : MonoBehaviour
         if (currentTime < 0)
         {
             currentTime = 0;
+            
         }
         AdsLuckyWheelButton.gameObject.SetActive(false);
         isColdDownTimeLuckyWheel = true;

@@ -154,6 +154,7 @@ public class Plane : MonoBehaviour
             {
                 SuperPlaneManager.instance.skillEffectSuperPlane2.SetActive(false);
             }
+            AudioManager.instance.StopFallingSound();
             StartCoroutine(UpMass());
         }
     }
@@ -657,6 +658,8 @@ public class Plane : MonoBehaviour
     
     IEnumerator UpMass()
     {
+        // Đảm bảo tắt falling sound trước khi phát âm thanh khác
+        AudioManager.instance.StopFallingSound();
         // AudioManager.instance.PlaySound(AudioManager.instance.landingSoundClip);
         AudioManager.instance.StopPlayerSound();
         Rigidbody2D airplaneRb = GManager.instance.airplaneRigidbody2D;
@@ -681,6 +684,7 @@ public class Plane : MonoBehaviour
         float initialAngleZ = GetCurrentRotationZ(airplaneRb);
         float initialAngleX = airplaneRb.transform.eulerAngles.x;
         if (initialAngleZ < -15f || initialAngleZ > 15f){
+            AudioManager.instance.StopFallingSound();
             AudioManager.instance.PlaySound(AudioManager.instance.explosionSoundClip);
             AudioManager.instance.StopPlayerSound();
             MakePlaneBlackAndExplode();
@@ -690,6 +694,7 @@ public class Plane : MonoBehaviour
             GManager.instance.isBonus = false;   
         }
         else{
+            AudioManager.instance.StopFallingSound();
             AudioManager.instance.PlaySound(AudioManager.instance.perfectLandingSoundClip);
             AudioManager.instance.StopPlayerSound();
             TextIntro.instance.GetRandomTextWinMessage(1); 
@@ -806,12 +811,14 @@ public class Plane : MonoBehaviour
             
             Debug.Log("Airplane stopped sliding");
             StartCoroutine(OpenImageWIn());
+            
             }
         }
 
     public bool resetRotationOnExplode = true;
     public float explodeRotationResetTime = 0.4f;
     private bool hasExploded = false;
+    public bool isImageWinOpen = false;
 
     public void MakePlaneBlackAndExplode()
     {

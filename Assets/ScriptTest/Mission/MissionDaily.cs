@@ -560,7 +560,7 @@ public class MissionDaily : MonoBehaviour
             imageBackGroundFillDailyMission4.sprite = spriteBackGroundFillMissionCompleted;
             textDailyMission4.text = "Claimed";
 
-            GManager.instance.totalDiamond += 50;
+            GManager.instance.totalDiamond += 20;
             PlayerPrefs.SetInt("TotalDiamond", GManager.instance.totalDiamond);
             PlayerPrefs.Save();
             GManager.instance.SaveTotalDiamond();

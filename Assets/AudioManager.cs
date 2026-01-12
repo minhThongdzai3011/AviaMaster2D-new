@@ -78,6 +78,10 @@ public class AudioManager : MonoBehaviour
 
     [Header("Âm thanh nhận thưởng mission")]
     public AudioClip rewardMissionSoundClip;
+    
+    // Coroutine reference cho falling sound
+    private Coroutine fallingLoopCoroutine;
+    
     public bool isMusicOn = true;
     public bool isSoundOn = true;
 
@@ -188,29 +192,45 @@ public class AudioManager : MonoBehaviour
             audioMusic.Stop();
     }
 
-
     public void PlayFallingSound()
     {
-        AudioManager.instance.PlaySound(fallingStartSoundClip);
+       PlaySound(fallingStartSoundClip);
 
-        StartCoroutine(PlayLoopAfterStart());
+        if (fallingLoopCoroutine != null)
+        {
+            StopCoroutine(fallingLoopCoroutine);
+        }
+        
+        fallingLoopCoroutine = StartCoroutine(PlayLoopAfterStart());
     }
 
     private IEnumerator PlayLoopAfterStart()
     {
         yield return new WaitForSeconds(fallingStartSoundClip.length);
-        AudioSource source = AudioManager.instance.audioSound;
-        source.clip = fallingLoopSoundClip;
-        source.loop = true;
-        source.Play();
+        
+        if (fallingLoopCoroutine != null)
+        {
+            AudioSource source = AudioManager.instance.audioSound;
+            source.clip = fallingLoopSoundClip;
+            source.loop = true;
+            source.Play();
+        }
     }
 
     public void StopFallingSound()
     {
-        if (audioSound.isPlaying)
+        if (fallingLoopCoroutine != null)
+        {
+            StopCoroutine(fallingLoopCoroutine);
+            fallingLoopCoroutine = null;
+        }
+        
+        if (audioSound.isPlaying && (audioSound.clip == fallingLoopSoundClip))
         {
             audioSound.loop = false; 
-            audioSound.Stop();       
+            audioSound.Stop();
+            audioSound.clip = null; 
         }
     }
 }
+

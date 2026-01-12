@@ -95,6 +95,8 @@ public class GManager : MonoBehaviour
     public bool isGroundCollisionDetected = false; // Flag collision từ Plane.cs
     public bool isCheckErrorAngleZ = false; //
 
+    public bool isNoPlayingGame = true;
+
     [Header("UI Texts")]
     public TextMeshProUGUI distanceText;
     public TextMeshProUGUI altitudeText;
