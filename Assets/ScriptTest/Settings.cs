@@ -119,6 +119,7 @@ public class Settings : MonoBehaviour
         {
             resultText.text = "Waiting...";
             isSpinning = false;
+            wasSpinningLastFrame = false;
             StartCountdown(); 
             Debug.Log("Continuing countdown from saved time: " + currentTime);
         }
@@ -126,6 +127,7 @@ public class Settings : MonoBehaviour
         {
             resultText.text = "Spin";
             isSpinning = true;
+            wasSpinningLastFrame = true;
             AdsLuckyWheelButton.gameObject.SetActive(false);
 
             Debug.Log("Countdown finished. Ready to spin.");
@@ -134,6 +136,7 @@ public class Settings : MonoBehaviour
         {
             resultText.text = "Spin";
             isSpinning = true;
+            wasSpinningLastFrame = true;
             Debug.Log("No countdown in progress. Ready to spin.");
         }
         // if (currentTime == 0)
@@ -150,7 +153,6 @@ public class Settings : MonoBehaviour
         Debug.Log("Settings initialized. Music: " + isMusicOn + ", Sound: " + isSoundOn);
         targetValue = PlayerPrefs.GetFloat("PrizeSliderValue", 0f);
         prizeSlider.fillAmount = targetValue;
-        StartCountdown();
         GManager.instance.coinEffect.Stop();
     }
     public bool isAltitudeImageActive = true;
@@ -187,17 +189,56 @@ public class Settings : MonoBehaviour
             }
         }
 
+        // Kiểm tra scale ban đầu (chỉ chạy 1 lần)
+        CheckInitialScale();
+        
+        // Kiểm tra và trigger scale effect cho Lucky Wheel chest
+        CheckLuckyWheelChestScale();
+    }
 
-
-
-
-
-
-
-
-
-
-
+    private bool wasSpinningLastFrame = false;
+    private bool hasCheckedInitialScale = false;
+    
+    private void CheckInitialScale()
+    {
+        if (hasCheckedInitialScale) return;
+        if (ScaleChestLuckyWheel.instance == null) return;
+        
+        // Đợi vài frame để đảm bảo mọi thứ đã khởi tạo xong
+        if (Time.frameCount < 5) return;
+        
+        hasCheckedInitialScale = true;
+        
+        // Nếu đã sẵn sàng quay ngay từ đầu -> trigger scale
+        if (isSpinning)
+        {
+            ScaleChestLuckyWheel.instance.StartScaling();
+            wasSpinningLastFrame = true;
+            Debug.Log("Initial scale triggered! isSpinning = true");
+        }
+        else
+        {
+            wasSpinningLastFrame = false;
+            Debug.Log("No initial scale. isSpinning = false (countdown in progress)");
+        }
+    }
+    
+    private void CheckLuckyWheelChestScale()
+    {
+        if (ScaleChestLuckyWheel.instance == null) return;
+        
+        // Nếu đã chờ xong (có thể quay) và chưa scale
+        if (isSpinning && !wasSpinningLastFrame)
+        {
+            ScaleChestLuckyWheel.instance.StartScaling();
+            wasSpinningLastFrame = true;
+        }
+        // Nếu đang chờ (không thể quay) và đang scale
+        else if (!isSpinning && wasSpinningLastFrame)
+        {
+            ScaleChestLuckyWheel.instance.StopScaling();
+            wasSpinningLastFrame = false;
+        }
     }
 
     void LoadSettings()
@@ -489,6 +530,12 @@ public class Settings : MonoBehaviour
         AudioManager.instance.PlaySound(AudioManager.instance.buttonSoundClip);
         Debug.Log("Mở Win Image!");
         CheckPlane.instance.SetActiveLuckyWheel();
+        
+        // Tắt scale khi mở Lucky Wheel để quay
+        if (ScaleChestLuckyWheel.instance != null)
+        {
+            ScaleChestLuckyWheel.instance.StopScaling();
+        }
         // Dừng tất cả animation đang chạy
         DOTween.Kill(luckyWheelImage.transform);
         isAnimating = true;
@@ -869,6 +916,12 @@ public class Settings : MonoBehaviour
         isColdDownTimeLuckyWheel = false;
         PlayerPrefs.SetInt("LuckyWheelColdDownAds", 0);
         PlayerPrefs.Save();
+        
+        // Bắt đầu scale chest khi countdown xong
+        if (ScaleChestLuckyWheel.instance != null)
+        {
+            ScaleChestLuckyWheel.instance.StartScaling();
+        }
     }
     // public void Exitpannel()
     // {
