@@ -19,6 +19,7 @@ public class LuckyWheel : MonoBehaviour
     private Rigidbody2D rbody;
     public Sprite prizeSpriteImageCoin;
     public Sprite prizeSpriteCoin;
+    
     int inRotate;
     public void Awake()
     {
@@ -155,6 +156,9 @@ public class LuckyWheel : MonoBehaviour
             {
                 rbody.AddTorque(RotatePower);
                 inRotate = 1;
+                Settings.instance.exitLeaderboardButton.gameObject.SetActive(false);
+
+                GMAnalytics.LogEvent("spin_lucky_wheel", 2);
             }
         }
         else if (!Settings.instance.isSpinning)
@@ -259,14 +263,15 @@ public class LuckyWheel : MonoBehaviour
     {
         print("You Win " + Score);
         
-        Settings.instance.currentTime = 11;
+        Settings.instance.currentTime = 600;
         PlayerPrefs.SetInt("SaveTime", Settings.instance.currentTime);
         PlayerPrefs.Save();
         
         Settings.instance.isSpinning = false;
         Settings.instance.StartCountdown(); 
         StartCoroutine(DelayTwoSeconds(2f));
-        Debug.Log("Win - Countdown started with 11 seconds");
+        Debug.Log("Win - Countdown started with 600 seconds");
+        Settings.instance.exitLeaderboardButton.gameObject.SetActive(true);
     }
 
     IEnumerator WaitAndPrint(float waitTime, float rot , int a , string b)

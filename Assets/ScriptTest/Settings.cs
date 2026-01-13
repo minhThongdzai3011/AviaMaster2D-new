@@ -32,6 +32,7 @@ public class Settings : MonoBehaviour
     public TextMeshProUGUI value3Text;
     public TextMeshProUGUI value4Text;
     public TextMeshProUGUI superBonusText;
+    public TextMeshProUGUI textToPlayText;
     
     [Header("Image Settings")]
     public Image musicImageOn;
@@ -66,6 +67,7 @@ public class Settings : MonoBehaviour
     public Button AdsButton;
     public Button AdsLuckyWheelButton;
     public Button butttonExitImageWin;
+    public Button exitLeaderboardButton;
     
     [Header("Bool Settings")]
     public bool isMusicOn = true;
@@ -108,14 +110,14 @@ public class Settings : MonoBehaviour
             AdsLuckyWheelButton.gameObject.SetActive(false);
         }
         
-        currentTime = PlayerPrefs.GetInt("SaveTime", 11);
+        currentTime = PlayerPrefs.GetInt("SaveTime", 600);
         
         // Load chest tier (giới hạn tối đa là 4)
         chestTier = PlayerPrefs.GetInt("ChestTier", 1);
         if (chestTier > 4) chestTier = 4;
         Debug.Log($"Loaded ChestTier: {chestTier} - Requirement: {GetCurrentRequirement()}coin -> Reward: {GetCurrentReward()}coin");
 
-        if (currentTime < 11 && currentTime > 0) 
+        if (currentTime < 600 && currentTime > 0) 
         {
             resultText.text = "Waiting...";
             isSpinning = false;
@@ -173,7 +175,8 @@ public class Settings : MonoBehaviour
         }
         saveNameInputField();
 
-        if (GManager.instance.isNoPlayingGame)
+        // SỬA: Chỉ xử lý input Space khi game đã ready
+        if (GManager.instance.isNoPlayingGame && GManager.instance.isGameReady)
         {
             if(Input.GetKeyDown(KeyCode.Space))
             {
@@ -181,7 +184,8 @@ public class Settings : MonoBehaviour
                 GManager.instance.isNoPlayingGame = false;  
             }
         }
-        if (Plane.instance.isImageWinOpen)
+        // SỬA: Chỉ xử lý input Space cho Win Image khi game đã ready
+        if (Plane.instance.isImageWinOpen && GManager.instance.isGameReady)
         {
             if(Input.GetKeyDown(KeyCode.Space))
             {
@@ -202,7 +206,11 @@ public class Settings : MonoBehaviour
     private void CheckInitialScale()
     {
         if (hasCheckedInitialScale) return;
-        if (ScaleChestLuckyWheel.instance == null) return;
+        if (ScaleChestLuckyWheel.instance == null) 
+        {
+            Debug.LogError("ScaleChestLuckyWheel.instance is NULL!");
+            return;
+        }
         
         // Đợi vài frame để đảm bảo mọi thứ đã khởi tạo xong
         if (Time.frameCount < 5) return;
@@ -212,9 +220,18 @@ public class Settings : MonoBehaviour
         // Nếu đã sẵn sàng quay ngay từ đầu -> trigger scale
         if (isSpinning)
         {
+            Debug.Log("Attempting to start scaling...");
+            Debug.Log($"ScaleChestLuckyWheel.instance exists: {ScaleChestLuckyWheel.instance != null}");
+            
+            // Kiểm tra thêm các điều kiện
+            if (ScaleChestLuckyWheel.instance.gameObject != null)
+            {
+                Debug.Log($"Target GameObject active: {ScaleChestLuckyWheel.instance.gameObject.activeInHierarchy}");
+            }
+            
             ScaleChestLuckyWheel.instance.StartScaling();
             wasSpinningLastFrame = true;
-            Debug.Log("Initial scale triggered! isSpinning = true");
+            Debug.Log("StartScaling() called successfully!");
         }
         else
         {
@@ -289,6 +306,13 @@ public class Settings : MonoBehaviour
 
     public void OpenSettings()
     {
+        // THÊM: Kiểm tra game đã ready chưa
+        if (GManager.instance != null && !GManager.instance.isGameReady)
+        {
+            Debug.Log("[SETTINGS] Game not ready yet - ignoring settings open");
+            return;
+        }
+        
         if (isAnimating) return;
         AudioManager.instance.PlaySound(AudioManager.instance.buttonSoundClip);
         pannelGray.gameObject.SetActive(true);
@@ -524,6 +548,13 @@ public class Settings : MonoBehaviour
     public bool isOpenLuckyWheel = false;
     public void openWheel()
     {
+        // THÊM: Kiểm tra game đã ready chưa
+        if (GManager.instance != null && !GManager.instance.isGameReady)
+        {
+            Debug.Log("[LUCKY_WHEEL] Game not ready yet - ignoring wheel open");
+            return;
+        }
+        
         if (isAnimating) return;
         pannelGray.gameObject.SetActive(true);
         isOpenLuckyWheel = true;
@@ -771,9 +802,18 @@ public class Settings : MonoBehaviour
 
     public void StartCountingCoin()
     {
-        float distanceValue = Plane.instance.moneyDistance;
-        float collectValue  = Plane.instance.moneyCollect;
-        MissionPlane.instance.planeMission1Progress += ((int)distanceValue);
+        float distanceValue = GManager.instance.distanceTraveled; // Quãng đường thực tế
+        float collectValue = Plane.instance.moneyCollect;
+        
+        // Cộng dồn mission progress
+        int distanceToAdd = (int)distanceValue;
+        int oldProgress = MissionPlane.instance.planeMission1Progress;
+        
+        MissionPlane.instance.planeMission1Progress += distanceToAdd;
+        
+        Debug.Log($"[MISSION] Lần bay này: {distanceToAdd}m");
+        Debug.Log($"[MISSION] Tổng cộng dồn: {oldProgress} → {MissionPlane.instance.planeMission1Progress}");
+        
         MissionPlane.instance.UpdatePlaneMission();
 
         if(SuperPlaneManager.instance != null && SuperPlaneManager.instance.isSuperPlane3 )
@@ -1108,7 +1148,7 @@ public class Settings : MonoBehaviour
 
     public void AdsLuckyWheelColdDownCoin()
     {
-        currentTime -= 11;
+        currentTime -= 600;
         PlayerPrefs.SetInt("SaveTime", currentTime);
         PlayerPrefs.Save();
         if (!isCountingDown)

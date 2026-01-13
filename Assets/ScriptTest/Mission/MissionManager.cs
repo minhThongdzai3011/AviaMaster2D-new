@@ -274,7 +274,7 @@ public class MissionManager : MonoBehaviour
         shopButton.interactable = false;
         luckyWheelButton.GetComponent<EventTrigger>().enabled = false;
         leaderBoardButton.GetComponent<EventTrigger>().enabled = false;
-        moreGameButton.GetComponent<EventTrigger>().enabled = false;
+        // moreGameButton.GetComponent<EventTrigger>().enabled = false;
 
         CheckPlane.instance.SetActiveLeaderBoard();
         CheckPlane.instance.SetActiveMoreGame();
@@ -319,7 +319,7 @@ public class MissionManager : MonoBehaviour
                 shopButton.interactable = true; 
                 luckyWheelButton.GetComponent<EventTrigger>().enabled = true;
                 leaderBoardButton.GetComponent<EventTrigger>().enabled = true;
-                moreGameButton.GetComponent<EventTrigger>().enabled = true;
+                // moreGameButton.GetComponent<EventTrigger>().enabled = true;
                 CheckPlane.instance.ResetActiveLeaderBoard();
                 CheckPlane.instance.ResetActiveMoreGame();
                 CheckPlane.instance.ResetActiveLuckyWheel();

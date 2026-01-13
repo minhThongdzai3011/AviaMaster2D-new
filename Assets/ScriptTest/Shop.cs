@@ -792,6 +792,9 @@ public class Shop : MonoBehaviour
                 }
                 planePriceText[0].gameObject.SetActive(false);
                 isBuyPlane1Done = true;
+
+                GMAnalytics.LogEvent("unlock_plane", 2);
+
                 MissionAchievements.instance.achievementMission2Progress++;
                 MissionAchievements.instance.UpdateAchievementMission();
             }
@@ -864,6 +867,9 @@ public class Shop : MonoBehaviour
                 }
                 planePriceText[1].gameObject.SetActive(false);
                 isBuyPlane2Done = true;
+
+                GMAnalytics.LogEvent("unlock_plane", 2);
+
                 MissionAchievements.instance.achievementMission2Progress++;
                 MissionAchievements.instance.UpdateAchievementMission();
             }
@@ -1004,6 +1010,9 @@ public class Shop : MonoBehaviour
                 }
                 planePriceText[3].gameObject.SetActive(false);
                 isBuyPlane4Done = true;
+
+                GMAnalytics.LogEvent("unlock_plane", 2);
+
                 MissionAchievements.instance.achievementMission2Progress++;
                 MissionAchievements.instance.UpdateAchievementMission();
             }
@@ -1074,6 +1083,9 @@ public class Shop : MonoBehaviour
                 }
                 planePriceText[4].gameObject.SetActive(false);
                 isBuyPlane5Done = true;
+
+                GMAnalytics.LogEvent("unlock_plane", 2);
+
                 MissionAchievements.instance.achievementMission2Progress++;
                 MissionAchievements.instance.UpdateAchievementMission();
             }
@@ -1221,6 +1233,9 @@ public class Shop : MonoBehaviour
                 }
                 planePriceText[6].gameObject.SetActive(false);
                 isBuyPlane7Done = true;
+
+                GMAnalytics.LogEvent("unlock_plane", 2);
+
                 MissionAchievements.instance.achievementMission2Progress++;
                 MissionAchievements.instance.UpdateAchievementMission();
             }
@@ -1368,6 +1383,9 @@ public class Shop : MonoBehaviour
                 }
                 planePriceText[8].gameObject.SetActive(false);
                 isBuyPlane9Done = true;
+
+                GMAnalytics.LogEvent("unlock_plane", 2);
+
                 MissionAchievements.instance.achievementMission2Progress++;
                 MissionAchievements.instance.UpdateAchievementMission();
             }
@@ -1438,6 +1456,9 @@ public class Shop : MonoBehaviour
                 }
                 planePriceText[9].gameObject.SetActive(false);
                 isBuyPlane10Done = true;
+
+                GMAnalytics.LogEvent("unlock_plane", 2);
+
                 MissionAchievements.instance.achievementMission2Progress++;
                 MissionAchievements.instance.UpdateAchievementMission();
             }
@@ -1508,6 +1529,9 @@ public class Shop : MonoBehaviour
                 }
                 planePriceText[10].gameObject.SetActive(false);
                 isBuyPlane11Done = true;
+
+                GMAnalytics.LogEvent("unlock_plane", 2);
+
                 MissionAchievements.instance.achievementMission2Progress++;
                 MissionAchievements.instance.UpdateAchievementMission();
             }
@@ -1656,6 +1680,9 @@ public class Shop : MonoBehaviour
                 }
                 planePriceText[12].gameObject.SetActive(false);
                 isBuyPlane13Done = true;
+
+                GMAnalytics.LogEvent("unlock_plane", 2);
+                
                 MissionAchievements.instance.achievementMission2Progress++;
                 MissionAchievements.instance.UpdateAchievementMission();
             }
@@ -1704,6 +1731,8 @@ public class Shop : MonoBehaviour
         }
         PlayerPrefs.SetInt("isCheckedPlaneIndex", isCheckedPlaneIndex);
         PlayerPrefs.Save();
+
+        
         
     }
     public void buyPlane14(){

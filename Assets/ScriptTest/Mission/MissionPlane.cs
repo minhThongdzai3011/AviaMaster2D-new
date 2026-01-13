@@ -154,15 +154,15 @@ public class MissionPlane : MonoBehaviour
         // {
         //     ResetPlaneMissions();
         // }
-        if (Input.GetKeyDown(KeyCode.X))
-        {
-            planeMission1Progress = planeMission1Target;
-            planeMission2Progress = planeMission2Target;
-            planeMission3Progress = planeMission3Target;
-            planeMission4Progress = planeMission4Target;
-            planeMission5Progress = planeMission5Target;
-            UpdatePlaneMission();
-        }
+        // if (Input.GetKeyDown(KeyCode.X))
+        // {
+        //     planeMission1Progress = planeMission1Target;
+        //     planeMission2Progress = planeMission2Target;
+        //     planeMission3Progress = planeMission3Target;
+        //     planeMission4Progress = planeMission4Target;
+        //     planeMission5Progress = planeMission5Target;
+        //     UpdatePlaneMission();
+        // }
 
     }
 
@@ -421,6 +421,11 @@ public class MissionPlane : MonoBehaviour
                 {
                     MissionManager.instance.notificationImagePlane.gameObject.SetActive(false);
                 }
+
+
+
+                GMAnalytics.LogEvent("unlock_super_plane", 2);
+            
             }
             Save();
         }
@@ -460,6 +465,8 @@ public class MissionPlane : MonoBehaviour
                 {
                     MissionManager.instance.notificationImagePlane.gameObject.SetActive(false);
                 }
+
+                GMAnalytics.LogEvent("unlock_super_plane", 2);
             }
             Save();
         }
@@ -499,6 +506,8 @@ public class MissionPlane : MonoBehaviour
                 {
                     MissionManager.instance.notificationImagePlane.gameObject.SetActive(false);
                 }
+
+                GMAnalytics.LogEvent("unlock_super_plane", 2);
             }
             Save();
         }
@@ -538,6 +547,8 @@ public class MissionPlane : MonoBehaviour
                 {
                     MissionManager.instance.notificationImagePlane.gameObject.SetActive(false);
                 }
+
+                GMAnalytics.LogEvent("unlock_super_plane", 2);
             }
             Save();
         }
@@ -577,6 +588,8 @@ public class MissionPlane : MonoBehaviour
                 {
                     MissionManager.instance.notificationImagePlane.gameObject.SetActive(false);
                 }
+
+                GMAnalytics.LogEvent("unlock_super_plane", 2);
             }
             Save();
         }

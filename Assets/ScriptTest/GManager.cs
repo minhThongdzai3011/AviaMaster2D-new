@@ -96,6 +96,11 @@ public class GManager : MonoBehaviour
     public bool isCheckErrorAngleZ = false; //
 
     public bool isNoPlayingGame = true;
+    
+    [Header("Game State Control")]
+    public bool isGameReady = false; // Flag để kiểm soát game đã sẵn sàng chưa
+    private bool isLoadingComplete = false; // Flag để đảm bảo chỉ delay 1 lần
+    private bool isLaunching = false; // Flag để prevent multiple launches
 
     [Header("UI Texts")]
     public TextMeshProUGUI distanceText;
@@ -152,6 +157,10 @@ public class GManager : MonoBehaviour
     {
         Debug.Log("Airplane GManager Start called " + airplaneRigidbody2D.name);
         
+        // Tạm thời vô hiệu hóa input để tránh click nhầm
+        isGameReady = false;
+        isNoPlayingGame = false; // Tạm thời không cho phép Space
+        
         // totalBoostMaxPower = totalBoost;
         // Debug.Log("totalBoost " + totalBoost + " totalBoostMaxPower " + totalBoostMaxPower);
         buttonDownImage.color = Color.gray;
@@ -198,15 +207,12 @@ public class GManager : MonoBehaviour
         SaveTotalDiamond();
         totalBoostMaxPower = totalBoost;
         
-        // Kiểm tra LuckyWheel sau khi tất cả đã được khởi tạo
         StartCoroutine(DelayedLuckyWheelCheck());
-
-       
-
+        
+        StartCoroutine(DelayedGameReady());
 
     }
     
-    // Coroutine để kiểm tra LuckyWheel sau một chút
     IEnumerator DelayedLuckyWheelCheck()
     {
         yield return new WaitForSeconds(0.1f);
@@ -221,10 +227,42 @@ public class GManager : MonoBehaviour
             Debug.LogWarning("LuckyWheel.instance still null after delay in Start()");
         }
     }
+    
+    IEnumerator DelayedGameReady()
+    {
+        Debug.Log("[GAME_READY] Starting 2-second delay...");
+        
+        yield return new WaitForSeconds(1f);
+        
+        isGameReady = true;
+        isNoPlayingGame = true; 
+        isLoadingComplete = true;
+        Settings.instance.textToPlayText.gameObject.SetActive(true);
+        
+        Debug.Log("[GAME_READY] Game is now ready for input!");
+    }
 
     
     public void LaunchAirplane()
     {
+        // THÊM: Kiểm tra game đã ready chưa
+        if (!isGameReady)
+        {
+            Debug.Log("[LAUNCH] Game not ready yet - ignoring launch request");
+            return;
+        }
+        
+        // THÊM: Prevent multiple launches
+        if (isLaunching)
+        {
+            Debug.Log("[LAUNCH] Already launching - ignoring request");
+            return;
+        }
+        
+        isLaunching = true;
+        
+        StartCoroutine(Delay1Second());
+        
         if (PositionX.instance != null)
         {
             PositionX.instance.checkPlay();
@@ -304,6 +342,8 @@ public class GManager : MonoBehaviour
             isRotationOscillating = false;
             GuideManager.instance.guideText.gameObject.SetActive(false);
         }
+    
+    
     }
 
     public bool controlPlane = false;
@@ -311,6 +351,7 @@ public class GManager : MonoBehaviour
     IEnumerator LaunchSequence()
     {
         //xoay canh quat
+        Debug.Log("[LAUNCH_SEQUENCE] Starting launch sequence...");
         
         if(airplaneRigidbody2D.name == "Forest" || airplaneRigidbody2D.name == "Avocado" || airplaneRigidbody2D.name == "BeeGee" || airplaneRigidbody2D.name == "Pancake" || airplaneRigidbody2D.name == "Scruffy" || airplaneRigidbody2D.name == "Jungle") 
         {
@@ -712,6 +753,7 @@ public class GManager : MonoBehaviour
         BonusSpawner.instance.StartSpawning();
         BonusHigherSpawn.instance.StartSpawning();
         DiamondHigherSpawn.instance.StartSpawning();
+        DiamondHigherSpawn1.instance.StartSpawning();
         // CatDiamondSpawner.instance.StartSpawning();
         PositionX.instance.timePerfect = 0.5f * durationFuel;
         Debug.Log($"Máy bay bắt đầu điều khiển với durationFuel = {durationFuel}s (rateFuel = {PositionX.instance.timePerfect})");
@@ -807,7 +849,7 @@ public class GManager : MonoBehaviour
         {
             Plane.instance.trailEffect.enabled = false; 
         }
-        if (Plane.instance != null && !Plane.instance.isGrounded){
+        if (Plane.instance != null && !Plane.instance.isGrounded && !Plane.instance.isExplodedbyBoom){
             AudioManager.instance.StopPlayerSound();
             AudioManager.instance.PlayFallingSound();
         }
@@ -980,6 +1022,7 @@ public class GManager : MonoBehaviour
         }
 
         isFallingInSequence = false;
+        isLaunching = false; // Reset launch flag khi sequence hoàn thành
         Debug.Log("Kết thúc giai đoạn rơi - Tắt A/D điều khiển");
 
         Debug.Log("Máy bay đã hoàn thành chuỗi bay: ngang → bay lên (xoay dần) → giữ (có điều khiển) → rơi");
@@ -1223,95 +1266,95 @@ public class GManager : MonoBehaviour
         }
     }
 
-        if (Input.GetKeyDown(KeyCode.Keypad1))
-        {
-            PauseGame();
-        }
-        if (Input.GetKeyDown(KeyCode.Keypad0))
-        {
-            AgainGame();
-        }
-        if (Input.GetKey(KeyCode.Keypad2))
-        {
-            totalMoney += 100000;
-            PlayerPrefs.SetFloat("TotalMoney", totalMoney);
-            PlayerPrefs.Save();
-            SaveTotalMoney();
+        // if (Input.GetKeyDown(KeyCode.Keypad1))
+        // {
+        //     PauseGame();
+        // }
+        // if (Input.GetKeyDown(KeyCode.Keypad0))
+        // {
+        //     AgainGame();
+        // }
+        // if (Input.GetKey(KeyCode.Keypad2))
+        // {
+        //     totalMoney += 100000;
+        //     PlayerPrefs.SetFloat("TotalMoney", totalMoney);
+        //     PlayerPrefs.Save();
+        //     SaveTotalMoney();
 
-        }
-        if (Input.GetKeyDown(KeyCode.Keypad3))
-        {
-            MapSpawner.instance.isMapCityUnlocked = true;
-            PlayerPrefs.SetInt("IsMapCityUnlocked", 1);
-            MapSpawner.instance.isMapDesertUnlocked = true;
-            PlayerPrefs.SetInt("IsMapDesertUnlocked", 1);
-            MapSpawner.instance.isMapBeachUnlocked = true;
-            PlayerPrefs.SetInt("IsMapBeachUnlocked", 1);
-            MapSpawner.instance.isMapFieldUnlocked = true;
-            PlayerPrefs.SetInt("IsMapFieldUnlocked", 1);
-            MapSpawner.instance.isMapIceUnlocked = true;
-            PlayerPrefs.SetInt("IsMapIceUnlocked", 1);
-            MapSpawner.instance.isMapLavaUnlocked = true;
-            PlayerPrefs.SetInt("IsMapLavaUnlocked", 1);
-            PlayerPrefs.Save();
-            AgainGame();
-        }
-        if (Input.GetKeyDown(KeyCode.Keypad4)) 
-        {
-            totalDiamond += 1000;
-            totalDiamondText.text = totalDiamond.ToString();
-            PlayerPrefs.SetInt("TotalDiamond", totalDiamond);
-            PlayerPrefs.Save();
-            SaveTotalDiamond();
-        }
+        // }
+        // if (Input.GetKeyDown(KeyCode.Keypad3))
+        // {
+        //     MapSpawner.instance.isMapCityUnlocked = true;
+        //     PlayerPrefs.SetInt("IsMapCityUnlocked", 1);
+        //     MapSpawner.instance.isMapDesertUnlocked = true;
+        //     PlayerPrefs.SetInt("IsMapDesertUnlocked", 1);
+        //     MapSpawner.instance.isMapBeachUnlocked = true;
+        //     PlayerPrefs.SetInt("IsMapBeachUnlocked", 1);
+        //     MapSpawner.instance.isMapFieldUnlocked = true;
+        //     PlayerPrefs.SetInt("IsMapFieldUnlocked", 1);
+        //     MapSpawner.instance.isMapIceUnlocked = true;
+        //     PlayerPrefs.SetInt("IsMapIceUnlocked", 1);
+        //     MapSpawner.instance.isMapLavaUnlocked = true;
+        //     PlayerPrefs.SetInt("IsMapLavaUnlocked", 1);
+        //     PlayerPrefs.Save();
+        //     AgainGame();
+        // }
+        // if (Input.GetKeyDown(KeyCode.Keypad4)) 
+        // {
+        //     totalDiamond += 1000;
+        //     totalDiamondText.text = totalDiamond.ToString();
+        //     PlayerPrefs.SetInt("TotalDiamond", totalDiamond);
+        //     PlayerPrefs.Save();
+        //     SaveTotalDiamond();
+        // }
 
-        if(Plane.instance != null && Input.GetKeyDown(KeyCode.Keypad5))
-        {
-            Plane.instance.isAirPortBeach = true;
-            PlayerPrefs.SetInt("LastSafeLandingAirport", 1);
-            PlayerPrefs.Save();
-            return; 
-        }
-        if(Plane.instance != null && Input.GetKeyDown(KeyCode.Keypad6))
-        {
-            Plane.instance.isAirPortDesert = true;
-            PlayerPrefs.SetInt("LastSafeLandingAirport", 2);
-            PlayerPrefs.Save();
-            Debug.Log("[CHEAT] Set safe landing to Desert (2), use Keypad0 to restart");
-            return; 
-        }
-        if(Plane.instance != null && Input.GetKeyDown(KeyCode.Keypad7))
-        {
-            Plane.instance.isAirPortField = true;
-            PlayerPrefs.SetInt("LastSafeLandingAirport", 3);
-            PlayerPrefs.Save();
-            Debug.Log("[CHEAT] Set safe landing to Field (3), use Keypad0 to restart");
-            return; 
-        }
-        if(Plane.instance != null && Input.GetKeyDown(KeyCode.Keypad8))
-        {
-            Plane.instance.isAirPortIce = true;
-            PlayerPrefs.SetInt("LastSafeLandingAirport", 4);
-            PlayerPrefs.Save();
-            Debug.Log("[CHEAT] Set safe landing to Ice (4), use Keypad0 to restart");
-            return; 
-        }
-        if(Plane.instance != null && Input.GetKeyDown(KeyCode.Keypad9))
-        {
-            Plane.instance.isAirPortLava = true;
-            PlayerPrefs.SetInt("LastSafeLandingAirport", 5);
-            PlayerPrefs.Save();
-            Debug.Log("[CHEAT] Set safe landing to Lava (5), use Keypad0 to restart");
-            return; 
-        }
+        // if(Plane.instance != null && Input.GetKeyDown(KeyCode.Keypad5))
+        // {
+        //     Plane.instance.isAirPortBeach = true;
+        //     PlayerPrefs.SetInt("LastSafeLandingAirport", 1);
+        //     PlayerPrefs.Save();
+        //     return; 
+        // }
+        // if(Plane.instance != null && Input.GetKeyDown(KeyCode.Keypad6))
+        // {
+        //     Plane.instance.isAirPortDesert = true;
+        //     PlayerPrefs.SetInt("LastSafeLandingAirport", 2);
+        //     PlayerPrefs.Save();
+        //     Debug.Log("[CHEAT] Set safe landing to Desert (2), use Keypad0 to restart");
+        //     return; 
+        // }
+        // if(Plane.instance != null && Input.GetKeyDown(KeyCode.Keypad7))
+        // {
+        //     Plane.instance.isAirPortField = true;
+        //     PlayerPrefs.SetInt("LastSafeLandingAirport", 3);
+        //     PlayerPrefs.Save();
+        //     Debug.Log("[CHEAT] Set safe landing to Field (3), use Keypad0 to restart");
+        //     return; 
+        // }
+        // if(Plane.instance != null && Input.GetKeyDown(KeyCode.Keypad8))
+        // {
+        //     Plane.instance.isAirPortIce = true;
+        //     PlayerPrefs.SetInt("LastSafeLandingAirport", 4);
+        //     PlayerPrefs.Save();
+        //     Debug.Log("[CHEAT] Set safe landing to Ice (4), use Keypad0 to restart");
+        //     return; 
+        // }
+        // if(Plane.instance != null && Input.GetKeyDown(KeyCode.Keypad9))
+        // {
+        //     Plane.instance.isAirPortLava = true;
+        //     PlayerPrefs.SetInt("LastSafeLandingAirport", 5);
+        //     PlayerPrefs.Save();
+        //     Debug.Log("[CHEAT] Set safe landing to Lava (5), use Keypad0 to restart");
+        //     return; 
+        // }
         
-        // Keypad0 để restart game với delay
-        if(Input.GetKeyDown(KeyCode.Keypad0))
-        {
-            Debug.Log("[CHEAT] Manual restart requested via Keypad0");
-            AgainGame();
-            return;
-        }
+        // // Keypad0 để restart game với delay
+        // if(Input.GetKeyDown(KeyCode.Keypad0))
+        // {
+        //     Debug.Log("[CHEAT] Manual restart requested via Keypad0");
+        //     AgainGame();
+        //     return;
+        // }
 
         
         if (distanceText != null && !stopDisplayDistance) distanceText.text = distanceTraveled.ToString("F0") + " ft";
@@ -1917,6 +1960,11 @@ public class GManager : MonoBehaviour
         
         isVelocity = true;
         
+        // Reset game ready flag để delay lại ở scene mới
+        isGameReady = false;
+        isNoPlayingGame = false;
+        isLaunching = false;
+        
         // Thêm delay nhỏ để đảm bảo PlayerPrefs được flush to disk
         StartCoroutine(DelayedSceneReload());
         
@@ -2170,7 +2218,12 @@ public void PlainDown()
             CheckPlane.instance.CheckMoneyForUpgradeButtonNext();
             levelFuelText.text = "Fuel capacity increased by " + rateFuel + "%";
             Debug.Log($"UpgradeFuel: Level {levelFuel}, Rate {rateFuel}%, Duration {durationFuel}s");
+
             PositionX.instance.timePerfect = durationFuel * 0.5f;
+
+
+            GMAnalytics.LogEvent("upgrade_fuel", 2);
+            
             
             // Thêm null check cho LuckyWheel.instance
             if (LuckyWheel.instance != null)
@@ -2243,6 +2296,8 @@ public void PlainDown()
             CheckPlane.instance.CheckMoneyForUpgradeButtonNext();
             levelBoostText.text = "Flight stability increased " + rateBoost + "%";
             Debug.Log($"UpgradeBoost: Level {levelBoost}, Rate {rateBoost}%, TotalBoost {totalBoost}");
+
+            GMAnalytics.LogEvent("upgrade_boost", 2);
             
             // Thêm null check cho LuckyWheel.instance
             if (LuckyWheel.instance != null)
@@ -2301,6 +2356,8 @@ public void PlainDown()
 
             levelPowerText.text = "Initial thrust increased by " + ratePower + "%";
             Debug.Log($"UpgradePower: Level {levelPower}, Rate {ratePower}%, Force {launchForce}");
+
+            GMAnalytics.LogEvent("upgrade_power", 2);
             
             // Thêm null check cho LuckyWheel.instance
             if (LuckyWheel.instance != null)
@@ -2578,6 +2635,11 @@ public void PlainDown()
     {
         if (isHomeUp)
         {
+            // Kill existing animations để tránh conflict
+            DOTween.Kill(leftHomeImage);
+            DOTween.Kill(leftCoinImage);
+            DOTween.Kill(leftDiamondImage);
+            
             leftHomeImage.DOAnchorPosX(leftHomeImage.anchoredPosition.x - 600f, duration)
                 .SetEase(Ease.OutCubic).OnComplete(() =>
                 {
@@ -2597,6 +2659,9 @@ public void PlainDown()
     {
         if (isHomeDown)
         {
+            // Kill existing animation để tránh conflict
+            DOTween.Kill(rightHomeImage);
+            
             rightHomeImage.DOAnchorPosX(rightHomeImage.anchoredPosition.x + 600f, duration)
                 .SetEase(Ease.OutCubic).OnComplete(() =>
                 {
@@ -2612,6 +2677,9 @@ public void PlainDown()
     {
         if (isFuelDown)
         {
+            // Kill existing animation để tránh conflict
+            DOTween.Kill(downFuelImage);
+            
             downFuelImage.DOAnchorPosY(downFuelImage.anchoredPosition.y - 390f, duration)
                 .SetEase(Ease.OutCubic).OnComplete(() =>
                 {
@@ -2629,11 +2697,15 @@ public void PlainDown()
     }
     public IEnumerator AircraftPlayUp()
     {
+        yield return new WaitForSeconds(2f);
         
-            yield return new WaitForSeconds(2f);
         if (isAircraftUp)
-            yield return new WaitForSeconds(1f);
         {
+            yield return new WaitForSeconds(1f);
+            
+            // Kill existing animation để tránh conflict
+            DOTween.Kill(upAircraftImage);
+            
             upAircraftImage.DOAnchorPosY(upAircraftImage.anchoredPosition.y + 280f, duration)
                 .SetEase(Ease.OutCubic).OnComplete(() =>
                 {
@@ -2754,6 +2826,12 @@ public void PlainDown()
         }
         
         Debug.Log("Max Power Ended - Restored all materials to original");
+    }
+
+    IEnumerator Delay1Second()
+    {
+        yield return new WaitForSeconds(2f);
+        
     }
 
 

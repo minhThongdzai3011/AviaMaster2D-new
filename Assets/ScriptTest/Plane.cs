@@ -158,6 +158,8 @@ public class Plane : MonoBehaviour
             StartCoroutine(UpMass());
         }
     }
+
+    public bool isExplodedbyBoom = false;
         
     void OnTriggerEnter2D(Collider2D other)
     {
@@ -165,7 +167,7 @@ public class Plane : MonoBehaviour
         {
             GManager.instance.AgainGame();
         }
-        if (other.CompareTag("Coin") || other.CompareTag("Respawn"))
+        if (other.CompareTag("Coin") || other.CompareTag("Respawn") || other.CompareTag("green1"))
         {
             // AnimCoin anim = other.GetComponent<AnimCoin>();
             AudioManager.instance.PlaySound(AudioManager.instance.collectMoneySoundClip);
@@ -236,8 +238,12 @@ public class Plane : MonoBehaviour
                 }
                 else
                 {
+                    // Đảm bảo tắt falling sound trước khi phát âm thanh khác
+                    AudioManager.instance.StopFallingSound();
+                    // AudioManager.instance.PlaySound(AudioManager.instance.landingSoundClip);
+                    AudioManager.instance.StopPlayerSound();
                     AudioManager.instance.PlaySound(AudioManager.instance.explosionSoundClip);
-            
+                    isExplodedbyBoom = true;
                     if (CameraManager.instance != null)
                     {
                         CameraManager.instance.FreezeCamera();
@@ -258,6 +264,7 @@ public class Plane : MonoBehaviour
                     GManager.instance.durationFuel = 0f;
                     GManager.instance.currentControlDuration = 0f;
                     GManager.instance.currentControlTimer = GManager.instance.currentControlDuration;
+                    AudioManager.instance.StopFallingSound();
                 }
                 // StartCoroutine(DelayOneSecond(2f));
             }
@@ -386,6 +393,18 @@ public class Plane : MonoBehaviour
             
             // Check if this is a new unlock
             bool wasAlreadyUnlocked = MapSpawner.instance.isMapBeachUnlocked;
+
+            bool check = PlayerPrefs.GetInt("IsMapBeachUnlocked", 0) == 1;
+            if (check)
+            {
+                Debug.Log("Map Beach was already unlocked before.");
+            }
+            else
+            {
+                GMAnalytics.LogEvent("unlock_map_beach", 2);
+            }
+
+
             MapSpawner.instance.isMapBeachUnlocked = true;
             PlayerPrefs.SetInt("IsMapBeachUnlocked", 1);
 
@@ -416,6 +435,21 @@ public class Plane : MonoBehaviour
         if (other.CompareTag("MapStartDesert") && !isBoom)
         {
             AudioManager.instance.PlaySound(AudioManager.instance.unlockMapSoundClip);
+
+
+
+            bool check = PlayerPrefs.GetInt("IsMapDesertUnlocked", 0) == 1;
+            if (check)
+            {
+                Debug.Log("Map Desert was already unlocked before.");
+            }
+            else
+            {
+                GMAnalytics.LogEvent("unlock_map_desert", 2);
+            }
+
+
+
             
             // Check if this is a new unlock
             bool wasAlreadyUnlocked = MapSpawner.instance.isMapDesertUnlocked;
@@ -449,6 +483,17 @@ public class Plane : MonoBehaviour
         if (other.CompareTag("MapStartField") && !isBoom)
         {
             AudioManager.instance.PlaySound(AudioManager.instance.unlockMapSoundClip);
+
+
+            bool check = PlayerPrefs.GetInt("IsMapFieldUnlocked", 0) == 1;
+            if (check)
+            {
+                Debug.Log("Map Field was already unlocked before.");
+            }
+            else
+            {
+                GMAnalytics.LogEvent("unlock_map_field", 2);
+            }
             
             // Check if this is a new unlock
             bool wasAlreadyUnlocked = MapSpawner.instance.isMapFieldUnlocked;
@@ -482,6 +527,17 @@ public class Plane : MonoBehaviour
         if (other.CompareTag("MapStartIce") && !isBoom)
         {
             AudioManager.instance.PlaySound(AudioManager.instance.unlockMapSoundClip);
+
+
+            bool check = PlayerPrefs.GetInt("IsMapIceUnlocked", 0) == 1;
+            if (check)
+            {
+                Debug.Log("Map Ice was already unlocked before.");
+            }
+            else
+            {
+                GMAnalytics.LogEvent("unlock_map_ice", 2);
+            }
             
             // Check if this is a new unlock
             bool wasAlreadyUnlocked = MapSpawner.instance.isMapIceUnlocked;
@@ -515,6 +571,16 @@ public class Plane : MonoBehaviour
         if (other.CompareTag("MapStartLava") && !isBoom)
         {
             AudioManager.instance.PlaySound(AudioManager.instance.unlockMapSoundClip);
+
+            bool check = PlayerPrefs.GetInt("IsMapLavaUnlocked", 0) == 1;
+            if (check)
+            {
+                Debug.Log("Map Lava was already unlocked before.");
+            }
+            else
+            {
+                GMAnalytics.LogEvent("unlock_map_lava", 2);
+            }
             
             // Check if this is a new unlock
             bool wasAlreadyUnlocked = MapSpawner.instance.isMapLavaUnlocked;
