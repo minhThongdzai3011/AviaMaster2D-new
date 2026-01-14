@@ -804,6 +804,7 @@ public class Settings : MonoBehaviour
     {
         float distanceValue = GManager.instance.distanceTraveled; // Quãng đường thực tế
         float collectValue = Plane.instance.moneyCollect;
+        distanceValue = distanceValue / 2.6f; // Chuyển đổi sang đơn vị tiền tệ
         
         // Cộng dồn mission progress
         int distanceToAdd = (int)distanceValue;

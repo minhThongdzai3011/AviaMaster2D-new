@@ -849,7 +849,8 @@ public class GManager : MonoBehaviour
         {
             Plane.instance.trailEffect.enabled = false; 
         }
-        if (Plane.instance != null && !Plane.instance.isGrounded && !Plane.instance.isExplodedbyBoom){
+
+        if (Plane.instance != null && !Plane.instance.isGrounded && !Plane.instance.isExplodedbyBoom && !Plane.instance.isBoom){
             AudioManager.instance.StopPlayerSound();
             AudioManager.instance.PlayFallingSound();
         }

@@ -96,6 +96,13 @@ public class Plane : MonoBehaviour
         // Hiển thị text với định dạng 2 chữ số thập phân
         GManager.instance.rotationTrailText.text = angleZ.ToString("F2") + "°";
 
+
+        // if (Plane.instance != null && Plane.instance.isGrounded == true && Plane.instance.isExplodedbyBoom == true && Plane.instance.isBoom == true)
+        // {
+        //     AudioManager.instance.StopFallingSound();
+        //     Debug.Log("Máy bay đã chạm đất do nổ boom.");
+        // }
+
     }
 
 
