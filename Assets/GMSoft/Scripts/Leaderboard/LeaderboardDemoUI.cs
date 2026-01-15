@@ -41,6 +41,7 @@ namespace Leaderboard
             nextPage.onClick.AddListener(OnNextPage);
             previousPage.onClick.AddListener(OnPreviousPage);
             InitRankItems();
+            SelectNewTab(tabGroup.defaultTab);
         }
 
         private void InitRankItems()

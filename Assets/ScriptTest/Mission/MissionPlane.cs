@@ -18,6 +18,13 @@ public class MissionPlane : MonoBehaviour
     public TextMeshProUGUI textPlaneMission4;
     public TextMeshProUGUI textPlaneMission5;
 
+    public TextMeshProUGUI textNewPlane1;
+    public TextMeshProUGUI textNewPlane2;
+    public TextMeshProUGUI textNewPlane3;
+    public TextMeshProUGUI textNewPlane4;
+    public TextMeshProUGUI textNewPlane5;
+
+
     [Header("Mission Plane Image")]
     public Image imagePlaneMission1;
     public Image imagePlaneMission2;
@@ -417,6 +424,7 @@ public class MissionPlane : MonoBehaviour
 
                 MissionManager.instance.textNotificationPlaneValue--;
                 MissionManager.instance.textNotificationPlane.text = MissionManager.instance.textNotificationPlaneValue.ToString();
+                textNewPlane1.gameObject.SetActive(true);
                 if (MissionManager.instance.textNotificationPlaneValue <= 0)
                 {
                     MissionManager.instance.notificationImagePlane.gameObject.SetActive(false);
@@ -460,6 +468,7 @@ public class MissionPlane : MonoBehaviour
                 }
 
                 MissionManager.instance.textNotificationPlaneValue--;
+                textNewPlane2.gameObject.SetActive(true);
                 MissionManager.instance.textNotificationPlane.text = MissionManager.instance.textNotificationPlaneValue.ToString();
                 if (MissionManager.instance.textNotificationPlaneValue <= 0)
                 {
@@ -501,6 +510,7 @@ public class MissionPlane : MonoBehaviour
                 }
 
                 MissionManager.instance.textNotificationPlaneValue--;
+                textNewPlane3.gameObject.SetActive(true);
                 MissionManager.instance.textNotificationPlane.text = MissionManager.instance.textNotificationPlaneValue.ToString();
                 if (MissionManager.instance.textNotificationPlaneValue <= 0)
                 {
@@ -542,6 +552,7 @@ public class MissionPlane : MonoBehaviour
                 }
 
                 MissionManager.instance.textNotificationPlaneValue--;
+                textNewPlane4.gameObject.SetActive(true);
                 MissionManager.instance.textNotificationPlane.text = MissionManager.instance.textNotificationPlaneValue.ToString();
                 if (MissionManager.instance.textNotificationPlaneValue <= 0)
                 {
@@ -583,6 +594,7 @@ public class MissionPlane : MonoBehaviour
                 }
 
                 MissionManager.instance.textNotificationPlaneValue--;
+                textNewPlane5.gameObject.SetActive(true);
                 MissionManager.instance.textNotificationPlane.text = MissionManager.instance.textNotificationPlaneValue.ToString();
                 if (MissionManager.instance.textNotificationPlaneValue <= 0)
                 {

@@ -50,6 +50,7 @@ public class Shop : MonoBehaviour
     private bool isAnimating = false;
 
     public TextMeshProUGUI[] listTextPriceSuperlane;
+    public TextMeshProUGUI[] listTextNewPlane;
     
     // Tính toán centerIndex động dựa trên số lượng máy bay
     private int CenterIndex => planeImages.Length / 2;
@@ -321,6 +322,7 @@ public class Shop : MonoBehaviour
             Image background = planeBackgrounds[i];
             Image guideImage = planeGuideImages[i];
             TextMeshProUGUI guideText = listTextGuidePlane[i];
+            TextMeshProUGUI newText = listTextNewPlane[i];  
             Vector2 currentPos = plane.rectTransform.anchoredPosition;
             Vector2 fadeOutPos = currentPos + new Vector2(moveDirection * fadeOffset, 0);
             
@@ -336,6 +338,8 @@ public class Shop : MonoBehaviour
                 .SetEase(Ease.InQuad));
             fadeOutSeq.Join(guideImage.DOFade(0f, moveDuration * 0.5f)
                 .SetEase(Ease.InQuad));
+            fadeOutSeq.Join(newText.DOFade(0f, moveDuration * 0.5f)
+                .SetEase(Ease.InQuad));
         }
         
         yield return fadeOutSeq.WaitForCompletion();
@@ -349,6 +353,7 @@ public class Shop : MonoBehaviour
             Image background = planeBackgrounds[i];
             Image guideImage = planeGuideImages[i];
             TextMeshProUGUI guideText = listTextGuidePlane[i];
+            TextMeshProUGUI newText = listTextNewPlane[i];
             CarouselState targetState = CalculateCarouselState(i);
             
             // Vị trí bắt đầu fade in: từ phía ngược lại + 100px
@@ -389,6 +394,8 @@ public class Shop : MonoBehaviour
             fadeInSeq.Join(guideImage.DOFade(targetState.alpha, moveDuration * 0.5f)
                 .SetEase(Ease.OutQuad));
             fadeInSeq.Join(guideText.DOFade(targetState.alpha, moveDuration * 0.5f)
+                .SetEase(Ease.OutQuad));
+            fadeInSeq.Join(listTextNewPlane[i].DOFade(targetState.alpha, moveDuration * 0.5f)
                 .SetEase(Ease.OutQuad));
         }
         
@@ -985,6 +992,7 @@ public class Shop : MonoBehaviour
             }
             EnsureCameraSetup();
         }
+        MissionPlane.instance.textNewPlane4.gameObject.SetActive(false);
         PlayerPrefs.SetInt("isCheckedPlaneIndex", isCheckedPlaneIndex);
         PlayerPrefs.Save();
     }
@@ -1208,6 +1216,7 @@ public class Shop : MonoBehaviour
             }
             EnsureCameraSetup();
         }
+        MissionPlane.instance.textNewPlane5.gameObject.SetActive(false);
         PlayerPrefs.SetInt("isCheckedPlaneIndex", isCheckedPlaneIndex);
         PlayerPrefs.Save();
     }
@@ -1360,6 +1369,7 @@ public class Shop : MonoBehaviour
         }
         PlayerPrefs.SetInt("isCheckedPlaneIndex", isCheckedPlaneIndex);
         PlayerPrefs.Save();
+        MissionPlane.instance.textNewPlane1.gameObject.SetActive(false);
     }
     public void buyPlane9(){
         StartCoroutine(PlayButtonEffect(11));
@@ -1655,6 +1665,7 @@ public class Shop : MonoBehaviour
             }
             EnsureCameraSetup();
         }
+        MissionPlane.instance.textNewPlane2.gameObject.SetActive(false);
         PlayerPrefs.SetInt("isCheckedPlaneIndex", isCheckedPlaneIndex);
         PlayerPrefs.Save();
     }
@@ -1869,6 +1880,7 @@ public class Shop : MonoBehaviour
             CameraManager.instance.virtualCamera.LookAt = airplanesRigidbody2D[14].transform;
             EnsureCameraSetup();
         }
+        MissionPlane.instance.textNewPlane3.gameObject.SetActive(false);
         PlayerPrefs.SetInt("isCheckedPlaneIndex", isCheckedPlaneIndex);
         PlayerPrefs.Save();
     }

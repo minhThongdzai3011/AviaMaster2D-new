@@ -73,6 +73,7 @@ public class MissionDaily : MonoBehaviour
     public int dailyMission5Target = 1;
     private DateTime endOfDay;
     public TextMeshProUGUI countdownText;
+    private DateTime lastPlayedDate;
     public bool isReceivedDaily1Reward = false;
     public bool isReceivedDaily2Reward = false;
     public bool isReceivedDaily3Reward = false;
@@ -106,15 +107,25 @@ public class MissionDaily : MonoBehaviour
             instance = this;
         else
             Destroy(gameObject);    
+        
         Load();
+        
+        DateTime now = DateTime.Now;
+        DateTime today = new DateTime(now.Year, now.Month, now.Day);
+        
+        if (lastPlayedDate.Date < today)
+        {
+            Debug.Log("New day detected! Resetting daily missions...");
+            ResetDailyMissions();
+        }
+        
+        lastPlayedDate = today;
+        SaveLastPlayedDate();
+        
         UpdateDailyMission();
         completeRewardCollection();
 
-        DateTime now = DateTime.Now;
         endOfDay = new DateTime(now.Year, now.Month, now.Day, 23, 59, 59);
-        
-
-
     }
 
     // Update is called once per frame
@@ -128,7 +139,6 @@ public class MissionDaily : MonoBehaviour
             countdownText.text = "00:00:00";
             ResetDailyMissions();
             
-            // Cập nhật endOfDay cho ngày tiếp theo để tránh reset liên tục
             DateTime tomorrow = now.AddDays(1);
             endOfDay = new DateTime(tomorrow.Year, tomorrow.Month, tomorrow.Day, 23, 59, 59);
         }
@@ -138,16 +148,38 @@ public class MissionDaily : MonoBehaviour
                 timeRemaining.Hours, timeRemaining.Minutes, timeRemaining.Seconds);
         }
 
+        // // DEBUG TRICKS - Chỉ dùng để test, xóa khi build final
         // if (Input.GetKeyDown(KeyCode.R))
         // {
+        //     Debug.Log("=== MANUAL RESET DAILY MISSIONS ===");
         //     ResetDailyMissions();
         // }
         // if (Input.GetKeyDown(KeyCode.T))
         // {
+        //     Debug.Log("=== COMPLETE ALL MISSIONS FOR TESTING ===");
         //     dailyMission3Progress = dailyMission3Target;
         //     dailyMission4Progress = dailyMission4Target;
         //     dailyMission5Progress = dailyMission5Target;
         //     UpdateDailyMission();
+        // }
+        // // Trick để test auto reset ngày mới
+        // if (Input.GetKeyDown(KeyCode.Y))
+        // {
+        //     Debug.Log("=== FAKE YESTERDAY - Test Auto Reset ===");
+        //     DateTime yesterday = DateTime.Now.AddDays(-1);
+        //     lastPlayedDate = yesterday;
+        //     SaveLastPlayedDate();
+        //     Debug.Log("Set lastPlayedDate to: " + lastPlayedDate.ToString("yyyy-MM-dd"));
+        //     Debug.Log("Next time you restart game, it should auto reset missions!");
+        // }
+        // // Show debug info về dates
+        // if (Input.GetKeyDown(KeyCode.I))
+        // {
+        //     Debug.Log("=== DEBUG INFO ===");
+        //     Debug.Log("Current Date: " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+        //     Debug.Log("Last Played Date: " + lastPlayedDate.ToString("yyyy-MM-dd"));
+        //     Debug.Log("Is New Day?: " + (lastPlayedDate.Date < DateTime.Now.Date));
+        //     Debug.Log("Time until reset: " + (endOfDay - DateTime.Now).ToString());
         // }
         if (GManager.instance.moneyFuel > 50000 || GManager.instance.moneyBoost > 50000 || GManager.instance.moneyPower > 50000)
         {
@@ -318,6 +350,8 @@ public class MissionDaily : MonoBehaviour
         PlayerPrefs.SetInt("IsDailyMission3CompletedForDaily1", isDailyMission3CompletedForDaily1 ? 1 : 0);
         PlayerPrefs.SetInt("IsDailyMission4CompletedForDaily1", isDailyMission4CompletedForDaily1 ? 1 : 0);
         PlayerPrefs.SetInt("IsDailyMission5CompletedForDaily1", isDailyMission5CompletedForDaily1 ? 1 : 0);
+        
+        SaveLastPlayedDate();
     }
 
     public void Load()
@@ -338,6 +372,23 @@ public class MissionDaily : MonoBehaviour
         isDailyMission3CompletedForDaily1 = PlayerPrefs.GetInt("IsDailyMission3CompletedForDaily1", 0) == 1;
         isDailyMission4CompletedForDaily1 = PlayerPrefs.GetInt("IsDailyMission4CompletedForDaily1", 0) == 1;
         isDailyMission5CompletedForDaily1 = PlayerPrefs.GetInt("IsDailyMission5CompletedForDaily1", 0) == 1;
+        
+        // Load last played date
+        string lastPlayedDateString = PlayerPrefs.GetString("LastPlayedDate", "");
+        if (string.IsNullOrEmpty(lastPlayedDateString))
+        {
+            lastPlayedDate = DateTime.Now.Date;
+        }
+        else
+        {
+            DateTime.TryParse(lastPlayedDateString, out lastPlayedDate);
+        }
+    }
+    
+    public void SaveLastPlayedDate()
+    {
+        PlayerPrefs.SetString("LastPlayedDate", lastPlayedDate.ToString("yyyy-MM-dd"));
+        PlayerPrefs.Save();
     }
 
     public void ResetDailyMissions()
